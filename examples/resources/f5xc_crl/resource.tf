@@ -1,0 +1,23 @@
+# Crl Resource Example
+# API to create CRL object
+
+# Basic Crl configuration
+resource "f5xc_crl" "example" {
+  name      = "my-crl"
+  namespace = "system"
+
+  labels = {
+    environment = "production"
+    managed_by  = "terraform"
+  }
+
+  annotations = {
+    "owner" = "platform-team"
+  }
+
+  # Resource-specific configuration
+    # HTTPAccessInfo.
+    http_access {
+      # Configure http_access settings
+    }
+}

@@ -1,0 +1,34 @@
+# Dns Zone Resource Example
+# Manages a DNSZone in F5 Distributed Cloud.
+
+# Basic Dns Zone configuration
+resource "f5xc_dns_zone" "example" {
+  name      = "my-dns-zone"
+  namespace = "system"
+
+  labels = {
+    environment = "production"
+    managed_by  = "terraform"
+  }
+
+  annotations = {
+    "owner" = "platform-team"
+  }
+
+  # DNS Zone configuration
+  # Primary DNS zone
+  primary {
+    soa_record_parameters {
+      refresh    = 86400
+      retry      = 7200
+      expire     = 3600000
+      ttl        = 86400
+      neg_ttl    = 1800
+    }
+    default_rr_set_group {}
+    default_soa_parameters {}
+    dnssec_mode {
+      disable {}
+    }
+  }
+}

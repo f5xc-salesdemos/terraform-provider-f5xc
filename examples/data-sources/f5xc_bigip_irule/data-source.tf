@@ -1,0 +1,13 @@
+# Bigip Irule Data Source Example
+# Retrieves information about an existing Bigip Irule
+
+# Look up an existing Bigip Irule by name
+data "f5xc_bigip_irule" "example" {
+  name      = "my-bigip-irule"
+  namespace = "system"
+}
+
+# Example: Use the data source in another resource
+# output "bigip_irule_id" {
+#   value = data.f5xc_bigip_irule.example.id
+# }

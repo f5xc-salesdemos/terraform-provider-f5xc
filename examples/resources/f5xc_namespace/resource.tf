@@ -1,9 +1,20 @@
+# Namespace Resource Example
+# Creates a new namespace. Name of the object is name of the name space.
+
+# Basic Namespace configuration
 resource "f5xc_namespace" "example" {
-  name        = "my-namespace"
-  description = "Example namespace for application workloads"
-  
+  name      = "my-namespace"
+  namespace = "system"
+
   labels = {
     environment = "production"
-    team        = "platform"
+    managed_by  = "terraform"
   }
+
+  annotations = {
+    "owner" = "platform-team"
+  }
+
+  # Namespace configuration
+  description = "Example namespace for application workloads"
 }
