@@ -18,6 +18,9 @@ jobs:
   auto-tag:
     name: Create Version Tag
     runs-on: ubuntu-latest
+    outputs:
+      new_tag: ${{ steps.next_version.outputs.new_tag }}
+      tag_created: ${{ steps.create_tag.outputs.created }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -84,6 +87,7 @@ jobs:
           fi
 
       - name: Create and push tag
+        id: create_tag
         if: steps.check_tag.outputs.exists == 'false'
         run: |
           NEW_TAG=${{ steps.next_version.outputs.new_tag }}
@@ -102,4 +106,17 @@ jobs:
           🤖 Auto-generated tag"
 
           git push origin "$NEW_TAG"
+          echo "created=true" >> $GITHUB_OUTPUT
           echo "Created and pushed tag: $NEW_TAG"
+
+  # Trigger release workflow for the new tag
+  trigger-release:
+    name: Trigger Release
+    needs: auto-tag
+    if: needs.auto-tag.outputs.tag_created == 'true'
+    uses: hashicorp/ghaction-terraform-provider-release/.github/workflows/community.yml@v4
+    secrets:
+      gpg-private-key: '${{ secrets.GPG_PRIVATE_KEY }}'
+      gpg-private-key-passphrase: '${{ secrets.PASSPHRASE }}'
+    with:
+      setup-go-version-file: 'go.mod'
