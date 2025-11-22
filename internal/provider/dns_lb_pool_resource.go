@@ -86,13 +86,13 @@ func (r *DNSLbPoolResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional: true,
 			},
 			"ttl": schema.Int64Attribute{
-				MarkdownDescription: "TTL. Exclusive with [use_rrset_ttl] Custom TTL in seconds (default 30) for responses from this pool ves.io.schema.rules.uint32.gte: 0 ves.io.schema.rules.uint32.lte: 2147483647",
+				MarkdownDescription: "[OneOf: ttl, use_rrset_ttl] TTL. Exclusive with [use_rrset_ttl] Custom TTL in seconds (default 30) for responses from this pool ves.io.schema.rules.uint32.gte: 0 ves.io.schema.rules.uint32.lte: 2147483647",
 				Optional: true,
 			},
 		},
 		Blocks: map[string]schema.Block{
 			"a_pool": schema.SingleNestedBlock{
-				MarkdownDescription: "Pool for A Record.",
+				MarkdownDescription: "[OneOf: a_pool, aaaa_pool, cname_pool, mx_pool, srv_pool] Pool for A Record.",
 				Attributes: map[string]schema.Attribute{
 					"max_answers": schema.Int64Attribute{
 						MarkdownDescription: "Maximum Answers. Limit on number of Resource Records to be included in the response to query Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.uint32.gte: 1 ves.io.schema.rules.uint32.lte: 32",

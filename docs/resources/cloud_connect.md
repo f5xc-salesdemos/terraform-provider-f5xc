@@ -62,6 +62,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "aws_tgw_site, azure_vnet_site" must be set
+
 `aws_tgw_site` - (Optional) AWS TGW Site Type. Cloud Connect AWS TGW Site Type. See [Aws Tgw Site](#aws-tgw-site) below for details.
 
 `azure_vnet_site` - (Optional) Azure VNET Site Type. Cloud Connect Azure VNET Site Type. See [Azure Vnet Site](#azure-vnet-site) below for details.

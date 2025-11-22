@@ -60,6 +60,8 @@ The following arguments are optional:
 
 `asn` - (Optional) ASN. 2-byte or 4-byte Autonomous System Number (ASN) Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.uint32.gte: 1 ves.io.schema.rules.uint32.lte: 4199999999 (`Number`).
 
+###### One of the arguments from this list "bgp_session_disabled, bgp_session_enabled" must be set
+
 `bgp_session_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Bgp Session Disabled](#bgp-session-disabled) below for details.
 
 `bgp_session_enabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Bgp Session Enabled](#bgp-session-enabled) below for details.

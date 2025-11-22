@@ -62,6 +62,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "dedicated_interface, dedicated_management_interface, ethernet_interface, layer2_interface, tunnel_interface" must be set
+
 `dedicated_interface` - (Optional) Dedicated Interface. Dedicated Interface Configuration. See [Dedicated Interface](#dedicated-interface) below for details.
 
 `dedicated_management_interface` - (Optional) Dedicated Management Interface. Dedicated Interface Configuration. See [Dedicated Management Interface](#dedicated-management-interface) below for details.

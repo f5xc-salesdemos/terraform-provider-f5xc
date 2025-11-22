@@ -97,13 +97,13 @@ func (r *ServicePolicyRuleResource) Schema(ctx context.Context, req resource.Sch
 		},
 		Blocks: map[string]schema.Block{
 			"any_asn": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: any_asn, asn_list, asn_matcher] Empty. This can be used for messages where no values are needed",
 			},
 			"any_client": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: any_client, client_name, client_name_matcher, client_selector, ip_threat_category_list] Empty. This can be used for messages where no values are needed",
 			},
 			"any_ip": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: any_ip, ip_matcher, ip_prefix_list] Empty. This can be used for messages where no values are needed",
 			},
 			"api_group_matcher": schema.SingleNestedBlock{
 				MarkdownDescription: "String Matcher. A matcher specifies a list of values for matching an input string. The match is considered successful if the input value is present in the list. The result of the match is inverted if invert_matcher is true.",
@@ -457,7 +457,7 @@ func (r *ServicePolicyRuleResource) Schema(ctx context.Context, req resource.Sch
 
 			},
 			"ja4_tls_fingerprint": schema.SingleNestedBlock{
-				MarkdownDescription: "JA4 TLS Fingerprint Matcher. An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of SSL/TLS clients and potentially has a different structure and length.",
+				MarkdownDescription: "[OneOf: ja4_tls_fingerprint, tls_fingerprint_matcher] JA4 TLS Fingerprint Matcher. An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of SSL/TLS clients and potentially has a different structure and length.",
 				Attributes: map[string]schema.Attribute{
 					"exact_values": schema.ListAttribute{
 						MarkdownDescription: "Exact Values. A list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against ves.io.schema.rules.repeated.items.string.len: 36 ves.io.schema.rules.repeated.max_items: 16 ves.io.schema.rules.repeated.unique: true",

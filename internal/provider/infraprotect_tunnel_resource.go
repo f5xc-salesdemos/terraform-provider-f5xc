@@ -182,7 +182,7 @@ func (r *InfraprotectTunnelResource) Schema(ctx context.Context, req resource.Sc
 
 			},
 			"gre_ipv4": schema.SingleNestedBlock{
-				MarkdownDescription: "GRE IPv4 Tunnel. IPv4 Tunnel.",
+				MarkdownDescription: "[OneOf: gre_ipv4, gre_ipv6, ip_in_ip, ipv6_to_ipv6] GRE IPv4 Tunnel. IPv4 Tunnel.",
 				Attributes: map[string]schema.Attribute{
 					"customer_endpoint_ipv4": schema.StringAttribute{
 						MarkdownDescription: "Customer Endpoint IP. IPv4 address for the customer endpoint of the tunnel Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.ipv4_globally_routable: true",

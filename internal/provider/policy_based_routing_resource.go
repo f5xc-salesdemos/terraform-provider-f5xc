@@ -82,7 +82,7 @@ func (r *PolicyBasedRoutingResource) Schema(ctx context.Context, req resource.Sc
 		},
 		Blocks: map[string]schema.Block{
 			"forward_proxy_pbr": schema.SingleNestedBlock{
-				MarkdownDescription: "L3/L4 routing rule. Network(L3/L4) routing policy rule",
+				MarkdownDescription: "[OneOf: forward_proxy_pbr, network_pbr] L3/L4 routing rule. Network(L3/L4) routing policy rule",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{

@@ -87,7 +87,7 @@ func (r *OidcProviderResource) Schema(ctx context.Context, req resource.SchemaRe
 		},
 		Blocks: map[string]schema.Block{
 			"azure_oidc_spec_type": schema.SingleNestedBlock{
-				MarkdownDescription: "Azure OIDC Spec Type. AzureOIDCSpecType specifies the attributes required to configure Azure provider",
+				MarkdownDescription: "[OneOf: azure_oidc_spec_type, google_oidc_spec_type, oidc_v10_spec_type, okta_oidc_spec_type] Azure OIDC Spec Type. AzureOIDCSpecType specifies the attributes required to configure Azure provider",
 				Attributes: map[string]schema.Attribute{
 					"authorization_url": schema.StringAttribute{
 						MarkdownDescription: "Authorization URL. The authorization url of your OIDC application. Required: YES ves.io.schema.rules.message.required: true",

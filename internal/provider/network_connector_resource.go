@@ -82,7 +82,7 @@ func (r *NetworkConnectorResource) Schema(ctx context.Context, req resource.Sche
 		},
 		Blocks: map[string]schema.Block{
 			"disable_forward_proxy": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_forward_proxy, enable_forward_proxy] Empty. This can be used for messages where no values are needed",
 			},
 			"enable_forward_proxy": schema.SingleNestedBlock{
 				MarkdownDescription: "Forward Proxy Configuration. Fine tune forward proxy behavior Few configurations allowed are White listed ports and ip prefixes: Forward proxy does application protocol detection and server name(SNI) detection by peeking into the traffic on the incoming downstream connection. Few protocols doesn't have client sending the first data. In such cases, protocol and SNI detection fails. This configuration allows, skipping protocol and SNI detection for whitelisted ip-prefix-list and ports connectio...",
@@ -174,7 +174,7 @@ func (r *NetworkConnectorResource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"sli_to_global_dr": schema.SingleNestedBlock{
-				MarkdownDescription: "Global Network. Global network reference for direct connection",
+				MarkdownDescription: "[OneOf: sli_to_global_dr, sli_to_slo_snat, slo_to_global_dr] Global Network. Global network reference for direct connection",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{

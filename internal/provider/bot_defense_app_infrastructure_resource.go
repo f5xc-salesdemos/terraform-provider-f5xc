@@ -92,7 +92,7 @@ func (r *BotDefenseAppInfrastructureResource) Schema(ctx context.Context, req re
 		},
 		Blocks: map[string]schema.Block{
 			"cloud_hosted": schema.SingleNestedBlock{
-				MarkdownDescription: "F5 Hosted. Infra F5 Hosted",
+				MarkdownDescription: "[OneOf: cloud_hosted, data_center_hosted] F5 Hosted. Infra F5 Hosted",
 				Attributes: map[string]schema.Attribute{
 					"infra_host_name": schema.StringAttribute{
 						MarkdownDescription: "Infra Host Name. Infra Host Name Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.hostname: true",

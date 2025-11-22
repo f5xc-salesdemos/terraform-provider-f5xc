@@ -62,6 +62,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "http_health_check, https_health_check, icmp_health_check, tcp_health_check, tcp_hex_health_check, udp_health_check" must be set
+
 `http_health_check` - (Optional) HTTP Health Check. See [Http Health Check](#http-health-check) below for details.
 
 `https_health_check` - (Optional) HTTP Health Check. See [Https Health Check](#https-health-check) below for details.

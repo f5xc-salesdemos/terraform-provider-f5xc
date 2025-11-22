@@ -62,11 +62,17 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "disable_https_management, https_management" must be set
+
 `disable_https_management` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Https Management](#disable-https-management) below for details.
+
+###### One of the arguments from this list "disable_ssh_access, enabled_ssh_access" must be set
 
 `disable_ssh_access` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Ssh Access](#disable-ssh-access) below for details.
 
 `enabled_ssh_access` - (Optional) SSH based management. SSH based configuration. See [Enabled Ssh Access](#enabled-ssh-access) below for details.
+
+###### One of the arguments from this list "f5_big_ip_aws_service, palo_alto_fw_service" must be set
 
 `f5_big_ip_aws_service` - (Optional) Virtual BIG-IP AWS. Virtual BIG-IP specification for AWS. See [F5 Big Ip Aws Service](#f5-big-ip-aws-service) below for details.
 

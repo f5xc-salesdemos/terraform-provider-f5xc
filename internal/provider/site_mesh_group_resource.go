@@ -82,13 +82,13 @@ func (r *SiteMeshGroupResource) Schema(ctx context.Context, req resource.SchemaR
 		},
 		Blocks: map[string]schema.Block{
 			"disable_re_fallback": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_re_fallback, enable_re_fallback] Empty. This can be used for messages where no values are needed",
 			},
 			"enable_re_fallback": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"full_mesh": schema.SingleNestedBlock{
-				MarkdownDescription: "Full Mesh. Details of Full Mesh Group Type",
+				MarkdownDescription: "[OneOf: full_mesh, hub_mesh, spoke_mesh] Full Mesh. Details of Full Mesh Group Type",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{

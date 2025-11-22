@@ -74,7 +74,11 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "cluster_id, no_cluster_id" must be set
+
 `cluster_id` - (Optional) Discovery cluster Identifier. Exclusive with [no_cluster_id] Specify identifier for discovery cluster. This identifier can be specified in endpoint object to discover only from this discovery object (`String`).
+
+###### One of the arguments from this list "discovery_consul, discovery_k8s" must be set
 
 `discovery_consul` - (Optional) Consul Discovery Configuration. Discovery configuration for Hashicorp Consul. See [Discovery Consul](#discovery-consul) below for details.
 

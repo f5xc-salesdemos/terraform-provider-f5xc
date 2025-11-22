@@ -62,7 +62,11 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "aws, gcp" must be set
+
 `aws` - (Optional) Amazon Web Services(AWS) CloudLink Provider. CloudLink for AWS Cloud Provider. See [Aws](#aws) below for details.
+
+###### One of the arguments from this list "disabled, enabled" must be set
 
 `disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Disabled](#disabled) below for details.
 

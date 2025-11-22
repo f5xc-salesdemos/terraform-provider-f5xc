@@ -82,7 +82,7 @@ func (r *CloudConnectResource) Schema(ctx context.Context, req resource.SchemaRe
 		},
 		Blocks: map[string]schema.Block{
 			"aws_tgw_site": schema.SingleNestedBlock{
-				MarkdownDescription: "AWS TGW Site Type. Cloud Connect AWS TGW Site Type",
+				MarkdownDescription: "[OneOf: aws_tgw_site, azure_vnet_site] AWS TGW Site Type. Cloud Connect AWS TGW Site Type",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{

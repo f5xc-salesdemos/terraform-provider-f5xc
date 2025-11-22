@@ -60,9 +60,15 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "active_enhanced_firewall_policies, active_network_policies, disable_network_policy" must be set
+
 `active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option .... See [Active Enhanced Firewall Policies](#active-enhanced-firewall-policies) below for details.
 
+###### One of the arguments from this list "active_fast_acls, disable_fast_acl" must be set
+
 `active_fast_acls` - (Optional) Active Fast ACL(s). List of Fast ACL(s). See [Active Fast Acls](#active-fast-acls) below for details.
+
+###### One of the arguments from this list "active_forward_proxy_policies, disable_forward_proxy_policy" must be set
 
 `active_forward_proxy_policies` - (Optional) Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active. See [Active Forward Proxy Policies](#active-forward-proxy-policies) below for details.
 

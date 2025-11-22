@@ -64,9 +64,15 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "any_asn, asn_list, asn_matcher" must be set
+
 `any_asn` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Asn](#any-asn) below for details.
 
+###### One of the arguments from this list "any_client, client_name, client_name_matcher, client_selector, ip_threat_category_list" must be set
+
 `any_client` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Client](#any-client) below for details.
+
+###### One of the arguments from this list "any_ip, ip_matcher, ip_prefix_list" must be set
 
 `any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Ip](#any-ip) below for details.
 
@@ -103,6 +109,8 @@ The following arguments are optional:
 `ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [Ip Prefix List](#ip-prefix-list) below for details.
 
 `ip_threat_category_list` - (Optional) IP Threat Category List Type. List of ip threat categories. See [Ip Threat Category List](#ip-threat-category-list) below for details.
+
+###### One of the arguments from this list "ja4_tls_fingerprint, tls_fingerprint_matcher" must be set
 
 `ja4_tls_fingerprint` - (Optional) JA4 TLS Fingerprint Matcher. An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of SSL/TLS clients and potentially has a different structure and length. See [Ja4 Tls Fingerprint](#ja4-tls-fingerprint) below for details.
 

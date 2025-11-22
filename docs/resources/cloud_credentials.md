@@ -59,6 +59,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "aws_assume_role, aws_secret_key, azure_client_secret, azure_pfx_certificate, gcp_cred_file" must be set
+
 `aws_assume_role` - (Optional) AWS Assume Role to Handle Delegated Access. AWS Assume Role to Handle Delegated Access. See [Aws Assume Role](#aws-assume-role) below for details.
 
 `aws_secret_key` - (Optional) AWS Programmatic Access Credentials. AWS Programmatic Access Credentials type. See [Aws Secret Key](#aws-secret-key) below for details.

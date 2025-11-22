@@ -111,6 +111,8 @@ The following arguments are optional:
 
 `admin_password` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Admin Password](#admin-password) below for details.
 
+###### One of the arguments from this list "alternate_region, azure_region" must be set
+
 `alternate_region` - (Optional) Alternate Azure Region Name. Exclusive with [azure_region] Name of the azure region which does not support availability zones. ves.io.schema.rules.string.max_len: 64 (`String`).
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
@@ -118,6 +120,8 @@ The following arguments are optional:
 `azure_cred` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Azure Cred](#azure-cred) below for details.
 
 `azure_region` - (Optional) Recommended Azure Region Name. Exclusive with [alternate_region] Name of the azure region which supports availability zones. ves.io.schema.rules.string.max_len: 64 (`String`).
+
+###### One of the arguments from this list "block_all_services, blocked_services, default_blocked_services" must be set
 
 `block_all_services` - (Optional) Empty. This can be used for messages where no values are needed. See [Block All Services](#block-all-services) below for details.
 
@@ -131,6 +135,8 @@ The following arguments are optional:
 
 `disk_size` - (Optional) Cloud Disk Size. Disk size to be used for this instance in GiB. 80 is 80 GiB ves.io.schema.rules.uint32.lte: 4095 (`Number`).
 
+###### One of the arguments from this list "ingress_egress_gw, ingress_egress_gw_ar, ingress_gw, ingress_gw_ar, voltstack_cluster, voltstack_cluster_ar" must be set
+
 `ingress_egress_gw` - (Optional) Azure Ingress/Egress Gateway on Recommended Region. Two interface Azure ingress/egress site. See [Ingress Egress Gw](#ingress-egress-gw) below for details.
 
 `ingress_egress_gw_ar` - (Optional) Azure Ingress/Egress Gateway on Alternate Region. Two interface Azure ingress/egress site on Alternate Region with no support for zones. See [Ingress Egress Gw Ar](#ingress-egress-gw-ar) below for details.
@@ -143,11 +149,15 @@ The following arguments are optional:
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
+###### One of the arguments from this list "log_receiver, logs_streaming_disabled" must be set
+
 `log_receiver` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Log Receiver](#log-receiver) below for details.
 
 `logs_streaming_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Logs Streaming Disabled](#logs-streaming-disabled) below for details.
 
 `machine_type` - (Optional) Azure Machine Type for Node. Select Instance size based on performance needed (`String`).
+
+###### One of the arguments from this list "no_worker_nodes, nodes_per_az, total_nodes" must be set
 
 `no_worker_nodes` - (Optional) Empty. This can be used for messages where no values are needed. See [No Worker Nodes](#no-worker-nodes) below for details.
 

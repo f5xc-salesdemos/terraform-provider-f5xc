@@ -62,6 +62,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "aws_site_type_choice, baremetal_site_type_choice" must be set
+
 `aws_site_type_choice` - (Optional) AWS Transit Gateway Site choice. Virtual F5 BIG-IP APM service to be deployed as external service on AWS Transit Gateway Site. See [Aws Site Type Choice](#aws-site-type-choice) below for details.
 
 `baremetal_site_type_choice` - (Optional) Virtual BIG-IP on App Stack Bare Metal Site. Virtual BIG-IP specification for App Stack Bare Metal Site. See [Baremetal Site Type Choice](#baremetal-site-type-choice) below for details.

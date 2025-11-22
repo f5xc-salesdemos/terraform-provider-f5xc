@@ -87,7 +87,7 @@ func (r *InfraprotectAsnResource) Schema(ctx context.Context, req resource.Schem
 		},
 		Blocks: map[string]schema.Block{
 			"bgp_session_disabled": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: bgp_session_disabled, bgp_session_enabled] Empty. This can be used for messages where no values are needed",
 			},
 			"bgp_session_enabled": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",

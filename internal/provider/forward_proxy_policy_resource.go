@@ -82,7 +82,7 @@ func (r *ForwardProxyPolicyResource) Schema(ctx context.Context, req resource.Sc
 		},
 		Blocks: map[string]schema.Block{
 			"allow_all": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: allow_all, allow_list, deny_list, rule_list] Empty. This can be used for messages where no values are needed",
 			},
 			"allow_list": schema.SingleNestedBlock{
 				MarkdownDescription: "Forward Proxy Rule. URL(s) and domains policy for forward proxy for a connection type (TLS or HTTP)",
@@ -178,7 +178,7 @@ func (r *ForwardProxyPolicyResource) Schema(ctx context.Context, req resource.Sc
 
 			},
 			"any_proxy": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: any_proxy, drp_http_connect, network_connector, proxy_label_selector] Empty. This can be used for messages where no values are needed",
 			},
 			"deny_list": schema.SingleNestedBlock{
 				MarkdownDescription: "Forward Proxy Rule. URL(s) and domains policy for forward proxy for a connection type (TLS or HTTP)",

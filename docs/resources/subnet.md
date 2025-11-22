@@ -62,6 +62,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "connect_to_layer2, connect_to_slo, isolated_nw" must be set
+
 `connect_to_layer2` - (Optional) Subnet connection to Layer2 Interface. See [Connect To Layer2](#connect-to-layer2) below for details.
 
 `connect_to_slo` - (Optional) Empty. This can be used for messages where no values are needed. See [Connect To Slo](#connect-to-slo) below for details.

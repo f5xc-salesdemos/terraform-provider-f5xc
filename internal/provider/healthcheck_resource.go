@@ -107,7 +107,7 @@ func (r *HealthcheckResource) Schema(ctx context.Context, req resource.SchemaReq
 		},
 		Blocks: map[string]schema.Block{
 			"http_health_check": schema.SingleNestedBlock{
-				MarkdownDescription: "HTTP Health Check. Healthy if 'get' method on URL 'http(s)://<host>/<path>' with optional '<header>' returns success. 'host' is not used for DNS resolution. It is used as HTTP Header in the request.",
+				MarkdownDescription: "[OneOf: http_health_check, tcp_health_check, udp_icmp_health_check] HTTP Health Check. Healthy if 'get' method on URL 'http(s)://<host>/<path>' with optional '<header>' returns success. 'host' is not used for DNS resolution. It is used as HTTP Header in the request.",
 				Attributes: map[string]schema.Attribute{
 					"expected_status_codes": schema.ListAttribute{
 						MarkdownDescription: "Expected Status Codes. Specifies a list of HTTP response status codes considered healthy. To treat default HTTP expected status code 200 as healthy, user has to configure it explicitly. This is a list of strings, each of which is single HTTP status code or a range with start and end values separated by '-'. ves.io.schema.rules.repeated.items.string.http_status_range: true ves.io.schema.rules.repeated.items.string.max_len: 10 ves.io.schema.rules.repeated.items.string.min_len: 3 ves.io.schema.r...",

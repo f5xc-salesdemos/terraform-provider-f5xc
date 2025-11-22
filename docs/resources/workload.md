@@ -84,6 +84,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "job, service, simple_service, stateful_service" must be set
+
 `job` - (Optional) Job Type. Jobs are used for running batch processing tasks and run to completion. Jobs are generally used for tasks like report generation, billing, parallel data processing, ETL processing, etc. See [Job](#job) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).

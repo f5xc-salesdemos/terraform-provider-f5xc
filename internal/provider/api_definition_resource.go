@@ -120,7 +120,7 @@ func (r *APIDefinitionResource) Schema(ctx context.Context, req resource.SchemaR
 				},
 			},
 			"mixed_schema_origin": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: mixed_schema_origin, strict_schema_origin] Empty. This can be used for messages where no values are needed",
 			},
 			"non_api_endpoints": schema.ListNestedBlock{
 				MarkdownDescription: "API Discovery Exclusion List. List of Non-API Endpoints. ves.io.schema.rules.repeated.max_items: 1000 ves.io.schema.rules.repeated.unique: true",

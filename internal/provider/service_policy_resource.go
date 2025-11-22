@@ -87,7 +87,7 @@ func (r *ServicePolicyResource) Schema(ctx context.Context, req resource.SchemaR
 		},
 		Blocks: map[string]schema.Block{
 			"allow_all_requests": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: allow_all_requests, allow_list, deny_all_requests, deny_list, rule_list] Empty. This can be used for messages where no values are needed",
 			},
 			"allow_list": schema.SingleNestedBlock{
 				MarkdownDescription: "Source List. List of sources. A request belongs to this list if it satisfies any of the match criteria.",
@@ -180,7 +180,7 @@ func (r *ServicePolicyResource) Schema(ctx context.Context, req resource.SchemaR
 
 			},
 			"any_server": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: any_server, server_name, server_name_matcher, server_selector] Empty. This can be used for messages where no values are needed",
 			},
 			"deny_all_requests": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",

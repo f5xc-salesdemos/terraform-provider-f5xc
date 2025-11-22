@@ -62,6 +62,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "auto_http_config, http1_config, http2_options" must be set
+
 `auto_http_config` - (Optional) Empty. This can be used for messages where no values are needed. See [Auto Http Config](#auto-http-config) below for details.
 
 `circuit_breaker` - (Optional) Circuit Breaker. CircuitBreaker provides a mechanism for watching failures in upstream connections or requests and if the failures reach a certain threshold, automatically fail subsequent requests .... See [Circuit Breaker](#circuit-breaker) below for details.
@@ -69,6 +71,8 @@ The following arguments are optional:
 `connection_timeout` - (Optional) Connection Timeout. The timeout for new network connections to endpoints in the cluster. This is specified in milliseconds. The default value is 2 seconds ves.io.schema.rules.uint32.lte: 600000 (`Number`).
 
 `default_subset` - (Optional) Default Subset. List of key-value pairs that define default subset. See [Default Subset](#default-subset) below for details.
+
+###### One of the arguments from this list "disable_proxy_protocol, proxy_protocol_v1, proxy_protocol_v2" must be set
 
 `disable_proxy_protocol` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Proxy Protocol](#disable-proxy-protocol) below for details.
 
@@ -91,6 +95,8 @@ The following arguments are optional:
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
 `loadbalancer_algorithm` - (Optional) Load Balancer Algorithm. Different load balancing algorithms supported When a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm to determine... (`String`).
+
+###### One of the arguments from this list "no_panic_threshold, panic_threshold" must be set
 
 `no_panic_threshold` - (Optional) Empty. This can be used for messages where no values are needed. See [No Panic Threshold](#no-panic-threshold) below for details.
 

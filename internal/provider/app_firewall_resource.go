@@ -82,7 +82,7 @@ func (r *AppFirewallResource) Schema(ctx context.Context, req resource.SchemaReq
 		},
 		Blocks: map[string]schema.Block{
 			"ai_risk_based_blocking": schema.SingleNestedBlock{
-				MarkdownDescription: "Risk-Based Blocking (Powered by AI) - Preview. All Attack Types, including high, medium, and low accuracy signatures, automatic Attack Signature tuning, Threat Campaigns, and all Violations will be enabled. AI and ML algorithms will assess request risk, and only high-risk requests will be blocked by default. This feature is in preview mode.",
+				MarkdownDescription: "[OneOf: ai_risk_based_blocking, default_detection_settings, detection_settings] Risk-Based Blocking (Powered by AI) - Preview. All Attack Types, including high, medium, and low accuracy signatures, automatic Attack Signature tuning, Threat Campaigns, and all Violations will be enabled. AI and ML algorithms will assess request risk, and only high-risk requests will be blocked by default. This feature is in preview mode.",
 				Attributes: map[string]schema.Attribute{
 					"high_risk_action": schema.StringAttribute{
 						MarkdownDescription: "Risk Based Blocking Action. Action to be performed on the request Log and block Log only",
@@ -100,7 +100,7 @@ func (r *AppFirewallResource) Schema(ctx context.Context, req resource.SchemaReq
 
 			},
 			"allow_all_response_codes": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: allow_all_response_codes, allowed_response_codes] Empty. This can be used for messages where no values are needed",
 			},
 			"allowed_response_codes": schema.SingleNestedBlock{
 				MarkdownDescription: "Allowed Response Codes. List of HTTP response status codes that are allowed",
@@ -114,10 +114,10 @@ func (r *AppFirewallResource) Schema(ctx context.Context, req resource.SchemaReq
 
 			},
 			"blocking": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: blocking, monitoring] Empty. This can be used for messages where no values are needed",
 			},
 			"blocking_page": schema.SingleNestedBlock{
-				MarkdownDescription: "Custom Blocking Response Page. Custom blocking response page body",
+				MarkdownDescription: "[OneOf: blocking_page, use_default_blocking_page] Custom Blocking Response Page. Custom blocking response page body",
 				Attributes: map[string]schema.Attribute{
 					"blocking_page": schema.StringAttribute{
 						MarkdownDescription: "Blocking Response Page Body. Define the content of the response page (e.g., an HTML document or a JSON object), use the {{request_id}} placeholder to provide users with a unique identifier to be able to trace the blocked request in the logs. The maximum allowed size of response body is 4096 bytes after base64 encoding, which would be about 3070 bytes in plain text. ves.io.schema.rules.string.max_len: 4096 ves.io.schema.rules.string.uri_ref: true",
@@ -131,7 +131,7 @@ func (r *AppFirewallResource) Schema(ctx context.Context, req resource.SchemaReq
 
 			},
 			"bot_protection_setting": schema.SingleNestedBlock{
-				MarkdownDescription: "Bot Protection. Configuration of WAF Bot Protection",
+				MarkdownDescription: "[OneOf: bot_protection_setting, default_bot_setting] Bot Protection. Configuration of WAF Bot Protection",
 				Attributes: map[string]schema.Attribute{
 					"good_bot_action": schema.StringAttribute{
 						MarkdownDescription: "Bot Action. Action to be performed on the request Log and block Log only Disable detection",
@@ -149,7 +149,7 @@ func (r *AppFirewallResource) Schema(ctx context.Context, req resource.SchemaReq
 
 			},
 			"custom_anonymization": schema.SingleNestedBlock{
-				MarkdownDescription: "Anonymization Configuration. Anonymization settings which is a list of HTTP headers, parameters and cookies",
+				MarkdownDescription: "[OneOf: custom_anonymization, default_anonymization, disable_anonymization] Anonymization Configuration. Anonymization settings which is a list of HTTP headers, parameters and cookies",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{

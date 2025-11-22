@@ -66,6 +66,8 @@ The following arguments are optional:
 
 `protocol_policer` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Protocol Policer](#protocol-policer) below for details.
 
+###### One of the arguments from this list "re_acl, site_acl" must be set
+
 `re_acl` - (Optional) Fast ACL for RE. Fast ACL definition for RE. See [Re Acl](#re-acl) below for details.
 
 `site_acl` - (Optional) Fast ACL for Site. Fast ACL definition for Site. See [Site Acl](#site-acl) below for details.

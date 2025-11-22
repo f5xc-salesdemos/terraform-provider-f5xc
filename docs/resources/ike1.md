@@ -62,11 +62,15 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "ike_keylifetime_hours, ike_keylifetime_minutes, use_default_keylifetime" must be set
+
 `ike_keylifetime_hours` - (Optional) Hours. Input Hours. See [Ike Keylifetime Hours](#ike-keylifetime-hours) below for details.
 
 `ike_keylifetime_minutes` - (Optional) Minutes. Set IKE Key Lifetime in minutes. See [Ike Keylifetime Minutes](#ike-keylifetime-minutes) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
+
+###### One of the arguments from this list "reauth_disabled, reauth_timeout_days, reauth_timeout_hours" must be set
 
 `reauth_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Reauth Disabled](#reauth-disabled) below for details.
 

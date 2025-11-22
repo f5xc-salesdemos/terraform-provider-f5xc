@@ -77,7 +77,11 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "active_enhanced_firewall_policies, no_network_policy" must be set
+
 `active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option .... See [Active Enhanced Firewall Policies](#active-enhanced-firewall-policies) below for details.
+
+###### One of the arguments from this list "active_forward_proxy_policies, no_forward_proxy" must be set
 
 `active_forward_proxy_policies` - (Optional) Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active. See [Active Forward Proxy Policies](#active-forward-proxy-policies) below for details.
 
@@ -85,25 +89,41 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "aws, azure, baremetal, equinix, gcp, kvm, nutanix, oci, openstack, vmware" must be set
+
 `aws` - (Optional) AWS Provider Type. AWS Provider Type. See [Aws](#aws) below for details.
 
 `azure` - (Optional) Azure Provider Type. Azure Provider Type. See [Azure](#azure) below for details.
 
 `baremetal` - (Optional) Baremetal Provider Type. Baremetal Provider Type. See [Baremetal](#baremetal) below for details.
 
+###### One of the arguments from this list "block_all_services, blocked_services" must be set
+
 `block_all_services` - (Optional) Empty. This can be used for messages where no values are needed. See [Block All Services](#block-all-services) below for details.
 
 `blocked_services` - (Optional) Disable Node Local Services. Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site. See [Blocked Services](#blocked-services) below for details.
 
+###### One of the arguments from this list "custom_proxy, f5_proxy" must be set
+
 `custom_proxy` - (Optional) Custom Enterprise Proxy. Custom Enterprise Proxy. See [Custom Proxy](#custom-proxy) below for details.
+
+###### One of the arguments from this list "custom_proxy_bypass, no_proxy_bypass" must be set
 
 `custom_proxy_bypass` - (Optional) Proxy Bypass. List of domains to bypass the proxy. See [Custom Proxy Bypass](#custom-proxy-bypass) below for details.
 
+###### One of the arguments from this list "dc_cluster_group_sli, no_s2s_connectivity_sli" must be set
+
 `dc_cluster_group_sli` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Dc Cluster Group Sli](#dc-cluster-group-sli) below for details.
+
+###### One of the arguments from this list "dc_cluster_group_slo, no_s2s_connectivity_slo, site_mesh_group_on_slo" must be set
 
 `dc_cluster_group_slo` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Dc Cluster Group Slo](#dc-cluster-group-slo) below for details.
 
+###### One of the arguments from this list "disable_ha, enable_ha" must be set
+
 `disable_ha` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Ha](#disable-ha) below for details.
+
+###### One of the arguments from this list "disable_url_categorization, enable_url_categorization" must be set
 
 `disable_url_categorization` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Url Categorization](#disable-url-categorization) below for details.
 
@@ -126,6 +146,8 @@ The following arguments are optional:
 `load_balancing` - (Optional) Load Balancing Settings. This section contains settings on the site that relate to Load Balancing functionality. See [Load Balancing](#load-balancing) below for details.
 
 `local_vrf` - (Optional) Local VRF Settings. There can be two local VRFs on each site. See [Local Vrf](#local-vrf) below for details.
+
+###### One of the arguments from this list "log_receiver, logs_streaming_disabled" must be set
 
 `log_receiver` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Log Receiver](#log-receiver) below for details.
 

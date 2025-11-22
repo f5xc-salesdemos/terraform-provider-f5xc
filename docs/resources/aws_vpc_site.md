@@ -114,6 +114,8 @@ The following arguments are optional:
 
 `aws_region` - (Optional) AWS Region. Name for AWS Region. Required: YES ves.io.schema.rules.message.required: true (`String`).
 
+###### One of the arguments from this list "block_all_services, blocked_services, default_blocked_services" must be set
+
 `block_all_services` - (Optional) Empty. This can be used for messages where no values are needed. See [Block All Services](#block-all-services) below for details.
 
 `blocked_services` - (Optional) Disable Node Local Services. Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site. See [Blocked Services](#blocked-services) below for details.
@@ -122,17 +124,25 @@ The following arguments are optional:
 
 `custom_dns` - (Optional) Custom DNS. Custom DNS is the configured for specify CE site. See [Custom Dns](#custom-dns) below for details.
 
+###### One of the arguments from this list "custom_security_group, f5xc_security_group" must be set
+
 `custom_security_group` - (Optional) Security Group IDS. Enter pre created security groups for slo(Site Local Outside) and sli(Site Local Inside) interface. Supported only for sites deployed on existing VPC. See [Custom Security Group](#custom-security-group) below for details.
 
 `default_blocked_services` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Blocked Services](#default-blocked-services) below for details.
+
+###### One of the arguments from this list "direct_connect_disabled, direct_connect_enabled, private_connectivity" must be set
 
 `direct_connect_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Direct Connect Disabled](#direct-connect-disabled) below for details.
 
 `direct_connect_enabled` - (Optional) Direct Connect Configuration. Direct Connect Configuration. See [Direct Connect Enabled](#direct-connect-enabled) below for details.
 
+###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
+
 `disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet Vip](#disable-internet-vip) below for details.
 
 `disk_size` - (Optional) Cloud Disk Size. Disk size to be used for this instance in GiB. 80 is 80 GiB ves.io.schema.rules.uint32.lte: 2048 (`Number`).
+
+###### One of the arguments from this list "egress_gateway_default, egress_nat_gw, egress_virtual_private_gateway" must be set
 
 `egress_gateway_default` - (Optional) Empty. This can be used for messages where no values are needed. See [Egress Gateway Default](#egress-gateway-default) below for details.
 
@@ -142,9 +152,13 @@ The following arguments are optional:
 
 `enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet Vip](#enable-internet-vip) below for details.
 
+###### One of the arguments from this list "f5_orchestrated_routing, manual_routing" must be set
+
 `f5_orchestrated_routing` - (Optional) Empty. This can be used for messages where no values are needed. See [F5 Orchestrated Routing](#f5-orchestrated-routing) below for details.
 
 `f5xc_security_group` - (Optional) Empty. This can be used for messages where no values are needed. See [F5xc Security Group](#f5xc-security-group) below for details.
+
+###### One of the arguments from this list "ingress_egress_gw, ingress_gw, voltstack_cluster" must be set
 
 `ingress_egress_gw` - (Optional) AWS Ingress/Egress Gateway. Two interface AWS ingress/egress site. See [Ingress Egress Gw](#ingress-egress-gw) below for details.
 
@@ -156,11 +170,15 @@ The following arguments are optional:
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
+###### One of the arguments from this list "log_receiver, logs_streaming_disabled" must be set
+
 `log_receiver` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Log Receiver](#log-receiver) below for details.
 
 `logs_streaming_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Logs Streaming Disabled](#logs-streaming-disabled) below for details.
 
 `manual_routing` - (Optional) Empty. This can be used for messages where no values are needed. See [Manual Routing](#manual-routing) below for details.
+
+###### One of the arguments from this list "no_worker_nodes, nodes_per_az, total_nodes" must be set
 
 `no_worker_nodes` - (Optional) Empty. This can be used for messages where no values are needed. See [No Worker Nodes](#no-worker-nodes) below for details.
 

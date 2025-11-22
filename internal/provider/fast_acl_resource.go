@@ -100,7 +100,7 @@ func (r *FastACLResource) Schema(ctx context.Context, req resource.SchemaRequest
 
 			},
 			"re_acl": schema.SingleNestedBlock{
-				MarkdownDescription: "Fast ACL for RE. Fast ACL definition for RE",
+				MarkdownDescription: "[OneOf: re_acl, site_acl] Fast ACL for RE. Fast ACL definition for RE",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{

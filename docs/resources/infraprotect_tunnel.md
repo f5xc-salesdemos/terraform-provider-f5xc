@@ -68,6 +68,8 @@ The following arguments are optional:
 
 `firewall_rule_group` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Firewall Rule Group](#firewall-rule-group) below for details.
 
+###### One of the arguments from this list "gre_ipv4, gre_ipv6, ip_in_ip, ipv6_to_ipv6" must be set
+
 `gre_ipv4` - (Optional) GRE IPv4 Tunnel. IPv4 Tunnel. See [Gre Ipv4](#gre-ipv4) below for details.
 
 `gre_ipv6` - (Optional) GRE IPv6 Tunnel. IPv6 Tunnel. See [Gre Ipv6](#gre-ipv6) below for details.

@@ -62,6 +62,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "forward_proxy_pbr, network_pbr" must be set
+
 `forward_proxy_pbr` - (Optional) L3/L4 routing rule. Network(L3/L4) routing policy rule. See [Forward Proxy Pbr](#forward-proxy-pbr) below for details.
 
 `forwarding_class_list` - (Optional) Default Forwarding Classes. Ordered list of forwarding Class to be used if source application match and no rule match. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules. See [Forwarding Class List](#forwarding-class-list) below for details.

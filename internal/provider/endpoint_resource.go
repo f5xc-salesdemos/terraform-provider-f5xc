@@ -85,7 +85,7 @@ func (r *EndpointResource) Schema(ctx context.Context, req resource.SchemaReques
 				},
 			},
 			"dns_name": schema.StringAttribute{
-				MarkdownDescription: "Endpoint Name. Exclusive with [dns_name_advanced ip service_info] Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. ves.io.schema.rules.string.hostname: true ves.io.schema.rules.string.max_len: 256",
+				MarkdownDescription: "[OneOf: dns_name, dns_name_advanced, ip, service_info] Endpoint Name. Exclusive with [dns_name_advanced ip service_info] Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. ves.io.schema.rules.string.hostname: true ves.io.schema.rules.string.max_len: 256",
 				Optional: true,
 			},
 			"health_check_port": schema.Int64Attribute{

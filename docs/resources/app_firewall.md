@@ -62,7 +62,11 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "ai_risk_based_blocking, default_detection_settings, detection_settings" must be set
+
 `ai_risk_based_blocking` - (Optional) Risk-Based Blocking (Powered by AI) - Preview. All Attack Types, including high, medium, and low accuracy signatures, automatic Attack Signature tuning, Threat Campaigns, and all Violations will be.... See [Ai Risk Based Blocking](#ai-risk-based-blocking) below for details.
+
+###### One of the arguments from this list "allow_all_response_codes, allowed_response_codes" must be set
 
 `allow_all_response_codes` - (Optional) Empty. This can be used for messages where no values are needed. See [Allow All Response Codes](#allow-all-response-codes) below for details.
 
@@ -70,11 +74,19 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "blocking, monitoring" must be set
+
 `blocking` - (Optional) Empty. This can be used for messages where no values are needed. See [Blocking](#blocking) below for details.
+
+###### One of the arguments from this list "blocking_page, use_default_blocking_page" must be set
 
 `blocking_page` - (Optional) Custom Blocking Response Page. Custom blocking response page body. See [Blocking Page](#blocking-page) below for details.
 
+###### One of the arguments from this list "bot_protection_setting, default_bot_setting" must be set
+
 `bot_protection_setting` - (Optional) Bot Protection. Configuration of WAF Bot Protection. See [Bot Protection Setting](#bot-protection-setting) below for details.
+
+###### One of the arguments from this list "custom_anonymization, default_anonymization, disable_anonymization" must be set
 
 `custom_anonymization` - (Optional) Anonymization Configuration. Anonymization settings which is a list of HTTP headers, parameters and cookies. See [Custom Anonymization](#custom-anonymization) below for details.
 

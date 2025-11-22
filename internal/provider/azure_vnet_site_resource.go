@@ -93,7 +93,7 @@ func (r *AzureVNETSiteResource) Schema(ctx context.Context, req resource.SchemaR
 				Optional: true,
 			},
 			"alternate_region": schema.StringAttribute{
-				MarkdownDescription: "Alternate Azure Region Name. Exclusive with [azure_region] Name of the azure region which does not support availability zones. ves.io.schema.rules.string.max_len: 64",
+				MarkdownDescription: "[OneOf: alternate_region, azure_region] Alternate Azure Region Name. Exclusive with [azure_region] Name of the azure region which does not support availability zones. ves.io.schema.rules.string.max_len: 64",
 				Optional: true,
 			},
 			"azure_region": schema.StringAttribute{
@@ -183,7 +183,7 @@ func (r *AzureVNETSiteResource) Schema(ctx context.Context, req resource.SchemaR
 
 			},
 			"block_all_services": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: block_all_services, blocked_services, default_blocked_services] Empty. This can be used for messages where no values are needed",
 			},
 			"blocked_services": schema.SingleNestedBlock{
 				MarkdownDescription: "Disable Node Local Services. Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site.",
@@ -247,7 +247,7 @@ func (r *AzureVNETSiteResource) Schema(ctx context.Context, req resource.SchemaR
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"ingress_egress_gw": schema.SingleNestedBlock{
-				MarkdownDescription: "Azure Ingress/Egress Gateway on Recommended Region. Two interface Azure ingress/egress site",
+				MarkdownDescription: "[OneOf: ingress_egress_gw, ingress_egress_gw_ar, ingress_gw, ingress_gw_ar, voltstack_cluster, voltstack_cluster_ar] Azure Ingress/Egress Gateway on Recommended Region. Two interface Azure ingress/egress site",
 				Attributes: map[string]schema.Attribute{
 					"azure_certified_hw": schema.StringAttribute{
 						MarkdownDescription: "Azure Certified Hardware. Name for Azure certified hardware. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_len: 64",
@@ -1195,7 +1195,7 @@ func (r *AzureVNETSiteResource) Schema(ctx context.Context, req resource.SchemaR
 
 			},
 			"log_receiver": schema.SingleNestedBlock{
-				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
+				MarkdownDescription: "[OneOf: log_receiver, logs_streaming_disabled] Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
 				Attributes: map[string]schema.Attribute{
 					"name": schema.StringAttribute{
 						MarkdownDescription: "Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_bytes: 128 ves.io.schema.rules.string.min_bytes: 1",
@@ -1216,7 +1216,7 @@ func (r *AzureVNETSiteResource) Schema(ctx context.Context, req resource.SchemaR
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"no_worker_nodes": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: no_worker_nodes, nodes_per_az, total_nodes] Empty. This can be used for messages where no values are needed",
 			},
 			"offline_survivability_mode": schema.SingleNestedBlock{
 				MarkdownDescription: "Offline Survivability Mode. Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC). When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline. The certificates needed to keep the services running on this site are signed using a local CA. Secrets would also be cached locally to handl...",

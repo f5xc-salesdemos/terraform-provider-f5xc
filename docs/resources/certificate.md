@@ -60,6 +60,8 @@ The following arguments are optional:
 
 `certificate_url` - (Optional) Certificate. Certificate. Certificate or certificate chain in PEM format including the PEM headers. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string (`String`).
 
+###### One of the arguments from this list "custom_hash_algorithms, disable_ocsp_stapling, use_system_defaults" must be set
+
 `custom_hash_algorithms` - (Optional) Hash Algorithms. Specifies the hash algorithms to be used. See [Custom Hash Algorithms](#custom-hash-algorithms) below for details.
 
 `disable_ocsp_stapling` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Ocsp Stapling](#disable-ocsp-stapling) below for details.

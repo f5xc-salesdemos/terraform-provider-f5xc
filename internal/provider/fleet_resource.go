@@ -102,7 +102,7 @@ func (r *FleetResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 		},
 		Blocks: map[string]schema.Block{
 			"allow_all_usb": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: allow_all_usb, deny_all_usb, usb_policy] Empty. This can be used for messages where no values are needed",
 			},
 			"blocked_services": schema.ListNestedBlock{
 				MarkdownDescription: "Disable Node Local Services. Disable node local services on this site. ves.io.schema.rules.repeated.max_items: 6",
@@ -128,7 +128,7 @@ func (r *FleetResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"bond_device_list": schema.SingleNestedBlock{
-				MarkdownDescription: "Bond Devices List. List of bond devices for this fleet",
+				MarkdownDescription: "[OneOf: bond_device_list, no_bond_devices] Bond Devices List. List of bond devices for this fleet",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -174,7 +174,7 @@ func (r *FleetResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 
 			},
 			"dc_cluster_group": schema.SingleNestedBlock{
-				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
+				MarkdownDescription: "[OneOf: dc_cluster_group, dc_cluster_group_inside, no_dc_cluster_group] Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
 				Attributes: map[string]schema.Attribute{
 					"name": schema.StringAttribute{
 						MarkdownDescription: "Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_bytes: 128 ves.io.schema.rules.string.min_bytes: 1",
@@ -210,13 +210,13 @@ func (r *FleetResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 
 			},
 			"default_config": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: default_config, device_list, interface_list] Empty. This can be used for messages where no values are needed",
 			},
 			"default_sriov_interface": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: default_sriov_interface, sriov_interfaces] Empty. This can be used for messages where no values are needed",
 			},
 			"default_storage_class": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: default_storage_class, storage_class_list] Empty. This can be used for messages where no values are needed",
 			},
 			"deny_all_usb": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
@@ -264,10 +264,10 @@ func (r *FleetResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 
 			},
 			"disable_gpu": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_gpu, enable_gpu, enable_vgpu] Empty. This can be used for messages where no values are needed",
 			},
 			"disable_vm": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_vm, enable_vm] Empty. This can be used for messages where no values are needed",
 			},
 			"enable_gpu": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
@@ -381,7 +381,7 @@ func (r *FleetResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 
 			},
 			"log_receiver": schema.SingleNestedBlock{
-				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
+				MarkdownDescription: "[OneOf: log_receiver, logs_streaming_disabled] Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
 				Attributes: map[string]schema.Attribute{
 					"name": schema.StringAttribute{
 						MarkdownDescription: "Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_bytes: 128 ves.io.schema.rules.string.min_bytes: 1",
@@ -464,13 +464,13 @@ func (r *FleetResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"no_storage_device": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: no_storage_device, storage_device_list] Empty. This can be used for messages where no values are needed",
 			},
 			"no_storage_interfaces": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: no_storage_interfaces, storage_interface_list] Empty. This can be used for messages where no values are needed",
 			},
 			"no_storage_static_routes": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: no_storage_static_routes, storage_static_routes] Empty. This can be used for messages where no values are needed",
 			},
 			"outside_virtual_network": schema.ListNestedBlock{
 				MarkdownDescription: "Outside (Site Local) Virtual Network. Default outside (site local) virtual network for the fleet ves.io.schema.rules.repeated.max_items: 1",

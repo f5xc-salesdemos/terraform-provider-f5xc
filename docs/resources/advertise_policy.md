@@ -66,6 +66,8 @@ The following arguments are optional:
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
+###### One of the arguments from this list "port, port_ranges" must be set
+
 `port` - (Optional) TCP/UDP Port. Exclusive with [port_ranges] Port to advertise. ves.io.schema.rules.uint32.lte: 65535 (`Number`).
 
 `port_ranges` - (Optional) Port Ranges. Exclusive with [port] A string containing a comma separated list of port ranges. Each port range consists of a single port or two ports separated by '-'. ves.io.schema.rules.string (`String`).

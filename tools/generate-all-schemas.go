@@ -105,6 +105,7 @@ type GenerationResult struct {
 }
 
 var schemaCache = make(map[string]SchemaDefinition)
+var rawSpecCache = make(map[string]map[string]interface{}) // Store raw JSON for x-ves-oneof-field extraction
 
 func init() {
 	flag.StringVar(&specDir, "spec-dir", "", "Directory containing OpenAPI spec files")
@@ -313,6 +314,20 @@ func parseOpenAPISpec(specFile string) (*OpenAPI3Spec, error) {
 		schemaCache[name] = schema
 	}
 
+	// Also parse raw JSON to extract x-ves-oneof-field annotations
+	var rawSpec map[string]interface{}
+	if err := json.Unmarshal(data, &rawSpec); err == nil {
+		if components, ok := rawSpec["components"].(map[string]interface{}); ok {
+			if schemas, ok := components["schemas"].(map[string]interface{}); ok {
+				for name, schema := range schemas {
+					if schemaMap, ok := schema.(map[string]interface{}); ok {
+						rawSpecCache[name] = schemaMap
+					}
+				}
+			}
+		}
+	}
+
 	return &spec, nil
 }
 
@@ -320,12 +335,14 @@ func extractResourceSchema(spec *OpenAPI3Spec, resourceName string) (*ResourceTe
 	// Find CreateSpecType schema
 	var createSpec SchemaDefinition
 	var found bool
+	var createSpecKey string
 
 	for key, schema := range spec.Components.Schemas {
 		keyLower := strings.ToLower(key)
 		if strings.Contains(keyLower, strings.ToLower(resourceName)) &&
 			strings.Contains(keyLower, "createspectype") {
 			createSpec = schema
+			createSpecKey = key
 			found = true
 			break
 		}
@@ -333,6 +350,28 @@ func extractResourceSchema(spec *OpenAPI3Spec, resourceName string) (*ResourceTe
 
 	if !found {
 		return nil, fmt.Errorf("no CreateSpecType found")
+	}
+
+	// Extract OneOf groups from x-ves-oneof-field annotations
+	oneOfGroups := extractOneOfGroups(spec, createSpecKey)
+
+	// Create reverse mapping: field -> group name + all fields in group
+	// Also track which field should get the constraint (first alphabetically)
+	fieldToOneOf := make(map[string][]string)
+	fieldIsFirst := make(map[string]bool) // Only first field in each group gets the constraint
+	for _, fields := range oneOfGroups {
+		// Sort fields to determine which is first
+		sortedFields := make([]string, len(fields))
+		copy(sortedFields, fields)
+		sort.Strings(sortedFields)
+		firstField := sortedFields[0]
+
+		for _, field := range fields {
+			fieldToOneOf[field] = fields
+			if field == firstField {
+				fieldIsFirst[field] = true
+			}
+		}
 	}
 
 	// Convert properties to Terraform attributes
@@ -343,7 +382,12 @@ func extractResourceSchema(spec *OpenAPI3Spec, resourceName string) (*ResourceTe
 	}
 
 	for propName, propSchema := range createSpec.Properties {
+		oneOfFields := fieldToOneOf[propName]
 		attr := convertToTerraformAttribute(propName, propSchema, requiredSet[propName], "", spec)
+		// Add OneOf constraint hint to description only for the first field in each group
+		if len(oneOfFields) > 1 && fieldIsFirst[propName] {
+			attr.Description = addOneOfConstraint(attr.Description, oneOfFields)
+		}
 		attributes = append(attributes, attr)
 	}
 
@@ -625,6 +669,65 @@ func cleanDescription(desc string) string {
 		desc = desc[:497] + "..."
 	}
 	return desc
+}
+
+// extractOneOfGroups extracts x-ves-oneof-field annotations from the raw schema JSON
+func extractOneOfGroups(spec *OpenAPI3Spec, schemaKey string) map[string][]string {
+	oneOfGroups := make(map[string][]string)
+
+	// Get raw schema from cache
+	rawSchema, ok := rawSpecCache[schemaKey]
+	if !ok {
+		return oneOfGroups
+	}
+
+	// Look for x-ves-oneof-field-* in the raw schema
+	for key, value := range rawSchema {
+		if strings.HasPrefix(key, "x-ves-oneof-field-") {
+			groupName := strings.TrimPrefix(key, "x-ves-oneof-field-")
+			// Value can be either a JSON array string or actual array
+			switch v := value.(type) {
+			case string:
+				// Parse JSON array format: "[\"field1\",\"field2\"]"
+				v = strings.Trim(v, "[]")
+				fields := strings.Split(v, ",")
+				for i, f := range fields {
+					fields[i] = strings.Trim(strings.TrimSpace(f), "\"")
+				}
+				oneOfGroups[groupName] = fields
+			case []interface{}:
+				fields := make([]string, len(v))
+				for i, f := range v {
+					if s, ok := f.(string); ok {
+						fields[i] = s
+					}
+				}
+				oneOfGroups[groupName] = fields
+			}
+		}
+	}
+
+	return oneOfGroups
+}
+
+// addOneOfConstraint adds a OneOf constraint hint to the description
+func addOneOfConstraint(desc string, oneOfFields []string) string {
+	if len(oneOfFields) < 2 {
+		return desc
+	}
+
+	// Format fields with quotes
+	quotedFields := make([]string, len(oneOfFields))
+	for i, f := range oneOfFields {
+		quotedFields[i] = f
+	}
+	constraint := fmt.Sprintf("[OneOf: %s]", strings.Join(quotedFields, ", "))
+
+	// Add constraint at the beginning of description
+	if desc == "" {
+		return constraint
+	}
+	return constraint + " " + desc
 }
 
 func toTitleCase(s string) string {

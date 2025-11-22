@@ -97,7 +97,7 @@ func (r *ForwardingClassResource) Schema(ctx context.Context, req resource.Schem
 		},
 		Blocks: map[string]schema.Block{
 			"dscp": schema.SingleNestedBlock{
-				MarkdownDescription: "DSCP Marking setting. DSCP marking setting as per RFC 2475",
+				MarkdownDescription: "[OneOf: dscp, no_marking, tos_value] DSCP Marking setting. DSCP marking setting as per RFC 2475",
 				Attributes: map[string]schema.Attribute{
 					"drop_precedence": schema.StringAttribute{
 						MarkdownDescription: "DSCP AF Drop Precedence. DSCP Assured forwarding drop precedence DSCP Low drop precedence DSCP Low drop precedence DSCP Low drop precedence DSCP drop precedence value is taken from output of policer",
@@ -111,13 +111,13 @@ func (r *ForwardingClassResource) Schema(ctx context.Context, req resource.Schem
 
 			},
 			"dscp_based_queue": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: dscp_based_queue, queue_id_to_use] Empty. This can be used for messages where no values are needed",
 			},
 			"no_marking": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"no_policer": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: no_policer, policer] Empty. This can be used for messages where no values are needed",
 			},
 			"policer": schema.SingleNestedBlock{
 				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",

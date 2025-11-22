@@ -64,6 +64,8 @@ The following arguments are optional:
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
+###### One of the arguments from this list "psp_spec, yaml" must be set
+
 `psp_spec` - (Optional) Pod Security Policy Specification. Form based pod security specification. See [Psp Spec](#psp-spec) below for details.
 
 `yaml` - (Optional) K8s YAML. Exclusive with [psp_spec] K8s YAML for Pod Security Policy ves.io.schema.rules.string.max_len: 4096 ves.io.schema.rules.string.uri_ref: true (`String`).

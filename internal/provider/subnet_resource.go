@@ -82,7 +82,7 @@ func (r *SubnetResource) Schema(ctx context.Context, req resource.SchemaRequest,
 		},
 		Blocks: map[string]schema.Block{
 			"connect_to_layer2": schema.SingleNestedBlock{
-				MarkdownDescription: "Subnet connection to Layer2 Interface.",
+				MarkdownDescription: "[OneOf: connect_to_layer2, connect_to_slo, isolated_nw] Subnet connection to Layer2 Interface.",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{

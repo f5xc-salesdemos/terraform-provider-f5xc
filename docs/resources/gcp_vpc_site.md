@@ -112,6 +112,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "block_all_services, blocked_services, default_blocked_services" must be set
+
 `block_all_services` - (Optional) Empty. This can be used for messages where no values are needed. See [Block All Services](#block-all-services) below for details.
 
 `blocked_services` - (Optional) Disable Node Local Services. Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site. See [Blocked Services](#blocked-services) below for details.
@@ -130,6 +132,8 @@ The following arguments are optional:
 
 `gcp_region` - (Optional) GCP Region. Name for GCP Region. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_len: 64 (`String`).
 
+###### One of the arguments from this list "ingress_egress_gw, ingress_gw, voltstack_cluster" must be set
+
 `ingress_egress_gw` - (Optional) GCP Ingress/Egress Gateway. Two interface GCP ingress/egress site. See [Ingress Egress Gw](#ingress-egress-gw) below for details.
 
 `ingress_gw` - (Optional) GCP Ingress Gateway. Single interface GCP ingress site. See [Ingress Gw](#ingress-gw) below for details.
@@ -140,6 +144,8 @@ The following arguments are optional:
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
+###### One of the arguments from this list "log_receiver, logs_streaming_disabled" must be set
+
 `log_receiver` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Log Receiver](#log-receiver) below for details.
 
 `logs_streaming_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Logs Streaming Disabled](#logs-streaming-disabled) below for details.
@@ -147,6 +153,8 @@ The following arguments are optional:
 `offline_survivability_mode` - (Optional) Offline Survivability Mode. Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global C.... See [Offline Survivability Mode](#offline-survivability-mode) below for details.
 
 `os` - (Optional) Operating System Version. Select the F5XC Operating System Version for the site. By default, latest available OS Version will be used. Refer to release notes to find required released OS versions. See [Os](#os) below for details.
+
+###### One of the arguments from this list "private_connect_disabled, private_connectivity" must be set
 
 `private_connect_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Private Connect Disabled](#private-connect-disabled) below for details.
 

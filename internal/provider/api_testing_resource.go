@@ -184,7 +184,7 @@ func (r *APITestingResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"every_day": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: every_day, every_month, every_week] Empty. This can be used for messages where no values are needed",
 			},
 			"every_month": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",

@@ -2,12 +2,12 @@
 page_title: "f5xc_dns_zone Resource - terraform-provider-f5xc"
 subcategory: ""
 description: |-
-  Manages a DNSZone in F5 Distributed Cloud.
+  Create DNS Zone in a given namespace. If one already exist it will give a error.
 ---
 
 # f5xc_dns_zone (Resource)
 
-Manages a DNSZone in F5 Distributed Cloud.
+Create DNS Zone in a given namespace. If one already exist it will give a error.
 
 ~> **Note** For more information about this resource, please refer to the [F5 XC API Documentation](https://docs.cloud.f5.com/docs/api/).
 
@@ -63,21 +63,15 @@ The following arguments are required:
 
 The following arguments are optional:
 
-`allow_http_lb_managed_records` - (Optional) Option to allow user-created HTTP, TCP, and CDN load balancer related resource records to be automatically managed in a protected RRset (`Bool`).
-
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
-
-`default_rr_set_group` - (Optional) Add and manage DNS resource record sets part of Default set group. ves.io.schema.rules.repeated.max_items: 50000. See [Default Rr Set Group](#default-rr-set-group) below for details.
-
-`default_soa_parameters` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Soa Parameters](#default-soa-parameters) below for details.
-
-`dnssec_mode` - (Optional) Disable. See [Dnssec Mode](#dnssec-mode) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
-`rr_set_group` - (Optional) Create and manage set groups, and resource record sets within them, x-ves-io-managed set is managed by F5. ves.io.schema.rules.repeated.max_items: 50 ves.io.schema.rules.repeated. See [Rr Set Group](#rr-set-group) below for details.
+###### One of the arguments from this list "primary, secondary" must be set
 
-`soa_parameters` - (Optional) SOARecordParameterConfig. See [Soa Parameters](#soa-parameters) below for details.
+`primary` - (Optional) PrimaryDNSCreateSpecType. See [Primary](#primary) below for details.
+
+`secondary` - (Optional) SecondaryDNSCreateSpecType. See [Secondary](#secondary) below for details.
 
 
 ### Attributes Reference
@@ -89,628 +83,395 @@ In addition to all arguments above, the following attributes are exported:
 
 ---
 
-<a id="nestedblock--default_rr_set_group"></a>
-### Default Rr Set Group
+<a id="nestedblock--primary"></a>
+### Primary
 
-`a_record` - (Optional) DNSAResourceRecord. A Records. See [A Record](#nestedblock--default_rr_set_group--a_record) below.
+`allow_http_lb_managed_records` - (Optional) Option to allow user-created HTTP, TCP, and CDN load balancer related resource records to be automatically managed in a protected RRset (`Bool`).
 
-`aaaa_record` - (Optional) DNSAAAAResourceRecord. RecordSet for AAAA Records. See [Aaaa Record](#nestedblock--default_rr_set_group--aaaa_record) below.
+`default_rr_set_group` - (Optional) Add and manage DNS resource record sets part of Default set group. ves.io.schema.rules.repeated.max_items: 50000. See [Default Rr Set Group](#nestedblock--primary--default_rr_set_group) below.
 
-`afsdb_record` - (Optional) DNS AFSDB Record. DNS AFSDB Record. See [Afsdb Record](#nestedblock--default_rr_set_group--afsdb_record) below.
+`default_soa_parameters` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Soa Parameters](#nestedblock--primary--default_soa_parameters) below.
 
-`alias_record` - (Optional) DNSAliasResourceRecord. See [Alias Record](#nestedblock--default_rr_set_group--alias_record) below.
+`dnssec_mode` - (Optional) Disable. See [Dnssec Mode](#nestedblock--primary--dnssec_mode) below.
 
-`caa_record` - (Optional) DNSCAAResourceRecord. See [Caa Record](#nestedblock--default_rr_set_group--caa_record) below.
+`rr_set_group` - (Optional) Create and manage set groups, and resource record sets within them, x-ves-io-managed set is managed by F5. ves.io.schema.rules.repeated.max_items: 50 ves.io.schema.rules.repeated. See [Rr Set Group](#nestedblock--primary--rr_set_group) below.
 
-`cds_record` - (Optional) DNS CDS Record. DNS CDS Record. See [Cds Record](#nestedblock--default_rr_set_group--cds_record) below.
+`soa_parameters` - (Optional) SOARecordParameterConfig. See [Soa Parameters](#nestedblock--primary--soa_parameters) below.
 
-`cert_record` - (Optional) DNS CERT Record. DNS CERT Record. See [Cert Record](#nestedblock--default_rr_set_group--cert_record) below.
+<a id="nestedblock--primary--default_rr_set_group"></a>
+### Primary Default Rr Set Group
 
-`cname_record` - (Optional) DNSCNAMEResourceRecord. See [Cname Record](#nestedblock--default_rr_set_group--cname_record) below.
+`a_record` - (Optional) DNSAResourceRecord. A Records. See [A Record](#nestedblock--primary--default_rr_set_group--a_record) below.
+
+`aaaa_record` - (Optional) DNSAAAAResourceRecord. RecordSet for AAAA Records. See [Aaaa Record](#nestedblock--primary--default_rr_set_group--aaaa_record) below.
+
+`afsdb_record` - (Optional) DNS AFSDB Record. DNS AFSDB Record. See [Afsdb Record](#nestedblock--primary--default_rr_set_group--afsdb_record) below.
+
+`alias_record` - (Optional) DNSAliasResourceRecord. See [Alias Record](#nestedblock--primary--default_rr_set_group--alias_record) below.
+
+`caa_record` - (Optional) DNSCAAResourceRecord. See [Caa Record](#nestedblock--primary--default_rr_set_group--caa_record) below.
+
+`cds_record` - (Optional) DNS CDS Record. DNS CDS Record. See [Cds Record](#nestedblock--primary--default_rr_set_group--cds_record) below.
+
+`cert_record` - (Optional) DNS CERT Record. DNS CERT Record. See [Cert Record](#nestedblock--primary--default_rr_set_group--cert_record) below.
+
+`cname_record` - (Optional) DNSCNAMEResourceRecord. See [Cname Record](#nestedblock--primary--default_rr_set_group--cname_record) below.
 
 `description` - (Optional) Comment (`String`).
 
-`ds_record` - (Optional) DNS DS Record. DNS DS Record. See [Ds Record](#nestedblock--default_rr_set_group--ds_record) below.
+`ds_record` - (Optional) DNS DS Record. DNS DS Record. See [Ds Record](#nestedblock--primary--default_rr_set_group--ds_record) below.
 
-`eui48_record` - (Optional) DNS EUI48 Record. DNS EUI48 Record. See [Eui48 Record](#nestedblock--default_rr_set_group--eui48_record) below.
+`eui48_record` - (Optional) DNS EUI48 Record. DNS EUI48 Record. See [Eui48 Record](#nestedblock--primary--default_rr_set_group--eui48_record) below.
 
-`eui64_record` - (Optional) DNS EUI64 Record. DNS EUI64 Record. See [Eui64 Record](#nestedblock--default_rr_set_group--eui64_record) below.
+`eui64_record` - (Optional) DNS EUI64 Record. DNS EUI64 Record. See [Eui64 Record](#nestedblock--primary--default_rr_set_group--eui64_record) below.
 
-`lb_record` - (Optional) DNS Load Balancer Record. DNS Load Balancer Record. See [Lb Record](#nestedblock--default_rr_set_group--lb_record) below.
+`lb_record` - (Optional) DNS Load Balancer Record. DNS Load Balancer Record. See [Lb Record](#nestedblock--primary--default_rr_set_group--lb_record) below.
 
-`loc_record` - (Optional) DNS LOC Record. DNS LOC Record. See [Loc Record](#nestedblock--default_rr_set_group--loc_record) below.
+`loc_record` - (Optional) DNS LOC Record. DNS LOC Record. See [Loc Record](#nestedblock--primary--default_rr_set_group--loc_record) below.
 
-`mx_record` - (Optional) DNSMXResourceRecord. See [Mx Record](#nestedblock--default_rr_set_group--mx_record) below.
+`mx_record` - (Optional) DNSMXResourceRecord. See [Mx Record](#nestedblock--primary--default_rr_set_group--mx_record) below.
 
-`naptr_record` - (Optional) DNS NAPTR Record. DNS NAPTR Record. See [Naptr Record](#nestedblock--default_rr_set_group--naptr_record) below.
+`naptr_record` - (Optional) DNS NAPTR Record. DNS NAPTR Record. See [Naptr Record](#nestedblock--primary--default_rr_set_group--naptr_record) below.
 
-`ns_record` - (Optional) DNSNSResourceRecord. See [Ns Record](#nestedblock--default_rr_set_group--ns_record) below.
+`ns_record` - (Optional) DNSNSResourceRecord. See [Ns Record](#nestedblock--primary--default_rr_set_group--ns_record) below.
 
-`ptr_record` - (Optional) DNSPTRResourceRecord. See [Ptr Record](#nestedblock--default_rr_set_group--ptr_record) below.
+`ptr_record` - (Optional) DNSPTRResourceRecord. See [Ptr Record](#nestedblock--primary--default_rr_set_group--ptr_record) below.
 
-`srv_record` - (Optional) DNSSRVResourceRecord. See [Srv Record](#nestedblock--default_rr_set_group--srv_record) below.
+`srv_record` - (Optional) DNSSRVResourceRecord. See [Srv Record](#nestedblock--primary--default_rr_set_group--srv_record) below.
 
-`sshfp_record` - (Optional) DNS SSHFP Record. DNS SSHFP Record. See [Sshfp Record](#nestedblock--default_rr_set_group--sshfp_record) below.
+`sshfp_record` - (Optional) DNS SSHFP Record. DNS SSHFP Record. See [Sshfp Record](#nestedblock--primary--default_rr_set_group--sshfp_record) below.
 
-`tlsa_record` - (Optional) DNS TLSA Record. DNS TLSA Record. See [Tlsa Record](#nestedblock--default_rr_set_group--tlsa_record) below.
+`tlsa_record` - (Optional) DNS TLSA Record. DNS TLSA Record. See [Tlsa Record](#nestedblock--primary--default_rr_set_group--tlsa_record) below.
 
 `ttl` - (Optional) Time to live. ves.io.schema.rules.uint32.gte: 60 ves.io.schema.rules.uint32.lte: 2147483647 (`Number`).
 
-`txt_record` - (Optional) DNSTXTResourceRecord. See [Txt Record](#nestedblock--default_rr_set_group--txt_record) below.
+`txt_record` - (Optional) DNSTXTResourceRecord. See [Txt Record](#nestedblock--primary--default_rr_set_group--txt_record) below.
 
-<a id="nestedblock--default_rr_set_group--a_record"></a>
-### Default Rr Set Group A Record
+<a id="nestedblock--primary--default_rr_set_group--a_record"></a>
+### Primary Default Rr Set Group A Record
 
 `name` - (Optional) Record Name (Excluding Domain name). A Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
 `values` - (Optional) IPv4 Addresses. A valid IPv4 address, for example: 1.1.1.1 Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.items.string.ipv4: true ves.io.schema.rules.repeated (`List`).
 
-<a id="nestedblock--default_rr_set_group--aaaa_record"></a>
-### Default Rr Set Group Aaaa Record
+<a id="nestedblock--primary--default_rr_set_group--aaaa_record"></a>
+### Primary Default Rr Set Group Aaaa Record
 
 `name` - (Optional) Record Name (Excluding Domain name). AAAA Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
 `values` - (Optional) IPv6 Addresses. A valid IPv6 address, for example: 2001:0db8:85a3:0000:0000:8a2e:0370:7334 Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.items.string (`List`).
 
-<a id="nestedblock--default_rr_set_group--afsdb_record"></a>
-### Default Rr Set Group Afsdb Record
+<a id="nestedblock--primary--default_rr_set_group--afsdb_record"></a>
+### Primary Default Rr Set Group Afsdb Record
 
 `name` - (Optional) Record Name (Excluding Domain name). AFSDB Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
-`values` - (Optional) AFSDB Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--default_rr_set_group--afsdb_record--values) below.
+`values` - (Optional) AFSDB Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--primary--default_rr_set_group--afsdb_record--values) below.
 
-<a id="nestedblock--default_rr_set_group--afsdb_record--values"></a>
-### Default Rr Set Group Afsdb Record Values
+<a id="nestedblock--primary--default_rr_set_group--afsdb_record--values"></a>
+### Primary Default Rr Set Group Afsdb Record Values
 
-`hostname` - (Optional) Hostname. Server name of the AFS cell database server or the DCE name server. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.hostname: true (`String`).
-
-`subtype` - (Optional) AFSDB Record Subtype. AFS Volume Location Server or DCE Authentication Server. - NONE: NONE - AFSVolumeLocationServer: AFS Volume Location Server - DCEAuthenticationServer: DCE Authentication Server (`String`).
-
-<a id="nestedblock--default_rr_set_group--alias_record"></a>
-### Default Rr Set Group Alias Record
+<a id="nestedblock--primary--default_rr_set_group--alias_record"></a>
+### Primary Default Rr Set Group Alias Record
 
 `value` - (Optional) Domain. A valid domain name, for example: example.com ves.io.schema.rules.string.hostname: true ves.io.schema.rules.string.max_len: 255 (`String`).
 
-<a id="nestedblock--default_rr_set_group--caa_record"></a>
-### Default Rr Set Group Caa Record
+<a id="nestedblock--primary--default_rr_set_group--caa_record"></a>
+### Primary Default Rr Set Group Caa Record
 
 `name` - (Optional) Record Name (Excluding Domain name). CAA Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
-`values` - (Optional) CAA Record Value. ves.io.schema.rules.repeated.max_items: 100. See [Values](#nestedblock--default_rr_set_group--caa_record--values) below.
+`values` - (Optional) CAA Record Value. ves.io.schema.rules.repeated.max_items: 100. See [Values](#nestedblock--primary--default_rr_set_group--caa_record--values) below.
 
-<a id="nestedblock--default_rr_set_group--caa_record--values"></a>
-### Default Rr Set Group Caa Record Values
+<a id="nestedblock--primary--default_rr_set_group--caa_record--values"></a>
+### Primary Default Rr Set Group Caa Record Values
 
-`flags` - (Optional) Flags. This flag should be an integer between 0 and 255. ves.io.schema.rules.uint32.gte: 0 ves.io.schema.rules.uint32.lte: 255 (`Number`).
-
-`tag` - (Optional) Tag (`String`).
-
-`value` - (Optional) Value. ves.io.schema.rules.string.max_len: 1024 ves.io.schema.rules.string.min_len: 1 (`String`).
-
-<a id="nestedblock--default_rr_set_group--cds_record"></a>
-### Default Rr Set Group Cds Record
+<a id="nestedblock--primary--default_rr_set_group--cds_record"></a>
+### Primary Default Rr Set Group Cds Record
 
 `name` - (Optional) Record Name (Excluding Domain name). CDS Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
-`values` - (Optional) DS Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--default_rr_set_group--cds_record--values) below.
+`values` - (Optional) DS Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--primary--default_rr_set_group--cds_record--values) below.
 
-<a id="nestedblock--default_rr_set_group--cds_record--values"></a>
-### Default Rr Set Group Cds Record Values
+<a id="nestedblock--primary--default_rr_set_group--cds_record--values"></a>
+### Primary Default Rr Set Group Cds Record Values
 
-`ds_key_algorithm` - (Optional) DS Key algorithm. DS key value must be compatible with the specified algorithm (`String`).
-
-`key_tag` - (Optional) Key Tag. A short numeric value which can help quickly identify the referenced DNSKEY-record. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.uint32.gte: 1 ves.io.schema (`Number`).
-
-`sha1_digest` - (Optional) SHA1 Digest. See [Sha1 Digest](#nestedblock--default_rr_set_group--cds_record--values--sha1_digest) below.
-
-`sha256_digest` - (Optional) SHA256 Digest. See [Sha256 Digest](#nestedblock--default_rr_set_group--cds_record--values--sha256_digest) below.
-
-`sha384_digest` - (Optional) SHA384 Digest. See [Sha384 Digest](#nestedblock--default_rr_set_group--cds_record--values--sha384_digest) below.
-
-<a id="nestedblock--default_rr_set_group--cds_record--values--sha1_digest"></a>
-### Default Rr Set Group Cds Record Values Sha1 Digest
-
-<a id="nestedblock--default_rr_set_group--cds_record--values--sha256_digest"></a>
-### Default Rr Set Group Cds Record Values Sha256 Digest
-
-<a id="nestedblock--default_rr_set_group--cds_record--values--sha384_digest"></a>
-### Default Rr Set Group Cds Record Values Sha384 Digest
-
-<a id="nestedblock--default_rr_set_group--cert_record"></a>
-### Default Rr Set Group Cert Record
+<a id="nestedblock--primary--default_rr_set_group--cert_record"></a>
+### Primary Default Rr Set Group Cert Record
 
 `name` - (Optional) Record Name (Excluding Domain name). CERT Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
-`values` - (Optional) CERT Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--default_rr_set_group--cert_record--values) below.
+`values` - (Optional) CERT Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--primary--default_rr_set_group--cert_record--values) below.
 
-<a id="nestedblock--default_rr_set_group--cert_record--values"></a>
-### Default Rr Set Group Cert Record Values
+<a id="nestedblock--primary--default_rr_set_group--cert_record--values"></a>
+### Primary Default Rr Set Group Cert Record Values
 
-`algorithm` - (Optional) CERT Algorithm. CERT algorithm value must be compatible with the specified algorithm (`String`).
-
-`cert_key_tag` - (Optional) Key Tag. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.uint32.gte: 0 ves.io.schema.rules.uint32.lte: 65535 (`Number`).
-
-`cert_type` - (Optional) CERT Type. CERT type value must be compatible with the specified types (`String`).
-
-`certificate` - (Optional) Certificate. Certificate in base 64 format. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_len: 4096 ves.io.schema.rules.string.min_len: 1 (`String`).
-
-<a id="nestedblock--default_rr_set_group--cname_record"></a>
-### Default Rr Set Group Cname Record
+<a id="nestedblock--primary--default_rr_set_group--cname_record"></a>
+### Primary Default Rr Set Group Cname Record
 
 `name` - (Optional) Record Name (Excluding Domain name). CName Record name, please provide only the specific subdomain or record name without the base domain. Required: YES ves.io.schema.rules.message.required: true ves (`String`).
 
 `value` - (Optional) Domain. ves.io.schema.rules.string.hostname: true ves.io.schema.rules.string.max_len: 255 (`String`).
 
-<a id="nestedblock--default_rr_set_group--ds_record"></a>
-### Default Rr Set Group Ds Record
+<a id="nestedblock--primary--default_rr_set_group--ds_record"></a>
+### Primary Default Rr Set Group Ds Record
 
 `name` - (Optional) Record Name (Excluding Domain name). DS Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
-`values` - (Optional) DS Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--default_rr_set_group--ds_record--values) below.
+`values` - (Optional) DS Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--primary--default_rr_set_group--ds_record--values) below.
 
-<a id="nestedblock--default_rr_set_group--ds_record--values"></a>
-### Default Rr Set Group Ds Record Values
+<a id="nestedblock--primary--default_rr_set_group--ds_record--values"></a>
+### Primary Default Rr Set Group Ds Record Values
 
-`ds_key_algorithm` - (Optional) DS Key algorithm. DS key value must be compatible with the specified algorithm (`String`).
-
-`key_tag` - (Optional) Key Tag. A short numeric value which can help quickly identify the referenced DNSKEY-record. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.uint32.gte: 1 ves.io.schema (`Number`).
-
-`sha1_digest` - (Optional) SHA1 Digest. See [Sha1 Digest](#nestedblock--default_rr_set_group--ds_record--values--sha1_digest) below.
-
-`sha256_digest` - (Optional) SHA256 Digest. See [Sha256 Digest](#nestedblock--default_rr_set_group--ds_record--values--sha256_digest) below.
-
-`sha384_digest` - (Optional) SHA384 Digest. See [Sha384 Digest](#nestedblock--default_rr_set_group--ds_record--values--sha384_digest) below.
-
-<a id="nestedblock--default_rr_set_group--ds_record--values--sha1_digest"></a>
-### Default Rr Set Group Ds Record Values Sha1 Digest
-
-<a id="nestedblock--default_rr_set_group--ds_record--values--sha256_digest"></a>
-### Default Rr Set Group Ds Record Values Sha256 Digest
-
-<a id="nestedblock--default_rr_set_group--ds_record--values--sha384_digest"></a>
-### Default Rr Set Group Ds Record Values Sha384 Digest
-
-<a id="nestedblock--default_rr_set_group--eui48_record"></a>
-### Default Rr Set Group Eui48 Record
+<a id="nestedblock--primary--default_rr_set_group--eui48_record"></a>
+### Primary Default Rr Set Group Eui48 Record
 
 `name` - (Optional) Record Name (Excluding Domain name). EUI48 Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
 `value` - (Optional) EUI48 Identifier. A valid eui48 identifier, for example: 01-23-45-67-89-ab Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_len: 17 ves.io.schema.rules.string (`String`).
 
-<a id="nestedblock--default_rr_set_group--eui64_record"></a>
-### Default Rr Set Group Eui64 Record
+<a id="nestedblock--primary--default_rr_set_group--eui64_record"></a>
+### Primary Default Rr Set Group Eui64 Record
 
 `name` - (Optional) Record Name (Excluding Domain name). EUI64 Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
 `value` - (Optional) EUI64 Identifier. A valid EUI64 identifier, for example: 01-23-45-67-89-ab-cd-ef Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_len: 23 ves.io.schema.rules (`String`).
 
-<a id="nestedblock--default_rr_set_group--lb_record"></a>
-### Default Rr Set Group Lb Record
+<a id="nestedblock--primary--default_rr_set_group--lb_record"></a>
+### Primary Default Rr Set Group Lb Record
 
 `name` - (Optional) Record Name (Excluding Domain name). Load Balancer record name (except for SRV DNS Load balancer record) should be a simple record name and not a subdomain of a subdomain. ves.io.schema.rules.string (`String`).
 
-`value` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Value](#nestedblock--default_rr_set_group--lb_record--value) below.
+`value` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Value](#nestedblock--primary--default_rr_set_group--lb_record--value) below.
 
-<a id="nestedblock--default_rr_set_group--lb_record--value"></a>
-### Default Rr Set Group Lb Record Value
+<a id="nestedblock--primary--default_rr_set_group--lb_record--value"></a>
+### Primary Default Rr Set Group Lb Record Value
 
-`name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name. Required: YES ves.io.schema.rules.message (`String`).
-
-`namespace` - (Optional) Namespace. When a configuration object(e.g. virtual_host) refers to another(e.g route) then namespace will hold the referred object's(e.g. route's) namespace. ves.io.schema.rules.string.max_bytes: 64 (`String`).
-
-`tenant` - (Optional) Tenant. When a configuration object(e.g. virtual_host) refers to another(e.g route) then tenant will hold the referred object's(e.g. route's) tenant. ves.io.schema.rules.string.max_bytes: 64 (`String`).
-
-<a id="nestedblock--default_rr_set_group--loc_record"></a>
-### Default Rr Set Group Loc Record
+<a id="nestedblock--primary--default_rr_set_group--loc_record"></a>
+### Primary Default Rr Set Group Loc Record
 
 `name` - (Optional) Record Name (Excluding Domain name). LOC Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
-`values` - (Optional) LOC Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--default_rr_set_group--loc_record--values) below.
+`values` - (Optional) LOC Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--primary--default_rr_set_group--loc_record--values) below.
 
-<a id="nestedblock--default_rr_set_group--loc_record--values"></a>
-### Default Rr Set Group Loc Record Values
+<a id="nestedblock--primary--default_rr_set_group--loc_record--values"></a>
+### Primary Default Rr Set Group Loc Record Values
 
-`altitude` - (Optional) Altitude. Altitude in meters Required: YES ves.io.schema.rules.float.gte: -100000.00 ves.io.schema.rules.float.lte: 42849672.95 ves.io.schema.rules.message.required: true (`Number`).
-
-`horizontal_precision` - (Optional) Horizontal Precision. Horizontal Precision in meters ves.io.schema.rules.float.gte: 0.0 ves.io.schema.rules.float.lte: 90000000.00 (`Number`).
-
-`latitude_degree` - (Optional) Latitude degree. Latitude degree, an integer between 0 and 90, including 0 and 90 Required: YES ves.io.schema.rules.int32.gte: 0 ves.io.schema.rules.int32.lte: 90 ves.io.schema.rules.message (`Number`).
-
-`latitude_hemisphere` - (Optional) Latitude hemisphere. Latitude hemisphere can only be N or S - N: North Hemisphere - S: South Hemisphere (`String`).
-
-`latitude_minute` - (Optional) Latitude minute. Latitude minute, an integer between 0 and 59, including 0 and 59 ves.io.schema.rules.int32.gte: 0 ves.io.schema.rules.int32.lte: 59 (`Number`).
-
-`latitude_second` - (Optional) Latitude second. Latitude second, an decimal between 0 and 59.999, including 0 and 59.999 ves.io.schema.rules.float.gte: 0.0 ves.io.schema.rules.float.lte: 59.999 (`Number`).
-
-`location_diameter` - (Optional) Size. Diameter of a sphere enclosing the described entity, in meters ves.io.schema.rules.float.gte: 0.0 ves.io.schema.rules.float.lte: 90000000.00 (`Number`).
-
-`longitude_degree` - (Optional) Longitude degree. Longitude degree, an integer between 0 and 180, including 0 and 180 Required: YES ves.io.schema.rules.int32.gte: 0 ves.io.schema.rules.int32.lte: 180 ves.io.schema.rules.message (`Number`).
-
-`longitude_hemisphere` - (Optional) Longitude hemisphere. Longitude hemisphere can only be E or W - E: East Hemisphere - W: West Hemisphere (`String`).
-
-`longitude_minute` - (Optional) Longitude minute. Longitude minute, an integer between 0 and 59, including 0 and 59 ves.io.schema.rules.int32.gte: 0 ves.io.schema.rules.int32.lte: 59 (`Number`).
-
-`longitude_second` - (Optional) Longitude second. Longitude second, an decimal between 0 and 59.999, including 0 and 59.999 ves.io.schema.rules.float.gte: 0.0 ves.io.schema.rules.float.lte: 59.999 (`Number`).
-
-`vertical_precision` - (Optional) Vertical Precision. Vertical Precision in meters ves.io.schema.rules.float.gte: 0.0 ves.io.schema.rules.float.lte: 90000000.00 (`Number`).
-
-<a id="nestedblock--default_rr_set_group--mx_record"></a>
-### Default Rr Set Group Mx Record
+<a id="nestedblock--primary--default_rr_set_group--mx_record"></a>
+### Primary Default Rr Set Group Mx Record
 
 `name` - (Optional) Record Name (Excluding Domain name). MX Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
-`values` - (Optional) MX Record Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100. See [Values](#nestedblock--default_rr_set_group--mx_record--values) below.
+`values` - (Optional) MX Record Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100. See [Values](#nestedblock--primary--default_rr_set_group--mx_record--values) below.
 
-<a id="nestedblock--default_rr_set_group--mx_record--values"></a>
-### Default Rr Set Group Mx Record Values
+<a id="nestedblock--primary--default_rr_set_group--mx_record--values"></a>
+### Primary Default Rr Set Group Mx Record Values
 
-`domain` - (Optional) Domain. Mail exchanger domain name, please provide the full hostname, for example: mail.example.com ves.io.schema.rules.string.hostname: true (`String`).
-
-`priority` - (Optional) Priority. Mail exchanger priority code ves.io.schema.rules.uint32.gte: 0 ves.io.schema.rules.uint32.lte: 65535 (`Number`).
-
-<a id="nestedblock--default_rr_set_group--naptr_record"></a>
-### Default Rr Set Group Naptr Record
+<a id="nestedblock--primary--default_rr_set_group--naptr_record"></a>
+### Primary Default Rr Set Group Naptr Record
 
 `name` - (Optional) Record Name (Excluding Domain name). NAPTR Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
-`values` - (Optional) NAPTR Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--default_rr_set_group--naptr_record--values) below.
+`values` - (Optional) NAPTR Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--primary--default_rr_set_group--naptr_record--values) below.
 
-<a id="nestedblock--default_rr_set_group--naptr_record--values"></a>
-### Default Rr Set Group Naptr Record Values
+<a id="nestedblock--primary--default_rr_set_group--naptr_record--values"></a>
+### Primary Default Rr Set Group Naptr Record Values
 
-`flags` - (Optional) Flags. Flag to control aspects of the rewriting and interpretation of the fields in the record. At this time only four flags, S/A/U/P, are defined. Required: YES ves.io.schema.rules.message (`String`).
-
-`order` - (Optional) Order. Order in which the NAPTR records must be processed. A lower number indicates a higher preference. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.uint32.gte: 0 ves (`Number`).
-
-`preference` - (Optional) Preference. Preference when records have the same order. A lower number indicates a higher preference. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.uint32.gte: 0 ves (`Number`).
-
-`regexp` - (Optional) Regular Expression. Regular expression to construct the next domain name to lookup. ves.io.schema.rules.string.max_len: 255 (`String`).
-
-`replacement` - (Optional) Replacement. The next NAME to query for NAPTR, SRV, or address records depending on the value of the flags field (`String`).
-
-`service` - (Optional) Protocol Resolution Service. Specifies the service(s) available down this rewrite path. ves.io.schema.rules.string.max_len: 255 ves.io.schema.rules.string (`String`).
-
-<a id="nestedblock--default_rr_set_group--ns_record"></a>
-### Default Rr Set Group Ns Record
+<a id="nestedblock--primary--default_rr_set_group--ns_record"></a>
+### Primary Default Rr Set Group Ns Record
 
 `name` - (Optional) Record Name (Excluding Domain name). NS Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
 `values` - (Optional) Name Servers. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.items.string.hostname: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules (`List`).
 
-<a id="nestedblock--default_rr_set_group--ptr_record"></a>
-### Default Rr Set Group Ptr Record
+<a id="nestedblock--primary--default_rr_set_group--ptr_record"></a>
+### Primary Default Rr Set Group Ptr Record
 
 `name` - (Optional) Record Name (Excluding Domain name). PTR Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
 `values` - (Optional) Domain Name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.items.string.hostname: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated (`List`).
 
-<a id="nestedblock--default_rr_set_group--srv_record"></a>
-### Default Rr Set Group Srv Record
+<a id="nestedblock--primary--default_rr_set_group--srv_record"></a>
+### Primary Default Rr Set Group Srv Record
 
 `name` - (Optional) Record Name (Excluding Domain name). SRV Record name, please provide only the specific subdomain or record name without the base domain. Required: YES ves.io.schema.rules.message.required: true ves (`String`).
 
-`values` - (Optional) SRV Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--default_rr_set_group--srv_record--values) below.
+`values` - (Optional) SRV Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--primary--default_rr_set_group--srv_record--values) below.
 
-<a id="nestedblock--default_rr_set_group--srv_record--values"></a>
-### Default Rr Set Group Srv Record Values
+<a id="nestedblock--primary--default_rr_set_group--srv_record--values"></a>
+### Primary Default Rr Set Group Srv Record Values
 
-`port` - (Optional) Port. Port on which the service can be found ves.io.schema.rules.uint32.gte: 0 ves.io.schema.rules.uint32.lte: 65535 (`Number`).
-
-`priority` - (Optional) Priority. Priority of the target. A lower number indicates a higher preference. ves.io.schema.rules.uint32.gte: 0 ves.io.schema.rules.uint32.lte: 65535 (`Number`).
-
-`target` - (Optional) Target. Hostname of the machine providing the service ves.io.schema.rules.string.pattern: ^[.]$|^([a-zA-Z0-9]{1}[a-zA-Z0-9_-]{0,62})(\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*?(\ (`String`).
-
-`weight` - (Optional) Weight. Weight of the target. A higher number indicates a higher preference. ves.io.schema.rules.uint32.gte: 0 ves.io.schema.rules.uint32.lte: 65535 (`Number`).
-
-<a id="nestedblock--default_rr_set_group--sshfp_record"></a>
-### Default Rr Set Group Sshfp Record
+<a id="nestedblock--primary--default_rr_set_group--sshfp_record"></a>
+### Primary Default Rr Set Group Sshfp Record
 
 `name` - (Optional) Record Name (Excluding Domain name). SSHFP Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
-`values` - (Optional) SSHFP Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--default_rr_set_group--sshfp_record--values) below.
+`values` - (Optional) SSHFP Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--primary--default_rr_set_group--sshfp_record--values) below.
 
-<a id="nestedblock--default_rr_set_group--sshfp_record--values"></a>
-### Default Rr Set Group Sshfp Record Values
+<a id="nestedblock--primary--default_rr_set_group--sshfp_record--values"></a>
+### Primary Default Rr Set Group Sshfp Record Values
 
-`algorithm` - (Optional) SSHFP Algorithm. SSHFP algorithm value must be compatible with the specified algorithm (`String`).
-
-`sha1_fingerprint` - (Optional) SHA1 Fingerprint. See [Sha1 Fingerprint](#nestedblock--default_rr_set_group--sshfp_record--values--sha1_fingerprint) below.
-
-`sha256_fingerprint` - (Optional) SHA256 Fingerprint. See [Sha256 Fingerprint](#nestedblock--default_rr_set_group--sshfp_record--values--sha256_fingerprint) below.
-
-<a id="nestedblock--default_rr_set_group--sshfp_record--values--sha1_fingerprint"></a>
-### Default Rr Set Group Sshfp Record Values Sha1 Fingerprint
-
-<a id="nestedblock--default_rr_set_group--sshfp_record--values--sha256_fingerprint"></a>
-### Default Rr Set Group Sshfp Record Values Sha256 Fingerprint
-
-<a id="nestedblock--default_rr_set_group--tlsa_record"></a>
-### Default Rr Set Group Tlsa Record
+<a id="nestedblock--primary--default_rr_set_group--tlsa_record"></a>
+### Primary Default Rr Set Group Tlsa Record
 
 `name` - (Optional) Record Name (Excluding Domain name). TLSA Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
-`values` - (Optional) TLSA Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--default_rr_set_group--tlsa_record--values) below.
+`values` - (Optional) TLSA Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--primary--default_rr_set_group--tlsa_record--values) below.
 
-<a id="nestedblock--default_rr_set_group--tlsa_record--values"></a>
-### Default Rr Set Group Tlsa Record Values
+<a id="nestedblock--primary--default_rr_set_group--tlsa_record--values"></a>
+### Primary Default Rr Set Group Tlsa Record Values
 
-`certificate_association_data` - (Optional) Certificate Association Data. The actual data to be matched given the settings of the other fields. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.hex: true ves (`String`).
-
-`certificate_usage` - (Optional) TLSA Record Certificate Usage. - CertificateAuthorityConstraint: Certificate Authority Constraint - ServiceCertificateConstraint: Service Certificate Constraint - TrustAnchorAssertion: Trust Anchor... (`String`).
-
-`matching_type` - (Optional) TLSA Record Matching Type. - NoHash: No Hash - SHA256: SHA-256 - SHA512: SHA-512 (`String`).
-
-`selector` - (Optional) TLSA Record Selector. - FullCertificate: Full Certificate - UseSubjectPublicKey: Use Subject Public Key (`String`).
-
-<a id="nestedblock--default_rr_set_group--txt_record"></a>
-### Default Rr Set Group Txt Record
+<a id="nestedblock--primary--default_rr_set_group--txt_record"></a>
+### Primary Default Rr Set Group Txt Record
 
 `name` - (Optional) Record Name (Excluding Domain name). TXT Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
 
 `values` - (Optional) Text. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.items.string.max_len: 4000 ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated (`List`).
 
-<a id="nestedblock--default_soa_parameters"></a>
-### Default Soa Parameters
+<a id="nestedblock--primary--default_soa_parameters"></a>
+### Primary Default Soa Parameters
 
-<a id="nestedblock--dnssec_mode"></a>
-### Dnssec Mode
+<a id="nestedblock--primary--dnssec_mode"></a>
+### Primary Dnssec Mode
 
-`disable` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable](#nestedblock--dnssec_mode--disable) below.
+`disable` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable](#nestedblock--primary--dnssec_mode--disable) below.
 
-`enable` - (Optional) Enable. DNSSEC enable. See [Enable](#nestedblock--dnssec_mode--enable) below.
+`enable` - (Optional) Enable. DNSSEC enable. See [Enable](#nestedblock--primary--dnssec_mode--enable) below.
 
-<a id="nestedblock--dnssec_mode--disable"></a>
-### Dnssec Mode Disable
+<a id="nestedblock--primary--dnssec_mode--disable"></a>
+### Primary Dnssec Mode Disable
 
-<a id="nestedblock--dnssec_mode--enable"></a>
-### Dnssec Mode Enable
+<a id="nestedblock--primary--dnssec_mode--enable"></a>
+### Primary Dnssec Mode Enable
 
-<a id="nestedblock--rr_set_group"></a>
-### Rr Set Group
+<a id="nestedblock--primary--rr_set_group"></a>
+### Primary Rr Set Group
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--rr_set_group--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--primary--rr_set_group--metadata) below.
 
-`rr_set` - (Optional) Resource Record Sets. Collection of DNS resource record sets ves.io.schema.rules.repeated.max_items: 50000. See [Rr Set](#nestedblock--rr_set_group--rr_set) below.
+`rr_set` - (Optional) Resource Record Sets. Collection of DNS resource record sets ves.io.schema.rules.repeated.max_items: 50000. See [Rr Set](#nestedblock--primary--rr_set_group--rr_set) below.
 
-<a id="nestedblock--rr_set_group--metadata"></a>
-### Rr Set Group Metadata
+<a id="nestedblock--primary--rr_set_group--metadata"></a>
+### Primary Rr Set Group Metadata
 
 `description` - (Optional) Description. Human readable description. ves.io.schema.rules.string.max_len: 256 (`String`).
 
 `name` - (Optional) Name. This is the name of the message. The value of name has to follow DNS-1035 format. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.min_len: 1 ves.io.schema (`String`).
 
-<a id="nestedblock--rr_set_group--rr_set"></a>
-### Rr Set Group Rr Set
+<a id="nestedblock--primary--rr_set_group--rr_set"></a>
+### Primary Rr Set Group Rr Set
 
-`a_record` - (Optional) DNSAResourceRecord. A Records. See [A Record](#nestedblock--rr_set_group--rr_set--a_record) below.
+`a_record` - (Optional) DNSAResourceRecord. A Records. See [A Record](#nestedblock--primary--rr_set_group--rr_set--a_record) below.
 
-`aaaa_record` - (Optional) DNSAAAAResourceRecord. RecordSet for AAAA Records. See [Aaaa Record](#nestedblock--rr_set_group--rr_set--aaaa_record) below.
+`aaaa_record` - (Optional) DNSAAAAResourceRecord. RecordSet for AAAA Records. See [Aaaa Record](#nestedblock--primary--rr_set_group--rr_set--aaaa_record) below.
 
-`afsdb_record` - (Optional) DNS AFSDB Record. DNS AFSDB Record. See [Afsdb Record](#nestedblock--rr_set_group--rr_set--afsdb_record) below.
+`afsdb_record` - (Optional) DNS AFSDB Record. DNS AFSDB Record. See [Afsdb Record](#nestedblock--primary--rr_set_group--rr_set--afsdb_record) below.
 
-`alias_record` - (Optional) DNSAliasResourceRecord. See [Alias Record](#nestedblock--rr_set_group--rr_set--alias_record) below.
+`alias_record` - (Optional) DNSAliasResourceRecord. See [Alias Record](#nestedblock--primary--rr_set_group--rr_set--alias_record) below.
 
-`caa_record` - (Optional) DNSCAAResourceRecord. See [Caa Record](#nestedblock--rr_set_group--rr_set--caa_record) below.
+`caa_record` - (Optional) DNSCAAResourceRecord. See [Caa Record](#nestedblock--primary--rr_set_group--rr_set--caa_record) below.
 
-`cds_record` - (Optional) DNS CDS Record. DNS CDS Record. See [Cds Record](#nestedblock--rr_set_group--rr_set--cds_record) below.
+`cds_record` - (Optional) DNS CDS Record. DNS CDS Record. See [Cds Record](#nestedblock--primary--rr_set_group--rr_set--cds_record) below.
 
-`cert_record` - (Optional) DNS CERT Record. DNS CERT Record. See [Cert Record](#nestedblock--rr_set_group--rr_set--cert_record) below.
+`cert_record` - (Optional) DNS CERT Record. DNS CERT Record. See [Cert Record](#nestedblock--primary--rr_set_group--rr_set--cert_record) below.
 
-`cname_record` - (Optional) DNSCNAMEResourceRecord. See [Cname Record](#nestedblock--rr_set_group--rr_set--cname_record) below.
+`cname_record` - (Optional) DNSCNAMEResourceRecord. See [Cname Record](#nestedblock--primary--rr_set_group--rr_set--cname_record) below.
 
 `description` - (Optional) Comment (`String`).
 
-`ds_record` - (Optional) DNS DS Record. DNS DS Record. See [Ds Record](#nestedblock--rr_set_group--rr_set--ds_record) below.
+`ds_record` - (Optional) DNS DS Record. DNS DS Record. See [Ds Record](#nestedblock--primary--rr_set_group--rr_set--ds_record) below.
 
-`eui48_record` - (Optional) DNS EUI48 Record. DNS EUI48 Record. See [Eui48 Record](#nestedblock--rr_set_group--rr_set--eui48_record) below.
+`eui48_record` - (Optional) DNS EUI48 Record. DNS EUI48 Record. See [Eui48 Record](#nestedblock--primary--rr_set_group--rr_set--eui48_record) below.
 
-`eui64_record` - (Optional) DNS EUI64 Record. DNS EUI64 Record. See [Eui64 Record](#nestedblock--rr_set_group--rr_set--eui64_record) below.
+`eui64_record` - (Optional) DNS EUI64 Record. DNS EUI64 Record. See [Eui64 Record](#nestedblock--primary--rr_set_group--rr_set--eui64_record) below.
 
-`lb_record` - (Optional) DNS Load Balancer Record. DNS Load Balancer Record. See [Lb Record](#nestedblock--rr_set_group--rr_set--lb_record) below.
+`lb_record` - (Optional) DNS Load Balancer Record. DNS Load Balancer Record. See [Lb Record](#nestedblock--primary--rr_set_group--rr_set--lb_record) below.
 
-`loc_record` - (Optional) DNS LOC Record. DNS LOC Record. See [Loc Record](#nestedblock--rr_set_group--rr_set--loc_record) below.
+`loc_record` - (Optional) DNS LOC Record. DNS LOC Record. See [Loc Record](#nestedblock--primary--rr_set_group--rr_set--loc_record) below.
 
-`mx_record` - (Optional) DNSMXResourceRecord. See [Mx Record](#nestedblock--rr_set_group--rr_set--mx_record) below.
+`mx_record` - (Optional) DNSMXResourceRecord. See [Mx Record](#nestedblock--primary--rr_set_group--rr_set--mx_record) below.
 
-`naptr_record` - (Optional) DNS NAPTR Record. DNS NAPTR Record. See [Naptr Record](#nestedblock--rr_set_group--rr_set--naptr_record) below.
+`naptr_record` - (Optional) DNS NAPTR Record. DNS NAPTR Record. See [Naptr Record](#nestedblock--primary--rr_set_group--rr_set--naptr_record) below.
 
-`ns_record` - (Optional) DNSNSResourceRecord. See [Ns Record](#nestedblock--rr_set_group--rr_set--ns_record) below.
+`ns_record` - (Optional) DNSNSResourceRecord. See [Ns Record](#nestedblock--primary--rr_set_group--rr_set--ns_record) below.
 
-`ptr_record` - (Optional) DNSPTRResourceRecord. See [Ptr Record](#nestedblock--rr_set_group--rr_set--ptr_record) below.
+`ptr_record` - (Optional) DNSPTRResourceRecord. See [Ptr Record](#nestedblock--primary--rr_set_group--rr_set--ptr_record) below.
 
-`srv_record` - (Optional) DNSSRVResourceRecord. See [Srv Record](#nestedblock--rr_set_group--rr_set--srv_record) below.
+`srv_record` - (Optional) DNSSRVResourceRecord. See [Srv Record](#nestedblock--primary--rr_set_group--rr_set--srv_record) below.
 
-`sshfp_record` - (Optional) DNS SSHFP Record. DNS SSHFP Record. See [Sshfp Record](#nestedblock--rr_set_group--rr_set--sshfp_record) below.
+`sshfp_record` - (Optional) DNS SSHFP Record. DNS SSHFP Record. See [Sshfp Record](#nestedblock--primary--rr_set_group--rr_set--sshfp_record) below.
 
-`tlsa_record` - (Optional) DNS TLSA Record. DNS TLSA Record. See [Tlsa Record](#nestedblock--rr_set_group--rr_set--tlsa_record) below.
+`tlsa_record` - (Optional) DNS TLSA Record. DNS TLSA Record. See [Tlsa Record](#nestedblock--primary--rr_set_group--rr_set--tlsa_record) below.
 
 `ttl` - (Optional) Time to live. ves.io.schema.rules.uint32.gte: 60 ves.io.schema.rules.uint32.lte: 2147483647 (`Number`).
 
-`txt_record` - (Optional) DNSTXTResourceRecord. See [Txt Record](#nestedblock--rr_set_group--rr_set--txt_record) below.
+`txt_record` - (Optional) DNSTXTResourceRecord. See [Txt Record](#nestedblock--primary--rr_set_group--rr_set--txt_record) below.
 
-<a id="nestedblock--rr_set_group--rr_set--a_record"></a>
-### Rr Set Group Rr Set A Record
+<a id="nestedblock--primary--rr_set_group--rr_set--a_record"></a>
+### Primary Rr Set Group Rr Set A Record
 
-`name` - (Optional) Record Name (Excluding Domain name). A Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
+<a id="nestedblock--primary--rr_set_group--rr_set--aaaa_record"></a>
+### Primary Rr Set Group Rr Set Aaaa Record
 
-`values` - (Optional) IPv4 Addresses. A valid IPv4 address, for example: 1.1.1.1 Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.items.string.ipv4: true ves.io.schema.rules.repeated (`List`).
+<a id="nestedblock--primary--rr_set_group--rr_set--afsdb_record"></a>
+### Primary Rr Set Group Rr Set Afsdb Record
 
-<a id="nestedblock--rr_set_group--rr_set--aaaa_record"></a>
-### Rr Set Group Rr Set Aaaa Record
+<a id="nestedblock--primary--rr_set_group--rr_set--alias_record"></a>
+### Primary Rr Set Group Rr Set Alias Record
 
-`name` - (Optional) Record Name (Excluding Domain name). AAAA Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
+<a id="nestedblock--primary--rr_set_group--rr_set--caa_record"></a>
+### Primary Rr Set Group Rr Set Caa Record
 
-`values` - (Optional) IPv6 Addresses. A valid IPv6 address, for example: 2001:0db8:85a3:0000:0000:8a2e:0370:7334 Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.items.string (`List`).
+<a id="nestedblock--primary--rr_set_group--rr_set--cds_record"></a>
+### Primary Rr Set Group Rr Set Cds Record
 
-<a id="nestedblock--rr_set_group--rr_set--afsdb_record"></a>
-### Rr Set Group Rr Set Afsdb Record
+<a id="nestedblock--primary--rr_set_group--rr_set--cert_record"></a>
+### Primary Rr Set Group Rr Set Cert Record
 
-`name` - (Optional) Record Name (Excluding Domain name). AFSDB Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
+<a id="nestedblock--primary--rr_set_group--rr_set--cname_record"></a>
+### Primary Rr Set Group Rr Set Cname Record
 
-`values` - (Optional) AFSDB Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--rr_set_group--rr_set--afsdb_record--values) below.
+<a id="nestedblock--primary--rr_set_group--rr_set--ds_record"></a>
+### Primary Rr Set Group Rr Set Ds Record
 
-<a id="nestedblock--rr_set_group--rr_set--afsdb_record--values"></a>
-### Rr Set Group Rr Set Afsdb Record Values
+<a id="nestedblock--primary--rr_set_group--rr_set--eui48_record"></a>
+### Primary Rr Set Group Rr Set Eui48 Record
 
-<a id="nestedblock--rr_set_group--rr_set--alias_record"></a>
-### Rr Set Group Rr Set Alias Record
+<a id="nestedblock--primary--rr_set_group--rr_set--eui64_record"></a>
+### Primary Rr Set Group Rr Set Eui64 Record
 
-`value` - (Optional) Domain. A valid domain name, for example: example.com ves.io.schema.rules.string.hostname: true ves.io.schema.rules.string.max_len: 255 (`String`).
+<a id="nestedblock--primary--rr_set_group--rr_set--lb_record"></a>
+### Primary Rr Set Group Rr Set Lb Record
 
-<a id="nestedblock--rr_set_group--rr_set--caa_record"></a>
-### Rr Set Group Rr Set Caa Record
+<a id="nestedblock--primary--rr_set_group--rr_set--loc_record"></a>
+### Primary Rr Set Group Rr Set Loc Record
 
-`name` - (Optional) Record Name (Excluding Domain name). CAA Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
+<a id="nestedblock--primary--rr_set_group--rr_set--mx_record"></a>
+### Primary Rr Set Group Rr Set Mx Record
 
-`values` - (Optional) CAA Record Value. ves.io.schema.rules.repeated.max_items: 100. See [Values](#nestedblock--rr_set_group--rr_set--caa_record--values) below.
+<a id="nestedblock--primary--rr_set_group--rr_set--naptr_record"></a>
+### Primary Rr Set Group Rr Set Naptr Record
 
-<a id="nestedblock--rr_set_group--rr_set--caa_record--values"></a>
-### Rr Set Group Rr Set Caa Record Values
+<a id="nestedblock--primary--rr_set_group--rr_set--ns_record"></a>
+### Primary Rr Set Group Rr Set Ns Record
 
-<a id="nestedblock--rr_set_group--rr_set--cds_record"></a>
-### Rr Set Group Rr Set Cds Record
+<a id="nestedblock--primary--rr_set_group--rr_set--ptr_record"></a>
+### Primary Rr Set Group Rr Set Ptr Record
 
-`name` - (Optional) Record Name (Excluding Domain name). CDS Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
+<a id="nestedblock--primary--rr_set_group--rr_set--srv_record"></a>
+### Primary Rr Set Group Rr Set Srv Record
 
-`values` - (Optional) DS Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--rr_set_group--rr_set--cds_record--values) below.
+<a id="nestedblock--primary--rr_set_group--rr_set--sshfp_record"></a>
+### Primary Rr Set Group Rr Set Sshfp Record
 
-<a id="nestedblock--rr_set_group--rr_set--cds_record--values"></a>
-### Rr Set Group Rr Set Cds Record Values
+<a id="nestedblock--primary--rr_set_group--rr_set--tlsa_record"></a>
+### Primary Rr Set Group Rr Set Tlsa Record
 
-<a id="nestedblock--rr_set_group--rr_set--cert_record"></a>
-### Rr Set Group Rr Set Cert Record
+<a id="nestedblock--primary--rr_set_group--rr_set--txt_record"></a>
+### Primary Rr Set Group Rr Set Txt Record
 
-`name` - (Optional) Record Name (Excluding Domain name). CERT Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
-
-`values` - (Optional) CERT Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--rr_set_group--rr_set--cert_record--values) below.
-
-<a id="nestedblock--rr_set_group--rr_set--cert_record--values"></a>
-### Rr Set Group Rr Set Cert Record Values
-
-<a id="nestedblock--rr_set_group--rr_set--cname_record"></a>
-### Rr Set Group Rr Set Cname Record
-
-`name` - (Optional) Record Name (Excluding Domain name). CName Record name, please provide only the specific subdomain or record name without the base domain. Required: YES ves.io.schema.rules.message.required: true ves (`String`).
-
-`value` - (Optional) Domain. ves.io.schema.rules.string.hostname: true ves.io.schema.rules.string.max_len: 255 (`String`).
-
-<a id="nestedblock--rr_set_group--rr_set--ds_record"></a>
-### Rr Set Group Rr Set Ds Record
-
-`name` - (Optional) Record Name (Excluding Domain name). DS Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
-
-`values` - (Optional) DS Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--rr_set_group--rr_set--ds_record--values) below.
-
-<a id="nestedblock--rr_set_group--rr_set--ds_record--values"></a>
-### Rr Set Group Rr Set Ds Record Values
-
-<a id="nestedblock--rr_set_group--rr_set--eui48_record"></a>
-### Rr Set Group Rr Set Eui48 Record
-
-`name` - (Optional) Record Name (Excluding Domain name). EUI48 Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
-
-`value` - (Optional) EUI48 Identifier. A valid eui48 identifier, for example: 01-23-45-67-89-ab Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_len: 17 ves.io.schema.rules.string (`String`).
-
-<a id="nestedblock--rr_set_group--rr_set--eui64_record"></a>
-### Rr Set Group Rr Set Eui64 Record
-
-`name` - (Optional) Record Name (Excluding Domain name). EUI64 Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
-
-`value` - (Optional) EUI64 Identifier. A valid EUI64 identifier, for example: 01-23-45-67-89-ab-cd-ef Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_len: 23 ves.io.schema.rules (`String`).
-
-<a id="nestedblock--rr_set_group--rr_set--lb_record"></a>
-### Rr Set Group Rr Set Lb Record
-
-`name` - (Optional) Record Name (Excluding Domain name). Load Balancer record name (except for SRV DNS Load balancer record) should be a simple record name and not a subdomain of a subdomain. ves.io.schema.rules.string (`String`).
-
-`value` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Value](#nestedblock--rr_set_group--rr_set--lb_record--value) below.
-
-<a id="nestedblock--rr_set_group--rr_set--lb_record--value"></a>
-### Rr Set Group Rr Set Lb Record Value
-
-<a id="nestedblock--rr_set_group--rr_set--loc_record"></a>
-### Rr Set Group Rr Set Loc Record
-
-`name` - (Optional) Record Name (Excluding Domain name). LOC Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
-
-`values` - (Optional) LOC Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--rr_set_group--rr_set--loc_record--values) below.
-
-<a id="nestedblock--rr_set_group--rr_set--loc_record--values"></a>
-### Rr Set Group Rr Set Loc Record Values
-
-<a id="nestedblock--rr_set_group--rr_set--mx_record"></a>
-### Rr Set Group Rr Set Mx Record
-
-`name` - (Optional) Record Name (Excluding Domain name). MX Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
-
-`values` - (Optional) MX Record Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100. See [Values](#nestedblock--rr_set_group--rr_set--mx_record--values) below.
-
-<a id="nestedblock--rr_set_group--rr_set--mx_record--values"></a>
-### Rr Set Group Rr Set Mx Record Values
-
-<a id="nestedblock--rr_set_group--rr_set--naptr_record"></a>
-### Rr Set Group Rr Set Naptr Record
-
-`name` - (Optional) Record Name (Excluding Domain name). NAPTR Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
-
-`values` - (Optional) NAPTR Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--rr_set_group--rr_set--naptr_record--values) below.
-
-<a id="nestedblock--rr_set_group--rr_set--naptr_record--values"></a>
-### Rr Set Group Rr Set Naptr Record Values
-
-<a id="nestedblock--rr_set_group--rr_set--ns_record"></a>
-### Rr Set Group Rr Set Ns Record
-
-`name` - (Optional) Record Name (Excluding Domain name). NS Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
-
-`values` - (Optional) Name Servers. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.items.string.hostname: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules (`List`).
-
-<a id="nestedblock--rr_set_group--rr_set--ptr_record"></a>
-### Rr Set Group Rr Set Ptr Record
-
-`name` - (Optional) Record Name (Excluding Domain name). PTR Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
-
-`values` - (Optional) Domain Name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.items.string.hostname: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated (`List`).
-
-<a id="nestedblock--rr_set_group--rr_set--srv_record"></a>
-### Rr Set Group Rr Set Srv Record
-
-`name` - (Optional) Record Name (Excluding Domain name). SRV Record name, please provide only the specific subdomain or record name without the base domain. Required: YES ves.io.schema.rules.message.required: true ves (`String`).
-
-`values` - (Optional) SRV Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--rr_set_group--rr_set--srv_record--values) below.
-
-<a id="nestedblock--rr_set_group--rr_set--srv_record--values"></a>
-### Rr Set Group Rr Set Srv Record Values
-
-<a id="nestedblock--rr_set_group--rr_set--sshfp_record"></a>
-### Rr Set Group Rr Set Sshfp Record
-
-`name` - (Optional) Record Name (Excluding Domain name). SSHFP Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
-
-`values` - (Optional) SSHFP Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--rr_set_group--rr_set--sshfp_record--values) below.
-
-<a id="nestedblock--rr_set_group--rr_set--sshfp_record--values"></a>
-### Rr Set Group Rr Set Sshfp Record Values
-
-<a id="nestedblock--rr_set_group--rr_set--tlsa_record"></a>
-### Rr Set Group Rr Set Tlsa Record
-
-`name` - (Optional) Record Name (Excluding Domain name). TLSA Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
-
-`values` - (Optional) TLSA Value. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated.min_items: 1. See [Values](#nestedblock--rr_set_group--rr_set--tlsa_record--values) below.
-
-<a id="nestedblock--rr_set_group--rr_set--tlsa_record--values"></a>
-### Rr Set Group Rr Set Tlsa Record Values
-
-<a id="nestedblock--rr_set_group--rr_set--txt_record"></a>
-### Rr Set Group Rr Set Txt Record
-
-`name` - (Optional) Record Name (Excluding Domain name). TXT Record name, please provide only the specific subdomain or record name without the base domain. ves.io.schema.rules.string (`String`).
-
-`values` - (Optional) Text. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.items.string.max_len: 4000 ves.io.schema.rules.repeated.max_items: 100 ves.io.schema.rules.repeated (`List`).
-
-<a id="nestedblock--soa_parameters"></a>
-### Soa Parameters
+<a id="nestedblock--primary--soa_parameters"></a>
+### Primary Soa Parameters
 
 `expire` - (Optional) Expire. expire value indicates when secondary nameservers should stop answering request for this zone if primary does not respond ves.io.schema.rules.uint32.gte: 0 ves.io.schema.rules.uint32 (`Number`).
 
@@ -721,6 +482,40 @@ In addition to all arguments above, the following attributes are exported:
 `retry` - (Optional) Retry Interval. retry value indicates when secondary nameservers should retry to request the serial number if primary does not respond ves.io.schema.rules.uint32.gte: 60 ves.io.schema.rules.uint32 (`Number`).
 
 `ttl` - (Optional) TTL. SOA record time to live (in seconds) ves.io.schema.rules.uint32.gte: 0 ves.io.schema.rules.uint32.lte: 2147483647 (`Number`).
+
+<a id="nestedblock--secondary"></a>
+### Secondary
+
+`primary_servers` - (Optional) DNS Primary Server IP. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.items.string.ipv4: true ves.io.schema.rules.repeated.max_items: 10 ves.io.schema.rules (`List`).
+
+`tsig_key_algorithm` - (Optional) TSIG Key Algorithm. TSIG key value must be compatible with the specified algorithm - UNDEFINED: UNDEFINED - HMAC_MD5: HMAC_MD5 - HMAC_SHA1: HMAC_SHA1 - HMAC_SHA224: HMAC_SHA224 - HMAC_SHA256: HMAC_... (`String`).
+
+`tsig_key_name` - (Optional) TSIG Key Name. TSIG key name as used in TSIG protocol extension ves.io.schema.rules.string.hostname: true (`String`).
+
+`tsig_key_value` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Tsig Key Value](#nestedblock--secondary--tsig_key_value) below.
+
+<a id="nestedblock--secondary--tsig_key_value"></a>
+### Secondary Tsig Key Value
+
+`blindfold_secret_info` - (Optional) Blindfold Secret. BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management. See [Blindfold Secret Info](#nestedblock--secondary--tsig_key_value--blindfold_secret_info) below.
+
+`clear_secret_info` - (Optional) In-Clear Secret. ClearSecretInfoType specifies information about the Secret that is not encrypted. See [Clear Secret Info](#nestedblock--secondary--tsig_key_value--clear_secret_info) below.
+
+<a id="nestedblock--secondary--tsig_key_value--blindfold_secret_info"></a>
+### Secondary Tsig Key Value Blindfold Secret Info
+
+`decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
+
+`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location Required: YES ves.io.schema.rules.message (`String`).
+
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+<a id="nestedblock--secondary--tsig_key_value--clear_secret_info"></a>
+### Secondary Tsig Key Value Clear Secret Info
+
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
 
 
 ## Import

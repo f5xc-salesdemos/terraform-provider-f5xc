@@ -173,7 +173,7 @@ func (r *AWSVPCSiteResource) Schema(ctx context.Context, req resource.SchemaRequ
 
 			},
 			"block_all_services": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: block_all_services, blocked_services, default_blocked_services] Empty. This can be used for messages where no values are needed",
 			},
 			"blocked_services": schema.SingleNestedBlock{
 				MarkdownDescription: "Disable Node Local Services. Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site.",
@@ -234,7 +234,7 @@ func (r *AWSVPCSiteResource) Schema(ctx context.Context, req resource.SchemaRequ
 
 			},
 			"custom_security_group": schema.SingleNestedBlock{
-				MarkdownDescription: "Security Group IDS. Enter pre created security groups for slo(Site Local Outside) and sli(Site Local Inside) interface. Supported only for sites deployed on existing VPC",
+				MarkdownDescription: "[OneOf: custom_security_group, f5xc_security_group] Security Group IDS. Enter pre created security groups for slo(Site Local Outside) and sli(Site Local Inside) interface. Supported only for sites deployed on existing VPC",
 				Attributes: map[string]schema.Attribute{
 					"inside_security_group_id": schema.StringAttribute{
 						MarkdownDescription: "Inside Security Group ID. Security Group ID to be attached to SLI(Site Local Inside) Interface ves.io.schema.rules.string.max_len: 20 ves.io.schema.rules.string.pattern: ^(sg-)([a-z0-9]{8}|[a-z0-9]{17})$|^$",
@@ -251,7 +251,7 @@ func (r *AWSVPCSiteResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"direct_connect_disabled": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: direct_connect_disabled, direct_connect_enabled, private_connectivity] Empty. This can be used for messages where no values are needed",
 			},
 			"direct_connect_enabled": schema.SingleNestedBlock{
 				MarkdownDescription: "Direct Connect Configuration. Direct Connect Configuration",
@@ -311,10 +311,10 @@ func (r *AWSVPCSiteResource) Schema(ctx context.Context, req resource.SchemaRequ
 
 			},
 			"disable_internet_vip": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_internet_vip, enable_internet_vip] Empty. This can be used for messages where no values are needed",
 			},
 			"egress_gateway_default": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: egress_gateway_default, egress_nat_gw, egress_virtual_private_gateway] Empty. This can be used for messages where no values are needed",
 			},
 			"egress_nat_gw": schema.SingleNestedBlock{
 				MarkdownDescription: "AWS NAT Gateway choice. With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway.",
@@ -340,13 +340,13 @@ func (r *AWSVPCSiteResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"f5_orchestrated_routing": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: f5_orchestrated_routing, manual_routing] Empty. This can be used for messages where no values are needed",
 			},
 			"f5xc_security_group": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"ingress_egress_gw": schema.SingleNestedBlock{
-				MarkdownDescription: "AWS Ingress/Egress Gateway. Two interface AWS ingress/egress site",
+				MarkdownDescription: "[OneOf: ingress_egress_gw, ingress_gw, voltstack_cluster] AWS Ingress/Egress Gateway. Two interface AWS ingress/egress site",
 				Attributes: map[string]schema.Attribute{
 					"aws_certified_hw": schema.StringAttribute{
 						MarkdownDescription: "AWS Certified Hardware. Name for AWS certified hardware. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_len: 64",
@@ -824,7 +824,7 @@ func (r *AWSVPCSiteResource) Schema(ctx context.Context, req resource.SchemaRequ
 
 			},
 			"log_receiver": schema.SingleNestedBlock{
-				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
+				MarkdownDescription: "[OneOf: log_receiver, logs_streaming_disabled] Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
 				Attributes: map[string]schema.Attribute{
 					"name": schema.StringAttribute{
 						MarkdownDescription: "Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_bytes: 128 ves.io.schema.rules.string.min_bytes: 1",
@@ -848,7 +848,7 @@ func (r *AWSVPCSiteResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"no_worker_nodes": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: no_worker_nodes, nodes_per_az, total_nodes] Empty. This can be used for messages where no values are needed",
 			},
 			"offline_survivability_mode": schema.SingleNestedBlock{
 				MarkdownDescription: "Offline Survivability Mode. Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC). When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline. The certificates needed to keep the services running on this site are signed using a local CA. Secrets would also be cached locally to handl...",

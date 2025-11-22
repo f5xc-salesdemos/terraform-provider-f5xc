@@ -82,7 +82,7 @@ func (r *APMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 		},
 		Blocks: map[string]schema.Block{
 			"aws_site_type_choice": schema.SingleNestedBlock{
-				MarkdownDescription: "AWS Transit Gateway Site choice. Virtual F5 BIG-IP APM service to be deployed as external service on AWS Transit Gateway Site",
+				MarkdownDescription: "[OneOf: aws_site_type_choice, baremetal_site_type_choice] AWS Transit Gateway Site choice. Virtual F5 BIG-IP APM service to be deployed as external service on AWS Transit Gateway Site",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{

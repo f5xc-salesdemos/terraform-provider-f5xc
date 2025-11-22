@@ -94,7 +94,7 @@ func (r *IKEPhase2ProfileResource) Schema(ctx context.Context, req resource.Sche
 		},
 		Blocks: map[string]schema.Block{
 			"dh_group_set": schema.SingleNestedBlock{
-				MarkdownDescription: "Diffie Hellman Groups. Choose the acceptable Diffie Hellman(DH) Group or Groups that you are willing to accept as part of this profile.",
+				MarkdownDescription: "[OneOf: dh_group_set, disable_pfs] Diffie Hellman Groups. Choose the acceptable Diffie Hellman(DH) Group or Groups that you are willing to accept as part of this profile.",
 				Attributes: map[string]schema.Attribute{
 					"dh_groups": schema.ListAttribute{
 						MarkdownDescription: "Diffie Hellman Groups. Choose the acceptable Diffie Hellman(DH) Group or Groups that you are willing to accept as part of this profile. Required: YES ves.io.schema.rules.message.required: true",
@@ -108,7 +108,7 @@ func (r *IKEPhase2ProfileResource) Schema(ctx context.Context, req resource.Sche
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"ike_keylifetime_hours": schema.SingleNestedBlock{
-				MarkdownDescription: "Hours. Input Hours",
+				MarkdownDescription: "[OneOf: ike_keylifetime_hours, ike_keylifetime_minutes, use_default_keylifetime] Hours. Input Hours",
 				Attributes: map[string]schema.Attribute{
 					"duration": schema.Int64Attribute{
 						MarkdownDescription: "Duration. ves.io.schema.rules.uint32.gte: 1 ves.io.schema.rules.uint32.lte: 5",

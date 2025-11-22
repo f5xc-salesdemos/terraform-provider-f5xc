@@ -88,7 +88,7 @@ func (r *OriginPoolResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional: true,
 			},
 			"health_check_port": schema.Int64Attribute{
-				MarkdownDescription: "Health check port. Exclusive with [same_as_endpoint_port] Port used for performing health check ves.io.schema.rules.uint32.lte: 65535",
+				MarkdownDescription: "[OneOf: health_check_port, same_as_endpoint_port] Health check port. Exclusive with [same_as_endpoint_port] Port used for performing health check ves.io.schema.rules.uint32.lte: 65535",
 				Optional: true,
 			},
 			"loadbalancer_algorithm": schema.StringAttribute{
@@ -275,7 +275,7 @@ func (r *OriginPoolResource) Schema(ctx context.Context, req resource.SchemaRequ
 
 			},
 			"automatic_port": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: automatic_port, lb_port, port] Empty. This can be used for messages where no values are needed",
 			},
 			"healthcheck": schema.ListNestedBlock{
 				MarkdownDescription: "Health Check object. Reference to healthcheck configuration objects ves.io.schema.rules.repeated.max_items: 4",
@@ -301,7 +301,7 @@ func (r *OriginPoolResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"no_tls": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: no_tls, use_tls] Empty. This can be used for messages where no values are needed",
 			},
 			"origin_servers": schema.ListNestedBlock{
 				MarkdownDescription: "Origin Servers. List of origin servers in this pool Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 32 ves.io.schema.rules.repeated.min_items: 1 ves.io.schema.rules.repeated.unique: true",

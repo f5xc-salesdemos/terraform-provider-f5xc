@@ -66,11 +66,17 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "append_server_name, default_header, pass_through, server_name" must be set
+
 `append_server_name` - (Optional) Append Server Name if absent. Exclusive with [default_header pass_through server_name] Specifies the value to be used for Server header if it is not already present (`String`).
+
+###### One of the arguments from this list "authentication, no_authentication" must be set
 
 `authentication` - (Optional) Authentication Details. Authentication related information. This allows to configure the URL to redirect after the authentication Authentication Object Reference, configuration of cookie params etc. See [Authentication](#authentication) below for details.
 
 `buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. See [Buffer Policy](#buffer-policy) below for details.
+
+###### One of the arguments from this list "captcha_challenge, js_challenge, no_challenge" must be set
 
 `captcha_challenge` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. See [Captcha Challenge](#captcha-challenge) below for details.
 
@@ -88,11 +94,15 @@ The following arguments are optional:
 
 `default_header` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Header](#default-header) below for details.
 
+###### One of the arguments from this list "default_loadbalancer, non_default_loadbalancer" must be set
+
 `default_loadbalancer` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Loadbalancer](#default-loadbalancer) below for details.
 
 `disable_default_error_pages` - (Optional) Disable default error pages. An option to specify whether to disable using default F5XC error pages (`Bool`).
 
 `disable_dns_resolve` - (Optional) Disable DNS resolution. Disable DNS resolution for domains specified in the virtual host When the virtual host is configured as Dynamive Resolve Proxy (DRP), disable DNS resolution for domains conf... (`Bool`).
+
+###### One of the arguments from this list "disable_path_normalize, enable_path_normalize" must be set
 
 `disable_path_normalize` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Path Normalize](#disable-path-normalize) below for details.
 
@@ -149,6 +159,8 @@ The following arguments are optional:
 `server_name` - (Optional) Server Name. Exclusive with [append_server_name default_header pass_through] Specifies the value to be used for Server header inserted in responses (`String`).
 
 `slow_ddos_mitigation` - (Optional) Slow DDoS Mitigation. 'Slow and low' attacks tie up server resources, leaving none available for servicing requests from actual users. See [Slow Ddos Mitigation](#slow-ddos-mitigation) below for details.
+
+###### One of the arguments from this list "tls_cert_params, tls_parameters" must be set
 
 `tls_cert_params` - (Optional) Certificate Parameters. Certificate Parameters for authentication, TLS ciphers, and trust store. See [Tls Cert Params](#tls-cert-params) below for details.
 

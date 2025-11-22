@@ -85,11 +85,15 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "allow_all, allow_list, deny_list, rule_list" must be set
+
 `allow_all` - (Optional) Empty. This can be used for messages where no values are needed. See [Allow All](#allow-all) below for details.
 
 `allow_list` - (Optional) Forward Proxy Rule. URL(s) and domains policy for forward proxy for a connection type (TLS or HTTP). See [Allow List](#allow-list) below for details.
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
+
+###### One of the arguments from this list "any_proxy, drp_http_connect, network_connector, proxy_label_selector" must be set
 
 `any_proxy` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Proxy](#any-proxy) below for details.
 

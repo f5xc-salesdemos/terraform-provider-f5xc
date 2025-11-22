@@ -60,6 +60,8 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "address_records, integer_records, string_records" must be set
+
 `address_records` - (Optional) Address Record. Data group with address record List. See [Address Records](#address-records) below for details.
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).

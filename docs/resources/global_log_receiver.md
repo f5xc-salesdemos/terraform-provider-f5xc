@@ -62,7 +62,11 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "audit_logs, dns_logs, request_logs, security_events" must be set
+
 `audit_logs` - (Optional) Empty. This can be used for messages where no values are needed. See [Audit Logs](#audit-logs) below for details.
+
+###### One of the arguments from this list "aws_cloud_watch_receiver, azure_event_hubs_receiver, azure_receiver, datadog_receiver, gcp_bucket_receiver, http_receiver, kafka_receiver, new_relic_receiver, qradar_receiver, s3_receiver, splunk_receiver, sumo_logic_receiver" must be set
 
 `aws_cloud_watch_receiver` - (Optional) AWS Cloudwatch Logs Configuration. AWS Cloudwatch Logs Configuration for Global Log Receiver. See [Aws Cloud Watch Receiver](#aws-cloud-watch-receiver) below for details.
 
@@ -83,6 +87,8 @@ The following arguments are optional:
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
 `new_relic_receiver` - (Optional) NewRelic Configuration. Configuration for NewRelic endpoint. See [New Relic Receiver](#new-relic-receiver) below for details.
+
+###### One of the arguments from this list "ns_all, ns_current, ns_list" must be set
 
 `ns_all` - (Optional) Empty. This can be used for messages where no values are needed. See [Ns All](#ns-all) below for details.
 

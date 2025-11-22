@@ -66,6 +66,8 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "advertise_custom, advertise_on_public, advertise_on_public_default_vip, do_not_advertise" must be set
+
 `advertise_custom` - (Optional) Advertise Custom. This defines a way to advertise a VIP on specific sites. See [Advertise Custom](#advertise-custom) below for details.
 
 `advertise_on_public` - (Optional) Advertise Public. This defines a way to advertise a load balancer on public. If optional public_ip is provided, it will only be advertised on RE sites where that public_ip is available. See [Advertise On Public](#advertise-on-public) below for details.
@@ -82,6 +84,8 @@ The following arguments are optional:
 
 `enable_per_packet_load_balancing` - (Optional) Per Packet Load Balancing. Per packet load balancing: If disabled (default): First packet identified by source IP/port and local IP/port is sent to an upstream server as the load balancing algorith... (`Bool`).
 
+###### One of the arguments from this list "hash_policy_choice_random, hash_policy_choice_round_robin, hash_policy_choice_source_ip_stickiness" must be set
+
 `hash_policy_choice_random` - (Optional) Empty. This can be used for messages where no values are needed. See [Hash Policy Choice Random](#hash-policy-choice-random) below for details.
 
 `hash_policy_choice_round_robin` - (Optional) Empty. This can be used for messages where no values are needed. See [Hash Policy Choice Round Robin](#hash-policy-choice-round-robin) below for details.
@@ -91,6 +95,8 @@ The following arguments are optional:
 `idle_timeout` - (Optional) Idle Timeout. The amount of time that a session can exist without upstream or downstream activity, in milliseconds. ves.io.schema.rules.uint32.lte: 30000 (`Number`).
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
+
+###### One of the arguments from this list "listen_port, port_ranges" must be set
 
 `listen_port` - (Optional) Listen Port. Exclusive with [port_ranges] Listen Port for this load balancer ves.io.schema.rules.uint32.lte: 65535 (`Number`).
 

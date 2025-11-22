@@ -98,10 +98,10 @@ func (r *VoltstackSiteResource) Schema(ctx context.Context, req resource.SchemaR
 		},
 		Blocks: map[string]schema.Block{
 			"allow_all_usb": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: allow_all_usb, deny_all_usb, usb_policy] Empty. This can be used for messages where no values are needed",
 			},
 			"blocked_services": schema.SingleNestedBlock{
-				MarkdownDescription: "Disable Node Local Services. Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site.",
+				MarkdownDescription: "[OneOf: blocked_services, default_blocked_services] Disable Node Local Services. Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site.",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -131,7 +131,7 @@ func (r *VoltstackSiteResource) Schema(ctx context.Context, req resource.SchemaR
 
 			},
 			"bond_device_list": schema.SingleNestedBlock{
-				MarkdownDescription: "Bond Devices List. List of bond devices for this fleet",
+				MarkdownDescription: "[OneOf: bond_device_list, no_bond_devices] Bond Devices List. List of bond devices for this fleet",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -205,7 +205,7 @@ func (r *VoltstackSiteResource) Schema(ctx context.Context, req resource.SchemaR
 
 			},
 			"custom_network_config": schema.SingleNestedBlock{
-				MarkdownDescription: "VssNetworkConfiguration.",
+				MarkdownDescription: "[OneOf: custom_network_config, default_network_config] VssNetworkConfiguration.",
 				Attributes: map[string]schema.Attribute{
 					"bgp_peer_address": schema.StringAttribute{
 						MarkdownDescription: "BGP Peer Address. Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured to fetch BGP peer address from site Object. This can be used to change peer address per site in fleet. ves.io.schema.rules.string.ip: true",
@@ -510,7 +510,7 @@ func (r *VoltstackSiteResource) Schema(ctx context.Context, req resource.SchemaR
 
 			},
 			"custom_storage_config": schema.SingleNestedBlock{
-				MarkdownDescription: "VssStorageConfiguration.",
+				MarkdownDescription: "[OneOf: custom_storage_config, default_storage_config] VssStorageConfiguration.",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -688,7 +688,7 @@ func (r *VoltstackSiteResource) Schema(ctx context.Context, req resource.SchemaR
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"default_sriov_interface": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: default_sriov_interface, sriov_interfaces] Empty. This can be used for messages where no values are needed",
 			},
 			"default_storage_config": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
@@ -697,10 +697,10 @@ func (r *VoltstackSiteResource) Schema(ctx context.Context, req resource.SchemaR
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"disable_gpu": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_gpu, enable_gpu, enable_vgpu] Empty. This can be used for messages where no values are needed",
 			},
 			"disable_vm": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_vm, enable_vm] Empty. This can be used for messages where no values are needed",
 			},
 			"enable_gpu": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
@@ -727,7 +727,7 @@ func (r *VoltstackSiteResource) Schema(ctx context.Context, req resource.SchemaR
 				MarkdownDescription: "VM Configuration. VMs support configuration",
 			},
 			"k8s_cluster": schema.SingleNestedBlock{
-				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
+				MarkdownDescription: "[OneOf: k8s_cluster, no_k8s_cluster] Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
 				Attributes: map[string]schema.Attribute{
 					"name": schema.StringAttribute{
 						MarkdownDescription: "Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_bytes: 128 ves.io.schema.rules.string.min_bytes: 1",
@@ -777,7 +777,7 @@ func (r *VoltstackSiteResource) Schema(ctx context.Context, req resource.SchemaR
 
 			},
 			"local_control_plane": schema.SingleNestedBlock{
-				MarkdownDescription: "Local Control Plane. Enable local control plane for L3VPN, SRV6, EVPN etc",
+				MarkdownDescription: "[OneOf: local_control_plane, no_local_control_plane] Local Control Plane. Enable local control plane for L3VPN, SRV6, EVPN etc",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -839,7 +839,7 @@ func (r *VoltstackSiteResource) Schema(ctx context.Context, req resource.SchemaR
 
 			},
 			"log_receiver": schema.SingleNestedBlock{
-				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
+				MarkdownDescription: "[OneOf: log_receiver, logs_streaming_disabled] Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
 				Attributes: map[string]schema.Attribute{
 					"name": schema.StringAttribute{
 						MarkdownDescription: "Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_bytes: 128 ves.io.schema.rules.string.min_bytes: 1",

@@ -62,7 +62,11 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "dscp, no_marking, tos_value" must be set
+
 `dscp` - (Optional) DSCP Marking setting. DSCP marking setting as per RFC 2475. See [Dscp](#dscp) below for details.
+
+###### One of the arguments from this list "dscp_based_queue, queue_id_to_use" must be set
 
 `dscp_based_queue` - (Optional) Empty. This can be used for messages where no values are needed. See [Dscp Based Queue](#dscp-based-queue) below for details.
 
@@ -71,6 +75,8 @@ The following arguments are optional:
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
 `no_marking` - (Optional) Empty. This can be used for messages where no values are needed. See [No Marking](#no-marking) below for details.
+
+###### One of the arguments from this list "no_policer, policer" must be set
 
 `no_policer` - (Optional) Empty. This can be used for messages where no values are needed. See [No Policer](#no-policer) below for details.
 

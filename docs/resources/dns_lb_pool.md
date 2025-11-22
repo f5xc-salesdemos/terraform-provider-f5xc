@@ -60,6 +60,8 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "a_pool, aaaa_pool, cname_pool, mx_pool, srv_pool" must be set
+
 `a_pool` - (Optional) Pool for A Record. See [A Pool](#a-pool) below for details.
 
 `aaaa_pool` - (Optional) Pool for AAAA Record. See [Aaaa Pool](#aaaa-pool) below for details.
@@ -75,6 +77,8 @@ The following arguments are optional:
 `mx_pool` - (Optional) Pool for MX Record. See [Mx Pool](#mx-pool) below for details.
 
 `srv_pool` - (Optional) Pool for SRV Record. See [Srv Pool](#srv-pool) below for details.
+
+###### One of the arguments from this list "ttl, use_rrset_ttl" must be set
 
 `ttl` - (Optional) TTL. Exclusive with [use_rrset_ttl] Custom TTL in seconds (default 30) for responses from this pool ves.io.schema.rules.uint32.gte: 0 ves.io.schema.rules.uint32.lte: 2147483647 (`Number`).
 

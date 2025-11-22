@@ -82,7 +82,7 @@ func (r *Ike1Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 		},
 		Blocks: map[string]schema.Block{
 			"ike_keylifetime_hours": schema.SingleNestedBlock{
-				MarkdownDescription: "Hours. Input Hours",
+				MarkdownDescription: "[OneOf: ike_keylifetime_hours, ike_keylifetime_minutes, use_default_keylifetime] Hours. Input Hours",
 				Attributes: map[string]schema.Attribute{
 					"duration": schema.Int64Attribute{
 						MarkdownDescription: "Duration. ves.io.schema.rules.uint32.gte: 1 ves.io.schema.rules.uint32.lte: 5",
@@ -102,7 +102,7 @@ func (r *Ike1Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 
 			},
 			"reauth_disabled": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: reauth_disabled, reauth_timeout_days, reauth_timeout_hours] Empty. This can be used for messages where no values are needed",
 			},
 			"reauth_timeout_days": schema.SingleNestedBlock{
 				MarkdownDescription: "Days. Set Duration in days",

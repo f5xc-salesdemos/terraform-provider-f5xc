@@ -62,6 +62,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "bigip_virtual_server, cdn_loadbalancer, http_loadbalancer" must be set
+
 `bigip_virtual_server` - (Optional) API Group Scope BIGIP Virtual Server. Set the scope of the API Group to a specific BIGIP Virtual Server. See [Bigip Virtual Server](#bigip-virtual-server) below for details.
 
 `cdn_loadbalancer` - (Optional) API Group Scope CDN Loadbalancer. Set the scope of the API Group to a specific CDN Loadbalancer. See [Cdn Loadbalancer](#cdn-loadbalancer) below for details.

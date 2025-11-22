@@ -82,7 +82,7 @@ func (r *DNSLbHealthCheckResource) Schema(ctx context.Context, req resource.Sche
 		},
 		Blocks: map[string]schema.Block{
 			"http_health_check": schema.SingleNestedBlock{
-				MarkdownDescription: "HTTP Health Check.",
+				MarkdownDescription: "[OneOf: http_health_check, https_health_check, icmp_health_check, tcp_health_check, tcp_hex_health_check, udp_health_check] HTTP Health Check.",
 				Attributes: map[string]schema.Attribute{
 					"health_check_port": schema.Int64Attribute{
 						MarkdownDescription: "Health Check Port. Port used for performing health check Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.uint32.gte: 1 ves.io.schema.rules.uint32.lte: 65535",

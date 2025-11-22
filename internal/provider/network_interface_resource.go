@@ -82,7 +82,7 @@ func (r *NetworkInterfaceResource) Schema(ctx context.Context, req resource.Sche
 		},
 		Blocks: map[string]schema.Block{
 			"dedicated_interface": schema.SingleNestedBlock{
-				MarkdownDescription: "Dedicated Interface. Dedicated Interface Configuration",
+				MarkdownDescription: "[OneOf: dedicated_interface, dedicated_management_interface, ethernet_interface, layer2_interface, tunnel_interface] Dedicated Interface. Dedicated Interface Configuration",
 				Attributes: map[string]schema.Attribute{
 					"device": schema.StringAttribute{
 						MarkdownDescription: "Interface Device. Name of the device for which interface is configured. Use wwan0 for 4G/LTE. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_len: 64 ves.io.schema.rules.string.min_len: 1",

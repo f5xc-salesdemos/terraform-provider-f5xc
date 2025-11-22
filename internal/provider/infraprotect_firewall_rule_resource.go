@@ -92,22 +92,22 @@ func (r *InfraprotectFirewallRuleResource) Schema(ctx context.Context, req resou
 		},
 		Blocks: map[string]schema.Block{
 			"action_allow": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: action_allow, action_deny] Empty. This can be used for messages where no values are needed",
 			},
 			"action_deny": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"destination_prefix_all": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: destination_prefix_all, destination_prefix_single] Empty. This can be used for messages where no values are needed",
 			},
 			"fragments_allow": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: fragments_allow, fragments_deny] Empty. This can be used for messages where no values are needed",
 			},
 			"fragments_deny": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"protocol_ah": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: protocol_ah, protocol_all, protocol_esp, protocol_gre, protocol_icmp, protocol_icmp6, protocol_ipv6, protocol_tcp, protocol_udp] Empty. This can be used for messages where no values are needed",
 			},
 			"protocol_all": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
@@ -258,16 +258,16 @@ func (r *InfraprotectFirewallRuleResource) Schema(ctx context.Context, req resou
 
 			},
 			"source_prefix_all": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: source_prefix_all, source_prefix_single] Empty. This can be used for messages where no values are needed",
 			},
 			"state_off": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: state_off, state_on] Empty. This can be used for messages where no values are needed",
 			},
 			"state_on": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"version_ipv4": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: version_ipv4, version_ipv6] Empty. This can be used for messages where no values are needed",
 			},
 			"version_ipv6": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",

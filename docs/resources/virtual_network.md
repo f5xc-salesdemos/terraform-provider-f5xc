@@ -60,6 +60,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "global_network, legacy_type, site_local_inside_network, site_local_network" must be set
+
 `global_network` - (Optional) Empty. This can be used for messages where no values are needed. See [Global Network](#global-network) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).

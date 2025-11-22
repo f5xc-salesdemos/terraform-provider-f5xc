@@ -150,9 +150,13 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "automatic_port, lb_port, port" must be set
+
 `automatic_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Automatic Port](#automatic-port) below for details.
 
 `endpoint_selection` - (Optional) Endpoint Selection Policy. Policy for selection of endpoints from local site/remote site/both Consider both remote and local endpoints for load balancing LOCAL_ONLY: Consider only local endpoints f... (`String`).
+
+###### One of the arguments from this list "health_check_port, same_as_endpoint_port" must be set
 
 `health_check_port` - (Optional) Health check port. Exclusive with [same_as_endpoint_port] Port used for performing health check ves.io.schema.rules.uint32.lte: 65535 (`Number`).
 
@@ -163,6 +167,8 @@ The following arguments are optional:
 `lb_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Lb Port](#lb-port) below for details.
 
 `loadbalancer_algorithm` - (Optional) Load Balancer Algorithm. Different load balancing algorithms supported When a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm to determine... (`String`).
+
+###### One of the arguments from this list "no_tls, use_tls" must be set
 
 `no_tls` - (Optional) Empty. This can be used for messages where no values are needed. See [No Tls](#no-tls) below for details.
 

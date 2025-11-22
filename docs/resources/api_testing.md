@@ -66,6 +66,8 @@ The following arguments are optional:
 
 `domains` - (Optional) Testing Environments. Add and configure testing domains and credentials Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 32. See [Domains](#domains) below for details.
 
+###### One of the arguments from this list "every_day, every_month, every_week" must be set
+
 `every_day` - (Optional) Empty. This can be used for messages where no values are needed. See [Every Day](#every-day) below for details.
 
 `every_month` - (Optional) Empty. This can be used for messages where no values are needed. See [Every Month](#every-month) below for details.

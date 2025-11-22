@@ -62,6 +62,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "expiration_never, expiration_timestamp, one_day, one_hour, one_month, one_year" must be set
+
 `expiration_never` - (Optional) Empty. This can be used for messages where no values are needed. See [Expiration Never](#expiration-never) below for details.
 
 `expiration_timestamp` - (Optional) Expiration Time (UTC). Exclusive with [expiration_never one_day one_hour one_month one_year] This deny list rule will expire at the given timestamp and will be removed from the system afterwards (`String`).

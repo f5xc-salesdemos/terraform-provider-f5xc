@@ -87,7 +87,7 @@ func (r *ProxyResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 		},
 		Blocks: map[string]schema.Block{
 			"active_forward_proxy_policies": schema.SingleNestedBlock{
-				MarkdownDescription: "Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active",
+				MarkdownDescription: "[OneOf: active_forward_proxy_policies, no_forward_proxy_policy] Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -114,10 +114,10 @@ func (r *ProxyResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 
 			},
 			"do_not_advertise": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: do_not_advertise, site_virtual_sites] Empty. This can be used for messages where no values are needed",
 			},
 			"dynamic_proxy": schema.SingleNestedBlock{
-				MarkdownDescription: "DynamicProxyType.",
+				MarkdownDescription: "[OneOf: dynamic_proxy, http_proxy] DynamicProxyType.",
 				Attributes: map[string]schema.Attribute{
 					"domains": schema.ListAttribute{
 						MarkdownDescription: "Domains. A list of Domains to be proxied. Wildcard hosts are supported in the suffix or prefix form Supported Domains and search order: 1. Exact Domain names: www.foo.com. 2. Domains starting with a Wildcard: *.foo.com. Not supported Domains: - Just a Wildcard: * - A Wildcard and TLD with no root Domain: *.com. - A Wildcard not matching a whole DNS label. e.g. *.foo.com and *.bar.foo.com are valid Wildcards however *bar.foo.com, *-bar.foo.com, and bar*.foo.com are all invalid. Additional note...",
@@ -591,10 +591,10 @@ func (r *ProxyResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"no_interception": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: no_interception, tls_intercept] Empty. This can be used for messages where no values are needed",
 			},
 			"site_local_inside_network": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: site_local_inside_network, site_local_network] Empty. This can be used for messages where no values are needed",
 			},
 			"site_local_network": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",

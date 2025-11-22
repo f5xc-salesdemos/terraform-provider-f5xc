@@ -100,7 +100,7 @@ func (r *VirtualK8SResource) Schema(ctx context.Context, req resource.SchemaRequ
 
 			},
 			"disabled": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disabled, isolated] Empty. This can be used for messages where no values are needed",
 			},
 			"isolated": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",

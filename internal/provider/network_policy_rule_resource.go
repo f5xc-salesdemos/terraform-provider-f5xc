@@ -108,7 +108,7 @@ func (r *NetworkPolicyRuleResource) Schema(ctx context.Context, req resource.Sch
 
 			},
 			"ip_prefix_set": schema.SingleNestedBlock{
-				MarkdownDescription: "IP Prefix Set Reference. A list of references to ip_prefix_set objects.",
+				MarkdownDescription: "[OneOf: ip_prefix_set, prefix, prefix_selector] IP Prefix Set Reference. A list of references to ip_prefix_set objects.",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{

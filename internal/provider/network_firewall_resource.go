@@ -82,7 +82,7 @@ func (r *NetworkFirewallResource) Schema(ctx context.Context, req resource.Schem
 		},
 		Blocks: map[string]schema.Block{
 			"active_enhanced_firewall_policies": schema.SingleNestedBlock{
-				MarkdownDescription: "Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option for service insertion.",
+				MarkdownDescription: "[OneOf: active_enhanced_firewall_policies, active_network_policies, disable_network_policy] Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option for service insertion.",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -109,7 +109,7 @@ func (r *NetworkFirewallResource) Schema(ctx context.Context, req resource.Schem
 
 			},
 			"active_fast_acls": schema.SingleNestedBlock{
-				MarkdownDescription: "Active Fast ACL(s). List of Fast ACL(s).",
+				MarkdownDescription: "[OneOf: active_fast_acls, disable_fast_acl] Active Fast ACL(s). List of Fast ACL(s).",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -136,7 +136,7 @@ func (r *NetworkFirewallResource) Schema(ctx context.Context, req resource.Schem
 
 			},
 			"active_forward_proxy_policies": schema.SingleNestedBlock{
-				MarkdownDescription: "Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active",
+				MarkdownDescription: "[OneOf: active_forward_proxy_policies, disable_forward_proxy_policy] Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{

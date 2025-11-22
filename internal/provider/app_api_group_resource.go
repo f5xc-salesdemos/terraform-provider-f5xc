@@ -82,7 +82,7 @@ func (r *AppAPIGroupResource) Schema(ctx context.Context, req resource.SchemaReq
 		},
 		Blocks: map[string]schema.Block{
 			"bigip_virtual_server": schema.SingleNestedBlock{
-				MarkdownDescription: "API Group Scope BIGIP Virtual Server. Set the scope of the API Group to a specific BIGIP Virtual Server",
+				MarkdownDescription: "[OneOf: bigip_virtual_server, cdn_loadbalancer, http_loadbalancer] API Group Scope BIGIP Virtual Server. Set the scope of the API Group to a specific BIGIP Virtual Server",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{

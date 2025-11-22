@@ -98,7 +98,7 @@ func (r *VirtualHostResource) Schema(ctx context.Context, req resource.SchemaReq
 				Optional: true,
 			},
 			"append_server_name": schema.StringAttribute{
-				MarkdownDescription: "Append Server Name if absent. Exclusive with [default_header pass_through server_name] Specifies the value to be used for Server header if it is not already present. If Server Header is already present it is not overwritten. It is just passed. ves.io.schema.rules.string.max_len: 8096",
+				MarkdownDescription: "[OneOf: append_server_name, default_header, pass_through, server_name] Append Server Name if absent. Exclusive with [default_header pass_through server_name] Specifies the value to be used for Server header if it is not already present. If Server Header is already present it is not overwritten. It is just passed. ves.io.schema.rules.string.max_len: 8096",
 				Optional: true,
 			},
 			"connection_idle_timeout": schema.Int64Attribute{
@@ -185,7 +185,7 @@ func (r *VirtualHostResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"authentication": schema.SingleNestedBlock{
-				MarkdownDescription: "Authentication Details. Authentication related information. This allows to configure the URL to redirect after the authentication Authentication Object Reference, configuration of cookie params etc",
+				MarkdownDescription: "[OneOf: authentication, no_authentication] Authentication Details. Authentication related information. This allows to configure the URL to redirect after the authentication Authentication Object Reference, configuration of cookie params etc",
 				Attributes: map[string]schema.Attribute{
 					"redirect_url": schema.StringAttribute{
 						MarkdownDescription: "Configure Redirect URL. Exclusive with [redirect_dynamic] user can provide a url for e.g https://abc.xyz.com where user gets redirected. This URL configured here must match with the redirect URL configured with the OIDC provider ves.io.schema.rules.string.max_len: 128 ves.io.schema.rules.string.min_len: 1 ves.io.schema.rules.string.uri_ref: true",
@@ -287,7 +287,7 @@ func (r *VirtualHostResource) Schema(ctx context.Context, req resource.SchemaReq
 
 			},
 			"captcha_challenge": schema.SingleNestedBlock{
-				MarkdownDescription: "Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. With this feature enabled, only clients that pass the captcha challenge will be allowed to complete the HTTP request. When loadbalancer is configured to do Captcha Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have captcha challenge embedded in it. Client will be allowed to make the request only if the cap...",
+				MarkdownDescription: "[OneOf: captcha_challenge, js_challenge, no_challenge] Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. With this feature enabled, only clients that pass the captcha challenge will be allowed to complete the HTTP request. When loadbalancer is configured to do Captcha Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have captcha challenge embedded in it. Client will be allowed to make the request only if the cap...",
 				Attributes: map[string]schema.Attribute{
 					"cookie_expiry": schema.Int64Attribute{
 						MarkdownDescription: "Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge. ves.io.schema.rules.uint32.gte: 1 ves.io.schema.rules.uint32.lte: 86400",
@@ -408,10 +408,10 @@ func (r *VirtualHostResource) Schema(ctx context.Context, req resource.SchemaReq
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"default_loadbalancer": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: default_loadbalancer, non_default_loadbalancer] Empty. This can be used for messages where no values are needed",
 			},
 			"disable_path_normalize": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_path_normalize, enable_path_normalize] Empty. This can be used for messages where no values are needed",
 			},
 			"dynamic_reverse_proxy": schema.SingleNestedBlock{
 				MarkdownDescription: "Dynamic Reverse Proxy Type. In this mode of proxy, virtual host will resolve the destination endpoint dynamically. The dynamic resolution is done using a predefined field in the request. This predefined field depends on the ProxyType configured on the Virtual Host. For HTTP traffic, i.e. with ProxyType as HTTP_PROXY or HTTPS_PROXY, virtual host will use the 'HOST' http header from the request and perform DNS resolution to select destination endpoint. For TCP traffic with SNI, (If the ProxyTyp...",
@@ -973,7 +973,7 @@ func (r *VirtualHostResource) Schema(ctx context.Context, req resource.SchemaReq
 
 			},
 			"tls_cert_params": schema.SingleNestedBlock{
-				MarkdownDescription: "Certificate Parameters. Certificate Parameters for authentication, TLS ciphers, and trust store",
+				MarkdownDescription: "[OneOf: tls_cert_params, tls_parameters] Certificate Parameters. Certificate Parameters for authentication, TLS ciphers, and trust store",
 				Attributes: map[string]schema.Attribute{
 					"cipher_suites": schema.ListAttribute{
 						MarkdownDescription: "Cipher Suites. The following list specifies the supported cipher suite TLS_AES_128_GCM_SHA256 TLS_AES_256_GCM_SHA384 TLS_CHACHA20_POLY1305_SHA256 TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA TLS_ECDHE_RSA_WITH_AES_128_CBC_...",

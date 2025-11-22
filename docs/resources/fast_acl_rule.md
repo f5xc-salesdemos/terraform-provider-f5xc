@@ -64,6 +64,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "ip_prefix_set, prefix" must be set
+
 `ip_prefix_set` - (Optional) IP Prefix Set Reference. A list of references to ip_prefix_set objects. See [Ip Prefix Set](#ip-prefix-set) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).

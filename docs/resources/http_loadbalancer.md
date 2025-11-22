@@ -178,9 +178,13 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "active_service_policies, no_service_policies, service_policies_from_namespace" must be set
+
 `active_service_policies` - (Optional) Service Policy List. List of service policies. See [Active Service Policies](#active-service-policies) below for details.
 
 `add_location` - (Optional) Add Location. x-example: true Appends header x-volterra-location = <re-site-name> in responses. This configuration is ignored on CE sites (`Bool`).
+
+###### One of the arguments from this list "advertise_custom, advertise_on_public, advertise_on_public_default_vip, do_not_advertise" must be set
 
 `advertise_custom` - (Optional) Advertise Custom. This defines a way to advertise a VIP on specific sites. See [Advertise Custom](#advertise-custom) below for details.
 
@@ -192,25 +196,43 @@ The following arguments are optional:
 
 `api_protection_rules` - (Optional) API Protection Rules. API Protection Rules. See [Api Protection Rules](#api-protection-rules) below for details.
 
+###### One of the arguments from this list "api_rate_limit, disable_rate_limit, rate_limit" must be set
+
 `api_rate_limit` - (Optional) APIRateLimit. See [Api Rate Limit](#api-rate-limit) below for details.
+
+###### One of the arguments from this list "api_specification, disable_api_definition" must be set
 
 `api_specification` - (Optional) API Specification and Validation. Settings for api specification (api definition, OpenAPI validation, etc.). See [Api Specification](#api-specification) below for details.
 
+###### One of the arguments from this list "api_testing, disable_api_testing" must be set
+
 `api_testing` - (Optional) API Testing. See [Api Testing](#api-testing) below for details.
+
+###### One of the arguments from this list "app_firewall, disable_waf" must be set
 
 `app_firewall` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [App Firewall](#app-firewall) below for details.
 
 `blocked_clients` - (Optional) Client Blocking Rules. Define rules to block IP Prefixes or AS numbers. ves.io.schema.rules.repeated.max_items: 256 ves.io.schema.rules.repeated.unique_metadata_name: true. See [Blocked Clients](#blocked-clients) below for details.
 
+###### One of the arguments from this list "bot_defense, bot_defense_advanced, disable_bot_defense" must be set
+
 `bot_defense` - (Optional) Bot Defense. This defines various configuration options for Bot Defense Policy. See [Bot Defense](#bot-defense) below for details.
 
 `bot_defense_advanced` - (Optional) Bot Defense Advanced. Bot Defense Advanced. See [Bot Defense Advanced](#bot-defense-advanced) below for details.
 
+###### One of the arguments from this list "caching_policy, disable_caching" must be set
+
 `caching_policy` - (Optional) Caching Policies. x-required Caching Policies for the CDN. See [Caching Policy](#caching-policy) below for details.
+
+###### One of the arguments from this list "captcha_challenge, enable_challenge, js_challenge, no_challenge, policy_based_challenge" must be set
 
 `captcha_challenge` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. See [Captcha Challenge](#captcha-challenge) below for details.
 
+###### One of the arguments from this list "client_side_defense, disable_client_side_defense" must be set
+
 `client_side_defense` - (Optional) Client-Side Defense. This defines various configuration options for Client-Side Defense Policy. See [Client Side Defense](#client-side-defense) below for details.
+
+###### One of the arguments from this list "cookie_stickiness, least_active, random, ring_hash, round_robin, source_ip_stickiness" must be set
 
 `cookie_stickiness` - (Optional) Hashing using Cookie. Two types of cookie affinity: 1. Passive. Takes a cookie that's present in the cookies header and hashes on its value. 2. Generated. See [Cookie Stickiness](#cookie-stickiness) below for details.
 
@@ -222,15 +244,21 @@ The following arguments are optional:
 
 `ddos_mitigation_rules` - (Optional) DDoS Mitigation Rules. Define manual mitigation rules to block L7 DDoS attacks. ves.io.schema.rules.repeated.max_items: 256 ves.io.schema.rules.repeated.unique_metadata_name: true. See [Ddos Mitigation Rules](#ddos-mitigation-rules) below for details.
 
+###### One of the arguments from this list "default_pool, default_pool_list" must be set
+
 `default_pool` - (Optional) Global Specification. Shape of the origin pool specification. See [Default Pool](#default-pool) below for details.
 
 `default_pool_list` - (Optional) Origin Pool List Type. List of Origin Pools. See [Default Pool List](#default-pool-list) below for details.
 
 `default_route_pools` - (Optional) Origin Pools. Origin Pools used when no route is specified (default route) ves.io.schema.rules.repeated.max_items: 8 ves.io.schema.rules.repeated.unique: true. See [Default Route Pools](#default-route-pools) below for details.
 
+###### One of the arguments from this list "default_sensitive_data_policy, sensitive_data_policy" must be set
+
 `default_sensitive_data_policy` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Sensitive Data Policy](#default-sensitive-data-policy) below for details.
 
 `disable_api_definition` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Api Definition](#disable-api-definition) below for details.
+
+###### One of the arguments from this list "disable_api_discovery, enable_api_discovery" must be set
 
 `disable_api_discovery` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Api Discovery](#disable-api-discovery) below for details.
 
@@ -242,15 +270,25 @@ The following arguments are optional:
 
 `disable_client_side_defense` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Client Side Defense](#disable-client-side-defense) below for details.
 
+###### One of the arguments from this list "disable_ip_reputation, enable_ip_reputation" must be set
+
 `disable_ip_reputation` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Ip Reputation](#disable-ip-reputation) below for details.
 
+###### One of the arguments from this list "disable_malicious_user_detection, enable_malicious_user_detection" must be set
+
 `disable_malicious_user_detection` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Malicious User Detection](#disable-malicious-user-detection) below for details.
+
+###### One of the arguments from this list "disable_malware_protection, malware_protection_settings" must be set
 
 `disable_malware_protection` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Malware Protection](#disable-malware-protection) below for details.
 
 `disable_rate_limit` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Rate Limit](#disable-rate-limit) below for details.
 
+###### One of the arguments from this list "disable_threat_mesh, enable_threat_mesh" must be set
+
 `disable_threat_mesh` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Threat Mesh](#disable-threat-mesh) below for details.
+
+###### One of the arguments from this list "disable_trust_client_ip_headers, enable_trust_client_ip_headers" must be set
 
 `disable_trust_client_ip_headers` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Trust Client Ip Headers](#disable-trust-client-ip-headers) below for details.
 
@@ -274,6 +312,8 @@ The following arguments are optional:
 
 `graphql_rules` - (Optional) GraphQL Inspection. GraphQL is a query language and server-side runtime for APIs which provides a complete and understandable description of the data in API. See [Graphql Rules](#graphql-rules) below for details.
 
+###### One of the arguments from this list "http, https, https_auto_cert" must be set
+
 `http` - (Optional) HTTP Choice. Choice for selecting HTTP proxy. See [Http](#http) below for details.
 
 `https` - (Optional) BYOC HTTPS Choice. Choice for selecting HTTP proxy with bring your own certificates. See [Https](#https) below for details.
@@ -283,6 +323,8 @@ The following arguments are optional:
 `js_challenge` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. See [Js Challenge](#js-challenge) below for details.
 
 `jwt_validation` - (Optional) JWT Validation. JWT Validation stops JWT replay attacks and JWT tampering by cryptographically verifying incoming JWTs before they are passed to your API origin. See [Jwt Validation](#jwt-validation) below for details.
+
+###### One of the arguments from this list "l7_ddos_action_block, l7_ddos_action_default, l7_ddos_action_js_challenge" must be set
 
 `l7_ddos_action_block` - (Optional) Empty. This can be used for messages where no values are needed. See [L7 Ddos Action Block](#l7-ddos-action-block) below for details.
 
@@ -299,6 +341,8 @@ The following arguments are optional:
 `malware_protection_settings` - (Optional) Malware Protection Policy. Malware Protection protects Web Apps and APIs, from malicious file uploads by scanning files in real-time. See [Malware Protection Settings](#malware-protection-settings) below for details.
 
 `more_option` - (Optional) Advanced Options. This defines various options to define a route. See [More Option](#more-option) below for details.
+
+###### One of the arguments from this list "multi_lb_app, single_lb_app" must be set
 
 `multi_lb_app` - (Optional) Empty. This can be used for messages where no values are needed. See [Multi Lb App](#multi-lb-app) below for details.
 
@@ -330,6 +374,8 @@ The following arguments are optional:
 
 `single_lb_app` - (Optional) Single Load Balancer App Setting. Specific settings for Machine learning analysis on this HTTP LB, independently from other LBs. See [Single Lb App](#single-lb-app) below for details.
 
+###### One of the arguments from this list "slow_ddos_mitigation, system_default_timeouts" must be set
+
 `slow_ddos_mitigation` - (Optional) Slow DDoS Mitigation. 'Slow and low' attacks tie up server resources, leaving none available for servicing requests from actual users. See [Slow Ddos Mitigation](#slow-ddos-mitigation) below for details.
 
 `source_ip_stickiness` - (Optional) Empty. This can be used for messages where no values are needed. See [Source Ip Stickiness](#source-ip-stickiness) below for details.
@@ -337,6 +383,8 @@ The following arguments are optional:
 `system_default_timeouts` - (Optional) Empty. This can be used for messages where no values are needed. See [System Default Timeouts](#system-default-timeouts) below for details.
 
 `trusted_clients` - (Optional) Trusted Client Rules. Define rules to skip processing of one or more features such as WAF, Bot Defense etc. for clients. ves.io.schema.rules.repeated.max_items: 256 ves.io.schema.rules.repeated. See [Trusted Clients](#trusted-clients) below for details.
+
+###### One of the arguments from this list "user_id_client_ip, user_identification" must be set
 
 `user_id_client_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [User Id Client Ip](#user-id-client-ip) below for details.
 

@@ -54,6 +54,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "email, opsgenie, pagerduty, slack, sms, webhook" must be set
+
 `email` - (Optional) Email Configuration. See [Email](#email) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).

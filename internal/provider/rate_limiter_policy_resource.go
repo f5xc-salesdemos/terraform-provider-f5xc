@@ -87,7 +87,7 @@ func (r *RateLimiterPolicyResource) Schema(ctx context.Context, req resource.Sch
 		},
 		Blocks: map[string]schema.Block{
 			"any_server": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: any_server, server_name, server_name_matcher, server_selector] Empty. This can be used for messages where no values are needed",
 			},
 			"rules": schema.ListNestedBlock{
 				MarkdownDescription: "Rules. A list of RateLimiterRules that are evaluated sequentially till a matching rule is identified. ves.io.schema.rules.repeated.max_items: 256 ves.io.schema.rules.repeated.unique_metadata_name: true",

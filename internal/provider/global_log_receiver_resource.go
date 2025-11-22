@@ -82,10 +82,10 @@ func (r *GlobalLogReceiverResource) Schema(ctx context.Context, req resource.Sch
 		},
 		Blocks: map[string]schema.Block{
 			"audit_logs": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: audit_logs, dns_logs, request_logs, security_events] Empty. This can be used for messages where no values are needed",
 			},
 			"aws_cloud_watch_receiver": schema.SingleNestedBlock{
-				MarkdownDescription: "AWS Cloudwatch Logs Configuration. AWS Cloudwatch Logs Configuration for Global Log Receiver",
+				MarkdownDescription: "[OneOf: aws_cloud_watch_receiver, azure_event_hubs_receiver, azure_receiver, datadog_receiver, gcp_bucket_receiver, http_receiver, kafka_receiver, new_relic_receiver, qradar_receiver, s3_receiver, splunk_receiver, sumo_logic_receiver] AWS Cloudwatch Logs Configuration. AWS Cloudwatch Logs Configuration for Global Log Receiver",
 				Attributes: map[string]schema.Attribute{
 					"aws_region": schema.StringAttribute{
 						MarkdownDescription: "AWS Region. AWS Region Name Required: YES ves.io.schema.rules.message.required: true",
@@ -872,7 +872,7 @@ func (r *GlobalLogReceiverResource) Schema(ctx context.Context, req resource.Sch
 
 			},
 			"ns_all": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: ns_all, ns_current, ns_list] Empty. This can be used for messages where no values are needed",
 			},
 			"ns_current": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",

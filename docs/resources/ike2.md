@@ -62,9 +62,13 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "dh_group_set, disable_pfs" must be set
+
 `dh_group_set` - (Optional) Diffie Hellman Groups. Choose the acceptable Diffie Hellman(DH) Group or Groups that you are willing to accept as part of this profile. See [Dh Group Set](#dh-group-set) below for details.
 
 `disable_pfs` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Pfs](#disable-pfs) below for details.
+
+###### One of the arguments from this list "ike_keylifetime_hours, ike_keylifetime_minutes, use_default_keylifetime" must be set
 
 `ike_keylifetime_hours` - (Optional) Hours. Input Hours. See [Ike Keylifetime Hours](#ike-keylifetime-hours) below for details.
 

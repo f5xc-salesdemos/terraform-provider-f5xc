@@ -120,6 +120,8 @@ The following arguments are optional:
 
 `aws_parameters` - (Optional) AWS Service VPC and TGW. Setup AWS services VPC, transit gateway and site. See [Aws Parameters](#aws-parameters) below for details.
 
+###### One of the arguments from this list "block_all_services, blocked_services, default_blocked_services" must be set
+
 `block_all_services` - (Optional) Empty. This can be used for messages where no values are needed. See [Block All Services](#block-all-services) below for details.
 
 `blocked_services` - (Optional) Disable Node Local Services. Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site. See [Blocked Services](#blocked-services) below for details.
@@ -130,6 +132,8 @@ The following arguments are optional:
 
 `default_blocked_services` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Blocked Services](#default-blocked-services) below for details.
 
+###### One of the arguments from this list "direct_connect_disabled, direct_connect_enabled, private_connectivity" must be set
+
 `direct_connect_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Direct Connect Disabled](#direct-connect-disabled) below for details.
 
 `direct_connect_enabled` - (Optional) Direct Connect Configuration. Direct Connect Configuration. See [Direct Connect Enabled](#direct-connect-enabled) below for details.
@@ -137,6 +141,8 @@ The following arguments are optional:
 `kubernetes_upgrade_drain` - (Optional) Node by Node Upgrade. Specify how worker nodes within a site will be upgraded. See [Kubernetes Upgrade Drain](#kubernetes-upgrade-drain) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
+
+###### One of the arguments from this list "log_receiver, logs_streaming_disabled" must be set
 
 `log_receiver` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Log Receiver](#log-receiver) below for details.
 

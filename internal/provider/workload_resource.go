@@ -82,7 +82,7 @@ func (r *WorkloadResource) Schema(ctx context.Context, req resource.SchemaReques
 		},
 		Blocks: map[string]schema.Block{
 			"job": schema.SingleNestedBlock{
-				MarkdownDescription: "Job Type. Jobs are used for running batch processing tasks and run to completion. Jobs are generally used for tasks like report generation, billing, parallel data processing, ETL processing, etc.",
+				MarkdownDescription: "[OneOf: job, service, simple_service, stateful_service] Job Type. Jobs are used for running batch processing tasks and run to completion. Jobs are generally used for tasks like report generation, billing, parallel data processing, ETL processing, etc.",
 				Attributes: map[string]schema.Attribute{
 					"num_replicas": schema.Int64Attribute{
 						MarkdownDescription: "Number of Replicas. Number of replicas of the batch job to spawn per site ves.io.schema.rules.int32.lte: 5",

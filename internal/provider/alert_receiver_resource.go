@@ -82,7 +82,7 @@ func (r *AlertReceiverResource) Schema(ctx context.Context, req resource.SchemaR
 		},
 		Blocks: map[string]schema.Block{
 			"email": schema.SingleNestedBlock{
-				MarkdownDescription: "Email Configuration.",
+				MarkdownDescription: "[OneOf: email, opsgenie, pagerduty, slack, sms, webhook] Email Configuration.",
 				Attributes: map[string]schema.Attribute{
 					"email": schema.StringAttribute{
 						MarkdownDescription: "Email. Email id of the user ves.io.schema.rules.string.email: true",

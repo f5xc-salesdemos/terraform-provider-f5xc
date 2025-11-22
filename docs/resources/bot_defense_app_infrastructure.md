@@ -62,6 +62,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "cloud_hosted, data_center_hosted" must be set
+
 `cloud_hosted` - (Optional) F5 Hosted. Infra F5 Hosted. See [Cloud Hosted](#cloud-hosted) below for details.
 
 `data_center_hosted` - (Optional) F5 Hosted. Infra F5 Hosted. See [Data Center Hosted](#data-center-hosted) below for details.

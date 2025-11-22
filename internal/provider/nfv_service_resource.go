@@ -82,10 +82,10 @@ func (r *NFVServiceResource) Schema(ctx context.Context, req resource.SchemaRequ
 		},
 		Blocks: map[string]schema.Block{
 			"disable_https_management": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_https_management, https_management] Empty. This can be used for messages where no values are needed",
 			},
 			"disable_ssh_access": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_ssh_access, enabled_ssh_access] Empty. This can be used for messages where no values are needed",
 			},
 			"enabled_ssh_access": schema.SingleNestedBlock{
 				MarkdownDescription: "SSH based management. SSH based configuration",
@@ -124,7 +124,7 @@ func (r *NFVServiceResource) Schema(ctx context.Context, req resource.SchemaRequ
 
 			},
 			"f5_big_ip_aws_service": schema.SingleNestedBlock{
-				MarkdownDescription: "Virtual BIG-IP AWS. Virtual BIG-IP specification for AWS",
+				MarkdownDescription: "[OneOf: f5_big_ip_aws_service, palo_alto_fw_service] Virtual BIG-IP AWS. Virtual BIG-IP specification for AWS",
 				Attributes: map[string]schema.Attribute{
 					"admin_username": schema.StringAttribute{
 						MarkdownDescription: "Admin Username. Admin Username for BIG-IP Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_len: 256",

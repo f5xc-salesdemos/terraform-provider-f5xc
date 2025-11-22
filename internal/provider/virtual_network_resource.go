@@ -87,7 +87,7 @@ func (r *VirtualNetworkResource) Schema(ctx context.Context, req resource.Schema
 		},
 		Blocks: map[string]schema.Block{
 			"global_network": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: global_network, legacy_type, site_local_inside_network, site_local_network] Empty. This can be used for messages where no values are needed",
 			},
 			"site_local_inside_network": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",

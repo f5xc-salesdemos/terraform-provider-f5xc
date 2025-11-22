@@ -51,6 +51,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "custom_geo_location_selector, global" must be set
+
 `custom_geo_location_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Custom Geo Location Selector](#custom-geo-location-selector) below for details.
 
 `global` - (Optional) Empty. This can be used for messages where no values are needed. See [Global](#global) below for details.

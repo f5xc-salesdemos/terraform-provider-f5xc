@@ -60,11 +60,15 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "disable_forward_proxy, enable_forward_proxy" must be set
+
 `disable_forward_proxy` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Forward Proxy](#disable-forward-proxy) below for details.
 
 `enable_forward_proxy` - (Optional) Forward Proxy Configuration. Fine tune forward proxy behavior Few configurations allowed are White listed ports and ip prefixes: Forward proxy does application protocol detection and server name(SN.... See [Enable Forward Proxy](#enable-forward-proxy) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
+
+###### One of the arguments from this list "sli_to_global_dr, sli_to_slo_snat, slo_to_global_dr" must be set
 
 `sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global Dr](#sli-to-global-dr) below for details.
 

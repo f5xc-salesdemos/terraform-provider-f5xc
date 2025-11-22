@@ -77,6 +77,8 @@ The following arguments are optional:
 
 `default_flavor_ref` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Default Flavor Ref](#default-flavor-ref) below for details.
 
+###### One of the arguments from this list "disabled, isolated" must be set
+
 `disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Disabled](#disabled) below for details.
 
 `isolated` - (Optional) Empty. This can be used for messages where no values are needed. See [Isolated](#isolated) below for details.

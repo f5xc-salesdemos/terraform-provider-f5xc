@@ -62,6 +62,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "azure_oidc_spec_type, google_oidc_spec_type, oidc_v10_spec_type, okta_oidc_spec_type" must be set
+
 `azure_oidc_spec_type` - (Optional) Azure OIDC Spec Type. AzureOIDCSpecType specifies the attributes required to configure Azure provider. See [Azure Oidc Spec Type](#azure-oidc-spec-type) below for details.
 
 `google_oidc_spec_type` - (Optional) Google OIDC Spec Type. GoogleOIDCSpecType specifies the attributes required to configure google provider. See [Google Oidc Spec Type](#google-oidc-spec-type) below for details.

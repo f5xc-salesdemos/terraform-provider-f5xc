@@ -81,13 +81,13 @@ func (r *DiscoveryResource) Schema(ctx context.Context, req resource.SchemaReque
 				},
 			},
 			"cluster_id": schema.StringAttribute{
-				MarkdownDescription: "Discovery cluster Identifier. Exclusive with [no_cluster_id] Specify identifier for discovery cluster. This identifier can be specified in endpoint object to discover only from this discovery object. ves.io.schema.rules.string.max_len: 256",
+				MarkdownDescription: "[OneOf: cluster_id, no_cluster_id] Discovery cluster Identifier. Exclusive with [no_cluster_id] Specify identifier for discovery cluster. This identifier can be specified in endpoint object to discover only from this discovery object. ves.io.schema.rules.string.max_len: 256",
 				Optional: true,
 			},
 		},
 		Blocks: map[string]schema.Block{
 			"discovery_consul": schema.SingleNestedBlock{
-				MarkdownDescription: "Consul Discovery Configuration. Discovery configuration for Hashicorp Consul",
+				MarkdownDescription: "[OneOf: discovery_consul, discovery_k8s] Consul Discovery Configuration. Discovery configuration for Hashicorp Consul",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{

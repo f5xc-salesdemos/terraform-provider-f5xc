@@ -89,11 +89,17 @@ The following arguments are optional:
 
 `address` - (Optional) Geographical Address. Site's geographical address that can be used to determine its latitude and longitude. ves.io.schema.rules.string.max_len: 256 (`String`).
 
+###### One of the arguments from this list "allow_all_usb, deny_all_usb, usb_policy" must be set
+
 `allow_all_usb` - (Optional) Empty. This can be used for messages where no values are needed. See [Allow All Usb](#allow-all-usb) below for details.
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "blocked_services, default_blocked_services" must be set
+
 `blocked_services` - (Optional) Disable Node Local Services. Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site. See [Blocked Services](#blocked-services) below for details.
+
+###### One of the arguments from this list "bond_device_list, no_bond_devices" must be set
 
 `bond_device_list` - (Optional) Bond Devices List. List of bond devices for this fleet. See [Bond Device List](#bond-device-list) below for details.
 
@@ -101,7 +107,11 @@ The following arguments are optional:
 
 `custom_dns` - (Optional) Custom DNS. Custom DNS is the configured for specify CE site. See [Custom Dns](#custom-dns) below for details.
 
+###### One of the arguments from this list "custom_network_config, default_network_config" must be set
+
 `custom_network_config` - (Optional) VssNetworkConfiguration. See [Custom Network Config](#custom-network-config) below for details.
+
+###### One of the arguments from this list "custom_storage_config, default_storage_config" must be set
 
 `custom_storage_config` - (Optional) VssStorageConfiguration. See [Custom Storage Config](#custom-storage-config) below for details.
 
@@ -109,13 +119,19 @@ The following arguments are optional:
 
 `default_network_config` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Network Config](#default-network-config) below for details.
 
+###### One of the arguments from this list "default_sriov_interface, sriov_interfaces" must be set
+
 `default_sriov_interface` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Sriov Interface](#default-sriov-interface) below for details.
 
 `default_storage_config` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Storage Config](#default-storage-config) below for details.
 
 `deny_all_usb` - (Optional) Empty. This can be used for messages where no values are needed. See [Deny All Usb](#deny-all-usb) below for details.
 
+###### One of the arguments from this list "disable_gpu, enable_gpu, enable_vgpu" must be set
+
 `disable_gpu` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Gpu](#disable-gpu) below for details.
+
+###### One of the arguments from this list "disable_vm, enable_vm" must be set
 
 `disable_vm` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Vm](#disable-vm) below for details.
 
@@ -125,13 +141,19 @@ The following arguments are optional:
 
 `enable_vm` - (Optional) VM Configuration. VMs support configuration. See [Enable Vm](#enable-vm) below for details.
 
+###### One of the arguments from this list "k8s_cluster, no_k8s_cluster" must be set
+
 `k8s_cluster` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [K8s Cluster](#k8s-cluster) below for details.
 
 `kubernetes_upgrade_drain` - (Optional) Node by Node Upgrade. Specify how worker nodes within a site will be upgraded. See [Kubernetes Upgrade Drain](#kubernetes-upgrade-drain) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
+###### One of the arguments from this list "local_control_plane, no_local_control_plane" must be set
+
 `local_control_plane` - (Optional) Local Control Plane. Enable local control plane for L3VPN, SRV6, EVPN etc. See [Local Control Plane](#local-control-plane) below for details.
+
+###### One of the arguments from this list "log_receiver, logs_streaming_disabled" must be set
 
 `log_receiver` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Log Receiver](#log-receiver) below for details.
 

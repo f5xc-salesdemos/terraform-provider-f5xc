@@ -60,11 +60,15 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "activation_announce, activation_withdraw" must be set
+
 `activation_announce` - (Optional) Empty. This can be used for messages where no values are needed. See [Activation Announce](#activation-announce) below for details.
 
 `activation_withdraw` - (Optional) Empty. This can be used for messages where no values are needed. See [Activation Withdraw](#activation-withdraw) below for details.
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
+
+###### One of the arguments from this list "expiration_never, expiration_timestamp" must be set
 
 `expiration_never` - (Optional) Empty. This can be used for messages where no values are needed. See [Expiration Never](#expiration-never) below for details.
 

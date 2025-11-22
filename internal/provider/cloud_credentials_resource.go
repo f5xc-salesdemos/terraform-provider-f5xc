@@ -82,7 +82,7 @@ func (r *CloudCredentialsResource) Schema(ctx context.Context, req resource.Sche
 		},
 		Blocks: map[string]schema.Block{
 			"aws_assume_role": schema.SingleNestedBlock{
-				MarkdownDescription: "AWS Assume Role to Handle Delegated Access. AWS Assume Role to Handle Delegated Access",
+				MarkdownDescription: "[OneOf: aws_assume_role, aws_secret_key, azure_client_secret, azure_pfx_certificate, gcp_cred_file] AWS Assume Role to Handle Delegated Access. AWS Assume Role to Handle Delegated Access",
 				Attributes: map[string]schema.Attribute{
 					"custom_external_id": schema.StringAttribute{
 						MarkdownDescription: "External ID is Custom ID. Exclusive with [external_id_is_optional external_id_is_tenant_id] External ID is Custom ID ves.io.schema.rules.string.max_len: 64 ves.io.schema.rules.string.min_len: 2",

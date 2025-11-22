@@ -89,7 +89,7 @@ func (r *AdvertisePolicyResource) Schema(ctx context.Context, req resource.Schem
 				Optional: true,
 			},
 			"port": schema.Int64Attribute{
-				MarkdownDescription: "TCP/UDP Port. Exclusive with [port_ranges] Port to advertise. ves.io.schema.rules.uint32.lte: 65535",
+				MarkdownDescription: "[OneOf: port, port_ranges] TCP/UDP Port. Exclusive with [port_ranges] Port to advertise. ves.io.schema.rules.uint32.lte: 65535",
 				Optional: true,
 			},
 			"port_ranges": schema.StringAttribute{

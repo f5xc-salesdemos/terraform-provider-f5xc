@@ -82,7 +82,7 @@ func (r *CloudLinkResource) Schema(ctx context.Context, req resource.SchemaReque
 		},
 		Blocks: map[string]schema.Block{
 			"aws": schema.SingleNestedBlock{
-				MarkdownDescription: "Amazon Web Services(AWS) CloudLink Provider. CloudLink for AWS Cloud Provider",
+				MarkdownDescription: "[OneOf: aws, gcp] Amazon Web Services(AWS) CloudLink Provider. CloudLink for AWS Cloud Provider",
 				Attributes: map[string]schema.Attribute{
 					"custom_asn": schema.Int64Attribute{
 						MarkdownDescription: "Custom ASN. Exclusive with [] F5XC will use custom ASN to create a Direct Connect Gateway ves.io.schema.rules.uint32.ranges: 64512-65534, 4200000000-4294967294",
@@ -166,7 +166,7 @@ func (r *CloudLinkResource) Schema(ctx context.Context, req resource.SchemaReque
 
 			},
 			"disabled": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disabled, enabled] Empty. This can be used for messages where no values are needed",
 			},
 			"enabled": schema.SingleNestedBlock{
 				MarkdownDescription: "CloudLink ADN Network Config.",

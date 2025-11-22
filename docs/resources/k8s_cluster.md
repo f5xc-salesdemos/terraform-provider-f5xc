@@ -88,17 +88,27 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "cluster_scoped_access_deny, cluster_scoped_access_permit" must be set
+
 `cluster_scoped_access_deny` - (Optional) Empty. This can be used for messages where no values are needed. See [Cluster Scoped Access Deny](#cluster-scoped-access-deny) below for details.
 
 `cluster_scoped_access_permit` - (Optional) Empty. This can be used for messages where no values are needed. See [Cluster Scoped Access Permit](#cluster-scoped-access-permit) below for details.
 
+###### One of the arguments from this list "cluster_wide_app_list, no_cluster_wide_apps" must be set
+
 `cluster_wide_app_list` - (Optional) Cluster Wide Application List. List of cluster wide applications. See [Cluster Wide App List](#cluster-wide-app-list) below for details.
 
+###### One of the arguments from this list "global_access_enable, no_global_access" must be set
+
 `global_access_enable` - (Optional) Empty. This can be used for messages where no values are needed. See [Global Access Enable](#global-access-enable) below for details.
+
+###### One of the arguments from this list "insecure_registry_list, no_insecure_registries" must be set
 
 `insecure_registry_list` - (Optional) Docker Insecure Registry List. List of docker insecure registries. See [Insecure Registry List](#insecure-registry-list) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
+
+###### One of the arguments from this list "local_access_config, no_local_access" must be set
 
 `local_access_config` - (Optional) Local Access Configuration. Parameters required to enable local access. See [Local Access Config](#local-access-config) below for details.
 
@@ -110,11 +120,19 @@ The following arguments are optional:
 
 `no_local_access` - (Optional) Empty. This can be used for messages where no values are needed. See [No Local Access](#no-local-access) below for details.
 
+###### One of the arguments from this list "use_custom_cluster_role_bindings, use_default_cluster_role_bindings" must be set
+
 `use_custom_cluster_role_bindings` - (Optional) Cluster Role Binding List. List of active cluster role binding list for a K8s cluster. See [Use Custom Cluster Role Bindings](#use-custom-cluster-role-bindings) below for details.
+
+###### One of the arguments from this list "use_custom_cluster_role_list, use_default_cluster_roles" must be set
 
 `use_custom_cluster_role_list` - (Optional) Cluster Role List. List of active cluster role list for a K8s cluster. See [Use Custom Cluster Role List](#use-custom-cluster-role-list) below for details.
 
+###### One of the arguments from this list "use_custom_pod_security_admission, use_default_pod_security_admission" must be set
+
 `use_custom_pod_security_admission` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Use Custom Pod Security Admission](#use-custom-pod-security-admission) below for details.
+
+###### One of the arguments from this list "use_custom_psp_list, use_default_psp" must be set
 
 `use_custom_psp_list` - (Optional) Pod Security Policy List. List of active Pod security policies for a K8s cluster. See [Use Custom Psp List](#use-custom-psp-list) below for details.
 
@@ -125,6 +143,8 @@ The following arguments are optional:
 `use_default_pod_security_admission` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Default Pod Security Admission](#use-default-pod-security-admission) below for details.
 
 `use_default_psp` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Default Psp](#use-default-psp) below for details.
+
+###### One of the arguments from this list "vk8s_namespace_access_deny, vk8s_namespace_access_permit" must be set
 
 `vk8s_namespace_access_deny` - (Optional) Empty. This can be used for messages where no values are needed. See [Vk8s Namespace Access Deny](#vk8s-namespace-access-deny) below for details.
 

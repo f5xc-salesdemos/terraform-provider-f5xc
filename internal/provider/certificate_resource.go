@@ -105,7 +105,7 @@ func (r *CertificateResource) Schema(ctx context.Context, req resource.SchemaReq
 
 			},
 			"custom_hash_algorithms": schema.SingleNestedBlock{
-				MarkdownDescription: "Hash Algorithms. Specifies the hash algorithms to be used",
+				MarkdownDescription: "[OneOf: custom_hash_algorithms, disable_ocsp_stapling, use_system_defaults] Hash Algorithms. Specifies the hash algorithms to be used",
 				Attributes: map[string]schema.Attribute{
 					"hash_algorithms": schema.ListAttribute{
 						MarkdownDescription: "Hash Algorithms. Ordered list of hash algorithms to be used. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.max_items: 4 ves.io.schema.rules.repeated.min_items: 1 ves.io.schema.rules.repeated.unique: true",

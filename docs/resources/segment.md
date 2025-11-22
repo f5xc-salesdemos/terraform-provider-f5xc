@@ -58,6 +58,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "disable, enable" must be set
+
 `disable` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable](#disable) below for details.
 
 `enable` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable](#enable) below for details.

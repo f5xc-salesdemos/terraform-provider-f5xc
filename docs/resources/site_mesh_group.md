@@ -65,9 +65,13 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "disable_re_fallback, enable_re_fallback" must be set
+
 `disable_re_fallback` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Re Fallback](#disable-re-fallback) below for details.
 
 `enable_re_fallback` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Re Fallback](#enable-re-fallback) below for details.
+
+###### One of the arguments from this list "full_mesh, hub_mesh, spoke_mesh" must be set
 
 `full_mesh` - (Optional) Full Mesh. Details of Full Mesh Group Type. See [Full Mesh](#full-mesh) below for details.
 

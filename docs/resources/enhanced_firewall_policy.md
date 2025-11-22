@@ -83,6 +83,8 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "allow_all, allowed_destinations, allowed_sources, denied_destinations, denied_sources, deny_all, rule_list" must be set
+
 `allow_all` - (Optional) Empty. This can be used for messages where no values are needed. See [Allow All](#allow-all) below for details.
 
 `allowed_destinations` - (Optional) IP Prefix List. List of IP Address prefixes. Prefix must contain both prefix and prefix-length The list can contain mix of both IPv4 and IPv6 prefixes. See [Allowed Destinations](#allowed-destinations) below for details.

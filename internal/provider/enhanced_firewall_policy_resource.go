@@ -82,7 +82,7 @@ func (r *EnhancedFirewallPolicyResource) Schema(ctx context.Context, req resourc
 		},
 		Blocks: map[string]schema.Block{
 			"allow_all": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: allow_all, allowed_destinations, allowed_sources, denied_destinations, denied_sources, deny_all, rule_list] Empty. This can be used for messages where no values are needed",
 			},
 			"allowed_destinations": schema.SingleNestedBlock{
 				MarkdownDescription: "IP Prefix List. List of IP Address prefixes. Prefix must contain both prefix and prefix-length The list can contain mix of both IPv4 and IPv6 prefixes",

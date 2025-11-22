@@ -93,7 +93,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 		},
 		Blocks: map[string]schema.Block{
 			"active_service_policies": schema.SingleNestedBlock{
-				MarkdownDescription: "Service Policy List. List of service policies.",
+				MarkdownDescription: "[OneOf: active_service_policies, no_service_policies, service_policies_from_namespace] Service Policy List. List of service policies.",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -120,7 +120,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"advertise_custom": schema.SingleNestedBlock{
-				MarkdownDescription: "Advertise Custom. This defines a way to advertise a VIP on specific sites",
+				MarkdownDescription: "[OneOf: advertise_custom, advertise_on_public, advertise_on_public_default_vip, do_not_advertise] Advertise Custom. This defines a way to advertise a VIP on specific sites",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -521,7 +521,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"api_rate_limit": schema.SingleNestedBlock{
-				MarkdownDescription: "APIRateLimit.",
+				MarkdownDescription: "[OneOf: api_rate_limit, disable_rate_limit, rate_limit] APIRateLimit.",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -874,7 +874,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"api_specification": schema.SingleNestedBlock{
-				MarkdownDescription: "API Specification and Validation. Settings for api specification (api definition, OpenAPI validation, etc.)",
+				MarkdownDescription: "[OneOf: api_specification, disable_api_definition] API Specification and Validation. Settings for api specification (api definition, OpenAPI validation, etc.)",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -1032,7 +1032,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"api_testing": schema.SingleNestedBlock{
-				MarkdownDescription: "API Testing.",
+				MarkdownDescription: "[OneOf: api_testing, disable_api_testing] API Testing.",
 				Attributes: map[string]schema.Attribute{
 					"custom_header_value": schema.StringAttribute{
 						MarkdownDescription: "Custom Header. Add x-f5-api-testing-identifier header value to prevent security flags on API testing traffic ves.io.schema.rules.string.max_len: 128",
@@ -1101,7 +1101,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"app_firewall": schema.SingleNestedBlock{
-				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
+				MarkdownDescription: "[OneOf: app_firewall, disable_waf] Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
 				Attributes: map[string]schema.Attribute{
 					"name": schema.StringAttribute{
 						MarkdownDescription: "Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_bytes: 128 ves.io.schema.rules.string.min_bytes: 1",
@@ -1210,7 +1210,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"bot_defense": schema.SingleNestedBlock{
-				MarkdownDescription: "Bot Defense. This defines various configuration options for Bot Defense Policy.",
+				MarkdownDescription: "[OneOf: bot_defense, bot_defense_advanced, disable_bot_defense] Bot Defense. This defines various configuration options for Bot Defense Policy.",
 				Attributes: map[string]schema.Attribute{
 					"regional_endpoint": schema.StringAttribute{
 						MarkdownDescription: "Bot Defense Region. Defines a selection for Bot Defense region - AUTO: AUTO Automatic selection based on client IP address - US: US US region - EU: EU European Union region - ASIA: ASIA Asia region",
@@ -1536,7 +1536,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"caching_policy": schema.SingleNestedBlock{
-				MarkdownDescription: "Caching Policies. x-required Caching Policies for the CDN",
+				MarkdownDescription: "[OneOf: caching_policy, disable_caching] Caching Policies. x-required Caching Policies for the CDN",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -1588,7 +1588,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"captcha_challenge": schema.SingleNestedBlock{
-				MarkdownDescription: "Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. With this feature enabled, only clients that pass the captcha challenge will be allowed to complete the HTTP request. When loadbalancer is configured to do Captcha Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have captcha challenge embedded in it. Client will be allowed to make the request only if the cap...",
+				MarkdownDescription: "[OneOf: captcha_challenge, enable_challenge, js_challenge, no_challenge, policy_based_challenge] Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. With this feature enabled, only clients that pass the captcha challenge will be allowed to complete the HTTP request. When loadbalancer is configured to do Captcha Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have captcha challenge embedded in it. Client will be allowed to make the request only if the cap...",
 				Attributes: map[string]schema.Attribute{
 					"cookie_expiry": schema.Int64Attribute{
 						MarkdownDescription: "Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge. ves.io.schema.rules.uint32.gte: 1 ves.io.schema.rules.uint32.lte: 86400",
@@ -1602,7 +1602,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"client_side_defense": schema.SingleNestedBlock{
-				MarkdownDescription: "Client-Side Defense. This defines various configuration options for Client-Side Defense Policy.",
+				MarkdownDescription: "[OneOf: client_side_defense, disable_client_side_defense] Client-Side Defense. This defines various configuration options for Client-Side Defense Policy.",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -1655,7 +1655,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"cookie_stickiness": schema.SingleNestedBlock{
-				MarkdownDescription: "Hashing using Cookie. Two types of cookie affinity: 1. Passive. Takes a cookie that's present in the cookies header and hashes on its value. 2. Generated. Generates and sets a cookie with an expiration (TTL) on the first request from the client in its response to the client, based on the endpoint the request gets sent to. The client then presents this on the next and all subsequent requests. The hash of this is sufficient to ensure these requests get sent to the same endpoint. The cookie is g...",
+				MarkdownDescription: "[OneOf: cookie_stickiness, least_active, random, ring_hash, round_robin, source_ip_stickiness] Hashing using Cookie. Two types of cookie affinity: 1. Passive. Takes a cookie that's present in the cookies header and hashes on its value. 2. Generated. Generates and sets a cookie with an expiration (TTL) on the first request from the client in its response to the client, based on the endpoint the request gets sent to. The client then presents this on the next and all subsequent requests. The hash of this is sufficient to ensure these requests get sent to the same endpoint. The cookie is g...",
 				Attributes: map[string]schema.Attribute{
 					"name": schema.StringAttribute{
 						MarkdownDescription: "Name. The name of the cookie that will be used to obtain the hash key. If the cookie is not present and TTL below is not set, no hash will be produced Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_len: 256 ves.io.schema.rules.string.min_len: 1",
@@ -1916,7 +1916,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"default_pool": schema.SingleNestedBlock{
-				MarkdownDescription: "Global Specification. Shape of the origin pool specification",
+				MarkdownDescription: "[OneOf: default_pool, default_pool_list] Global Specification. Shape of the origin pool specification",
 				Attributes: map[string]schema.Attribute{
 					"endpoint_selection": schema.StringAttribute{
 						MarkdownDescription: "Endpoint Selection Policy. Policy for selection of endpoints from local site/remote site/both Consider both remote and local endpoints for load balancing LOCAL_ONLY: Consider only local endpoints for load balancing Enable this policy to load balance ONLY among locally discovered endpoints Prefer the local endpoints for load balancing. If local endpoints are not present remote endpoints will be considered.",
@@ -2550,13 +2550,13 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"default_sensitive_data_policy": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: default_sensitive_data_policy, sensitive_data_policy] Empty. This can be used for messages where no values are needed",
 			},
 			"disable_api_definition": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"disable_api_discovery": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_api_discovery, enable_api_discovery] Empty. This can be used for messages where no values are needed",
 			},
 			"disable_api_testing": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
@@ -2571,22 +2571,22 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"disable_ip_reputation": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_ip_reputation, enable_ip_reputation] Empty. This can be used for messages where no values are needed",
 			},
 			"disable_malicious_user_detection": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_malicious_user_detection, enable_malicious_user_detection] Empty. This can be used for messages where no values are needed",
 			},
 			"disable_malware_protection": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_malware_protection, malware_protection_settings] Empty. This can be used for messages where no values are needed",
 			},
 			"disable_rate_limit": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"disable_threat_mesh": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_threat_mesh, enable_threat_mesh] Empty. This can be used for messages where no values are needed",
 			},
 			"disable_trust_client_ip_headers": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_trust_client_ip_headers, enable_trust_client_ip_headers] Empty. This can be used for messages where no values are needed",
 			},
 			"disable_waf": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
@@ -2854,7 +2854,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"http": schema.SingleNestedBlock{
-				MarkdownDescription: "HTTP Choice. Choice for selecting HTTP proxy",
+				MarkdownDescription: "[OneOf: http, https, https_auto_cert] HTTP Choice. Choice for selecting HTTP proxy",
 				Attributes: map[string]schema.Attribute{
 					"dns_volterra_managed": schema.BoolAttribute{
 						MarkdownDescription: "Automatically Manage DNS Records. DNS records for domains will be managed automatically by F5 Distributed Cloud. As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature or a DNS CNAME record should be created in your DNS provider's portal.",
@@ -3451,7 +3451,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"l7_ddos_action_block": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: l7_ddos_action_block, l7_ddos_action_default, l7_ddos_action_js_challenge] Empty. This can be used for messages where no values are needed",
 			},
 			"l7_ddos_action_default": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
@@ -3938,7 +3938,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"multi_lb_app": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: multi_lb_app, single_lb_app] Empty. This can be used for messages where no values are needed",
 			},
 			"no_challenge": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
@@ -5080,7 +5080,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"slow_ddos_mitigation": schema.SingleNestedBlock{
-				MarkdownDescription: "Slow DDoS Mitigation. 'Slow and low' attacks tie up server resources, leaving none available for servicing requests from actual users.",
+				MarkdownDescription: "[OneOf: slow_ddos_mitigation, system_default_timeouts] Slow DDoS Mitigation. 'Slow and low' attacks tie up server resources, leaving none available for servicing requests from actual users.",
 				Attributes: map[string]schema.Attribute{
 					"request_headers_timeout": schema.Int64Attribute{
 						MarkdownDescription: "Request Headers Timeout. The amount of time the client has to send only the headers on the request stream before the stream is cancelled. The default value is 10000 milliseconds. This setting provides protection against Slowloris attacks. ves.io.schema.rules.uint32.gte: 2000 ves.io.schema.rules.uint32.lte: 30000",
@@ -5196,7 +5196,7 @@ func (r *HTTPLoadBalancerResource) Schema(ctx context.Context, req resource.Sche
 				},
 			},
 			"user_id_client_ip": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: user_id_client_ip, user_identification] Empty. This can be used for messages where no values are needed",
 			},
 			"user_identification": schema.SingleNestedBlock{
 				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",

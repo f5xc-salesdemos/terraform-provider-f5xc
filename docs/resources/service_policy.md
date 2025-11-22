@@ -79,11 +79,15 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "allow_all_requests, allow_list, deny_all_requests, deny_list, rule_list" must be set
+
 `allow_all_requests` - (Optional) Empty. This can be used for messages where no values are needed. See [Allow All Requests](#allow-all-requests) below for details.
 
 `allow_list` - (Optional) Source List. List of sources. A request belongs to this list if it satisfies any of the match criteria. See [Allow List](#allow-list) below for details.
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
+
+###### One of the arguments from this list "any_server, server_name, server_name_matcher, server_selector" must be set
 
 `any_server` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Server](#any-server) below for details.
 

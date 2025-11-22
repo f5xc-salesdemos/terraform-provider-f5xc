@@ -62,6 +62,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "k8s_cluster_role_selector, policy_rule_list, yaml" must be set
+
 `k8s_cluster_role_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [K8s Cluster Role Selector](#k8s-cluster-role-selector) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).

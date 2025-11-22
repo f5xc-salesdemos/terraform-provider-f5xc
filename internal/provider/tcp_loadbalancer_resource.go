@@ -98,7 +98,7 @@ func (r *TCPLoadBalancerResource) Schema(ctx context.Context, req resource.Schem
 				Optional: true,
 			},
 			"listen_port": schema.Int64Attribute{
-				MarkdownDescription: "Listen Port. Exclusive with [port_ranges] Listen Port for this load balancer ves.io.schema.rules.uint32.lte: 65535",
+				MarkdownDescription: "[OneOf: listen_port, port_ranges] Listen Port. Exclusive with [port_ranges] Listen Port for this load balancer ves.io.schema.rules.uint32.lte: 65535",
 				Optional: true,
 			},
 			"port_ranges": schema.StringAttribute{
@@ -108,7 +108,7 @@ func (r *TCPLoadBalancerResource) Schema(ctx context.Context, req resource.Schem
 		},
 		Blocks: map[string]schema.Block{
 			"active_service_policies": schema.SingleNestedBlock{
-				MarkdownDescription: "Service Policy List. List of service policies.",
+				MarkdownDescription: "[OneOf: active_service_policies, no_service_policies, service_policies_from_namespace] Service Policy List. List of service policies.",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -135,7 +135,7 @@ func (r *TCPLoadBalancerResource) Schema(ctx context.Context, req resource.Schem
 
 			},
 			"advertise_custom": schema.SingleNestedBlock{
-				MarkdownDescription: "Advertise Custom. This defines a way to advertise a VIP on specific sites",
+				MarkdownDescription: "[OneOf: advertise_custom, advertise_on_public, advertise_on_public_default_vip, do_not_advertise] Advertise Custom. This defines a way to advertise a VIP on specific sites",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -288,16 +288,16 @@ func (r *TCPLoadBalancerResource) Schema(ctx context.Context, req resource.Schem
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"default_lb_with_sni": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: default_lb_with_sni, no_sni, sni] Empty. This can be used for messages where no values are needed",
 			},
 			"do_not_advertise": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"do_not_retract_cluster": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: do_not_retract_cluster, retract_cluster] Empty. This can be used for messages where no values are needed",
 			},
 			"hash_policy_choice_least_active": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: hash_policy_choice_least_active, hash_policy_choice_random, hash_policy_choice_round_robin, hash_policy_choice_source_ip_stickiness] Empty. This can be used for messages where no values are needed",
 			},
 			"hash_policy_choice_random": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
@@ -379,7 +379,7 @@ func (r *TCPLoadBalancerResource) Schema(ctx context.Context, req resource.Schem
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"tcp": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: tcp, tls_tcp, tls_tcp_auto_cert] Empty. This can be used for messages where no values are needed",
 			},
 			"tls_tcp": schema.SingleNestedBlock{
 				MarkdownDescription: "BYOC TLS over TCP Choice. Choice for selecting TLS over TCP proxy with bring your own certificates",

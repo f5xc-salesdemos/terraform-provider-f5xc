@@ -103,7 +103,7 @@ func (r *UDPLoadBalancerResource) Schema(ctx context.Context, req resource.Schem
 				Optional: true,
 			},
 			"listen_port": schema.Int64Attribute{
-				MarkdownDescription: "Listen Port. Exclusive with [port_ranges] Listen Port for this load balancer ves.io.schema.rules.uint32.lte: 65535",
+				MarkdownDescription: "[OneOf: listen_port, port_ranges] Listen Port. Exclusive with [port_ranges] Listen Port for this load balancer ves.io.schema.rules.uint32.lte: 65535",
 				Optional: true,
 			},
 			"port_ranges": schema.StringAttribute{
@@ -113,7 +113,7 @@ func (r *UDPLoadBalancerResource) Schema(ctx context.Context, req resource.Schem
 		},
 		Blocks: map[string]schema.Block{
 			"advertise_custom": schema.SingleNestedBlock{
-				MarkdownDescription: "Advertise Custom. This defines a way to advertise a VIP on specific sites",
+				MarkdownDescription: "[OneOf: advertise_custom, advertise_on_public, advertise_on_public_default_vip, do_not_advertise] Advertise Custom. This defines a way to advertise a VIP on specific sites",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -269,7 +269,7 @@ func (r *UDPLoadBalancerResource) Schema(ctx context.Context, req resource.Schem
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"hash_policy_choice_random": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: hash_policy_choice_random, hash_policy_choice_round_robin, hash_policy_choice_source_ip_stickiness] Empty. This can be used for messages where no values are needed",
 			},
 			"hash_policy_choice_round_robin": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",

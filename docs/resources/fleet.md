@@ -80,21 +80,33 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "allow_all_usb, deny_all_usb, usb_policy" must be set
+
 `allow_all_usb` - (Optional) Empty. This can be used for messages where no values are needed. See [Allow All Usb](#allow-all-usb) below for details.
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
 `blocked_services` - (Optional) Disable Node Local Services. Disable node local services on this site. ves.io.schema.rules.repeated.max_items: 6. See [Blocked Services](#blocked-services) below for details.
 
+###### One of the arguments from this list "bond_device_list, no_bond_devices" must be set
+
 `bond_device_list` - (Optional) Bond Devices List. List of bond devices for this fleet. See [Bond Device List](#bond-device-list) below for details.
+
+###### One of the arguments from this list "dc_cluster_group, dc_cluster_group_inside, no_dc_cluster_group" must be set
 
 `dc_cluster_group` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Dc Cluster Group](#dc-cluster-group) below for details.
 
 `dc_cluster_group_inside` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Dc Cluster Group Inside](#dc-cluster-group-inside) below for details.
 
+###### One of the arguments from this list "default_config, device_list, interface_list" must be set
+
 `default_config` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Config](#default-config) below for details.
 
+###### One of the arguments from this list "default_sriov_interface, sriov_interfaces" must be set
+
 `default_sriov_interface` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Sriov Interface](#default-sriov-interface) below for details.
+
+###### One of the arguments from this list "default_storage_class, storage_class_list" must be set
 
 `default_storage_class` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Storage Class](#default-storage-class) below for details.
 
@@ -102,7 +114,11 @@ The following arguments are optional:
 
 `device_list` - (Optional) List of Devices. Add device for all interfaces belonging to this fleet. See [Device List](#device-list) below for details.
 
+###### One of the arguments from this list "disable_gpu, enable_gpu, enable_vgpu" must be set
+
 `disable_gpu` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Gpu](#disable-gpu) below for details.
+
+###### One of the arguments from this list "disable_vm, enable_vm" must be set
 
 `disable_vm` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Vm](#disable-vm) below for details.
 
@@ -124,6 +140,8 @@ The following arguments are optional:
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
+###### One of the arguments from this list "log_receiver, logs_streaming_disabled" must be set
+
 `log_receiver` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Log Receiver](#log-receiver) below for details.
 
 `logs_streaming_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Logs Streaming Disabled](#logs-streaming-disabled) below for details.
@@ -136,9 +154,15 @@ The following arguments are optional:
 
 `no_dc_cluster_group` - (Optional) Empty. This can be used for messages where no values are needed. See [No Dc Cluster Group](#no-dc-cluster-group) below for details.
 
+###### One of the arguments from this list "no_storage_device, storage_device_list" must be set
+
 `no_storage_device` - (Optional) Empty. This can be used for messages where no values are needed. See [No Storage Device](#no-storage-device) below for details.
 
+###### One of the arguments from this list "no_storage_interfaces, storage_interface_list" must be set
+
 `no_storage_interfaces` - (Optional) Empty. This can be used for messages where no values are needed. See [No Storage Interfaces](#no-storage-interfaces) below for details.
+
+###### One of the arguments from this list "no_storage_static_routes, storage_static_routes" must be set
 
 `no_storage_static_routes` - (Optional) Empty. This can be used for messages where no values are needed. See [No Storage Static Routes](#no-storage-static-routes) below for details.
 

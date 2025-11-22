@@ -88,13 +88,21 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "active_service_policies, no_service_policies, service_policies_from_namespace" must be set
+
 `active_service_policies` - (Optional) Service Policy List. List of service policies. See [Active Service Policies](#active-service-policies) below for details.
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "api_rate_limit, disable_rate_limit, rate_limit" must be set
+
 `api_rate_limit` - (Optional) APIRateLimit. See [Api Rate Limit](#api-rate-limit) below for details.
 
+###### One of the arguments from this list "api_specification, disable_api_definition" must be set
+
 `api_specification` - (Optional) API Specification and Validation. Settings for api specification (api definition, OpenAPI validation, etc.). See [Api Specification](#api-specification) below for details.
+
+###### One of the arguments from this list "app_firewall, disable_waf" must be set
 
 `app_firewall` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [App Firewall](#app-firewall) below for details.
 
@@ -102,7 +110,11 @@ The following arguments are optional:
 
 `bot_defense` - (Optional) Bot Defense. This defines various configuration options for Bot Defense Policy. See [Bot Defense](#bot-defense) below for details.
 
+###### One of the arguments from this list "captcha_challenge, enable_challenge, js_challenge, no_challenge, policy_based_challenge" must be set
+
 `captcha_challenge` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. See [Captcha Challenge](#captcha-challenge) below for details.
+
+###### One of the arguments from this list "client_side_defense, disable_client_side_defense" must be set
 
 `client_side_defense` - (Optional) Client-Side Defense. This defines various configuration options for Client-Side Defense Policy. See [Client Side Defense](#client-side-defense) below for details.
 
@@ -118,19 +130,29 @@ The following arguments are optional:
 
 `default_cache_action` - (Optional) Default Cache Behaviour. This defines a Default Cache Action. See [Default Cache Action](#default-cache-action) below for details.
 
+###### One of the arguments from this list "default_sensitive_data_policy, sensitive_data_policy" must be set
+
 `default_sensitive_data_policy` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Sensitive Data Policy](#default-sensitive-data-policy) below for details.
 
 `disable_api_definition` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Api Definition](#disable-api-definition) below for details.
+
+###### One of the arguments from this list "disable_api_discovery, enable_api_discovery" must be set
 
 `disable_api_discovery` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Api Discovery](#disable-api-discovery) below for details.
 
 `disable_client_side_defense` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Client Side Defense](#disable-client-side-defense) below for details.
 
+###### One of the arguments from this list "disable_ip_reputation, enable_ip_reputation" must be set
+
 `disable_ip_reputation` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Ip Reputation](#disable-ip-reputation) below for details.
+
+###### One of the arguments from this list "disable_malicious_user_detection, enable_malicious_user_detection" must be set
 
 `disable_malicious_user_detection` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Malicious User Detection](#disable-malicious-user-detection) below for details.
 
 `disable_rate_limit` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Rate Limit](#disable-rate-limit) below for details.
+
+###### One of the arguments from this list "disable_threat_mesh, enable_threat_mesh" must be set
 
 `disable_threat_mesh` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Threat Mesh](#disable-threat-mesh) below for details.
 
@@ -150,6 +172,8 @@ The following arguments are optional:
 
 `graphql_rules` - (Optional) GraphQL Inspection. GraphQL is a query language and server-side runtime for APIs which provides a complete and understandable description of the data in API. See [Graphql Rules](#graphql-rules) below for details.
 
+###### One of the arguments from this list "http, https, https_auto_cert" must be set
+
 `http` - (Optional) HTTP Choice. Choice for selecting HTTP proxy. See [Http](#http) below for details.
 
 `https` - (Optional) BYOC HTTPS Choice. Choice for selecting CDN Distribution with bring your own certificates. See [Https](#https) below for details.
@@ -159,6 +183,8 @@ The following arguments are optional:
 `js_challenge` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. See [Js Challenge](#js-challenge) below for details.
 
 `jwt_validation` - (Optional) JWT Validation. JWT Validation stops JWT replay attacks and JWT tampering by cryptographically verifying incoming JWTs before they are passed to your API origin. See [Jwt Validation](#jwt-validation) below for details.
+
+###### One of the arguments from this list "l7_ddos_action_block, l7_ddos_action_default, l7_ddos_action_js_challenge" must be set
 
 `l7_ddos_action_block` - (Optional) Empty. This can be used for messages where no values are needed. See [L7 Ddos Action Block](#l7-ddos-action-block) below for details.
 
@@ -186,11 +212,15 @@ The following arguments are optional:
 
 `service_policies_from_namespace` - (Optional) Empty. This can be used for messages where no values are needed. See [Service Policies From Namespace](#service-policies-from-namespace) below for details.
 
+###### One of the arguments from this list "slow_ddos_mitigation, system_default_timeouts" must be set
+
 `slow_ddos_mitigation` - (Optional) Slow DDoS Mitigation. 'Slow and low' attacks tie up server resources, leaving none available for servicing requests from actual users. See [Slow Ddos Mitigation](#slow-ddos-mitigation) below for details.
 
 `system_default_timeouts` - (Optional) Empty. This can be used for messages where no values are needed. See [System Default Timeouts](#system-default-timeouts) below for details.
 
 `trusted_clients` - (Optional) Trusted Client Rules. Define rules to skip processing of one or more features such as WAF, Bot Defense etc. for clients. ves.io.schema.rules.repeated.max_items: 256 ves.io.schema.rules.repeated. See [Trusted Clients](#trusted-clients) below for details.
+
+###### One of the arguments from this list "user_id_client_ip, user_identification" must be set
 
 `user_id_client_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [User Id Client Ip](#user-id-client-ip) below for details.
 

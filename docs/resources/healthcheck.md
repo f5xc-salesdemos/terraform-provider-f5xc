@@ -63,6 +63,8 @@ The following arguments are optional:
 
 `healthy_threshold` - (Optional) Healthy Threshold. Number of successful responses before declaring healthy. In other words, this is the number of healthy health checks required before a host is marked healthy (`Number`).
 
+###### One of the arguments from this list "http_health_check, tcp_health_check, udp_icmp_health_check" must be set
+
 `http_health_check` - (Optional) HTTP Health Check. Healthy if 'get' method on URL 'http(s)://<host>/<path>' with optional '<header>' returns success. 'host' is not used for DNS resolution. It is used as HTTP Header in the request. See [Http Health Check](#http-health-check) below for details.
 
 `interval` - (Optional) Interval. Time interval in seconds between two healthcheck requests. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.uint32.gte: 1 ves.io.schema.rules.uint32.lte: 600 (`Number`).

@@ -86,7 +86,11 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "active_service_policies, no_service_policies, service_policies_from_namespace" must be set
+
 `active_service_policies` - (Optional) Service Policy List. List of service policies. See [Active Service Policies](#active-service-policies) below for details.
+
+###### One of the arguments from this list "advertise_custom, advertise_on_public, advertise_on_public_default_vip, do_not_advertise" must be set
 
 `advertise_custom` - (Optional) Advertise Custom. This defines a way to advertise a VIP on specific sites. See [Advertise Custom](#advertise-custom) below for details.
 
@@ -96,15 +100,21 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "default_lb_with_sni, no_sni, sni" must be set
+
 `default_lb_with_sni` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Lb With Sni](#default-lb-with-sni) below for details.
 
 `dns_volterra_managed` - (Optional) Automatically Manage DNS Records. DNS records for domains will be managed automatically by Volterra. This requires the domain to be delegated to F5XC using the Delegated Domain feature (`Bool`).
 
 `do_not_advertise` - (Optional) Empty. This can be used for messages where no values are needed. See [Do Not Advertise](#do-not-advertise) below for details.
 
+###### One of the arguments from this list "do_not_retract_cluster, retract_cluster" must be set
+
 `do_not_retract_cluster` - (Optional) Empty. This can be used for messages where no values are needed. See [Do Not Retract Cluster](#do-not-retract-cluster) below for details.
 
 `domains` - (Optional) Domains. A list of Domains (host/authority header) that will be matched to this Load Balancer. Supported Domains and search order: 1. Exact Domain names: www.foo.com. 2 (`List`).
+
+###### One of the arguments from this list "hash_policy_choice_least_active, hash_policy_choice_random, hash_policy_choice_round_robin, hash_policy_choice_source_ip_stickiness" must be set
 
 `hash_policy_choice_least_active` - (Optional) Empty. This can be used for messages where no values are needed. See [Hash Policy Choice Least Active](#hash-policy-choice-least-active) below for details.
 
@@ -117,6 +127,8 @@ The following arguments are optional:
 `idle_timeout` - (Optional) Idle Timeout. The amount of time that a stream can exist without upstream or downstream activity, in milliseconds. ves.io.schema.rules.uint32.lte: 4147200000 (`Number`).
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
+
+###### One of the arguments from this list "listen_port, port_ranges" must be set
 
 `listen_port` - (Optional) Listen Port. Exclusive with [port_ranges] Listen Port for this load balancer ves.io.schema.rules.uint32.lte: 65535 (`Number`).
 
@@ -133,6 +145,8 @@ The following arguments are optional:
 `service_policies_from_namespace` - (Optional) Empty. This can be used for messages where no values are needed. See [Service Policies From Namespace](#service-policies-from-namespace) below for details.
 
 `sni` - (Optional) Empty. This can be used for messages where no values are needed. See [Sni](#sni) below for details.
+
+###### One of the arguments from this list "tcp, tls_tcp, tls_tcp_auto_cert" must be set
 
 `tcp` - (Optional) Empty. This can be used for messages where no values are needed. See [Tcp](#tcp) below for details.
 

@@ -82,13 +82,13 @@ func (r *K8SClusterResource) Schema(ctx context.Context, req resource.SchemaRequ
 		},
 		Blocks: map[string]schema.Block{
 			"cluster_scoped_access_deny": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: cluster_scoped_access_deny, cluster_scoped_access_permit] Empty. This can be used for messages where no values are needed",
 			},
 			"cluster_scoped_access_permit": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"cluster_wide_app_list": schema.SingleNestedBlock{
-				MarkdownDescription: "Cluster Wide Application List. List of cluster wide applications",
+				MarkdownDescription: "[OneOf: cluster_wide_app_list, no_cluster_wide_apps] Cluster Wide Application List. List of cluster wide applications",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -124,10 +124,10 @@ func (r *K8SClusterResource) Schema(ctx context.Context, req resource.SchemaRequ
 
 			},
 			"global_access_enable": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: global_access_enable, no_global_access] Empty. This can be used for messages where no values are needed",
 			},
 			"insecure_registry_list": schema.SingleNestedBlock{
-				MarkdownDescription: "Docker Insecure Registry List. List of docker insecure registries",
+				MarkdownDescription: "[OneOf: insecure_registry_list, no_insecure_registries] Docker Insecure Registry List. List of docker insecure registries",
 				Attributes: map[string]schema.Attribute{
 					"insecure_registries": schema.ListAttribute{
 						MarkdownDescription: "Docker Insecure Registry List. List of docker insecure registries in format 'example.com:5000' Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.repeated.items.string.hostport: true ves.io.schema.rules.repeated.items.string.max_bytes: 256 ves.io.schema.rules.repeated.max_items: 16 ves.io.schema.rules.repeated.min_items: 1 ves.io.schema.rules.repeated.unique: true",
@@ -138,7 +138,7 @@ func (r *K8SClusterResource) Schema(ctx context.Context, req resource.SchemaRequ
 
 			},
 			"local_access_config": schema.SingleNestedBlock{
-				MarkdownDescription: "Local Access Configuration. Parameters required to enable local access",
+				MarkdownDescription: "[OneOf: local_access_config, no_local_access] Local Access Configuration. Parameters required to enable local access",
 				Attributes: map[string]schema.Attribute{
 					"local_domain": schema.StringAttribute{
 						MarkdownDescription: "Local Domain. Local K8s API server will be accessible at <site name>.<local domain>. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.hostname: true ves.io.schema.rules.string.max_len: 192 ves.io.schema.rules.string.min_len: 1",
@@ -169,7 +169,7 @@ func (r *K8SClusterResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"use_custom_cluster_role_bindings": schema.SingleNestedBlock{
-				MarkdownDescription: "Cluster Role Binding List. List of active cluster role binding list for a K8s cluster",
+				MarkdownDescription: "[OneOf: use_custom_cluster_role_bindings, use_default_cluster_role_bindings] Cluster Role Binding List. List of active cluster role binding list for a K8s cluster",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -196,7 +196,7 @@ func (r *K8SClusterResource) Schema(ctx context.Context, req resource.SchemaRequ
 
 			},
 			"use_custom_cluster_role_list": schema.SingleNestedBlock{
-				MarkdownDescription: "Cluster Role List. List of active cluster role list for a K8s cluster",
+				MarkdownDescription: "[OneOf: use_custom_cluster_role_list, use_default_cluster_roles] Cluster Role List. List of active cluster role list for a K8s cluster",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -223,7 +223,7 @@ func (r *K8SClusterResource) Schema(ctx context.Context, req resource.SchemaRequ
 
 			},
 			"use_custom_pod_security_admission": schema.SingleNestedBlock{
-				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
+				MarkdownDescription: "[OneOf: use_custom_pod_security_admission, use_default_pod_security_admission] Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
 				Attributes: map[string]schema.Attribute{
 					"name": schema.StringAttribute{
 						MarkdownDescription: "Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_bytes: 128 ves.io.schema.rules.string.min_bytes: 1",
@@ -241,7 +241,7 @@ func (r *K8SClusterResource) Schema(ctx context.Context, req resource.SchemaRequ
 
 			},
 			"use_custom_psp_list": schema.SingleNestedBlock{
-				MarkdownDescription: "Pod Security Policy List. List of active Pod security policies for a K8s cluster",
+				MarkdownDescription: "[OneOf: use_custom_psp_list, use_default_psp] Pod Security Policy List. List of active Pod security policies for a K8s cluster",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -280,7 +280,7 @@ func (r *K8SClusterResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
 			},
 			"vk8s_namespace_access_deny": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: vk8s_namespace_access_deny, vk8s_namespace_access_permit] Empty. This can be used for messages where no values are needed",
 			},
 			"vk8s_namespace_access_permit": schema.SingleNestedBlock{
 				MarkdownDescription: "Empty. This can be used for messages where no values are needed",

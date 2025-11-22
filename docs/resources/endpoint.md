@@ -62,6 +62,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "dns_name, dns_name_advanced, ip, service_info" must be set
+
 `dns_name` - (Optional) Endpoint Name. Exclusive with [dns_name_advanced ip service_info] Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. ves.io.schema (`String`).
 
 `dns_name_advanced` - (Optional) DNS Name Advanced Type. Specifies name and TTL used for DNS resolution. See [Dns Name Advanced](#dns-name-advanced) below for details.

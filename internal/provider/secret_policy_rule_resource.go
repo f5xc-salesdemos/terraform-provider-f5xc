@@ -86,7 +86,7 @@ func (r *SecretPolicyRuleResource) Schema(ctx context.Context, req resource.Sche
 				Optional: true,
 			},
 			"client_name": schema.StringAttribute{
-				MarkdownDescription: "Client Name. Exclusive with [client_name_matcher client_selector] The name of the client trying to access the secret. Name of the client will be extracted from client TLS certificate. This predicate evaluates to true if client name matches the configured name ves.io.schema.rules.string.max_bytes: 256",
+				MarkdownDescription: "[OneOf: client_name, client_name_matcher, client_selector] Client Name. Exclusive with [client_name_matcher client_selector] The name of the client trying to access the secret. Name of the client will be extracted from client TLS certificate. This predicate evaluates to true if client name matches the configured name ves.io.schema.rules.string.max_bytes: 256",
 				Optional: true,
 			},
 		},

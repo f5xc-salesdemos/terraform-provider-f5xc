@@ -61,6 +61,8 @@ The following arguments are optional:
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
+###### One of the arguments from this list "mixed_schema_origin, strict_schema_origin" must be set
+
 `mixed_schema_origin` - (Optional) Empty. This can be used for messages where no values are needed. See [Mixed Schema Origin](#mixed-schema-origin) below for details.
 
 `non_api_endpoints` - (Optional) API Discovery Exclusion List. List of Non-API Endpoints. ves.io.schema.rules.repeated.max_items: 1000 ves.io.schema.rules.repeated.unique: true. See [Non Api Endpoints](#non-api-endpoints) below for details.

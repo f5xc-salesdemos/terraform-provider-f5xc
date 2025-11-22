@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -94,6 +95,7 @@ func transformDoc(filePath string) error {
 	// Parse main schema attributes
 	inSection := ""
 	attrRegex := regexp.MustCompile(`^- \x60([^\x60]+)\x60 \(([^)]+)\)(.*)$`)
+	printedConstraints := make(map[string]bool) // Track already printed OneOf constraints
 
 	for i := schemaStart + 1; i < mainSchemaEnd; i++ {
 		line := lines[i]
@@ -122,6 +124,10 @@ func transformDoc(filePath string) error {
 			typeInfo := matches[2]
 			desc := strings.TrimSpace(matches[3])
 
+			// Extract OneOf constraint if present
+			oneOfConstraint := extractOneOfConstraint(desc)
+			desc = removeOneOfConstraint(desc)
+
 			// Clean up description
 			desc = cleanDescription(desc, name)
 
@@ -135,6 +141,14 @@ func transformDoc(filePath string) error {
 			}
 
 			typeStr := extractSimpleType(typeInfo)
+
+			// Write OneOf constraint hint if present and not already printed (Volterra-style)
+			// Normalize the constraint key to handle different orderings of the same fields
+			constraintKey := normalizeOneOfKey(oneOfConstraint)
+			if oneOfConstraint != "" && !printedConstraints[constraintKey] {
+				output.WriteString(fmt.Sprintf("###### One of the arguments from this list \"%s\" must be set\n\n", oneOfConstraint))
+				printedConstraints[constraintKey] = true
+			}
 
 			if hasNested {
 				anchorName := toAnchorName(name)
@@ -334,4 +348,30 @@ func toTitleCase(s string) string {
 
 func toAnchorName(name string) string {
 	return strings.ToLower(strings.ReplaceAll(name, "_", "-"))
+}
+
+// extractOneOfConstraint extracts the [OneOf: field1, field2] constraint from description
+func extractOneOfConstraint(desc string) string {
+	oneOfRegex := regexp.MustCompile(`\[OneOf:\s*([^\]]+)\]`)
+	matches := oneOfRegex.FindStringSubmatch(desc)
+	if len(matches) >= 2 {
+		return strings.TrimSpace(matches[1])
+	}
+	return ""
+}
+
+// removeOneOfConstraint removes the [OneOf: ...] constraint from description
+func removeOneOfConstraint(desc string) string {
+	oneOfRegex := regexp.MustCompile(`\[OneOf:\s*[^\]]+\]\s*`)
+	return strings.TrimSpace(oneOfRegex.ReplaceAllString(desc, ""))
+}
+
+// normalizeOneOfKey creates a normalized key for deduplication by sorting fields
+func normalizeOneOfKey(constraint string) string {
+	if constraint == "" {
+		return ""
+	}
+	fields := strings.Split(constraint, ", ")
+	sort.Strings(fields)
+	return strings.Join(fields, ", ")
 }

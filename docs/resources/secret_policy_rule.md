@@ -60,6 +60,8 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "client_name, client_name_matcher, client_selector" must be set
+
 `client_name` - (Optional) Client Name. Exclusive with [client_name_matcher client_selector] The name of the client trying to access the secret. Name of the client will be extracted from client TLS certificate (`String`).
 
 `client_name_matcher` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. See [Client Name Matcher](#client-name-matcher) below for details.

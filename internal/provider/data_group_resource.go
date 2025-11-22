@@ -82,7 +82,7 @@ func (r *DataGroupResource) Schema(ctx context.Context, req resource.SchemaReque
 		},
 		Blocks: map[string]schema.Block{
 			"address_records": schema.SingleNestedBlock{
-				MarkdownDescription: "Address Record. Data group with address record List",
+				MarkdownDescription: "[OneOf: address_records, integer_records, string_records] Address Record. Data group with address record List",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{

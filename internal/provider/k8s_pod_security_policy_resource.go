@@ -87,7 +87,7 @@ func (r *K8SPodSecurityPolicyResource) Schema(ctx context.Context, req resource.
 		},
 		Blocks: map[string]schema.Block{
 			"psp_spec": schema.SingleNestedBlock{
-				MarkdownDescription: "Pod Security Policy Specification. Form based pod security specification",
+				MarkdownDescription: "[OneOf: psp_spec, yaml] Pod Security Policy Specification. Form based pod security specification",
 				Attributes: map[string]schema.Attribute{
 					"allow_privilege_escalation": schema.BoolAttribute{
 						MarkdownDescription: "Allow Privilege Escalation. Pod can request to privilege escalation",

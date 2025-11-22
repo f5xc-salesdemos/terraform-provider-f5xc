@@ -98,7 +98,7 @@ func (r *SecuremeshSiteResource) Schema(ctx context.Context, req resource.Schema
 		},
 		Blocks: map[string]schema.Block{
 			"blocked_services": schema.SingleNestedBlock{
-				MarkdownDescription: "Disable Node Local Services. Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site.",
+				MarkdownDescription: "[OneOf: blocked_services, default_blocked_services] Disable Node Local Services. Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site.",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -128,7 +128,7 @@ func (r *SecuremeshSiteResource) Schema(ctx context.Context, req resource.Schema
 
 			},
 			"bond_device_list": schema.SingleNestedBlock{
-				MarkdownDescription: "Bond Devices List. List of bond devices for this fleet",
+				MarkdownDescription: "[OneOf: bond_device_list, no_bond_devices] Bond Devices List. List of bond devices for this fleet",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -188,7 +188,7 @@ func (r *SecuremeshSiteResource) Schema(ctx context.Context, req resource.Schema
 
 			},
 			"custom_network_config": schema.SingleNestedBlock{
-				MarkdownDescription: "SmsNetworkConfiguration.",
+				MarkdownDescription: "[OneOf: custom_network_config, default_network_config] SmsNetworkConfiguration.",
 				Attributes: map[string]schema.Attribute{
 					"tunnel_dead_timeout": schema.Int64Attribute{
 						MarkdownDescription: "Tunnel Dead Timeout (msec). Time interval, in millisec, within which any ipsec / ssl connection from the site going down is detected. When not set (== 0), a default value of 10000 msec will be used. ves.io.schema.rules.uint32.gte: 0 ves.io.schema.rules.uint32.lte: 180000",
@@ -547,7 +547,7 @@ func (r *SecuremeshSiteResource) Schema(ctx context.Context, req resource.Schema
 
 			},
 			"log_receiver": schema.SingleNestedBlock{
-				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
+				MarkdownDescription: "[OneOf: log_receiver, logs_streaming_disabled] Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
 				Attributes: map[string]schema.Attribute{
 					"name": schema.StringAttribute{
 						MarkdownDescription: "Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_bytes: 128 ves.io.schema.rules.string.min_bytes: 1",

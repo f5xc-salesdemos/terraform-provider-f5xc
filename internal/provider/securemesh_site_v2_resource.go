@@ -92,7 +92,7 @@ func (r *SecuremeshSiteV2Resource) Schema(ctx context.Context, req resource.Sche
 		},
 		Blocks: map[string]schema.Block{
 			"active_enhanced_firewall_policies": schema.SingleNestedBlock{
-				MarkdownDescription: "Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option for service insertion.",
+				MarkdownDescription: "[OneOf: active_enhanced_firewall_policies, no_network_policy] Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option for service insertion.",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -119,7 +119,7 @@ func (r *SecuremeshSiteV2Resource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"active_forward_proxy_policies": schema.SingleNestedBlock{
-				MarkdownDescription: "Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active",
+				MarkdownDescription: "[OneOf: active_forward_proxy_policies, no_forward_proxy] Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -195,7 +195,7 @@ func (r *SecuremeshSiteV2Resource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"aws": schema.SingleNestedBlock{
-				MarkdownDescription: "AWS Provider Type. AWS Provider Type",
+				MarkdownDescription: "[OneOf: aws, azure, baremetal, equinix, gcp, kvm, nutanix, oci, openstack, vmware] AWS Provider Type. AWS Provider Type",
 				Attributes: map[string]schema.Attribute{
 				},
 				Blocks: map[string]schema.Block{
@@ -321,7 +321,7 @@ func (r *SecuremeshSiteV2Resource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"block_all_services": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: block_all_services, blocked_services] Empty. This can be used for messages where no values are needed",
 			},
 			"blocked_services": schema.SingleNestedBlock{
 				MarkdownDescription: "Disable Node Local Services. Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site.",
@@ -354,7 +354,7 @@ func (r *SecuremeshSiteV2Resource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"custom_proxy": schema.SingleNestedBlock{
-				MarkdownDescription: "Custom Enterprise Proxy. Custom Enterprise Proxy",
+				MarkdownDescription: "[OneOf: custom_proxy, f5_proxy] Custom Enterprise Proxy. Custom Enterprise Proxy",
 				Attributes: map[string]schema.Attribute{
 					"proxy_ip_address": schema.StringAttribute{
 						MarkdownDescription: "Proxy IPv4 Address. Specify the IPv4 Address of the internal Enterprise Proxy Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.ipv4: true",
@@ -417,7 +417,7 @@ func (r *SecuremeshSiteV2Resource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"custom_proxy_bypass": schema.SingleNestedBlock{
-				MarkdownDescription: "Proxy Bypass. List of domains to bypass the proxy",
+				MarkdownDescription: "[OneOf: custom_proxy_bypass, no_proxy_bypass] Proxy Bypass. List of domains to bypass the proxy",
 				Attributes: map[string]schema.Attribute{
 					"proxy_bypass": schema.ListAttribute{
 						MarkdownDescription: "Proxy Bypass. List of domains to bypass the proxy ves.io.schema.rules.repeated.items.string.hostname_or_ip: true ves.io.schema.rules.repeated.items.string.max_len: 256 ves.io.schema.rules.repeated.max_items: 64 ves.io.schema.rules.repeated.unique: true",
@@ -428,7 +428,7 @@ func (r *SecuremeshSiteV2Resource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"dc_cluster_group_sli": schema.SingleNestedBlock{
-				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
+				MarkdownDescription: "[OneOf: dc_cluster_group_sli, no_s2s_connectivity_sli] Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
 				Attributes: map[string]schema.Attribute{
 					"name": schema.StringAttribute{
 						MarkdownDescription: "Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_bytes: 128 ves.io.schema.rules.string.min_bytes: 1",
@@ -446,7 +446,7 @@ func (r *SecuremeshSiteV2Resource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"dc_cluster_group_slo": schema.SingleNestedBlock{
-				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
+				MarkdownDescription: "[OneOf: dc_cluster_group_slo, no_s2s_connectivity_slo, site_mesh_group_on_slo] Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
 				Attributes: map[string]schema.Attribute{
 					"name": schema.StringAttribute{
 						MarkdownDescription: "Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_bytes: 128 ves.io.schema.rules.string.min_bytes: 1",
@@ -464,10 +464,10 @@ func (r *SecuremeshSiteV2Resource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"disable_ha": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_ha, enable_ha] Empty. This can be used for messages where no values are needed",
 			},
 			"disable_url_categorization": schema.SingleNestedBlock{
-				MarkdownDescription: "Empty. This can be used for messages where no values are needed",
+				MarkdownDescription: "[OneOf: disable_url_categorization, enable_url_categorization] Empty. This can be used for messages where no values are needed",
 			},
 			"dns_ntp_config": schema.SingleNestedBlock{
 				MarkdownDescription: "DNS & NTP Servers Settings. Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site.",
@@ -763,7 +763,7 @@ func (r *SecuremeshSiteV2Resource) Schema(ctx context.Context, req resource.Sche
 
 			},
 			"log_receiver": schema.SingleNestedBlock{
-				MarkdownDescription: "Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
+				MarkdownDescription: "[OneOf: log_receiver, logs_streaming_disabled] Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name",
 				Attributes: map[string]schema.Attribute{
 					"name": schema.StringAttribute{
 						MarkdownDescription: "Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name. Required: YES ves.io.schema.rules.message.required: true ves.io.schema.rules.string.max_bytes: 128 ves.io.schema.rules.string.min_bytes: 1",

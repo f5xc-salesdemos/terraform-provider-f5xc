@@ -60,21 +60,29 @@ The following arguments are required:
 
 The following arguments are optional:
 
+###### One of the arguments from this list "action_allow, action_deny" must be set
+
 `action_allow` - (Optional) Empty. This can be used for messages where no values are needed. See [Action Allow](#action-allow) below for details.
 
 `action_deny` - (Optional) Empty. This can be used for messages where no values are needed. See [Action Deny](#action-deny) below for details.
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
+###### One of the arguments from this list "destination_prefix_all, destination_prefix_single" must be set
+
 `destination_prefix_all` - (Optional) Empty. This can be used for messages where no values are needed. See [Destination Prefix All](#destination-prefix-all) below for details.
 
 `destination_prefix_single` - (Optional) Prefix. Exclusive with [destination_prefix_all] Prefix ves.io.schema.rules.string.ip_prefix_globally_routable: true (`String`).
+
+###### One of the arguments from this list "fragments_allow, fragments_deny" must be set
 
 `fragments_allow` - (Optional) Empty. This can be used for messages where no values are needed. See [Fragments Allow](#fragments-allow) below for details.
 
 `fragments_deny` - (Optional) Empty. This can be used for messages where no values are needed. See [Fragments Deny](#fragments-deny) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
+
+###### One of the arguments from this list "protocol_ah, protocol_all, protocol_esp, protocol_gre, protocol_icmp, protocol_icmp6, protocol_ipv6, protocol_tcp, protocol_udp" must be set
 
 `protocol_ah` - (Optional) Empty. This can be used for messages where no values are needed. See [Protocol Ah](#protocol-ah) below for details.
 
@@ -94,13 +102,19 @@ The following arguments are optional:
 
 `protocol_udp` - (Optional) UDP Protocol. x-required UDP Protocol. See [Protocol Udp](#protocol-udp) below for details.
 
+###### One of the arguments from this list "source_prefix_all, source_prefix_single" must be set
+
 `source_prefix_all` - (Optional) Empty. This can be used for messages where no values are needed. See [Source Prefix All](#source-prefix-all) below for details.
 
 `source_prefix_single` - (Optional) Prefix. Exclusive with [source_prefix_all] Prefix ves.io.schema.rules.string.ip_prefix_globally_routable: true (`String`).
 
+###### One of the arguments from this list "state_off, state_on" must be set
+
 `state_off` - (Optional) Empty. This can be used for messages where no values are needed. See [State Off](#state-off) below for details.
 
 `state_on` - (Optional) Empty. This can be used for messages where no values are needed. See [State On](#state-on) below for details.
+
+###### One of the arguments from this list "version_ipv4, version_ipv6" must be set
 
 `version_ipv4` - (Optional) Empty. This can be used for messages where no values are needed. See [Version Ipv4](#version-ipv4) below for details.
 
