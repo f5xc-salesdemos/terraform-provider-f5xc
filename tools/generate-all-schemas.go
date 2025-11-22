@@ -1,0 +1,1479 @@
+//go:build ignore
+// +build ignore
+
+// generate-all-schemas.go - Batch generator for all F5 XC Terraform resources
+// This tool processes all OpenAPI spec files and generates comprehensive Terraform schemas.
+//
+// Usage: go run tools/generate-all-schemas.go [--spec-dir=/path/to/specs] [--dry-run]
+//
+// Environment Variables:
+//   F5XC_SPEC_DIR - Directory containing OpenAPI spec files (default: /tmp)
+
+package main
+
+import (
+	"encoding/json"
+	"flag"
+	"fmt"
+	"os"
+	"path/filepath"
+	"regexp"
+	"sort"
+	"strings"
+	"text/template"
+)
+
+// Configuration
+var (
+	specDir    string
+	dryRun     bool
+	outputDir  string
+	clientDir  string
+	verbose    bool
+)
+
+// OpenAPI3Spec represents an OpenAPI 3.x specification
+type OpenAPI3Spec struct {
+	OpenAPI    string                 `json:"openapi"`
+	Info       map[string]interface{} `json:"info"`
+	Paths      map[string]interface{} `json:"paths"`
+	Components Components             `json:"components"`
+}
+
+type Components struct {
+	Schemas map[string]SchemaDefinition `json:"schemas"`
+}
+
+type SchemaDefinition struct {
+	Type                 string                      `json:"type"`
+	Description          string                      `json:"description"`
+	Title                string                      `json:"title"`
+	Format               string                      `json:"format"`
+	Enum                 []interface{}               `json:"enum"`
+	Properties           map[string]SchemaDefinition `json:"properties"`
+	Items                *SchemaDefinition           `json:"items"`
+	Ref                  string                      `json:"$ref"`
+	Required             []string                    `json:"required"`
+	XDisplayName         string                      `json:"x-displayname"`
+	XVesExample          string                      `json:"x-ves-example"`
+	XVesValidationRules  map[string]string           `json:"x-ves-validation-rules"`
+	XVesProtoMessage     string                      `json:"x-ves-proto-message"`
+	AdditionalProperties interface{}                 `json:"additionalProperties"`
+}
+
+type TerraformAttribute struct {
+	Name             string
+	GoName           string
+	TfsdkTag         string
+	Type             string
+	ElementType      string
+	Description      string
+	Required         bool
+	Optional         bool
+	Computed         bool
+	Sensitive        bool
+	NestedAttributes []TerraformAttribute
+	NestedBlockType  string
+	IsBlock          bool
+	OneOfGroup       string
+	PlanModifier     string
+	MaxDepth         int // Track recursion depth to prevent infinite loops
+}
+
+type ResourceTemplate struct {
+	Name               string
+	TitleCase          string
+	APIPath            string
+	APIPathPlural      string
+	Description        string
+	Attributes         []TerraformAttribute
+	OneOfGroups        map[string][]string
+	HasComplexSpec     bool
+	RequiredAttributes []string
+	OptionalAttributes []string
+	ComputedAttributes []string
+	ExampleUsage       string // HCL example for documentation
+	APIDocsURL         string // Link to F5 XC API documentation
+}
+
+type GenerationResult struct {
+	ResourceName string
+	Success      bool
+	Error        string
+	AttrCount    int
+	BlockCount   int
+}
+
+var schemaCache = make(map[string]SchemaDefinition)
+
+func init() {
+	flag.StringVar(&specDir, "spec-dir", "", "Directory containing OpenAPI spec files")
+	flag.BoolVar(&dryRun, "dry-run", false, "Show what would be generated without writing files")
+	flag.StringVar(&outputDir, "output-dir", "internal/provider", "Output directory for provider files")
+	flag.StringVar(&clientDir, "client-dir", "internal/client", "Output directory for client files")
+	flag.BoolVar(&verbose, "verbose", false, "Enable verbose output")
+}
+
+func main() {
+	flag.Parse()
+
+	// Check for spec directory
+	if specDir == "" {
+		specDir = os.Getenv("F5XC_SPEC_DIR")
+	}
+	if specDir == "" {
+		specDir = "/tmp"
+	}
+
+	fmt.Println("🔨 F5XC Terraform Provider - Batch Schema Generator")
+	fmt.Println(strings.Repeat("=", 60))
+	fmt.Printf("📁 Spec Directory: %s\n", specDir)
+	fmt.Printf("📁 Output Directory: %s\n", outputDir)
+	if dryRun {
+		fmt.Println("🔍 DRY RUN MODE - No files will be written")
+	}
+	fmt.Println()
+
+	// Find all spec files
+	pattern := filepath.Join(specDir, "docs-cloud-f5-com.*.ves-swagger.json")
+	specFiles, err := filepath.Glob(pattern)
+	if err != nil {
+		fmt.Printf("❌ Error finding spec files: %v\n", err)
+		os.Exit(1)
+	}
+
+	if len(specFiles) == 0 {
+		fmt.Printf("❌ No spec files found matching pattern: %s\n", pattern)
+		fmt.Println("💡 Tip: Download specs from docs.cloud.f5.com or set F5XC_SPEC_DIR")
+		os.Exit(1)
+	}
+
+	fmt.Printf("📄 Found %d OpenAPI specification files\n\n", len(specFiles))
+
+	// Process each spec file
+	results := []GenerationResult{}
+	successCount := 0
+	failCount := 0
+
+	for _, specFile := range specFiles {
+		result := processSpecFile(specFile)
+		results = append(results, result)
+		if result.Success {
+			successCount++
+		} else if result.Error != "" {
+			failCount++
+		}
+	}
+
+	// Generate combined client types file
+	if !dryRun {
+		generateCombinedClientTypes(results)
+	}
+
+	// Print summary
+	fmt.Println()
+	fmt.Println(strings.Repeat("=", 60))
+	fmt.Println("📊 Generation Summary")
+	fmt.Println(strings.Repeat("=", 60))
+	fmt.Printf("✅ Successfully generated: %d resources\n", successCount)
+	fmt.Printf("⏭️  Skipped (no schema): %d\n", len(results)-successCount-failCount)
+	fmt.Printf("❌ Failed: %d\n", failCount)
+
+	if failCount > 0 {
+		fmt.Println("\n❌ Failed resources:")
+		for _, r := range results {
+			if !r.Success && r.Error != "" {
+				fmt.Printf("   - %s: %s\n", r.ResourceName, r.Error)
+			}
+		}
+	}
+
+	// Generate provider registration
+	if !dryRun {
+		generateProviderRegistration(results)
+	}
+
+	fmt.Println("\n🎉 Batch generation complete!")
+}
+
+func processSpecFile(specFile string) GenerationResult {
+	// Extract resource name from filename
+	resourceName := extractResourceName(specFile)
+	if resourceName == "" {
+		return GenerationResult{ResourceName: filepath.Base(specFile), Success: false}
+	}
+
+	// Skip internal/utility schemas
+	skipPatterns := []string{
+		"object", "status", "spec", "metadata", "types", "common",
+		"refs", "crudapi", "public", "private", "api", "empty",
+	}
+	for _, skip := range skipPatterns {
+		if resourceName == skip {
+			return GenerationResult{ResourceName: resourceName, Success: false}
+		}
+	}
+
+	if verbose {
+		fmt.Printf("Processing: %s\n", resourceName)
+	}
+
+	// Parse spec
+	spec, err := parseOpenAPISpec(specFile)
+	if err != nil {
+		return GenerationResult{ResourceName: resourceName, Success: false, Error: err.Error()}
+	}
+
+	// Extract resource schema
+	resource, err := extractResourceSchema(spec, resourceName)
+	if err != nil {
+		if verbose {
+			fmt.Printf("  ⏭️  Skipping %s: %v\n", resourceName, err)
+		}
+		return GenerationResult{ResourceName: resourceName, Success: false}
+	}
+
+	// Count attributes and blocks
+	attrCount := 0
+	blockCount := 0
+	for _, attr := range resource.Attributes {
+		if attr.IsBlock {
+			blockCount++
+		} else {
+			attrCount++
+		}
+	}
+
+	if !dryRun {
+		// Generate resource file
+		if err := generateResourceFile(resource); err != nil {
+			return GenerationResult{ResourceName: resourceName, Success: false, Error: err.Error()}
+		}
+
+		// Generate client types
+		if err := generateClientTypes(resource); err != nil {
+			return GenerationResult{ResourceName: resourceName, Success: false, Error: err.Error()}
+		}
+
+		// Generate data source
+		if err := generateDataSource(resource); err != nil {
+			return GenerationResult{ResourceName: resourceName, Success: false, Error: err.Error()}
+		}
+	}
+
+	fmt.Printf("✅ %s: %d attrs, %d blocks\n", resourceName, attrCount, blockCount)
+	return GenerationResult{
+		ResourceName: resourceName,
+		Success:      true,
+		AttrCount:    attrCount,
+		BlockCount:   blockCount,
+	}
+}
+
+func extractResourceName(specFile string) string {
+	base := filepath.Base(specFile)
+
+	// Try views pattern: schema.views.RESOURCE.ves-swagger
+	re := regexp.MustCompile(`\.schema\.views\.([^.]+)\.ves-swagger`)
+	matches := re.FindStringSubmatch(base)
+	if len(matches) >= 2 {
+		return matches[1]
+	}
+
+	// Try subtype pattern: schema.SUBTYPE.RESOURCE.ves-swagger
+	re = regexp.MustCompile(`\.schema\.[^.]+\.([^.]+)\.ves-swagger`)
+	matches = re.FindStringSubmatch(base)
+	if len(matches) >= 2 {
+		return matches[1]
+	}
+
+	// Try direct pattern: schema.RESOURCE.ves-swagger
+	re = regexp.MustCompile(`\.schema\.([^.]+)\.ves-swagger`)
+	matches = re.FindStringSubmatch(base)
+	if len(matches) >= 2 {
+		return matches[1]
+	}
+
+	return ""
+}
+
+func parseOpenAPISpec(specFile string) (*OpenAPI3Spec, error) {
+	data, err := os.ReadFile(specFile)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read spec: %w", err)
+	}
+
+	var spec OpenAPI3Spec
+	if err := json.Unmarshal(data, &spec); err != nil {
+		return nil, fmt.Errorf("failed to parse spec: %w", err)
+	}
+
+	// Cache schemas
+	for name, schema := range spec.Components.Schemas {
+		schemaCache[name] = schema
+	}
+
+	return &spec, nil
+}
+
+func extractResourceSchema(spec *OpenAPI3Spec, resourceName string) (*ResourceTemplate, error) {
+	// Find CreateSpecType schema
+	var createSpec SchemaDefinition
+	var found bool
+
+	for key, schema := range spec.Components.Schemas {
+		keyLower := strings.ToLower(key)
+		if strings.Contains(keyLower, strings.ToLower(resourceName)) &&
+			strings.Contains(keyLower, "createspectype") {
+			createSpec = schema
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		return nil, fmt.Errorf("no CreateSpecType found")
+	}
+
+	// Convert properties to Terraform attributes
+	attributes := []TerraformAttribute{}
+	requiredSet := make(map[string]bool)
+	for _, r := range createSpec.Required {
+		requiredSet[r] = true
+	}
+
+	for propName, propSchema := range createSpec.Properties {
+		attr := convertToTerraformAttribute(propName, propSchema, requiredSet[propName], "", spec)
+		attributes = append(attributes, attr)
+	}
+
+	// Sort attributes
+	sort.Slice(attributes, func(i, j int) bool {
+		if attributes[i].Required != attributes[j].Required {
+			return attributes[i].Required
+		}
+		return attributes[i].Name < attributes[j].Name
+	})
+
+	// Add standard metadata attributes
+	standardAttrs := []TerraformAttribute{
+		{Name: "name", GoName: "Name", TfsdkTag: "name", Type: "string",
+			Description: fmt.Sprintf("Name of the %s. Must be unique within the namespace.", toTitleCase(resourceName)),
+			Required: true, PlanModifier: "RequiresReplace"},
+		{Name: "namespace", GoName: "Namespace", TfsdkTag: "namespace", Type: "string",
+			Description: fmt.Sprintf("Namespace where the %s will be created.", toTitleCase(resourceName)),
+			Required: true, PlanModifier: "RequiresReplace"},
+		{Name: "labels", GoName: "Labels", TfsdkTag: "labels", Type: "map", ElementType: "string",
+			Description: "Labels to apply to this resource.", Optional: true},
+		{Name: "annotations", GoName: "Annotations", TfsdkTag: "annotations", Type: "map", ElementType: "string",
+			Description: "Annotations to apply to this resource.", Optional: true},
+		{Name: "id", GoName: "ID", TfsdkTag: "id", Type: "string",
+			Description: "Unique identifier for the resource.", Computed: true, PlanModifier: "UseStateForUnknown"},
+	}
+
+	attributes = append(standardAttrs, attributes...)
+
+	description := createSpec.Description
+	if description == "" {
+		description = fmt.Sprintf("Manages a %s in F5 Distributed Cloud.", toTitleCase(resourceName))
+	}
+
+	// Generate example usage HCL
+	exampleUsage := generateExampleUsage(resourceName, attributes)
+
+	// Generate API docs URL
+	apiDocsURL := fmt.Sprintf("https://docs.cloud.f5.com/docs/api/%s", strings.ReplaceAll(resourceName, "_", "-"))
+
+	return &ResourceTemplate{
+		Name:          resourceName,
+		TitleCase:     toTitleCase(resourceName),
+		APIPath:       fmt.Sprintf("/api/config/namespaces/%%s/%ss", resourceName),
+		APIPathPlural: resourceName + "s",
+		Description:   cleanDescription(description),
+		Attributes:    attributes,
+		OneOfGroups:   make(map[string][]string),
+		ExampleUsage:  exampleUsage,
+		APIDocsURL:    apiDocsURL,
+	}, nil
+}
+
+// generateExampleUsage creates a sample HCL configuration for the resource
+func generateExampleUsage(resourceName string, attributes []TerraformAttribute) string {
+	var sb strings.Builder
+	sb.WriteString(fmt.Sprintf("resource \"f5xc_%s\" \"example\" {\n", resourceName))
+	sb.WriteString("  name      = \"example\"\n")
+	sb.WriteString("  namespace = \"system\"\n")
+	sb.WriteString("\n")
+	sb.WriteString("  labels = {\n")
+	sb.WriteString("    \"env\" = \"production\"\n")
+	sb.WriteString("  }\n")
+
+	// Add example for optional scalar attributes (skip standard ones)
+	standardAttrs := map[string]bool{"name": true, "namespace": true, "labels": true, "annotations": true, "id": true}
+	for _, attr := range attributes {
+		if standardAttrs[attr.Name] || attr.Computed || attr.IsBlock {
+			continue
+		}
+		if attr.Optional {
+			switch attr.Type {
+			case "string":
+				sb.WriteString(fmt.Sprintf("\n  %s = \"example-value\"\n", attr.Name))
+			case "int64":
+				sb.WriteString(fmt.Sprintf("\n  %s = 0\n", attr.Name))
+			case "bool":
+				sb.WriteString(fmt.Sprintf("\n  %s = false\n", attr.Name))
+			}
+			break // Just add one example optional attribute
+		}
+	}
+
+	// Add example for first nested block with attributes
+	for _, attr := range attributes {
+		if attr.IsBlock && len(attr.NestedAttributes) > 0 {
+			sb.WriteString(fmt.Sprintf("\n  %s {\n", attr.Name))
+			for _, nested := range attr.NestedAttributes {
+				if nested.IsBlock {
+					continue // Skip deeply nested blocks in example
+				}
+				switch nested.Type {
+				case "string":
+					sb.WriteString(fmt.Sprintf("    %s = \"example\"\n", nested.Name))
+				case "int64":
+					sb.WriteString(fmt.Sprintf("    %s = 0\n", nested.Name))
+				case "bool":
+					sb.WriteString(fmt.Sprintf("    %s = false\n", nested.Name))
+				}
+				if len(sb.String()) > 500 { // Keep example concise
+					break
+				}
+			}
+			sb.WriteString("  }\n")
+			break // Just add one example block
+		}
+	}
+
+	sb.WriteString("}")
+	return sb.String()
+}
+
+// Maximum recursion depth for nested schemas to prevent infinite loops
+const maxNestedDepth = 3
+
+func convertToTerraformAttribute(name string, schema SchemaDefinition, required bool, oneOfGroup string, spec *OpenAPI3Spec) TerraformAttribute {
+	return convertToTerraformAttributeWithDepth(name, schema, required, oneOfGroup, spec, 0)
+}
+
+func convertToTerraformAttributeWithDepth(name string, schema SchemaDefinition, required bool, oneOfGroup string, spec *OpenAPI3Spec, depth int) TerraformAttribute {
+	if schema.Ref != "" {
+		schema = resolveRef(schema.Ref, spec)
+	}
+
+	// Convert name to valid Terraform attribute name (lowercase with underscores)
+	tfsdkName := toSnakeCase(name)
+
+	attr := TerraformAttribute{
+		Name:       name,
+		GoName:     toTitleCase(name),
+		TfsdkTag:   tfsdkName,
+		Required:   required,
+		Optional:   !required,
+		OneOfGroup: oneOfGroup,
+		MaxDepth:   depth,
+	}
+
+	// Build description
+	description := schema.Description
+	if schema.XDisplayName != "" {
+		description = schema.XDisplayName + ". " + description
+	}
+	attr.Description = cleanDescription(description)
+	if attr.Description == "" {
+		attr.Description = fmt.Sprintf("Configuration for %s.", name)
+	}
+
+	// Determine type and extract nested attributes
+	switch schema.Type {
+	case "string":
+		attr.Type = "string"
+	case "integer", "number":
+		attr.Type = "int64"
+	case "boolean":
+		attr.Type = "bool"
+	case "array":
+		attr.Type = "list"
+		if schema.Items != nil {
+			itemSchema := *schema.Items
+			if itemSchema.Ref != "" {
+				itemSchema = resolveRef(itemSchema.Ref, spec)
+			}
+			if itemSchema.Type == "object" || len(itemSchema.Properties) > 0 {
+				attr.IsBlock = true
+				attr.NestedBlockType = "list"
+				// Extract nested attributes if within depth limit
+				if depth < maxNestedDepth {
+					attr.NestedAttributes = extractNestedAttributes(itemSchema, spec, depth+1)
+				}
+			} else {
+				attr.ElementType = mapSchemaType(itemSchema.Type)
+			}
+		}
+	case "object":
+		if len(schema.Properties) > 0 {
+			attr.Type = "object"
+			attr.IsBlock = true
+			attr.NestedBlockType = "single"
+			// Extract nested attributes if within depth limit
+			if depth < maxNestedDepth {
+				attr.NestedAttributes = extractNestedAttributes(schema, spec, depth+1)
+			}
+		} else if schema.AdditionalProperties != nil {
+			attr.Type = "map"
+			attr.ElementType = "string"
+		} else {
+			attr.Type = "object"
+			attr.IsBlock = true
+			attr.NestedBlockType = "single"
+		}
+	default:
+		if len(schema.Properties) > 0 {
+			attr.Type = "object"
+			attr.IsBlock = true
+			attr.NestedBlockType = "single"
+			// Extract nested attributes if within depth limit
+			if depth < maxNestedDepth {
+				attr.NestedAttributes = extractNestedAttributes(schema, spec, depth+1)
+			}
+		} else {
+			attr.Type = "string"
+		}
+	}
+
+	return attr
+}
+
+// extractNestedAttributes extracts attributes from an object schema's properties
+func extractNestedAttributes(schema SchemaDefinition, spec *OpenAPI3Spec, depth int) []TerraformAttribute {
+	if depth > maxNestedDepth {
+		return nil
+	}
+
+	requiredSet := make(map[string]bool)
+	for _, r := range schema.Required {
+		requiredSet[r] = true
+	}
+
+	var attrs []TerraformAttribute
+	for propName, propSchema := range schema.Properties {
+		attr := convertToTerraformAttributeWithDepth(propName, propSchema, requiredSet[propName], "", spec, depth)
+		attrs = append(attrs, attr)
+	}
+
+	// Sort attributes: required first, then alphabetically
+	sort.Slice(attrs, func(i, j int) bool {
+		if attrs[i].Required != attrs[j].Required {
+			return attrs[i].Required
+		}
+		return attrs[i].Name < attrs[j].Name
+	})
+
+	return attrs
+}
+
+func resolveRef(ref string, spec *OpenAPI3Spec) SchemaDefinition {
+	parts := strings.Split(ref, "/")
+	schemaName := parts[len(parts)-1]
+
+	if schema, ok := spec.Components.Schemas[schemaName]; ok {
+		return schema
+	}
+	if schema, ok := schemaCache[schemaName]; ok {
+		return schema
+	}
+	return SchemaDefinition{Type: "string"}
+}
+
+func mapSchemaType(t string) string {
+	switch t {
+	case "string":
+		return "string"
+	case "integer", "number":
+		return "int64"
+	case "boolean":
+		return "bool"
+	default:
+		return "string"
+	}
+}
+
+func cleanDescription(desc string) string {
+	// Remove example and validation rules sections
+	desc = regexp.MustCompile(`\s*Example:.*`).ReplaceAllString(desc, "")
+	desc = regexp.MustCompile(`\s*Validation Rules:.*`).ReplaceAllString(desc, "")
+	// Remove ves.io validation annotations (common pattern in F5 XC specs)
+	desc = regexp.MustCompile(`\s*ves\.io\.[^\s]*:\s*\[.*?\]`).ReplaceAllString(desc, "")
+	// Remove escaped quotes and backslashes from raw spec data
+	desc = strings.ReplaceAll(desc, `\"`, `"`)
+	desc = strings.ReplaceAll(desc, `\\`, `\`)
+	// Normalize whitespace
+	desc = regexp.MustCompile(`[\n\r]+`).ReplaceAllString(desc, " ")
+	desc = regexp.MustCompile(`\s+`).ReplaceAllString(desc, " ")
+	// Escape quotes for Go string literals
+	desc = strings.ReplaceAll(desc, `"`, "'")
+	desc = strings.TrimSpace(desc)
+	// Limit description length to prevent overly long strings
+	if len(desc) > 500 {
+		desc = desc[:497] + "..."
+	}
+	return desc
+}
+
+func toTitleCase(s string) string {
+	acronyms := map[string]bool{
+		"http": true, "https": true, "api": true, "dns": true, "waf": true,
+		"tls": true, "tcp": true, "udp": true, "ssl": true, "aws": true,
+		"gcp": true, "vpc": true, "vnet": true, "tgw": true, "ike": true,
+		"vpn": true, "ip": true, "id": true, "url": true, "uri": true,
+		"ntp": true, "ssh": true, "ha": true, "s2s": true, "sli": true,
+		"slo": true, "oci": true, "kvm": true, "nfv": true, "bgp": true,
+		"cdn": true, "crl": true, "apm": true, "ipv6": true, "ipv4": true,
+		"k8s": true, "acl": true,
+	}
+
+	compounds := map[string]string{
+		"loadbalancer": "LoadBalancer",
+		"bigip":        "BigIP",
+	}
+
+	parts := strings.Split(s, "_")
+	for i, part := range parts {
+		lower := strings.ToLower(part)
+		if acronyms[lower] {
+			parts[i] = strings.ToUpper(part)
+		} else if replacement, ok := compounds[lower]; ok {
+			parts[i] = replacement
+		} else {
+			parts[i] = strings.Title(lower)
+		}
+	}
+	return strings.Join(parts, "")
+}
+
+// toSnakeCase converts a string to lowercase snake_case for Terraform attribute names
+func toSnakeCase(s string) string {
+	// First, insert underscores before uppercase letters that follow lowercase letters
+	// e.g., "AWAFPayG3Gbps" -> "AWAF_Pay_G3_Gbps"
+	var result strings.Builder
+	for i, r := range s {
+		if i > 0 && r >= 'A' && r <= 'Z' {
+			prev := rune(s[i-1])
+			// Add underscore if previous char is lowercase or a digit
+			if (prev >= 'a' && prev <= 'z') || (prev >= '0' && prev <= '9') {
+				result.WriteRune('_')
+			}
+		}
+		result.WriteRune(r)
+	}
+	// Convert to lowercase and replace any existing underscores
+	name := strings.ToLower(result.String())
+
+	// Handle reserved Terraform attribute names
+	reservedNames := map[string]string{
+		"count":       "item_count",
+		"for_each":    "for_each_items",
+		"depends_on":  "depends_on_refs",
+		"provider":    "provider_ref",
+		"lifecycle":   "lifecycle_config",
+		"provisioner": "provisioner_config",
+		"connection":  "connection_config",
+		"locals":      "locals_config",
+	}
+
+	if replacement, ok := reservedNames[name]; ok {
+		return replacement
+	}
+	return name
+}
+
+func generateResourceFile(resource *ResourceTemplate) error {
+	outputPath := filepath.Join(outputDir, resource.Name+"_resource.go")
+
+	// Create template with custom functions
+	funcMap := template.FuncMap{
+		"renderNestedAttrs": renderNestedAttributes,
+		"renderNestedBlocks": renderNestedBlocks,
+	}
+
+	tmpl, err := template.New("resource").Funcs(funcMap).Parse(resourceTemplate)
+	if err != nil {
+		return fmt.Errorf("template parse error: %w", err)
+	}
+
+	f, err := os.Create(outputPath)
+	if err != nil {
+		return fmt.Errorf("create file error: %w", err)
+	}
+	defer f.Close()
+
+	return tmpl.Execute(f, resource)
+}
+
+// renderNestedAttributes generates the Attributes map for nested blocks
+func renderNestedAttributes(attrs []TerraformAttribute, indent string) string {
+	if len(attrs) == 0 {
+		return ""
+	}
+
+	var sb strings.Builder
+	sb.WriteString(indent + "Attributes: map[string]schema.Attribute{\n")
+
+	for _, attr := range attrs {
+		if attr.IsBlock {
+			continue // Blocks are handled separately
+		}
+
+		attrType := "String"
+		switch attr.Type {
+		case "int64":
+			attrType = "Int64"
+		case "bool":
+			attrType = "Bool"
+		case "map":
+			attrType = "Map"
+		case "list":
+			attrType = "List"
+		}
+
+		// Escape backslashes and quotes in descriptions for Go string literals
+		desc := escapeGoString(attr.Description)
+
+		sb.WriteString(fmt.Sprintf("%s\t\"%s\": schema.%sAttribute{\n", indent, attr.TfsdkTag, attrType))
+		sb.WriteString(fmt.Sprintf("%s\t\tMarkdownDescription: \"%s\",\n", indent, desc))
+
+		if attr.Required {
+			sb.WriteString(fmt.Sprintf("%s\t\tRequired: true,\n", indent))
+		} else if attr.Optional {
+			sb.WriteString(fmt.Sprintf("%s\t\tOptional: true,\n", indent))
+		} else if attr.Computed {
+			sb.WriteString(fmt.Sprintf("%s\t\tComputed: true,\n", indent))
+		}
+
+		if attr.Type == "map" || attr.Type == "list" {
+			sb.WriteString(fmt.Sprintf("%s\t\tElementType: types.StringType,\n", indent))
+		}
+
+		sb.WriteString(fmt.Sprintf("%s\t},\n", indent))
+	}
+
+	sb.WriteString(indent + "},\n")
+	return sb.String()
+}
+
+// escapeGoString escapes a string for use in a Go string literal
+func escapeGoString(s string) string {
+	// Replace backslashes first, then other special characters
+	s = strings.ReplaceAll(s, `\`, `\\`)
+	s = strings.ReplaceAll(s, `"`, `\"`)
+	return s
+}
+
+// renderNestedBlocks generates the Blocks map for nested blocks within a block
+func renderNestedBlocks(attrs []TerraformAttribute, indent string) string {
+	var hasBlocks bool
+	for _, attr := range attrs {
+		if attr.IsBlock {
+			hasBlocks = true
+			break
+		}
+	}
+
+	if !hasBlocks {
+		return ""
+	}
+
+	var sb strings.Builder
+	sb.WriteString(indent + "Blocks: map[string]schema.Block{\n")
+
+	for _, attr := range attrs {
+		if !attr.IsBlock {
+			continue
+		}
+
+		blockType := "SingleNestedBlock"
+		if attr.NestedBlockType == "list" {
+			blockType = "ListNestedBlock"
+		}
+
+		// Escape backslashes and quotes in descriptions
+		desc := escapeGoString(attr.Description)
+
+		sb.WriteString(fmt.Sprintf("%s\t\"%s\": schema.%s{\n", indent, attr.TfsdkTag, blockType))
+		sb.WriteString(fmt.Sprintf("%s\t\tMarkdownDescription: \"%s\",\n", indent, desc))
+
+		if attr.NestedBlockType == "list" {
+			sb.WriteString(fmt.Sprintf("%s\t\tNestedObject: schema.NestedBlockObject{\n", indent))
+			if len(attr.NestedAttributes) > 0 {
+				sb.WriteString(renderNestedAttributes(attr.NestedAttributes, indent+"\t\t\t"))
+				sb.WriteString(renderNestedBlocks(attr.NestedAttributes, indent+"\t\t\t"))
+			} else {
+				sb.WriteString(fmt.Sprintf("%s\t\t\tAttributes: map[string]schema.Attribute{},\n", indent))
+			}
+			sb.WriteString(fmt.Sprintf("%s\t\t},\n", indent))
+		} else {
+			// SingleNestedBlock
+			if len(attr.NestedAttributes) > 0 {
+				sb.WriteString(renderNestedAttributes(attr.NestedAttributes, indent+"\t\t"))
+				sb.WriteString(renderNestedBlocks(attr.NestedAttributes, indent+"\t\t"))
+			}
+		}
+
+		sb.WriteString(fmt.Sprintf("%s\t},\n", indent))
+	}
+
+	sb.WriteString(indent + "},\n")
+	return sb.String()
+}
+
+func generateClientTypes(resource *ResourceTemplate) error {
+	outputPath := filepath.Join(clientDir, resource.Name+"_types.go")
+
+	tmpl, err := template.New("client").Parse(clientTemplate)
+	if err != nil {
+		return fmt.Errorf("template parse error: %w", err)
+	}
+
+	f, err := os.Create(outputPath)
+	if err != nil {
+		return fmt.Errorf("create file error: %w", err)
+	}
+	defer f.Close()
+
+	return tmpl.Execute(f, resource)
+}
+
+func generateDataSource(resource *ResourceTemplate) error {
+	outputPath := filepath.Join(outputDir, resource.Name+"_data_source.go")
+
+	tmpl, err := template.New("datasource").Parse(dataSourceTemplate)
+	if err != nil {
+		return fmt.Errorf("template parse error: %w", err)
+	}
+
+	f, err := os.Create(outputPath)
+	if err != nil {
+		return fmt.Errorf("create file error: %w", err)
+	}
+	defer f.Close()
+
+	return tmpl.Execute(f, resource)
+}
+
+func generateCombinedClientTypes(results []GenerationResult) {
+	// This is handled by individual client type files
+}
+
+func generateProviderRegistration(results []GenerationResult) {
+	// Collect successful resources
+	var resources []string
+	var dataSources []string
+	for _, r := range results {
+		if r.Success {
+			titleCase := toTitleCase(r.ResourceName)
+			resources = append(resources, fmt.Sprintf("\t\tNew%sResource,", titleCase))
+			dataSources = append(dataSources, fmt.Sprintf("\t\tNew%sDataSource,", titleCase))
+		}
+	}
+
+	// Sort for consistent output
+	sort.Strings(resources)
+	sort.Strings(dataSources)
+
+	// Generate provider.go file
+	providerPath := filepath.Join(outputDir, "provider.go")
+	fmt.Printf("\n📝 Updating provider.go with %d resources and %d data sources...\n", len(resources), len(dataSources))
+
+	providerContent := fmt.Sprintf(`// Code generated by generate-all-schemas.go. DO NOT EDIT.
+// Source: F5 XC OpenAPI specification
+
+package provider
+
+import (
+	"context"
+	"os"
+
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/provider"
+	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+
+	"github.com/f5xc/terraform-provider-f5xc/internal/client"
+)
+
+// Ensure F5XCProvider satisfies various provider interfaces.
+var _ provider.Provider = &F5XCProvider{}
+
+// F5XCProvider defines the provider implementation.
+type F5XCProvider struct {
+	// version is set to the provider version on release, "dev" when the
+	// provider is built and ran locally, and "test" when running acceptance
+	// testing.
+	version string
+}
+
+// F5XCProviderModel describes the provider data model.
+type F5XCProviderModel struct {
+	APIToken types.String `+"`"+`tfsdk:"api_token"`+"`"+`
+	APIURL   types.String `+"`"+`tfsdk:"api_url"`+"`"+`
+}
+
+func (p *F5XCProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
+	resp.TypeName = "f5xc"
+	resp.Version = p.version
+}
+
+func (p *F5XCProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		MarkdownDescription: "Terraform provider for F5 Distributed Cloud (F5XC). " +
+			"This is an open source community provider built from public F5 API documentation.",
+		Attributes: map[string]schema.Attribute{
+			"api_token": schema.StringAttribute{
+				MarkdownDescription: "F5 Distributed Cloud API Token. Can also be set via F5XC_API_TOKEN environment variable.",
+				Optional:            true,
+				Sensitive:           true,
+			},
+			"api_url": schema.StringAttribute{
+				MarkdownDescription: "F5 Distributed Cloud API URL. Defaults to https://console.ves.volterra.io/api. " +
+					"Can also be set via F5XC_API_URL environment variable.",
+				Optional: true,
+			},
+		},
+	}
+}
+
+func (p *F5XCProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
+	tflog.Info(ctx, "Configuring F5XC client")
+
+	var config F5XCProviderModel
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	// Check for environment variables if not set in configuration
+	apiToken := os.Getenv("F5XC_API_TOKEN")
+	apiURL := os.Getenv("F5XC_API_URL")
+
+	// Configuration values override environment variables
+	if !config.APIToken.IsNull() {
+		apiToken = config.APIToken.ValueString()
+	}
+
+	if !config.APIURL.IsNull() {
+		apiURL = config.APIURL.ValueString()
+	}
+
+	// Set default API URL if not provided
+	if apiURL == "" {
+		apiURL = "https://console.ves.volterra.io/api"
+	}
+
+	// Validate that API token is provided
+	if apiToken == "" {
+		resp.Diagnostics.AddAttributeError(
+			path.Root("api_token"),
+			"Missing F5XC API Token",
+			"The provider cannot create the F5XC API client as there is a missing or empty value for the F5XC API token. "+
+				"Set the api_token value in the configuration or use the F5XC_API_TOKEN environment variable. "+
+				"If either is already set, ensure the value is not empty.",
+		)
+		return
+	}
+
+	// Create the F5XC client
+	c := client.NewClient(apiURL, apiToken)
+
+	// Make the client available during DataSource and Resource type Configure methods
+	resp.DataSourceData = c
+	resp.ResourceData = c
+
+	tflog.Info(ctx, "Configured F5XC client", map[string]any{"success": true, "api_url": apiURL})
+}
+
+func (p *F5XCProvider) Resources(ctx context.Context) []func() resource.Resource {
+	return []func() resource.Resource{
+%s
+	}
+}
+
+func (p *F5XCProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
+	return []func() datasource.DataSource{
+%s
+	}
+}
+
+func New(version string) func() provider.Provider {
+	return func() provider.Provider {
+		return &F5XCProvider{
+			version: version,
+		}
+	}
+}
+`, strings.Join(resources, "\n"), strings.Join(dataSources, "\n"))
+
+	if err := os.WriteFile(providerPath, []byte(providerContent), 0644); err != nil {
+		fmt.Printf("❌ Error writing provider.go: %v\n", err)
+		return
+	}
+
+	fmt.Printf("✅ Updated %s\n", providerPath)
+}
+
+const resourceTemplate = `// Code generated by generate-all-schemas.go. DO NOT EDIT.
+// Source: F5 XC OpenAPI specification
+
+package provider
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+
+	"github.com/f5xc/terraform-provider-f5xc/internal/client"
+)
+
+var (
+	_ resource.Resource                = &{{.TitleCase}}Resource{}
+	_ resource.ResourceWithConfigure   = &{{.TitleCase}}Resource{}
+	_ resource.ResourceWithImportState = &{{.TitleCase}}Resource{}
+)
+
+func New{{.TitleCase}}Resource() resource.Resource {
+	return &{{.TitleCase}}Resource{}
+}
+
+type {{.TitleCase}}Resource struct {
+	client *client.Client
+}
+
+type {{.TitleCase}}ResourceModel struct {
+{{- range .Attributes}}
+{{- if not .IsBlock}}
+	{{.GoName}} types.{{if eq .Type "string"}}String{{else if eq .Type "int64"}}Int64{{else if eq .Type "bool"}}Bool{{else if eq .Type "map"}}Map{{else if eq .Type "list"}}List{{else}}String{{end}} ` + "`" + `tfsdk:"{{.TfsdkTag}}"` + "`" + `
+{{- end}}
+{{- end}}
+}
+
+func (r *{{.TitleCase}}Resource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_{{.Name}}"
+}
+
+func (r *{{.TitleCase}}Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		MarkdownDescription: "{{.Description}}",
+		Attributes: map[string]schema.Attribute{
+{{- range .Attributes}}
+{{- if not .IsBlock}}
+			"{{.TfsdkTag}}": schema.{{if eq .Type "string"}}String{{else if eq .Type "int64"}}Int64{{else if eq .Type "bool"}}Bool{{else if eq .Type "map"}}Map{{else if eq .Type "list"}}List{{else}}String{{end}}Attribute{
+				MarkdownDescription: "{{.Description}}",
+{{- if .Required}}
+				Required: true,
+{{- else if .Optional}}
+				Optional: true,
+{{- else if .Computed}}
+				Computed: true,
+{{- end}}
+{{- if eq .Type "map"}}
+				ElementType: types.StringType,
+{{- end}}
+{{- if eq .Type "list"}}
+				ElementType: types.StringType,
+{{- end}}
+{{- if .PlanModifier}}
+				PlanModifiers: []planmodifier.String{
+{{- if eq .PlanModifier "RequiresReplace"}}
+					stringplanmodifier.RequiresReplace(),
+{{- else if eq .PlanModifier "UseStateForUnknown"}}
+					stringplanmodifier.UseStateForUnknown(),
+{{- end}}
+				},
+{{- end}}
+			},
+{{- end}}
+{{- end}}
+		},
+		Blocks: map[string]schema.Block{
+{{- range .Attributes}}
+{{- if .IsBlock}}
+			"{{.TfsdkTag}}": schema.{{if eq .NestedBlockType "single"}}SingleNestedBlock{{else if eq .NestedBlockType "list"}}ListNestedBlock{{else}}SingleNestedBlock{{end}}{
+				MarkdownDescription: "{{.Description}}",
+{{- if eq .NestedBlockType "list"}}
+				NestedObject: schema.NestedBlockObject{
+{{- if .NestedAttributes}}
+{{renderNestedAttrs .NestedAttributes "\t\t\t\t\t"}}{{renderNestedBlocks .NestedAttributes "\t\t\t\t\t"}}{{- else}}
+					Attributes: map[string]schema.Attribute{},
+{{- end}}
+				},
+{{- else}}
+{{- if .NestedAttributes}}
+{{renderNestedAttrs .NestedAttributes "\t\t\t\t"}}{{renderNestedBlocks .NestedAttributes "\t\t\t\t"}}{{- end}}
+{{- end}}
+			},
+{{- end}}
+{{- end}}
+		},
+	}
+}
+
+func (r *{{.TitleCase}}Resource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+	client, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+	r.client = client
+}
+
+func (r *{{.TitleCase}}Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var data {{.TitleCase}}ResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	apiResource := &client.{{.TitleCase}}{
+		Metadata: client.Metadata{
+			Name:      data.Name.ValueString(),
+			Namespace: data.Namespace.ValueString(),
+		},
+		Spec: client.{{.TitleCase}}Spec{},
+	}
+
+	if !data.Labels.IsNull() {
+		labels := make(map[string]string)
+		resp.Diagnostics.Append(data.Labels.ElementsAs(ctx, &labels, false)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		apiResource.Metadata.Labels = labels
+	}
+
+	if !data.Annotations.IsNull() {
+		annotations := make(map[string]string)
+		resp.Diagnostics.Append(data.Annotations.ElementsAs(ctx, &annotations, false)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		apiResource.Metadata.Annotations = annotations
+	}
+
+	created, err := r.client.Create{{.TitleCase}}(ctx, apiResource)
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create {{.TitleCase}}: %s", err))
+		return
+	}
+
+	data.ID = types.StringValue(created.Metadata.Name)
+	tflog.Trace(ctx, "created {{.TitleCase}} resource")
+	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+}
+
+func (r *{{.TitleCase}}Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var data {{.TitleCase}}ResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	apiResource, err := r.client.Get{{.TitleCase}}(ctx, data.Namespace.ValueString(), data.Name.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read {{.TitleCase}}: %s", err))
+		return
+	}
+
+	data.ID = types.StringValue(apiResource.Metadata.Name)
+	data.Name = types.StringValue(apiResource.Metadata.Name)
+	data.Namespace = types.StringValue(apiResource.Metadata.Namespace)
+
+	if len(apiResource.Metadata.Labels) > 0 {
+		labels, diags := types.MapValueFrom(ctx, types.StringType, apiResource.Metadata.Labels)
+		resp.Diagnostics.Append(diags...)
+		if !resp.Diagnostics.HasError() {
+			data.Labels = labels
+		}
+	} else {
+		data.Labels = types.MapNull(types.StringType)
+	}
+
+	if len(apiResource.Metadata.Annotations) > 0 {
+		annotations, diags := types.MapValueFrom(ctx, types.StringType, apiResource.Metadata.Annotations)
+		resp.Diagnostics.Append(diags...)
+		if !resp.Diagnostics.HasError() {
+			data.Annotations = annotations
+		}
+	} else {
+		data.Annotations = types.MapNull(types.StringType)
+	}
+
+	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+}
+
+func (r *{{.TitleCase}}Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var data {{.TitleCase}}ResourceModel
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	apiResource := &client.{{.TitleCase}}{
+		Metadata: client.Metadata{
+			Name:      data.Name.ValueString(),
+			Namespace: data.Namespace.ValueString(),
+		},
+		Spec: client.{{.TitleCase}}Spec{},
+	}
+
+	if !data.Labels.IsNull() {
+		labels := make(map[string]string)
+		resp.Diagnostics.Append(data.Labels.ElementsAs(ctx, &labels, false)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		apiResource.Metadata.Labels = labels
+	}
+
+	if !data.Annotations.IsNull() {
+		annotations := make(map[string]string)
+		resp.Diagnostics.Append(data.Annotations.ElementsAs(ctx, &annotations, false)...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+		apiResource.Metadata.Annotations = annotations
+	}
+
+	updated, err := r.client.Update{{.TitleCase}}(ctx, apiResource)
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to update {{.TitleCase}}: %s", err))
+		return
+	}
+
+	data.ID = types.StringValue(updated.Metadata.Name)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+}
+
+func (r *{{.TitleCase}}Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data {{.TitleCase}}ResourceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	err := r.client.Delete{{.TitleCase}}(ctx, data.Namespace.ValueString(), data.Name.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to delete {{.TitleCase}}: %s", err))
+		return
+	}
+}
+
+func (r *{{.TitleCase}}Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+}
+`
+
+const clientTemplate = `// Code generated by generate-all-schemas.go. DO NOT EDIT.
+// Source: F5 XC OpenAPI specification
+
+package client
+
+import (
+	"context"
+	"fmt"
+)
+
+// {{.TitleCase}} represents a F5XC {{.TitleCase}}
+type {{.TitleCase}} struct {
+	Metadata Metadata       ` + "`" + `json:"metadata"` + "`" + `
+	Spec     {{.TitleCase}}Spec ` + "`" + `json:"spec"` + "`" + `
+}
+
+// {{.TitleCase}}Spec defines the specification for {{.TitleCase}}
+type {{.TitleCase}}Spec struct {
+	Description string ` + "`" + `json:"description,omitempty"` + "`" + `
+}
+
+// Create{{.TitleCase}} creates a new {{.TitleCase}}
+func (c *Client) Create{{.TitleCase}}(ctx context.Context, resource *{{.TitleCase}}) (*{{.TitleCase}}, error) {
+	var result {{.TitleCase}}
+	path := fmt.Sprintf("{{.APIPath}}", resource.Metadata.Namespace)
+	err := c.Post(ctx, path, resource, &result)
+	return &result, err
+}
+
+// Get{{.TitleCase}} retrieves a {{.TitleCase}}
+func (c *Client) Get{{.TitleCase}}(ctx context.Context, namespace, name string) (*{{.TitleCase}}, error) {
+	var result {{.TitleCase}}
+	path := fmt.Sprintf("{{.APIPath}}/%s", namespace, name)
+	err := c.Get(ctx, path, &result)
+	return &result, err
+}
+
+// Update{{.TitleCase}} updates a {{.TitleCase}}
+func (c *Client) Update{{.TitleCase}}(ctx context.Context, resource *{{.TitleCase}}) (*{{.TitleCase}}, error) {
+	var result {{.TitleCase}}
+	path := fmt.Sprintf("{{.APIPath}}/%s", resource.Metadata.Namespace, resource.Metadata.Name)
+	err := c.Put(ctx, path, resource, &result)
+	return &result, err
+}
+
+// Delete{{.TitleCase}} deletes a {{.TitleCase}}
+func (c *Client) Delete{{.TitleCase}}(ctx context.Context, namespace, name string) error {
+	path := fmt.Sprintf("{{.APIPath}}/%s", namespace, name)
+	return c.Delete(ctx, path)
+}
+`
+
+const dataSourceTemplate = `// Code generated by generate-all-schemas.go. DO NOT EDIT.
+// Source: F5 XC OpenAPI specification
+
+package provider
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/types"
+
+	"github.com/f5xc/terraform-provider-f5xc/internal/client"
+)
+
+var (
+	_ datasource.DataSource              = &{{.TitleCase}}DataSource{}
+	_ datasource.DataSourceWithConfigure = &{{.TitleCase}}DataSource{}
+)
+
+func New{{.TitleCase}}DataSource() datasource.DataSource {
+	return &{{.TitleCase}}DataSource{}
+}
+
+type {{.TitleCase}}DataSource struct {
+	client *client.Client
+}
+
+type {{.TitleCase}}DataSourceModel struct {
+	ID          types.String ` + "`" + `tfsdk:"id"` + "`" + `
+	Name        types.String ` + "`" + `tfsdk:"name"` + "`" + `
+	Namespace   types.String ` + "`" + `tfsdk:"namespace"` + "`" + `
+	Description types.String ` + "`" + `tfsdk:"description"` + "`" + `
+	Labels      types.Map    ` + "`" + `tfsdk:"labels"` + "`" + `
+	Annotations types.Map    ` + "`" + `tfsdk:"annotations"` + "`" + `
+}
+
+func (d *{{.TitleCase}}DataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_{{.Name}}"
+}
+
+func (d *{{.TitleCase}}DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		MarkdownDescription: "{{.Description}}",
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				MarkdownDescription: "Unique identifier for the resource.",
+				Computed:            true,
+			},
+			"name": schema.StringAttribute{
+				MarkdownDescription: "Name of the {{.TitleCase}}.",
+				Required:            true,
+			},
+			"namespace": schema.StringAttribute{
+				MarkdownDescription: "Namespace where the {{.TitleCase}} exists.",
+				Required:            true,
+			},
+			"description": schema.StringAttribute{
+				MarkdownDescription: "Description of the {{.TitleCase}}.",
+				Computed:            true,
+			},
+			"labels": schema.MapAttribute{
+				MarkdownDescription: "Labels applied to this resource.",
+				Computed:            true,
+				ElementType:         types.StringType,
+			},
+			"annotations": schema.MapAttribute{
+				MarkdownDescription: "Annotations applied to this resource.",
+				Computed:            true,
+				ElementType:         types.StringType,
+			},
+		},
+	}
+}
+
+func (d *{{.TitleCase}}DataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+	client, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError("Unexpected Data Source Configure Type", "Expected *client.Client")
+		return
+	}
+	d.client = client
+}
+
+func (d *{{.TitleCase}}DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data {{.TitleCase}}DataSourceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resource, err := d.client.Get{{.TitleCase}}(ctx, data.Namespace.ValueString(), data.Name.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read {{.TitleCase}}: %s", err))
+		return
+	}
+
+	data.ID = types.StringValue(resource.Metadata.Name)
+	data.Name = types.StringValue(resource.Metadata.Name)
+	data.Namespace = types.StringValue(resource.Metadata.Namespace)
+	data.Description = types.StringValue(resource.Spec.Description)
+
+	if len(resource.Metadata.Labels) > 0 {
+		labels, diags := types.MapValueFrom(ctx, types.StringType, resource.Metadata.Labels)
+		resp.Diagnostics.Append(diags...)
+		if !resp.Diagnostics.HasError() {
+			data.Labels = labels
+		}
+	} else {
+		data.Labels = types.MapNull(types.StringType)
+	}
+
+	if len(resource.Metadata.Annotations) > 0 {
+		annotations, diags := types.MapValueFrom(ctx, types.StringType, resource.Metadata.Annotations)
+		resp.Diagnostics.Append(diags...)
+		if !resp.Diagnostics.HasError() {
+			data.Annotations = annotations
+		}
+	} else {
+		data.Annotations = types.MapNull(types.StringType)
+	}
+
+	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
+}
+`
