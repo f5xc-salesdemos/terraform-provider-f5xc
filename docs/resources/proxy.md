@@ -63,7 +63,7 @@ The following arguments are optional:
 
 `dynamic_proxy` - (Optional) DynamicProxyType. See [Dynamic Proxy](#dynamic-proxy) below for details.
 
-`http_proxy` - (Optional) Http Connect Proxy. Parameters for Http Connect Proxy. See [Http Proxy](#http-proxy) below for details.
+`http_proxy` - (Optional) HTTP Connect Proxy. Parameters for HTTP Connect Proxy. See [HTTP Proxy](#http-proxy) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
@@ -83,7 +83,7 @@ The following arguments are optional:
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
-`tls_intercept` - (Optional) Configuration for TLS interception. Configuration to enable TLS interception. See [Tls Intercept](#tls-intercept) below for details.
+`tls_intercept` - (Optional) Configuration for TLS interception. Configuration to enable TLS interception. See [TLS Intercept](#tls-intercept) below for details.
 
 ### Attributes Reference
 
@@ -117,41 +117,41 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Dynamic Proxy
 
-`disable_dns_masquerade` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Dns Masquerade](#nestedblock--dynamic_proxy--disable_dns_masquerade) below.
+`disable_dns_masquerade` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable DNS Masquerade](#nestedblock--dynamic_proxy--disable_dns_masquerade) below.
 
-`domains` - (Optional) Domains. A list of Domains to be proxied. Wildcard hosts are supported in the suffix or prefix form Supported Domains and search order: 1. Exact Domain names: `www.foo.com.` 2 (`List`).
+`domains` - (Optional) Domains. A list of Domains to be proxied. Wildcard hosts are supported in the suffix or prefix form Supported Domains and search order: 1. Exact Domain names: `www.foo.com.` 2. Domains starting with a Wildcard: *.foo.com. Not supported Domains: - Just a Wildcard: * - A Wildcard and TLD with no root Domain: *.com. - A Wildcard not matching a whole DNS label. e.g. *.foo.com and *.bar.foo.com are valid Wildcards however *bar.foo.com, *-bar.foo.com, and bar*.foo.com are all invalid. Additional note.. (`List`).
 
-`enable_dns_masquerade` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Dns Masquerade](#nestedblock--dynamic_proxy--enable_dns_masquerade) below.
+`enable_dns_masquerade` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable DNS Masquerade](#nestedblock--dynamic_proxy--enable_dns_masquerade) below.
 
-`http_proxy` - (Optional) Dynamic HTTP Proxy Type. Parameters for dynamic HTTP proxy. See [Http Proxy](#nestedblock--dynamic_proxy--http_proxy) below.
+`http_proxy` - (Optional) Dynamic HTTP Proxy Type. Parameters for dynamic HTTP proxy. See [HTTP Proxy](#nestedblock--dynamic_proxy--http_proxy) below.
 
-`https_proxy` - (Optional) Dynamic HTTPS Proxy Type. Parameters for dynamic HTTPS proxy. See [Https Proxy](#nestedblock--dynamic_proxy--https_proxy) below.
+`https_proxy` - (Optional) Dynamic HTTPS Proxy Type. Parameters for dynamic HTTPS proxy. See [HTTPS Proxy](#nestedblock--dynamic_proxy--https_proxy) below.
 
 `sni_proxy` - (Optional) Dynamic SNI Proxy Type. Parameters for dynamic SNI proxy. See [Sni Proxy](#nestedblock--dynamic_proxy--sni_proxy) below.
 
 <a id="nestedblock--dynamic_proxy--disable_dns_masquerade"></a>
 
-### Dynamic Proxy Disable Dns Masquerade
+### Dynamic Proxy Disable DNS Masquerade
 
 <a id="nestedblock--dynamic_proxy--enable_dns_masquerade"></a>
 
-### Dynamic Proxy Enable Dns Masquerade
+### Dynamic Proxy Enable DNS Masquerade
 
 <a id="nestedblock--dynamic_proxy--http_proxy"></a>
 
-### Dynamic Proxy Http Proxy
+### Dynamic Proxy HTTP Proxy
 
 `more_option` - (Optional) Advanced Options. This defines various options to define a route. See [More Option](#nestedblock--dynamic_proxy--http_proxy--more_option) below.
 
 <a id="nestedblock--dynamic_proxy--http_proxy--more_option"></a>
 
-### Dynamic Proxy Http Proxy More Option
+### Dynamic Proxy HTTP Proxy More Option
 
-`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. See [Buffer Policy](#nestedblock--dynamic_proxy--http_proxy--more_option--buffer_policy) below.
+`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. We can specify the maximum buffer size and buffer interval with this config. Buffering can be enabled and disabled at VirtualHost and Route levels Route level buffer configuration takes precedence. See [Buffer Policy](#nestedblock--dynamic_proxy--http_proxy--more_option--buffer_policy) below.
 
-`compression_params` - (Optional) Compression Parameters. Enables loadbalancer to compress dispatched data from an upstream service upon client request. See [Compression Params](#nestedblock--dynamic_proxy--http_proxy--more_option--compression_params) below.
+`compression_params` - (Optional) Compression Parameters. Enables loadbalancer to compress dispatched data from an upstream service upon client request. The content is compressed and then sent to the client with the appropriate headers if either response and request allow. Only GZIP compression is supported. By default compression will be skipped when: A request does NOT contain accept-encoding header. A request includes accept-encoding header, but it does not contain “gzip” or “*”. A request includes accept-encoding ... See [Compression Params](#nestedblock--dynamic_proxy--http_proxy--more_option--compression_params) below.
 
-`custom_errors` - (Optional) Custom Error Responses. Map of integer error codes as keys and string values that can be used to provide custom http pages for each error code. See [Custom Errors](#nestedblock--dynamic_proxy--http_proxy--more_option--custom_errors) below.
+`custom_errors` - (Optional) Custom Error Responses. Map of integer error codes as keys and string values that can be used to provide custom HTTP pages for each error code. Key of the map can be either response code class or HTTP Error code. Response code classes for key is configured as follows 3 -- for 3xx response code class 4 -- for 4xx response code class 5 -- for 5xx response code class Value of the map is string which represents custom HTTP responses. Specific response code takes preference when both response code... See [Custom Errors](#nestedblock--dynamic_proxy--http_proxy--more_option--custom_errors) below.
 
 `disable_default_error_pages` - (Optional) Disable Default Error Pages. Disable the use of default F5XC error pages (`Bool`).
 
@@ -159,11 +159,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `enable_path_normalize` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Path Normalize](#nestedblock--dynamic_proxy--http_proxy--more_option--enable_path_normalize) below.
 
-`idle_timeout` - (Optional) Idle Timeout. The amount of time that a stream can exist without upstream or downstream activity, in milliseconds (`Number`).
+`idle_timeout` - (Optional) Idle Timeout. The amount of time that a stream can exist without upstream or downstream activity, in milliseconds. The stream is terminated with a HTTP 504 (Gateway Timeout) error code if no upstream response header has been received, otherwise the stream is reset (`Number`).
 
-`max_request_header_size` - (Optional) Maximum Request Header Size. The maximum request header size for downstream connections, in KiB. A HTTP 431 (Request Header Fields Too Large) error code is sent for requests that exceed this size (`Number`).
+`max_request_header_size` - (Optional) Maximum Request Header Size. The maximum request header size for downstream connections, in KiB. A HTTP 431 (Request Header Fields Too Large) error code is sent for requests that exceed this size. If multiple load balancers share the same advertise_policy, the highest value configured across all such load balancers is used for all the load balancers in question (`Number`).
 
-`request_cookies_to_add` - (Optional) Add Cookies in Cookie Header. Cookies are key-value pairs to be added to HTTP request being routed towards upstream. See [Request Cookies To Add](#nestedblock--dynamic_proxy--http_proxy--more_option--request_cookies_to_add) below.
+`request_cookies_to_add` - (Optional) Add Cookies in Cookie Header. Cookies are key-value pairs to be added to HTTP request being routed towards upstream. Cookies specified at this level are applied after cookies from matched Route are applied. See [Request Cookies To Add](#nestedblock--dynamic_proxy--http_proxy--more_option--request_cookies_to_add) below.
 
 `request_cookies_to_remove` - (Optional) Remove Cookies from Cookie Header. List of keys of Cookies to be removed from the HTTP request being sent towards upstream (`List`).
 
@@ -171,7 +171,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `request_headers_to_remove` - (Optional) Remove Request Headers. List of keys of Headers to be removed from the HTTP request being sent towards upstream (`List`).
 
-`response_cookies_to_add` - (Optional) Add Set-Cookie Headers. Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream. See [Response Cookies To Add](#nestedblock--dynamic_proxy--http_proxy--more_option--response_cookies_to_add) below.
+`response_cookies_to_add` - (Optional) Add Set-Cookie Headers. Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream. Cookies specified at this level are applied after cookies from matched Route are applied. See [Response Cookies To Add](#nestedblock--dynamic_proxy--http_proxy--more_option--response_cookies_to_add) below.
 
 `response_cookies_to_remove` - (Optional) Remove Cookies from Set-Cookie Headers. List of name of Cookies to be removed from the HTTP response being sent towards downstream. Entire set-cookie header will be removed (`List`).
 
@@ -181,57 +181,57 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--dynamic_proxy--http_proxy--more_option--buffer_policy"></a>
 
-### Dynamic Proxy Http Proxy More Option Buffer Policy
+### Dynamic Proxy HTTP Proxy More Option Buffer Policy
 
 <a id="nestedblock--dynamic_proxy--http_proxy--more_option--compression_params"></a>
 
-### Dynamic Proxy Http Proxy More Option Compression Params
+### Dynamic Proxy HTTP Proxy More Option Compression Params
 
 <a id="nestedblock--dynamic_proxy--http_proxy--more_option--custom_errors"></a>
 
-### Dynamic Proxy Http Proxy More Option Custom Errors
+### Dynamic Proxy HTTP Proxy More Option Custom Errors
 
 <a id="nestedblock--dynamic_proxy--http_proxy--more_option--disable_path_normalize"></a>
 
-### Dynamic Proxy Http Proxy More Option Disable Path Normalize
+### Dynamic Proxy HTTP Proxy More Option Disable Path Normalize
 
 <a id="nestedblock--dynamic_proxy--http_proxy--more_option--enable_path_normalize"></a>
 
-### Dynamic Proxy Http Proxy More Option Enable Path Normalize
+### Dynamic Proxy HTTP Proxy More Option Enable Path Normalize
 
 <a id="nestedblock--dynamic_proxy--http_proxy--more_option--request_cookies_to_add"></a>
 
-### Dynamic Proxy Http Proxy More Option Request Cookies To Add
+### Dynamic Proxy HTTP Proxy More Option Request Cookies To Add
 
 <a id="nestedblock--dynamic_proxy--http_proxy--more_option--request_headers_to_add"></a>
 
-### Dynamic Proxy Http Proxy More Option Request Headers To Add
+### Dynamic Proxy HTTP Proxy More Option Request Headers To Add
 
 <a id="nestedblock--dynamic_proxy--http_proxy--more_option--response_cookies_to_add"></a>
 
-### Dynamic Proxy Http Proxy More Option Response Cookies To Add
+### Dynamic Proxy HTTP Proxy More Option Response Cookies To Add
 
 <a id="nestedblock--dynamic_proxy--http_proxy--more_option--response_headers_to_add"></a>
 
-### Dynamic Proxy Http Proxy More Option Response Headers To Add
+### Dynamic Proxy HTTP Proxy More Option Response Headers To Add
 
 <a id="nestedblock--dynamic_proxy--https_proxy"></a>
 
-### Dynamic Proxy Https Proxy
+### Dynamic Proxy HTTPS Proxy
 
 `more_option` - (Optional) Advanced Options. This defines various options to define a route. See [More Option](#nestedblock--dynamic_proxy--https_proxy--more_option) below.
 
-`tls_params` - (Optional) Inline TLS Parameters. Inline TLS parameters. See [Tls Params](#nestedblock--dynamic_proxy--https_proxy--tls_params) below.
+`tls_params` - (Optional) Inline TLS Parameters. Inline TLS parameters. See [TLS Params](#nestedblock--dynamic_proxy--https_proxy--tls_params) below.
 
 <a id="nestedblock--dynamic_proxy--https_proxy--more_option"></a>
 
-### Dynamic Proxy Https Proxy More Option
+### Dynamic Proxy HTTPS Proxy More Option
 
-`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. See [Buffer Policy](#nestedblock--dynamic_proxy--https_proxy--more_option--buffer_policy) below.
+`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. We can specify the maximum buffer size and buffer interval with this config. Buffering can be enabled and disabled at VirtualHost and Route levels Route level buffer configuration takes precedence. See [Buffer Policy](#nestedblock--dynamic_proxy--https_proxy--more_option--buffer_policy) below.
 
-`compression_params` - (Optional) Compression Parameters. Enables loadbalancer to compress dispatched data from an upstream service upon client request. See [Compression Params](#nestedblock--dynamic_proxy--https_proxy--more_option--compression_params) below.
+`compression_params` - (Optional) Compression Parameters. Enables loadbalancer to compress dispatched data from an upstream service upon client request. The content is compressed and then sent to the client with the appropriate headers if either response and request allow. Only GZIP compression is supported. By default compression will be skipped when: A request does NOT contain accept-encoding header. A request includes accept-encoding header, but it does not contain “gzip” or “*”. A request includes accept-encoding ... See [Compression Params](#nestedblock--dynamic_proxy--https_proxy--more_option--compression_params) below.
 
-`custom_errors` - (Optional) Custom Error Responses. Map of integer error codes as keys and string values that can be used to provide custom http pages for each error code. See [Custom Errors](#nestedblock--dynamic_proxy--https_proxy--more_option--custom_errors) below.
+`custom_errors` - (Optional) Custom Error Responses. Map of integer error codes as keys and string values that can be used to provide custom HTTP pages for each error code. Key of the map can be either response code class or HTTP Error code. Response code classes for key is configured as follows 3 -- for 3xx response code class 4 -- for 4xx response code class 5 -- for 5xx response code class Value of the map is string which represents custom HTTP responses. Specific response code takes preference when both response code... See [Custom Errors](#nestedblock--dynamic_proxy--https_proxy--more_option--custom_errors) below.
 
 `disable_default_error_pages` - (Optional) Disable Default Error Pages. Disable the use of default F5XC error pages (`Bool`).
 
@@ -239,11 +239,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `enable_path_normalize` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Path Normalize](#nestedblock--dynamic_proxy--https_proxy--more_option--enable_path_normalize) below.
 
-`idle_timeout` - (Optional) Idle Timeout. The amount of time that a stream can exist without upstream or downstream activity, in milliseconds (`Number`).
+`idle_timeout` - (Optional) Idle Timeout. The amount of time that a stream can exist without upstream or downstream activity, in milliseconds. The stream is terminated with a HTTP 504 (Gateway Timeout) error code if no upstream response header has been received, otherwise the stream is reset (`Number`).
 
-`max_request_header_size` - (Optional) Maximum Request Header Size. The maximum request header size for downstream connections, in KiB. A HTTP 431 (Request Header Fields Too Large) error code is sent for requests that exceed this size (`Number`).
+`max_request_header_size` - (Optional) Maximum Request Header Size. The maximum request header size for downstream connections, in KiB. A HTTP 431 (Request Header Fields Too Large) error code is sent for requests that exceed this size. If multiple load balancers share the same advertise_policy, the highest value configured across all such load balancers is used for all the load balancers in question (`Number`).
 
-`request_cookies_to_add` - (Optional) Add Cookies in Cookie Header. Cookies are key-value pairs to be added to HTTP request being routed towards upstream. See [Request Cookies To Add](#nestedblock--dynamic_proxy--https_proxy--more_option--request_cookies_to_add) below.
+`request_cookies_to_add` - (Optional) Add Cookies in Cookie Header. Cookies are key-value pairs to be added to HTTP request being routed towards upstream. Cookies specified at this level are applied after cookies from matched Route are applied. See [Request Cookies To Add](#nestedblock--dynamic_proxy--https_proxy--more_option--request_cookies_to_add) below.
 
 `request_cookies_to_remove` - (Optional) Remove Cookies from Cookie Header. List of keys of Cookies to be removed from the HTTP request being sent towards upstream (`List`).
 
@@ -251,7 +251,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `request_headers_to_remove` - (Optional) Remove Request Headers. List of keys of Headers to be removed from the HTTP request being sent towards upstream (`List`).
 
-`response_cookies_to_add` - (Optional) Add Set-Cookie Headers. Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream. See [Response Cookies To Add](#nestedblock--dynamic_proxy--https_proxy--more_option--response_cookies_to_add) below.
+`response_cookies_to_add` - (Optional) Add Set-Cookie Headers. Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream. Cookies specified at this level are applied after cookies from matched Route are applied. See [Response Cookies To Add](#nestedblock--dynamic_proxy--https_proxy--more_option--response_cookies_to_add) below.
 
 `response_cookies_to_remove` - (Optional) Remove Cookies from Set-Cookie Headers. List of name of Cookies to be removed from the HTTP response being sent towards downstream. Entire set-cookie header will be removed (`List`).
 
@@ -261,67 +261,67 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--dynamic_proxy--https_proxy--more_option--buffer_policy"></a>
 
-### Dynamic Proxy Https Proxy More Option Buffer Policy
+### Dynamic Proxy HTTPS Proxy More Option Buffer Policy
 
 <a id="nestedblock--dynamic_proxy--https_proxy--more_option--compression_params"></a>
 
-### Dynamic Proxy Https Proxy More Option Compression Params
+### Dynamic Proxy HTTPS Proxy More Option Compression Params
 
 <a id="nestedblock--dynamic_proxy--https_proxy--more_option--custom_errors"></a>
 
-### Dynamic Proxy Https Proxy More Option Custom Errors
+### Dynamic Proxy HTTPS Proxy More Option Custom Errors
 
 <a id="nestedblock--dynamic_proxy--https_proxy--more_option--disable_path_normalize"></a>
 
-### Dynamic Proxy Https Proxy More Option Disable Path Normalize
+### Dynamic Proxy HTTPS Proxy More Option Disable Path Normalize
 
 <a id="nestedblock--dynamic_proxy--https_proxy--more_option--enable_path_normalize"></a>
 
-### Dynamic Proxy Https Proxy More Option Enable Path Normalize
+### Dynamic Proxy HTTPS Proxy More Option Enable Path Normalize
 
 <a id="nestedblock--dynamic_proxy--https_proxy--more_option--request_cookies_to_add"></a>
 
-### Dynamic Proxy Https Proxy More Option Request Cookies To Add
+### Dynamic Proxy HTTPS Proxy More Option Request Cookies To Add
 
 <a id="nestedblock--dynamic_proxy--https_proxy--more_option--request_headers_to_add"></a>
 
-### Dynamic Proxy Https Proxy More Option Request Headers To Add
+### Dynamic Proxy HTTPS Proxy More Option Request Headers To Add
 
 <a id="nestedblock--dynamic_proxy--https_proxy--more_option--response_cookies_to_add"></a>
 
-### Dynamic Proxy Https Proxy More Option Response Cookies To Add
+### Dynamic Proxy HTTPS Proxy More Option Response Cookies To Add
 
 <a id="nestedblock--dynamic_proxy--https_proxy--more_option--response_headers_to_add"></a>
 
-### Dynamic Proxy Https Proxy More Option Response Headers To Add
+### Dynamic Proxy HTTPS Proxy More Option Response Headers To Add
 
 <a id="nestedblock--dynamic_proxy--https_proxy--tls_params"></a>
 
-### Dynamic Proxy Https Proxy Tls Params
+### Dynamic Proxy HTTPS Proxy TLS Params
 
-`no_mtls` - (Optional) Empty. This can be used for messages where no values are needed. See [No Mtls](#nestedblock--dynamic_proxy--https_proxy--tls_params--no_mtls) below.
+`no_mtls` - (Optional) Empty. This can be used for messages where no values are needed. See [No mTLS](#nestedblock--dynamic_proxy--https_proxy--tls_params--no_mtls) below.
 
-`tls_certificates` - (Optional) TLS Certificates. Users can add one or more certificates that share the same set of domains. for example, domain.com and *.domain.com - but use different signature algorithms. See [Tls Certificates](#nestedblock--dynamic_proxy--https_proxy--tls_params--tls_certificates) below.
+`tls_certificates` - (Optional) TLS Certificates. Users can add one or more certificates that share the same set of domains. for example, domain.com and *.domain.com - but use different signature algorithms. See [TLS Certificates](#nestedblock--dynamic_proxy--https_proxy--tls_params--tls_certificates) below.
 
-`tls_config` - (Optional) TLS Config. This defines various options to configure TLS configuration parameters. See [Tls Config](#nestedblock--dynamic_proxy--https_proxy--tls_params--tls_config) below.
+`tls_config` - (Optional) TLS Config. This defines various options to configure TLS configuration parameters. See [TLS Config](#nestedblock--dynamic_proxy--https_proxy--tls_params--tls_config) below.
 
-`use_mtls` - (Optional) Clients TLS validation context. Validation context for downstream client TLS connections. See [Use Mtls](#nestedblock--dynamic_proxy--https_proxy--tls_params--use_mtls) below.
+`use_mtls` - (Optional) Clients TLS validation context. Validation context for downstream client TLS connections. See [Use mTLS](#nestedblock--dynamic_proxy--https_proxy--tls_params--use_mtls) below.
 
 <a id="nestedblock--dynamic_proxy--https_proxy--tls_params--no_mtls"></a>
 
-### Dynamic Proxy Https Proxy Tls Params No Mtls
+### Dynamic Proxy HTTPS Proxy TLS Params No mTLS
 
 <a id="nestedblock--dynamic_proxy--https_proxy--tls_params--tls_certificates"></a>
 
-### Dynamic Proxy Https Proxy Tls Params Tls Certificates
+### Dynamic Proxy HTTPS Proxy TLS Params TLS Certificates
 
 <a id="nestedblock--dynamic_proxy--https_proxy--tls_params--tls_config"></a>
 
-### Dynamic Proxy Https Proxy Tls Params Tls Config
+### Dynamic Proxy HTTPS Proxy TLS Params TLS Config
 
 <a id="nestedblock--dynamic_proxy--https_proxy--tls_params--use_mtls"></a>
 
-### Dynamic Proxy Https Proxy Tls Params Use Mtls
+### Dynamic Proxy HTTPS Proxy TLS Params Use mTLS
 
 <a id="nestedblock--dynamic_proxy--sni_proxy"></a>
 
@@ -331,25 +331,25 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--http_proxy"></a>
 
-### Http Proxy
+### HTTP Proxy
 
-`enable_http` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Http](#nestedblock--http_proxy--enable_http) below.
+`enable_http` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable HTTP](#nestedblock--http_proxy--enable_http) below.
 
 `more_option` - (Optional) Advanced Options. This defines various options to define a route. See [More Option](#nestedblock--http_proxy--more_option) below.
 
 <a id="nestedblock--http_proxy--enable_http"></a>
 
-### Http Proxy Enable Http
+### HTTP Proxy Enable HTTP
 
 <a id="nestedblock--http_proxy--more_option"></a>
 
-### Http Proxy More Option
+### HTTP Proxy More Option
 
-`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. See [Buffer Policy](#nestedblock--http_proxy--more_option--buffer_policy) below.
+`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. We can specify the maximum buffer size and buffer interval with this config. Buffering can be enabled and disabled at VirtualHost and Route levels Route level buffer configuration takes precedence. See [Buffer Policy](#nestedblock--http_proxy--more_option--buffer_policy) below.
 
-`compression_params` - (Optional) Compression Parameters. Enables loadbalancer to compress dispatched data from an upstream service upon client request. See [Compression Params](#nestedblock--http_proxy--more_option--compression_params) below.
+`compression_params` - (Optional) Compression Parameters. Enables loadbalancer to compress dispatched data from an upstream service upon client request. The content is compressed and then sent to the client with the appropriate headers if either response and request allow. Only GZIP compression is supported. By default compression will be skipped when: A request does NOT contain accept-encoding header. A request includes accept-encoding header, but it does not contain “gzip” or “*”. A request includes accept-encoding ... See [Compression Params](#nestedblock--http_proxy--more_option--compression_params) below.
 
-`custom_errors` - (Optional) Custom Error Responses. Map of integer error codes as keys and string values that can be used to provide custom http pages for each error code. See [Custom Errors](#nestedblock--http_proxy--more_option--custom_errors) below.
+`custom_errors` - (Optional) Custom Error Responses. Map of integer error codes as keys and string values that can be used to provide custom HTTP pages for each error code. Key of the map can be either response code class or HTTP Error code. Response code classes for key is configured as follows 3 -- for 3xx response code class 4 -- for 4xx response code class 5 -- for 5xx response code class Value of the map is string which represents custom HTTP responses. Specific response code takes preference when both response code... See [Custom Errors](#nestedblock--http_proxy--more_option--custom_errors) below.
 
 `disable_default_error_pages` - (Optional) Disable Default Error Pages. Disable the use of default F5XC error pages (`Bool`).
 
@@ -357,11 +357,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `enable_path_normalize` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Path Normalize](#nestedblock--http_proxy--more_option--enable_path_normalize) below.
 
-`idle_timeout` - (Optional) Idle Timeout. The amount of time that a stream can exist without upstream or downstream activity, in milliseconds (`Number`).
+`idle_timeout` - (Optional) Idle Timeout. The amount of time that a stream can exist without upstream or downstream activity, in milliseconds. The stream is terminated with a HTTP 504 (Gateway Timeout) error code if no upstream response header has been received, otherwise the stream is reset (`Number`).
 
-`max_request_header_size` - (Optional) Maximum Request Header Size. The maximum request header size for downstream connections, in KiB. A HTTP 431 (Request Header Fields Too Large) error code is sent for requests that exceed this size (`Number`).
+`max_request_header_size` - (Optional) Maximum Request Header Size. The maximum request header size for downstream connections, in KiB. A HTTP 431 (Request Header Fields Too Large) error code is sent for requests that exceed this size. If multiple load balancers share the same advertise_policy, the highest value configured across all such load balancers is used for all the load balancers in question (`Number`).
 
-`request_cookies_to_add` - (Optional) Add Cookies in Cookie Header. Cookies are key-value pairs to be added to HTTP request being routed towards upstream. See [Request Cookies To Add](#nestedblock--http_proxy--more_option--request_cookies_to_add) below.
+`request_cookies_to_add` - (Optional) Add Cookies in Cookie Header. Cookies are key-value pairs to be added to HTTP request being routed towards upstream. Cookies specified at this level are applied after cookies from matched Route are applied. See [Request Cookies To Add](#nestedblock--http_proxy--more_option--request_cookies_to_add) below.
 
 `request_cookies_to_remove` - (Optional) Remove Cookies from Cookie Header. List of keys of Cookies to be removed from the HTTP request being sent towards upstream (`List`).
 
@@ -369,7 +369,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `request_headers_to_remove` - (Optional) Remove Request Headers. List of keys of Headers to be removed from the HTTP request being sent towards upstream (`List`).
 
-`response_cookies_to_add` - (Optional) Add Set-Cookie Headers. Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream. See [Response Cookies To Add](#nestedblock--http_proxy--more_option--response_cookies_to_add) below.
+`response_cookies_to_add` - (Optional) Add Set-Cookie Headers. Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream. Cookies specified at this level are applied after cookies from matched Route are applied. See [Response Cookies To Add](#nestedblock--http_proxy--more_option--response_cookies_to_add) below.
 
 `response_cookies_to_remove` - (Optional) Remove Cookies from Set-Cookie Headers. List of name of Cookies to be removed from the HTTP response being sent towards downstream. Entire set-cookie header will be removed (`List`).
 
@@ -379,7 +379,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--http_proxy--more_option--buffer_policy"></a>
 
-### Http Proxy More Option Buffer Policy
+### HTTP Proxy More Option Buffer Policy
 
 `disabled` - (Optional) Disable. Disable buffering for a particular route. This is useful when virtual-host has buffering, but we need to disable it on a specific route. The value of this field is ignored for virtual-host (`Bool`).
 
@@ -387,31 +387,31 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--http_proxy--more_option--compression_params"></a>
 
-### Http Proxy More Option Compression Params
+### HTTP Proxy More Option Compression Params
 
 `content_length` - (Optional) Content Length. Minimum response length, in bytes, which will trigger compression. The default value is 30 (`Number`).
 
-`content_type` - (Optional) Content Type. Set of strings that allows specifying which mime-types yield compression When this field is not defined, compression will be applied to the following mime-types: 'application/javascri... (`List`).
+`content_type` - (Optional) Content Type. Set of strings that allows specifying which mime-types yield compression When this field is not defined, compression will be applied to the following mime-types: 'application/javascript' 'application/JSON', 'application/xhtml+XML' 'image/svg+XML' 'text/CSS' 'text/HTML' 'text/plain' 'text/XML' (`List`).
 
-`disable_on_etag_header` - (Optional) Disable On Etag Header. If true, disables compression when the response contains an etag header (`Bool`).
+`disable_on_etag_header` - (Optional) Disable On Etag Header. If true, disables compression when the response contains an etag header. When it is false, weak etags will be preserved and the ones that require strong validation will be removed (`Bool`).
 
 `remove_accept_encoding_header` - (Optional) Remove Accept-Encoding Header. If true, removes accept-encoding from the request headers before dispatching it to the upstream so that responses do not get compressed before reaching the filter (`Bool`).
 
 <a id="nestedblock--http_proxy--more_option--custom_errors"></a>
 
-### Http Proxy More Option Custom Errors
+### HTTP Proxy More Option Custom Errors
 
 <a id="nestedblock--http_proxy--more_option--disable_path_normalize"></a>
 
-### Http Proxy More Option Disable Path Normalize
+### HTTP Proxy More Option Disable Path Normalize
 
 <a id="nestedblock--http_proxy--more_option--enable_path_normalize"></a>
 
-### Http Proxy More Option Enable Path Normalize
+### HTTP Proxy More Option Enable Path Normalize
 
 <a id="nestedblock--http_proxy--more_option--request_cookies_to_add"></a>
 
-### Http Proxy More Option Request Cookies To Add
+### HTTP Proxy More Option Request Cookies To Add
 
 `name` - (Optional) Name. Name of the cookie in Cookie header (`String`).
 
@@ -423,11 +423,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--http_proxy--more_option--request_cookies_to_add--secret_value"></a>
 
-### Http Proxy More Option Request Cookies To Add Secret Value
+### HTTP Proxy More Option Request Cookies To Add Secret Value
 
 <a id="nestedblock--http_proxy--more_option--request_headers_to_add"></a>
 
-### Http Proxy More Option Request Headers To Add
+### HTTP Proxy More Option Request Headers To Add
 
 `append` - (Optional) Append. Should the value be appended? If true, the value is appended to existing values. Default value is do not append (`Bool`).
 
@@ -439,11 +439,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--http_proxy--more_option--request_headers_to_add--secret_value"></a>
 
-### Http Proxy More Option Request Headers To Add Secret Value
+### HTTP Proxy More Option Request Headers To Add Secret Value
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add"></a>
 
-### Http Proxy More Option Response Cookies To Add
+### HTTP Proxy More Option Response Cookies To Add
 
 `add_domain` - (Optional) Add Domain. Add domain attribute (`String`).
 
@@ -493,71 +493,71 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--add_httponly"></a>
 
-### Http Proxy More Option Response Cookies To Add Add Httponly
+### HTTP Proxy More Option Response Cookies To Add Add Httponly
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--add_partitioned"></a>
 
-### Http Proxy More Option Response Cookies To Add Add Partitioned
+### HTTP Proxy More Option Response Cookies To Add Add Partitioned
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--add_secure"></a>
 
-### Http Proxy More Option Response Cookies To Add Add Secure
+### HTTP Proxy More Option Response Cookies To Add Add Secure
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--ignore_domain"></a>
 
-### Http Proxy More Option Response Cookies To Add Ignore Domain
+### HTTP Proxy More Option Response Cookies To Add Ignore Domain
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--ignore_expiry"></a>
 
-### Http Proxy More Option Response Cookies To Add Ignore Expiry
+### HTTP Proxy More Option Response Cookies To Add Ignore Expiry
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--ignore_httponly"></a>
 
-### Http Proxy More Option Response Cookies To Add Ignore Httponly
+### HTTP Proxy More Option Response Cookies To Add Ignore Httponly
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--ignore_max_age"></a>
 
-### Http Proxy More Option Response Cookies To Add Ignore Max Age
+### HTTP Proxy More Option Response Cookies To Add Ignore Max Age
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--ignore_partitioned"></a>
 
-### Http Proxy More Option Response Cookies To Add Ignore Partitioned
+### HTTP Proxy More Option Response Cookies To Add Ignore Partitioned
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--ignore_path"></a>
 
-### Http Proxy More Option Response Cookies To Add Ignore Path
+### HTTP Proxy More Option Response Cookies To Add Ignore Path
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--ignore_samesite"></a>
 
-### Http Proxy More Option Response Cookies To Add Ignore Samesite
+### HTTP Proxy More Option Response Cookies To Add Ignore Samesite
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--ignore_secure"></a>
 
-### Http Proxy More Option Response Cookies To Add Ignore Secure
+### HTTP Proxy More Option Response Cookies To Add Ignore Secure
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--ignore_value"></a>
 
-### Http Proxy More Option Response Cookies To Add Ignore Value
+### HTTP Proxy More Option Response Cookies To Add Ignore Value
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--samesite_lax"></a>
 
-### Http Proxy More Option Response Cookies To Add Samesite Lax
+### HTTP Proxy More Option Response Cookies To Add Samesite Lax
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--samesite_none"></a>
 
-### Http Proxy More Option Response Cookies To Add Samesite None
+### HTTP Proxy More Option Response Cookies To Add Samesite None
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--samesite_strict"></a>
 
-### Http Proxy More Option Response Cookies To Add Samesite Strict
+### HTTP Proxy More Option Response Cookies To Add Samesite Strict
 
 <a id="nestedblock--http_proxy--more_option--response_cookies_to_add--secret_value"></a>
 
-### Http Proxy More Option Response Cookies To Add Secret Value
+### HTTP Proxy More Option Response Cookies To Add Secret Value
 
 <a id="nestedblock--http_proxy--more_option--response_headers_to_add"></a>
 
-### Http Proxy More Option Response Headers To Add
+### HTTP Proxy More Option Response Headers To Add
 
 `append` - (Optional) Append. Should the value be appended? If true, the value is appended to existing values. Default value is do not append (`Bool`).
 
@@ -569,7 +569,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--http_proxy--more_option--response_headers_to_add--secret_value"></a>
 
-### Http Proxy More Option Response Headers To Add Secret Value
+### HTTP Proxy More Option Response Headers To Add Secret Value
 
 <a id="nestedblock--no_forward_proxy_policy"></a>
 
@@ -599,7 +599,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `port` - (Optional) TCP Listen Port. TCP port to Listen (`Number`).
 
-`site` - (Optional) Site. This defines a reference to a CE site along with network type and an optional ip address where a load balancer could be advertised. See [Site](#nestedblock--site_virtual_sites--advertise_where--site) below.
+`site` - (Optional) Site. This defines a reference to a CE site along with network type and an optional IP address where a load balancer could be advertised. See [Site](#nestedblock--site_virtual_sites--advertise_where--site) below.
 
 `use_default_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Default Port](#nestedblock--site_virtual_sites--advertise_where--use_default_port) below.
 
@@ -611,7 +611,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `ip` - (Optional) IP Address. Use given IP address as VIP on the site (`String`).
 
-`network` - (Optional) Site Network. This defines network types to be used on site All inside and outside networks. All inside and outside networks with internet VIP support. All inside networks. All outside networks (`String`).
+`network` - (Optional) Site Network. This defines network types to be used on site All inside and outside networks. All inside and outside networks with internet VIP support. All inside networks. All outside networks. All outside networks with internet VIP support. vK8s service network. - SITE_NETWORK_IP_FABRIC: VER IP Fabric network for the site This Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or for endpoint in IP Fabric network. Possible values are `SITE_NETWORK_INSIDE_AND_OUTSIDE`, `SITE_NETWORK_INSIDE`, `SITE_NETWORK_OUTSIDE`, `SITE_NETWORK_SERVICE`, `SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_IP_FABRIC`. Defaults to `SITE_NETWORK_INSIDE_AND_OUTSIDE` (`String`).
 
 `site` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Site](#nestedblock--site_virtual_sites--advertise_where--site--site) below.
 
@@ -627,7 +627,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Site Virtual Sites Advertise Where Virtual Site
 
-`network` - (Optional) Site Network. This defines network types to be used on site All inside and outside networks. All inside and outside networks with internet VIP support. All inside networks. All outside networks (`String`).
+`network` - (Optional) Site Network. This defines network types to be used on site All inside and outside networks. All inside and outside networks with internet VIP support. All inside networks. All outside networks. All outside networks with internet VIP support. vK8s service network. - SITE_NETWORK_IP_FABRIC: VER IP Fabric network for the site This Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or for endpoint in IP Fabric network. Possible values are `SITE_NETWORK_INSIDE_AND_OUTSIDE`, `SITE_NETWORK_INSIDE`, `SITE_NETWORK_OUTSIDE`, `SITE_NETWORK_SERVICE`, `SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_IP_FABRIC`. Defaults to `SITE_NETWORK_INSIDE_AND_OUTSIDE` (`String`).
 
 `virtual_site` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Virtual Site](#nestedblock--site_virtual_sites--advertise_where--virtual_site--virtual_site) below.
 
@@ -639,17 +639,17 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--tls_intercept"></a>
 
-### Tls Intercept
+### TLS Intercept
 
 `custom_certificate` - (Optional) TLS Certificate. Handle to fetch certificate and key. See [Custom Certificate](#nestedblock--tls_intercept--custom_certificate) below.
 
@@ -661,11 +661,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `volterra_certificate` - (Optional) Empty. This can be used for messages where no values are needed. See [Volterra Certificate](#nestedblock--tls_intercept--volterra_certificate) below.
 
-`volterra_trusted_ca` - (Optional) Empty. This can be used for messages where no values are needed. See [Volterra Trusted Ca](#nestedblock--tls_intercept--volterra_trusted_ca) below.
+`volterra_trusted_ca` - (Optional) Empty. This can be used for messages where no values are needed. See [Volterra Trusted CA](#nestedblock--tls_intercept--volterra_trusted_ca) below.
 
 <a id="nestedblock--tls_intercept--custom_certificate"></a>
 
-### Tls Intercept Custom Certificate
+### TLS Intercept Custom Certificate
 
 `certificate_url` - (Optional) Certificate. TLS certificate. Certificate or certificate chain in PEM format including the PEM headers (`String`).
 
@@ -673,7 +673,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `description` - (Optional) Description. Description for the certificate (`String`).
 
-`disable_ocsp_stapling` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Ocsp Stapling](#nestedblock--tls_intercept--custom_certificate--disable_ocsp_stapling) below.
+`disable_ocsp_stapling` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable OCSP Stapling](#nestedblock--tls_intercept--custom_certificate--disable_ocsp_stapling) below.
 
 `private_key` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Private Key](#nestedblock--tls_intercept--custom_certificate--private_key) below.
 
@@ -681,17 +681,17 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--tls_intercept--custom_certificate--custom_hash_algorithms"></a>
 
-### Tls Intercept Custom Certificate Custom Hash Algorithms
+### TLS Intercept Custom Certificate Custom Hash Algorithms
 
 `hash_algorithms` - (Optional) Hash Algorithms. Ordered list of hash algorithms to be used (`List`).
 
 <a id="nestedblock--tls_intercept--custom_certificate--disable_ocsp_stapling"></a>
 
-### Tls Intercept Custom Certificate Disable Ocsp Stapling
+### TLS Intercept Custom Certificate Disable OCSP Stapling
 
 <a id="nestedblock--tls_intercept--custom_certificate--private_key"></a>
 
-### Tls Intercept Custom Certificate Private Key
+### TLS Intercept Custom Certificate Private Key
 
 `blindfold_secret_info` - (Optional) Blindfold Secret. BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management. See [Blindfold Secret Info](#nestedblock--tls_intercept--custom_certificate--private_key--blindfold_secret_info) below.
 
@@ -699,29 +699,29 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--tls_intercept--custom_certificate--private_key--blindfold_secret_info"></a>
 
-### Tls Intercept Custom Certificate Private Key Blindfold Secret Info
+### TLS Intercept Custom Certificate Private Key Blindfold Secret Info
 
 <a id="nestedblock--tls_intercept--custom_certificate--private_key--clear_secret_info"></a>
 
-### Tls Intercept Custom Certificate Private Key Clear Secret Info
+### TLS Intercept Custom Certificate Private Key Clear Secret Info
 
 <a id="nestedblock--tls_intercept--custom_certificate--use_system_defaults"></a>
 
-### Tls Intercept Custom Certificate Use System Defaults
+### TLS Intercept Custom Certificate Use System Defaults
 
 <a id="nestedblock--tls_intercept--enable_for_all_domains"></a>
 
-### Tls Intercept Enable For All Domains
+### TLS Intercept Enable For All Domains
 
 <a id="nestedblock--tls_intercept--policy"></a>
 
-### Tls Intercept Policy
+### TLS Intercept Policy
 
 `interception_rules` - (Optional) TLS Interception Rules. List of ordered rules to enable or disable for TLS interception. See [Interception Rules](#nestedblock--tls_intercept--policy--interception_rules) below.
 
 <a id="nestedblock--tls_intercept--policy--interception_rules"></a>
 
-### Tls Intercept Policy Interception Rules
+### TLS Intercept Policy Interception Rules
 
 `disable_interception` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Interception](#nestedblock--tls_intercept--policy--interception_rules--disable_interception) below.
 
@@ -731,23 +731,23 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--tls_intercept--policy--interception_rules--disable_interception"></a>
 
-### Tls Intercept Policy Interception Rules Disable Interception
+### TLS Intercept Policy Interception Rules Disable Interception
 
 <a id="nestedblock--tls_intercept--policy--interception_rules--domain_match"></a>
 
-### Tls Intercept Policy Interception Rules Domain Match
+### TLS Intercept Policy Interception Rules Domain Match
 
 <a id="nestedblock--tls_intercept--policy--interception_rules--enable_interception"></a>
 
-### Tls Intercept Policy Interception Rules Enable Interception
+### TLS Intercept Policy Interception Rules Enable Interception
 
 <a id="nestedblock--tls_intercept--volterra_certificate"></a>
 
-### Tls Intercept Volterra Certificate
+### TLS Intercept Volterra Certificate
 
 <a id="nestedblock--tls_intercept--volterra_trusted_ca"></a>
 
-### Tls Intercept Volterra Trusted Ca
+### TLS Intercept Volterra Trusted CA
 
 ## Import
 

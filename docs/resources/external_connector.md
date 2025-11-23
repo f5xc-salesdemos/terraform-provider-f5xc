@@ -60,7 +60,7 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
-`ce_site_reference` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Ce Site Reference](#ce-site-reference) below for details.
+`ce_site_reference` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [CE Site Reference](#ce-site-reference) below for details.
 
 `ipsec` - (Optional) IPSec. External Connector with IPSec tunnel. See [Ipsec](#ipsec) below for details.
 
@@ -78,7 +78,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ce_site_reference"></a>
 
-### Ce Site Reference
+### CE Site Reference
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -112,7 +112,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `rm_hostname` - (Optional) Hostname. Configure an hostname Remote IKE ID (`String`).
 
-`rm_ip_address` - (Optional) IP Address. IP Address used to specify an IPv4 or IPv6 address. See [Rm Ip Address](#nestedblock--ipsec--ike_parameters--rm_ip_address) below.
+`rm_ip_address` - (Optional) IP Address. IP Address used to specify an IPv4 or IPv6 address. See [Rm IP Address](#nestedblock--ipsec--ike_parameters--rm_ip_address) below.
 
 `use_default_local_ike_id` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Default Local Ike Id](#nestedblock--ipsec--ike_parameters--use_default_local_ike_id) below.
 
@@ -158,19 +158,19 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ipsec--ike_parameters--rm_ip_address"></a>
 
-### Ipsec Ike Parameters Rm Ip Address
+### Ipsec Ike Parameters Rm IP Address
 
-`ipv4` - (Optional) IPv4 Address. IPv4 Address in dot-decimal notation. See [Ipv4](#nestedblock--ipsec--ike_parameters--rm_ip_address--ipv4) below.
+`ipv4` - (Optional) IPv4 Address. IPv4 Address in dot-decimal notation. See [IPv4](#nestedblock--ipsec--ike_parameters--rm_ip_address--ipv4) below.
 
-`ipv6` - (Optional) IPv6 Address. IPv6 Address specified as hexadecimal numbers separated by ':'. See [Ipv6](#nestedblock--ipsec--ike_parameters--rm_ip_address--ipv6) below.
+`ipv6` - (Optional) IPv6 Address. IPv6 Address specified as hexadecimal numbers separated by ':'. See [IPv6](#nestedblock--ipsec--ike_parameters--rm_ip_address--ipv6) below.
 
 <a id="nestedblock--ipsec--ike_parameters--rm_ip_address--ipv4"></a>
 
-### Ipsec Ike Parameters Rm Ip Address Ipv4
+### Ipsec Ike Parameters Rm IP Address IPv4
 
 <a id="nestedblock--ipsec--ike_parameters--rm_ip_address--ipv6"></a>
 
-### Ipsec Ike Parameters Rm Ip Address Ipv6
+### Ipsec Ike Parameters Rm IP Address IPv6
 
 <a id="nestedblock--ipsec--ike_parameters--use_default_local_ike_id"></a>
 
@@ -184,7 +184,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Ipsec Ipsec Tunnel Parameters
 
-`peer_ip_address` - (Optional) IPv4 Address. IPv4 Address in dot-decimal notation. See [Peer Ip Address](#nestedblock--ipsec--ipsec_tunnel_parameters--peer_ip_address) below.
+`peer_ip_address` - (Optional) IPv4 Address. IPv4 Address in dot-decimal notation. See [Peer IP Address](#nestedblock--ipsec--ipsec_tunnel_parameters--peer_ip_address) below.
 
 `psk` - (Optional) Pre-Shared Key. The IKE pre-shared key (PSK) is required to ensure the IKE peers can authenticate one another within IKE phase 1 negotiation (`String`).
 
@@ -200,7 +200,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ipsec--ipsec_tunnel_parameters--peer_ip_address"></a>
 
-### Ipsec Ipsec Tunnel Parameters Peer Ip Address
+### Ipsec Ipsec Tunnel Parameters Peer IP Address
 
 `addr` - (Optional) IPv4 Address. IPv4 Address in string form with dot-decimal notation (`String`).
 
@@ -238,13 +238,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

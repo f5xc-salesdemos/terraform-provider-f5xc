@@ -62,7 +62,7 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "k8s_cluster_role_selector, policy_rule_list, yaml" must be set.
 
-`k8s_cluster_role_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [K8s Cluster Role Selector](#k8s-cluster-role-selector) below for details.
+`k8s_cluster_role_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [K8s Cluster Role Selector](#k8s-cluster-role-selector) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
@@ -96,13 +96,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Policy Rule List Policy Rule
 
-`non_resource_url_list` - (Optional) List of Non Resource URL(s). permissions for URL(s) that do not represent K8s resource. See [Non Resource Url List](#nestedblock--policy_rule_list--policy_rule--non_resource_url_list) below.
+`non_resource_url_list` - (Optional) List of Non Resource URL(s). permissions for URL(s) that do not represent K8s resource. See [Non Resource URL List](#nestedblock--policy_rule_list--policy_rule--non_resource_url_list) below.
 
-`resource_list` - (Optional) Resource List. List of resources in terms of api groups/resource types/resource instances and verbs allowed. See [Resource List](#nestedblock--policy_rule_list--policy_rule--resource_list) below.
+`resource_list` - (Optional) Resource List. List of resources in terms of API groups/resource types/resource instances and verbs allowed. See [Resource List](#nestedblock--policy_rule_list--policy_rule--resource_list) below.
 
 <a id="nestedblock--policy_rule_list--policy_rule--non_resource_url_list"></a>
 
-### Policy Rule List Policy Rule Non Resource Url List
+### Policy Rule List Policy Rule Non Resource URL List
 
 `urls` - (Optional) Non Resource URL(s). allowed URL(s) that do not represent any K8s resource. URL can be suffix or regex (`List`).
 
@@ -112,11 +112,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Policy Rule List Policy Rule Resource List
 
-`api_groups` - (Optional) API Groups. Allowed list of API group that contains resources, all resources of a given api group (`List`).
+`api_groups` - (Optional) API Groups. Allowed list of API group that contains resources, all resources of a given API group (`List`).
 
 `resource_instances` - (Optional) Resource Instances. Allowed list of resource instances within the resource types (`List`).
 
-`resource_types` - (Optional) Resource Types. Allowed list of resource types within the api groups (`List`).
+`resource_types` - (Optional) Resource Types. Allowed list of resource types within the API groups (`List`).
 
 `verbs` - (Optional) Allowed Verbs. Allowed list of verbs(operations) on resources. Use * for all operations (`List`).
 
@@ -124,13 +124,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

@@ -85,15 +85,15 @@ In addition to all arguments above, the following attributes are exported:
 
 `syslog_rfc5424` - (Optional) Syslog RFC5424 Format. Select RFC5424 syslog format and maximum message length (`Number`).
 
-`tcp_server` - (Optional) TCP Server name and Port Number. Name and port number for a TCP server. See [Tcp Server](#nestedblock--syslog--tcp_server) below.
+`tcp_server` - (Optional) TCP Server name and Port Number. Name and port number for a TCP server. See [TCP Server](#nestedblock--syslog--tcp_server) below.
 
-`tls_server` - (Optional) Client TLS Config. TLS config for client of discovery service. See [Tls Server](#nestedblock--syslog--tls_server) below.
+`tls_server` - (Optional) Client TLS Config. TLS config for client of discovery service. See [TLS Server](#nestedblock--syslog--tls_server) below.
 
-`udp_server` - (Optional) UDP Server Name and Port Number. Name and port number for a UDP server. See [Udp Server](#nestedblock--syslog--udp_server) below.
+`udp_server` - (Optional) UDP Server Name and Port Number. Name and port number for a UDP server. See [UDP Server](#nestedblock--syslog--udp_server) below.
 
 <a id="nestedblock--syslog--tcp_server"></a>
 
-### Syslog Tcp Server
+### Syslog TCP Server
 
 `port` - (Optional) Port Number. Port number used for communication (`Number`).
 
@@ -101,15 +101,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--syslog--tls_server"></a>
 
-### Syslog Tls Server
+### Syslog TLS Server
 
-`default_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Https Port](#nestedblock--syslog--tls_server--default_https_port) below.
+`default_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Default HTTPS Port](#nestedblock--syslog--tls_server--default_https_port) below.
 
-`default_syslog_tls_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Syslog Tls Port](#nestedblock--syslog--tls_server--default_syslog_tls_port) below.
+`default_syslog_tls_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Syslog TLS Port](#nestedblock--syslog--tls_server--default_syslog_tls_port) below.
 
-`mtls_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Mtls Disabled](#nestedblock--syslog--tls_server--mtls_disabled) below.
+`mtls_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [mTLS Disabled](#nestedblock--syslog--tls_server--mtls_disabled) below.
 
-`mtls_enable` - (Optional) mTLS Client Config. TLS config for client. See [Mtls Enable](#nestedblock--syslog--tls_server--mtls_enable) below.
+`mtls_enable` - (Optional) mTLS Client Config. TLS config for client. See [mTLS Enable](#nestedblock--syslog--tls_server--mtls_enable) below.
 
 `port` - (Optional) TCP Port Number. Custom port number used for communication (`Number`).
 
@@ -117,39 +117,39 @@ In addition to all arguments above, the following attributes are exported:
 
 `trusted_ca_url` - (Optional) Server CA Certificates. The URL or value for trusted Server CA certificate or certificate chain Certificates in PEM format including the PEM headers (`String`).
 
-`volterra_ca` - (Optional) Empty. This can be used for messages where no values are needed. See [Volterra Ca](#nestedblock--syslog--tls_server--volterra_ca) below.
+`volterra_ca` - (Optional) Empty. This can be used for messages where no values are needed. See [Volterra CA](#nestedblock--syslog--tls_server--volterra_ca) below.
 
 <a id="nestedblock--syslog--tls_server--default_https_port"></a>
 
-### Syslog Tls Server Default Https Port
+### Syslog TLS Server Default HTTPS Port
 
 <a id="nestedblock--syslog--tls_server--default_syslog_tls_port"></a>
 
-### Syslog Tls Server Default Syslog Tls Port
+### Syslog TLS Server Default Syslog TLS Port
 
 <a id="nestedblock--syslog--tls_server--mtls_disabled"></a>
 
-### Syslog Tls Server Mtls Disabled
+### Syslog TLS Server mTLS Disabled
 
 <a id="nestedblock--syslog--tls_server--mtls_enable"></a>
 
-### Syslog Tls Server Mtls Enable
+### Syslog TLS Server mTLS Enable
 
 `certificate` - (Optional) Client Certificate. Client certificate is PEM-encoded certificate or certificate-chain (`String`).
 
-`key_url` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Key Url](#nestedblock--syslog--tls_server--mtls_enable--key_url) below.
+`key_url` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Key URL](#nestedblock--syslog--tls_server--mtls_enable--key_url) below.
 
 <a id="nestedblock--syslog--tls_server--mtls_enable--key_url"></a>
 
-### Syslog Tls Server Mtls Enable Key Url
+### Syslog TLS Server mTLS Enable Key URL
 
 <a id="nestedblock--syslog--tls_server--volterra_ca"></a>
 
-### Syslog Tls Server Volterra Ca
+### Syslog TLS Server Volterra CA
 
 <a id="nestedblock--syslog--udp_server"></a>
 
-### Syslog Udp Server
+### Syslog UDP Server
 
 `port` - (Optional) Port Number. Port number used for communication (`Number`).
 
@@ -159,13 +159,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

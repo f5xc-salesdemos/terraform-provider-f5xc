@@ -97,21 +97,21 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "disable_gpu, enable_gpu, enable_vgpu" must be set.
 
-`disable_gpu` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Gpu](#disable-gpu) below for details.
+`disable_gpu` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable GPU](#disable-gpu) below for details.
 
 > **Note:** One of the arguments from this list "disable_vm, enable_vm" must be set.
 
-`disable_vm` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Vm](#disable-vm) below for details.
+`disable_vm` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable VM](#disable-vm) below for details.
 
-`enable_default_fleet_config_download` - (Optional) Enable Default Fleet Config Download. Enable default fleet config, It must be set for storage config and gpu config (`Bool`).
+`enable_default_fleet_config_download` - (Optional) Enable Default Fleet Config Download. Enable default fleet config, It must be set for storage config and GPU config (`Bool`).
 
-`enable_gpu` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Gpu](#enable-gpu) below for details.
+`enable_gpu` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable GPU](#enable-gpu) below for details.
 
 `enable_vgpu` - (Optional) vGPU Configuration. Licensing configuration for NVIDIA vGPU. See [Enable Vgpu](#enable-vgpu) below for details.
 
-`enable_vm` - (Optional) VM Configuration. VMs support configuration. See [Enable Vm](#enable-vm) below for details.
+`enable_vm` - (Optional) VM Configuration. VMs support configuration. See [Enable VM](#enable-vm) below for details.
 
-`fleet_label` - (Optional) Fleet Label Value. fleet_label value is used to create known_label 'ves.io/fleet=<fleet_label>' The known_label is created in the 'shared' namespace for the tenant (`String`).
+`fleet_label` - (Optional) Fleet Label Value. fleet_label value is used to create known_label 'ves.io/fleet=<fleet_label>' The known_label is created in the 'shared' namespace for the tenant. A virtual_site object with name <fleet_label> is also created in 'shared' namespace for tenant. The virtual_site object will select all sites configured with the known_label above fleet_label with 'sfo' will create a known_label 'ves.io/fleet=sfo' in tenant for the fleet (`String`).
 
 `inside_virtual_network` - (Optional) Site Local Inside Virtual Network. Default inside (site local) virtual network for the fleet. See [Inside Virtual Network](#inside-virtual-network) below for details.
 
@@ -127,9 +127,9 @@ The following arguments are optional:
 
 `logs_streaming_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Logs Streaming Disabled](#logs-streaming-disabled) below for details.
 
-`network_connectors` - (Optional) Network Connectors. Network Connector defines connection between two virtual networks in a given site. Fleet defines one or more such network connectors. See [Network Connectors](#network-connectors) below for details.
+`network_connectors` - (Optional) Network Connectors. Network Connector defines connection between two virtual networks in a given site. Fleet defines one or more such network connectors. The network connectors configuration is applied on all sites that are member of the fleet. See [Network Connectors](#network-connectors) below for details.
 
-`network_firewall` - (Optional) Network Firewall. Network Firewall defines firewall to be applied for the virtual networks in the fleet. The network firewall configuration is applied on all sites that are member of the fleet. See [Network Firewall](#network-firewall) below for details.
+`network_firewall` - (Optional) Network Firewall. Network Firewall defines firewall to be applied for the virtual networks in the fleet. The network firewall configuration is applied on all sites that are member of the fleet. Constraints The Network Firewall is applied on Virtual Networks of type site local network and site local inside network. See [Network Firewall](#network-firewall) below for details.
 
 `no_bond_devices` - (Optional) Empty. This can be used for messages where no values are needed. See [No Bond Devices](#no-bond-devices) below for details.
 
@@ -167,7 +167,7 @@ The following arguments are optional:
 
 `usb_policy` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Usb Policy](#usb-policy) below for details.
 
-`volterra_software_version` - (Optional) Software Version. F5XC software version is human readable string matching released set of version components. The given software version is applied to all sites that are member of the fleet (`String`).
+`volterra_software_version` - (Optional) Software Version. F5XC software version is human readable string matching released set of version components. The given software version is applied to all sites that are member of the fleet. Current software installed can be overridden via site config (`String`).
 
 ### Attributes Reference
 
@@ -185,21 +185,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Blocked Services
 
-`dns` - (Optional) Empty. This can be used for messages where no values are needed. See [Dns](#nestedblock--blocked_services--dns) below.
+`dns` - (Optional) Empty. This can be used for messages where no values are needed. See [DNS](#nestedblock--blocked_services--dns) below.
 
-`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
-`ssh` - (Optional) Empty. This can be used for messages where no values are needed. See [Ssh](#nestedblock--blocked_services--ssh) below.
+`ssh` - (Optional) Empty. This can be used for messages where no values are needed. See [SSH](#nestedblock--blocked_services--ssh) below.
 
 `web_user_interface` - (Optional) Empty. This can be used for messages where no values are needed. See [Web User Interface](#nestedblock--blocked_services--web_user_interface) below.
 
 <a id="nestedblock--blocked_services--dns"></a>
 
-### Blocked Services Dns
+### Blocked Services DNS
 
 <a id="nestedblock--blocked_services--ssh"></a>
 
-### Blocked Services Ssh
+### Blocked Services SSH
 
 <a id="nestedblock--blocked_services--web_user_interface"></a>
 
@@ -277,25 +277,25 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Device List
 
-`devices` - (Optional) Devices. Configuration for all devices in the fleet. Examples of devices are - network interfaces, cameras, scanners etc. See [Devices](#nestedblock--device_list--devices) below.
+`devices` - (Optional) Devices. Configuration for all devices in the fleet. Examples of devices are - network interfaces, cameras, scanners etc. Configuration a device is applied on VER node if the VER node is member of this fleet and has an corresponding interface/device. The mapping from device configured in fleet with interface/device in VER node depends on the type of device and is documented in device instance specific sections. See [Devices](#nestedblock--device_list--devices) below.
 
 <a id="nestedblock--device_list--devices"></a>
 
 ### Device List Devices
 
-`name` - (Optional) Device Name. Name of the device including the unit number (e.g. eth0 or disk1). The name must match name of device in host-os of node (`String`).
+`name` - (Optional) Device Name. Name of the device including the unit number (e.g. eth0 or disk1). The name must match name of device in host-OS of node (`String`).
 
-`network_device` - (Optional) Network Device Type. Represents physical network interface. The 'interface' reference points to a Network Interface object. See [Network Device](#nestedblock--device_list--devices--network_device) below.
+`network_device` - (Optional) Network Device Type. Represents physical network interface. The 'interface' reference points to a Network Interface object. Attributes such as Labels, MTU from Network Interface must be applied to the device. Device mapping to nodes A fleet can have many devices and nodes in VER customer edge site can have many interfaces. An interface in node inherits configuration from a device by matching, - device_name in Network Interface for the device - device name for physical-interface in the node. See [Network Device](#nestedblock--device_list--devices--network_device) below.
 
-`owner` - (Optional) Device Owner Type. Defines ownership for a device. Device owner is invalid Device is owned by VER pod. usually it will be network interface device or accelerator like crypto engine (`String`).
+`owner` - (Optional) Device Owner Type. Defines ownership for a device. Device owner is invalid Device is owned by VER pod. usually it will be network interface device or accelerator like crypto engine. Device is available to be owned by vK8s workload on the site, like camera GPU etc. Device is not available to be owned by vK8s or VER. Can be exposed via some other service. Like TPM. Possible values are `DEVICE_OWNER_INVALID`, `DEVICE_OWNER_VER`, `DEVICE_OWNER_VK8S_WORK_LOAD`, `DEVICE_OWNER_HOST` (`String`).
 
 <a id="nestedblock--device_list--devices--network_device"></a>
 
 ### Device List Devices Network Device
 
-`interface` - (Optional) Network Interface. Network Interface attributes for the device. User network interface configuration for this network device. See [Interface](#nestedblock--device_list--devices--network_device--interface) below.
+`interface` - (Optional) Network Interface. Network Interface attributes for the device. User network interface configuration for this network device. Attributes like labels, MTU from the 'interface' are applied to corresponding interface in VER node If network interface refers to a virtual-network, the virtual-netowrk type must be consistent with use attribute given below If use is NETWORK_INTERFACE_USE_REGULAR, the virtual-network must be of type VIRTUAL_NETWORK_SITE_LOCAL or VIRTUAL_NETWORK_SITE_LOCAL_INSIDE if us... See [Interface](#nestedblock--device_list--devices--network_device--interface) below.
 
-`use` - (Optional) Network Device Use. Defines how the device is used If networking device is owned by VER, it is available for users to configure as required If networking device is owned by VER, it is included in b... (`String`).
+`use` - (Optional) Network Device Use. Defines how the device is used If networking device is owned by VER, it is available for users to configure as required If networking device is owned by VER, it is included in bootstrap config and member of outside network. If networking device is owned by VER, it is included in bootstrap config and member of inside network. Possible values are `NETWORK_INTERFACE_USE_REGULAR`, `NETWORK_INTERFACE_USE_OUTSIDE`, `NETWORK_INTERFACE_USE_INSIDE`. Defaults to `NETWORK_INTERFACE_USE_REGULAR` (`String`).
 
 <a id="nestedblock--device_list--devices--network_device--interface"></a>
 
@@ -303,21 +303,21 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--disable_gpu"></a>
 
-### Disable Gpu
+### Disable GPU
 
 <a id="nestedblock--disable_vm"></a>
 
-### Disable Vm
+### Disable VM
 
 <a id="nestedblock--enable_gpu"></a>
 
-### Enable Gpu
+### Enable GPU
 
 <a id="nestedblock--enable_vgpu"></a>
 
 ### Enable Vgpu
 
-`feature_type` - (Optional) Feature Type. Set feature to be enabled Operate with a degraded vGPU performance Enable NVIDIA vGPU Enable NVIDIA RTX Virtual Workstation Enable NVIDIA Virtual Compute Server (`String`).
+`feature_type` - (Optional) Feature Type. Set feature to be enabled Operate with a degraded vGPU performance Enable NVIDIA vGPU Enable NVIDIA RTX Virtual Workstation Enable NVIDIA Virtual Compute Server. Possible values are `UNLICENSED`, `VGPU`, `VWS`, `VCS`. Defaults to `UNLICENSED` (`String`).
 
 `server_address` - (Optional) License Server Address. Set License Server Address (`String`).
 
@@ -325,7 +325,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--enable_vm"></a>
 
-### Enable Vm
+### Enable VM
 
 <a id="nestedblock--inside_virtual_network"></a>
 
@@ -377,7 +377,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `drain_max_unavailable_node_count` - (Optional) Node Batch Size Count (`Number`).
 
-`drain_node_timeout` - (Optional) Upgrade Wait Time. Seconds to wait before initiating upgrade on the next set of nodes (`Number`).
+`drain_node_timeout` - (Optional) Upgrade Wait Time. Seconds to wait before initiating upgrade on the next set of nodes. Setting it to 0 will wait indefinitely for all services on nodes to be upgraded gracefully before proceeding to the next set of nodes. (Warning: It may block upgrade if services on a node cannot be gracefully upgraded. It is recommended to use the default value) (`Number`).
 
 `enable_vega_upgrade_mode` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Vega Upgrade Mode](#nestedblock--kubernetes_upgrade_drain--enable_upgrade_drain--enable_vega_upgrade_mode) below.
 
@@ -605,7 +605,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `backend` - (Optional) Backend. Defines type of Pure storage backend block or file. The volume will have the aspects defined in the chosen virtual pool (`String`).
 
-`bandwidth_limit` - (Optional) Bandwidth Limit. It must be between 1 MB/s and 512 GB/s. Enter the size as a number (bytes must be multiple of 512) or number with a single character unit symbol (`String`).
+`bandwidth_limit` - (Optional) Bandwidth Limit. It must be between 1 MB/s and 512 GB/s. Enter the size as a number (bytes must be multiple of 512) or number with a single character unit symbol. Valid unit symbols are K, M, G, representing KiB, MiB, and GiB (`String`).
 
 `iops_limit` - (Optional) IOPS Limit. Enable IOPS limitation. It must be between 100 and 100 million. If value is 0, IOPS limit is not defined (`Number`).
 
@@ -645,9 +645,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `api_server_port` - (Optional) Storage server Port. Enter Storage Server Port (`Number`).
 
-`iscsi_chap_password` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Iscsi Chap Password](#nestedblock--storage_device_list--storage_devices--hpe_storage--iscsi_chap_password) below.
+`iscsi_chap_password` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [iSCSI Chap Password](#nestedblock--storage_device_list--storage_devices--hpe_storage--iscsi_chap_password) below.
 
-`iscsi_chap_user` - (Optional) iscsi chapUser. chap Username to connect to the HPE storage (`String`).
+`iscsi_chap_user` - (Optional) iSCSI chapUser. chap Username to connect to the HPE storage (`String`).
 
 `password` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Password](#nestedblock--storage_device_list--storage_devices--hpe_storage--password) below.
 
@@ -659,7 +659,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--storage_device_list--storage_devices--hpe_storage--iscsi_chap_password"></a>
 
-### Storage Device List Storage Devices Hpe Storage Iscsi Chap Password
+### Storage Device List Storage Devices Hpe Storage iSCSI Chap Password
 
 <a id="nestedblock--storage_device_list--storage_devices--hpe_storage--password"></a>
 
@@ -687,7 +687,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `arrays` - (Optional) Arrays Configuration. Device configuration for PSO Arrays. See [Arrays](#nestedblock--storage_device_list--storage_devices--pure_service_orchestrator--arrays) below.
 
-`cluster_id` - (Optional) Cluster ID. clusterID is added as a prefix for all volumes created by this PSO installation. clusterID is also used to identify the volumes used by the datastore, pso-db (`String`).
+`cluster_id` - (Optional) Cluster ID. clusterID is added as a prefix for all volumes created by this PSO installation. clusterID is also used to identify the volumes used by the datastore, pso-db. clusterID MUST BE UNIQUE for multiple K8s clusters running on top of the same storage arrays. characters allowed: alphanumeric and underscores (`String`).
 
 `enable_storage_topology` - (Optional) Enable Storage Topology. This option is to enable/disable the csi topology feature for pso-csi (`Bool`).
 
@@ -743,7 +743,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `nexthop_address` - (Optional) IP Address. IP Address used to specify an IPv4 or IPv6 address. See [Nexthop Address](#nestedblock--storage_static_routes--storage_routes--nexthop--nexthop_address) below.
 
-`type` - (Optional) Nexthop Types. Defines types of next-hop Use default gateway on the local interface as gateway for route. Assumes there is only one local interface on the virtual network (`String`).
+`type` - (Optional) Nexthop Types. Defines types of next-hop Use default gateway on the local interface as gateway for route. Assumes there is only one local interface on the virtual network. Use the specified address as nexthop Use the network interface as nexthop Discard nexthop, used when attr type is Advertise Used in VoltADN private virtual network. Possible values are `NEXT_HOP_DEFAULT_GATEWAY`, `NEXT_HOP_USE_CONFIGURED`, `NEXT_HOP_NETWORK_INTERFACE`. Defaults to `NEXT_HOP_DEFAULT_GATEWAY` (`String`).
 
 <a id="nestedblock--storage_static_routes--storage_routes--nexthop--interface"></a>
 
@@ -757,29 +757,29 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Storage Static Routes Storage Routes Subnets
 
-`ipv4` - (Optional) IPv4 Subnet. IPv4 subnets specified as prefix and prefix-length. Prefix length must be <= 32. See [Ipv4](#nestedblock--storage_static_routes--storage_routes--subnets--ipv4) below.
+`ipv4` - (Optional) IPv4 Subnet. IPv4 subnets specified as prefix and prefix-length. Prefix length must be <= 32. See [IPv4](#nestedblock--storage_static_routes--storage_routes--subnets--ipv4) below.
 
-`ipv6` - (Optional) IPv6 Subnet. IPv6 subnets specified as prefix and prefix-length. prefix-legnth must be <= 128. See [Ipv6](#nestedblock--storage_static_routes--storage_routes--subnets--ipv6) below.
+`ipv6` - (Optional) IPv6 Subnet. IPv6 subnets specified as prefix and prefix-length. prefix-legnth must be <= 128. See [IPv6](#nestedblock--storage_static_routes--storage_routes--subnets--ipv6) below.
 
 <a id="nestedblock--storage_static_routes--storage_routes--subnets--ipv4"></a>
 
-### Storage Static Routes Storage Routes Subnets Ipv4
+### Storage Static Routes Storage Routes Subnets IPv4
 
 <a id="nestedblock--storage_static_routes--storage_routes--subnets--ipv6"></a>
 
-### Storage Static Routes Storage Routes Subnets Ipv6
+### Storage Static Routes Storage Routes Subnets IPv6
 
 <a id="nestedblock--timeouts"></a>
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--usb_policy"></a>
 

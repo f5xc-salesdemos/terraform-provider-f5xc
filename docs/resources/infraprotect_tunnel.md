@@ -62,25 +62,25 @@ The following arguments are optional:
 
 `bandwidth` - (Optional) Bandwidth Speed Configuration. Bandwidth max allowed. See [Bandwidth](#bandwidth) below for details.
 
-`bgp_information` - (Optional) BGP. BGP information associated with a DDoS transit tunnel. See [Bgp Information](#bgp-information) below for details.
+`bgp_information` - (Optional) BGP. BGP information associated with a DDOS transit tunnel. See [BGP Information](#bgp-information) below for details.
 
 `firewall_rule_group` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Firewall Rule Group](#firewall-rule-group) below for details.
 
 > **Note:** One of the arguments from this list "gre_ipv4, gre_ipv6, ip_in_ip, ipv6_to_ipv6" must be set.
 
-`gre_ipv4` - (Optional) GRE IPv4 Tunnel. IPv4 Tunnel. See [Gre Ipv4](#gre-ipv4) below for details.
+`gre_ipv4` - (Optional) GRE IPv4 Tunnel. IPv4 Tunnel. See [Gre IPv4](#gre-ipv4) below for details.
 
-`gre_ipv6` - (Optional) GRE IPv6 Tunnel. IPv6 Tunnel. See [Gre Ipv6](#gre-ipv6) below for details.
+`gre_ipv6` - (Optional) GRE IPv6 Tunnel. IPv6 Tunnel. See [Gre IPv6](#gre-ipv6) below for details.
 
-`ip_in_ip` - (Optional) IP in IP Tunnel. IP in IP Tunnel. See [Ip In Ip](#ip-in-ip) below for details.
+`ip_in_ip` - (Optional) IP in IP Tunnel. IP in IP Tunnel. See [IP In IP](#ip-in-ip) below for details.
 
-`ipv6_to_ipv6` - (Optional) IPv6 to IPv6 Tunnel. IPv6 to IPv6 Tunnel. See [Ipv6 To Ipv6](#ipv6-to-ipv6) below for details.
+`ipv6_to_ipv6` - (Optional) IPv6 to IPv6 Tunnel. IPv6 to IPv6 Tunnel. See [IPv6 To IPv6](#ipv6-to-ipv6) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
-`tunnel_location` - (Optional) Location. Location of a DDoS transit tunnel. See [Tunnel Location](#tunnel-location) below for details.
+`tunnel_location` - (Optional) Location. Location of a DDOS transit tunnel. See [Tunnel Location](#tunnel-location) below for details.
 
 ### Attributes Reference
 
@@ -98,7 +98,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--bgp_information"></a>
 
-### Bgp Information
+### BGP Information
 
 `asn` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Asn](#nestedblock--bgp_information--asn) below.
 
@@ -112,7 +112,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--bgp_information--asn"></a>
 
-### Bgp Information Asn
+### BGP Information Asn
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -122,11 +122,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--bgp_information--no_secret"></a>
 
-### Bgp Information No Secret
+### BGP Information No Secret
 
 <a id="nestedblock--bgp_information--peer_secret_override"></a>
 
-### Bgp Information Peer Secret Override
+### BGP Information Peer Secret Override
 
 `blindfold_secret_info` - (Optional) Blindfold Secret. BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management. See [Blindfold Secret Info](#nestedblock--bgp_information--peer_secret_override--blindfold_secret_info) below.
 
@@ -134,25 +134,25 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--bgp_information--peer_secret_override--blindfold_secret_info"></a>
 
-### Bgp Information Peer Secret Override Blindfold Secret Info
+### BGP Information Peer Secret Override Blindfold Secret Info
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--bgp_information--peer_secret_override--clear_secret_info"></a>
 
-### Bgp Information Peer Secret Override Clear Secret Info
+### BGP Information Peer Secret Override Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--bgp_information--use_default_secret"></a>
 
-### Bgp Information Use Default Secret
+### BGP Information Use Default Secret
 
 <a id="nestedblock--firewall_rule_group"></a>
 
@@ -166,7 +166,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--gre_ipv4"></a>
 
-### Gre Ipv4
+### Gre IPv4
 
 `customer_endpoint_ipv4` - (Optional) Customer Endpoint IP. IPv4 address for the customer endpoint of the tunnel (`String`).
 
@@ -174,9 +174,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `fragmentation_enabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Fragmentation Enabled](#nestedblock--gre_ipv4--fragmentation_enabled) below.
 
-`ipv6_interconnect_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Ipv6 Interconnect Disabled](#nestedblock--gre_ipv4--ipv6_interconnect_disabled) below.
+`ipv6_interconnect_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [IPv6 Interconnect Disabled](#nestedblock--gre_ipv4--ipv6_interconnect_disabled) below.
 
-`ipv6_interconnect_enabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Ipv6 Interconnect Enabled](#nestedblock--gre_ipv4--ipv6_interconnect_enabled) below.
+`ipv6_interconnect_enabled` - (Optional) Empty. This can be used for messages where no values are needed. See [IPv6 Interconnect Enabled](#nestedblock--gre_ipv4--ipv6_interconnect_enabled) below.
 
 `keepalive_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Keepalive Disabled](#nestedblock--gre_ipv4--keepalive_disabled) below.
 
@@ -184,55 +184,55 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--gre_ipv4--fragmentation_disabled"></a>
 
-### Gre Ipv4 Fragmentation Disabled
+### Gre IPv4 Fragmentation Disabled
 
 <a id="nestedblock--gre_ipv4--fragmentation_enabled"></a>
 
-### Gre Ipv4 Fragmentation Enabled
+### Gre IPv4 Fragmentation Enabled
 
 <a id="nestedblock--gre_ipv4--ipv6_interconnect_disabled"></a>
 
-### Gre Ipv4 Ipv6 Interconnect Disabled
+### Gre IPv4 IPv6 Interconnect Disabled
 
 <a id="nestedblock--gre_ipv4--ipv6_interconnect_enabled"></a>
 
-### Gre Ipv4 Ipv6 Interconnect Enabled
+### Gre IPv4 IPv6 Interconnect Enabled
 
 <a id="nestedblock--gre_ipv4--keepalive_disabled"></a>
 
-### Gre Ipv4 Keepalive Disabled
+### Gre IPv4 Keepalive Disabled
 
 <a id="nestedblock--gre_ipv4--keepalive_enabled"></a>
 
-### Gre Ipv4 Keepalive Enabled
+### Gre IPv4 Keepalive Enabled
 
 <a id="nestedblock--gre_ipv6"></a>
 
-### Gre Ipv6
+### Gre IPv6
 
 `customer_endpoint_ipv6` - (Optional) Customer Endpoint IP. IPv6 address for the customer endpoint of the tunnel (`String`).
 
-`ipv4_interconnect_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Ipv4 Interconnect Disabled](#nestedblock--gre_ipv6--ipv4_interconnect_disabled) below.
+`ipv4_interconnect_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [IPv4 Interconnect Disabled](#nestedblock--gre_ipv6--ipv4_interconnect_disabled) below.
 
-`ipv4_interconnect_enabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Ipv4 Interconnect Enabled](#nestedblock--gre_ipv6--ipv4_interconnect_enabled) below.
+`ipv4_interconnect_enabled` - (Optional) Empty. This can be used for messages where no values are needed. See [IPv4 Interconnect Enabled](#nestedblock--gre_ipv6--ipv4_interconnect_enabled) below.
 
 <a id="nestedblock--gre_ipv6--ipv4_interconnect_disabled"></a>
 
-### Gre Ipv6 Ipv4 Interconnect Disabled
+### Gre IPv6 IPv4 Interconnect Disabled
 
 <a id="nestedblock--gre_ipv6--ipv4_interconnect_enabled"></a>
 
-### Gre Ipv6 Ipv4 Interconnect Enabled
+### Gre IPv6 IPv4 Interconnect Enabled
 
 <a id="nestedblock--ip_in_ip"></a>
 
-### Ip In Ip
+### IP In IP
 
 `customer_endpoint_ipv4` - (Optional) Customer Endpoint IP. IPv4 address for the customer endpoint of the tunnel (`String`).
 
 <a id="nestedblock--ipv6_to_ipv6"></a>
 
-### Ipv6 To Ipv6
+### IPv6 To IPv6
 
 `customer_endpoint_ipv6` - (Optional) Customer Endpoint IP. IPv6 address for the customer endpoint of the tunnel (`String`).
 
@@ -240,13 +240,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--tunnel_location"></a>
 

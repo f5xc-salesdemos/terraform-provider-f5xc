@@ -66,9 +66,9 @@ The following arguments are optional:
 
 `server_name` - (Optional) Server Name. The expected name of the server. The actual names for the server are extracted from the HTTP Host header and the name of the virtual_host for the request (`String`).
 
-`server_name_matcher` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. See [Server Name Matcher](#server-name-matcher) below for details.
+`server_name_matcher` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set of supported match criteria includes a list of exact values and a list of regular expressions. See [Server Name Matcher](#server-name-matcher) below for details.
 
-`server_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Server Selector](#server-selector) below for details.
+`server_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Server Selector](#server-selector) below for details.
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
@@ -88,7 +88,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Rules
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--rules--metadata) below.
 
 `spec` - (Optional) Rate Limiter Rule Specification. Shape of Rate Limiter Rule. See [Spec](#nestedblock--rules--spec) below.
 
@@ -108,11 +108,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `any_country` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Country](#nestedblock--rules--spec--any_country) below.
 
-`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Ip](#nestedblock--rules--spec--any_ip) below.
+`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any IP](#nestedblock--rules--spec--any_ip) below.
 
 `apply_rate_limiter` - (Optional) Empty. This can be used for messages where no values are needed. See [Apply Rate Limiter](#nestedblock--rules--spec--apply_rate_limiter) below.
 
-`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. See [Asn List](#nestedblock--rules--spec--asn_list) below.
+`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. See [Asn List](#nestedblock--rules--spec--asn_list) below.
 
 `asn_matcher` - (Optional) ASN Matcher. Match any AS number contained in the list of bgp_asn_sets. See [Asn Matcher](#nestedblock--rules--spec--asn_matcher) below.
 
@@ -122,17 +122,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `custom_rate_limiter` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Custom Rate Limiter](#nestedblock--rules--spec--custom_rate_limiter) below.
 
-`domain_matcher` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. See [Domain Matcher](#nestedblock--rules--spec--domain_matcher) below.
+`domain_matcher` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set of supported match criteria includes a list of exact values and a list of regular expressions. See [Domain Matcher](#nestedblock--rules--spec--domain_matcher) below.
 
-`headers` - (Optional) A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. See [Headers](#nestedblock--rules--spec--headers) below.
+`headers` - (Optional) A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type. Note that all specified header predicates must evaluate to true. See [Headers](#nestedblock--rules--spec--headers) below.
 
-`http_method` - (Optional) HTTP Method Matcher. A http method matcher specifies a list of methods to match an input HTTP method. The match is considered successful if the input method is a member of the list. See [Http Method](#nestedblock--rules--spec--http_method) below.
+`http_method` - (Optional) HTTP Method Matcher. A HTTP method matcher specifies a list of methods to match an input HTTP method. The match is considered successful if the input method is a member of the list. The result of the match based on the method list is inverted if invert_matcher is true. See [HTTP Method](#nestedblock--rules--spec--http_method) below.
 
-`ip_matcher` - (Optional) IP Prefix Matcher. Match any ip prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [Ip Matcher](#nestedblock--rules--spec--ip_matcher) below.
+`ip_matcher` - (Optional) IP Prefix Matcher. Match any IP prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [IP Matcher](#nestedblock--rules--spec--ip_matcher) below.
 
-`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [Ip Prefix List](#nestedblock--rules--spec--ip_prefix_list) below.
+`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [IP Prefix List](#nestedblock--rules--spec--ip_prefix_list) below.
 
-`path` - (Optional) Path Matcher. A path matcher specifies multiple criteria for matching an HTTP path string. The match is considered successful if any of the criteria are satisfied. See [Path](#nestedblock--rules--spec--path) below.
+`path` - (Optional) Path Matcher. A path matcher specifies multiple criteria for matching an HTTP path string. The match is considered successful if any of the criteria are satisfied. The set of supported match criteria includes a list of path prefixes, a list of exact path values and a list of regular expressions. See [Path](#nestedblock--rules--spec--path) below.
 
 <a id="nestedblock--rules--spec--any_asn"></a>
 
@@ -144,7 +144,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rules--spec--any_ip"></a>
 
-### Rules Spec Any Ip
+### Rules Spec Any IP
 
 <a id="nestedblock--rules--spec--apply_rate_limiter"></a>
 
@@ -154,7 +154,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Rules Spec Asn List
 
-`as_numbers` - (Optional) AS Numbers. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy (`List`).
+`as_numbers` - (Optional) AS Numbers. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer (`List`).
 
 <a id="nestedblock--rules--spec--asn_matcher"></a>
 
@@ -206,7 +206,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `invert_matcher` - (Optional) Invert Header Matcher. Invert the match result (`Bool`).
 
-`item` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. See [Item](#nestedblock--rules--spec--headers--item) below.
+`item` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set of supported match criteria includes a list of exact values and a list of regular expressions. See [Item](#nestedblock--rules--spec--headers--item) below.
 
 `name` - (Optional) Header Name. A case-insensitive HTTP header name (`String`).
 
@@ -224,7 +224,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rules--spec--http_method"></a>
 
-### Rules Spec Http Method
+### Rules Spec HTTP Method
 
 `invert_matcher` - (Optional) Invert Method Matcher. Invert the match result (`Bool`).
 
@@ -232,7 +232,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rules--spec--ip_matcher"></a>
 
-### Rules Spec Ip Matcher
+### Rules Spec IP Matcher
 
 `invert_matcher` - (Optional) Invert IP Matcher. Invert the match result (`Bool`).
 
@@ -240,11 +240,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rules--spec--ip_matcher--prefix_sets"></a>
 
-### Rules Spec Ip Matcher Prefix Sets
+### Rules Spec IP Matcher Prefix Sets
 
 <a id="nestedblock--rules--spec--ip_prefix_list"></a>
 
-### Rules Spec Ip Prefix List
+### Rules Spec IP Prefix List
 
 `invert_match` - (Optional) Invert Match Result. Invert the match result (`Bool`).
 
@@ -284,13 +284,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

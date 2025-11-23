@@ -58,7 +58,7 @@ The following arguments are required:
 
 The following arguments are optional:
 
-`action` - (Optional) Rule Action. The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds forward (`String`).
+`action` - (Optional) Rule Action. The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds forward. If it matches a rule with a DENY action, the processing of the request is terminated and an appropriate message/code returned to the originator. If it matches a rule with a NEXT_POLICY_SET action, evaluation of the current policy set terminates and evaluation of the next policy set in the chain begins. - DENY: DENY D... Possible values are `DENY`, `ALLOW`, `NEXT_POLICY`. Defaults to `DENY` (`String`).
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
@@ -72,59 +72,59 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "any_ip, ip_matcher, ip_prefix_list" must be set.
 
-`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Ip](#any-ip) below for details.
+`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any IP](#any-ip) below for details.
 
-`api_group_matcher` - (Optional) String Matcher. A matcher specifies a list of values for matching an input string. The match is considered successful if the input value is present in the list. See [Api Group Matcher](#api-group-matcher) below for details.
+`api_group_matcher` - (Optional) String Matcher. A matcher specifies a list of values for matching an input string. The match is considered successful if the input value is present in the list. The result of the match is inverted if invert_matcher is true. See [API Group Matcher](#api-group-matcher) below for details.
 
-`arg_matchers` - (Optional) Argument Matchers. A list of predicates for all POST args that need to be matched. The criteria for matching each arg are described in individual instances of ArgMatcherType. See [Arg Matchers](#arg-matchers) below for details.
+`arg_matchers` - (Optional) Argument Matchers. A list of predicates for all POST args that need to be matched. The criteria for matching each arg are described in individual instances of ArgMatcherType. The actual arg values are extracted from the request API as a list of strings for each arg selector name. Note that all specified arg matcher predicates must evaluate to true. See [Arg Matchers](#arg-matchers) below for details.
 
-`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. See [Asn List](#asn-list) below for details.
+`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. See [Asn List](#asn-list) below for details.
 
 `asn_matcher` - (Optional) ASN Matcher. Match any AS number contained in the list of bgp_asn_sets. See [Asn Matcher](#asn-matcher) below for details.
 
-`body_matcher` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. See [Body Matcher](#body-matcher) below for details.
+`body_matcher` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set of supported match criteria includes a list of exact values and a list of regular expressions. See [Body Matcher](#body-matcher) below for details.
 
 `bot_action` - (Optional) Bot Action. Modify Bot protection behavior for a matching request. The modification could be to entirely skip Bot processing. See [Bot Action](#bot-action) below for details.
 
 `client_name` - (Optional) Client Name. The expected name of the client invoking the request API. The predicate evaluates to true if any of the actual names is the same as the expected client name (`String`).
 
-`client_name_matcher` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. See [Client Name Matcher](#client-name-matcher) below for details.
+`client_name_matcher` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set of supported match criteria includes a list of exact values and a list of regular expressions. See [Client Name Matcher](#client-name-matcher) below for details.
 
-`client_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Client Selector](#client-selector) below for details.
+`client_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Client Selector](#client-selector) below for details.
 
-`cookie_matchers` - (Optional) Cookie Matchers. A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances of CookieMatcherType. See [Cookie Matchers](#cookie-matchers) below for details.
+`cookie_matchers` - (Optional) Cookie Matchers. A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances of CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name. Note that all specified cookie matcher predicates must evaluate to true. See [Cookie Matchers](#cookie-matchers) below for details.
 
-`domain_matcher` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. See [Domain Matcher](#domain-matcher) below for details.
+`domain_matcher` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set of supported match criteria includes a list of exact values and a list of regular expressions. See [Domain Matcher](#domain-matcher) below for details.
 
-`expiration_timestamp` - (Optional) Expiration Timestamp. The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired (`String`).
+`expiration_timestamp` - (Optional) Expiration Timestamp. The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired. The rule continues to exist in the configuration but is not applied anymore (`String`).
 
-`headers` - (Optional) HTTP Headers. A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. See [Headers](#headers) below for details.
+`headers` - (Optional) HTTP Headers. A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type. Note that all specified header predicates must evaluate to true. See [Headers](#headers) below for details.
 
-`http_method` - (Optional) HTTP Method Matcher. A http method matcher specifies a list of methods to match an input HTTP method. The match is considered successful if the input method is a member of the list. See [Http Method](#http-method) below for details.
+`http_method` - (Optional) HTTP Method Matcher. A HTTP method matcher specifies a list of methods to match an input HTTP method. The match is considered successful if the input method is a member of the list. The result of the match based on the method list is inverted if invert_matcher is true. See [HTTP Method](#http-method) below for details.
 
-`ip_matcher` - (Optional) IP Prefix Matcher. Match any ip prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [Ip Matcher](#ip-matcher) below for details.
+`ip_matcher` - (Optional) IP Prefix Matcher. Match any IP prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [IP Matcher](#ip-matcher) below for details.
 
-`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [Ip Prefix List](#ip-prefix-list) below for details.
+`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [IP Prefix List](#ip-prefix-list) below for details.
 
-`ip_threat_category_list` - (Optional) IP Threat Category List Type. List of ip threat categories. See [Ip Threat Category List](#ip-threat-category-list) below for details.
+`ip_threat_category_list` - (Optional) IP Threat Category List Type. List of IP threat categories. See [IP Threat Category List](#ip-threat-category-list) below for details.
 
 > **Note:** One of the arguments from this list "ja4_tls_fingerprint, tls_fingerprint_matcher" must be set.
 
-`ja4_tls_fingerprint` - (Optional) JA4 TLS Fingerprint Matcher. An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of SSL/TLS clients and potentially has a different structure and length. See [Ja4 Tls Fingerprint](#ja4-tls-fingerprint) below for details.
+`ja4_tls_fingerprint` - (Optional) JA4 TLS Fingerprint Matcher. An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of SSL/TLS clients and potentially has a different structure and length. See [Ja4 TLS Fingerprint](#ja4-tls-fingerprint) below for details.
 
-`jwt_claims` - (Optional) JWT Claims. A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType instances. See [Jwt Claims](#jwt-claims) below for details.
+`jwt_claims` - (Optional) JWT Claims. A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType instances. The actual JWT claims values are extracted from the JWT payload as a list of strings. Note that all specified JWT claim predicates must evaluate to true. See [JWT Claims](#jwt-claims) below for details.
 
-`label_matcher` - (Optional) Label Matcher. A label matcher specifies a list of label keys whose values need to match for source/client and destination/server. See [Label Matcher](#label-matcher) below for details.
+`label_matcher` - (Optional) Label Matcher. A label matcher specifies a list of label keys whose values need to match for source/client and destination/server. Note that the actual label values are not specified and do not matter. This allows an ability to scope grouping by the label key name. See [Label Matcher](#label-matcher) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
 `mum_action` - (Optional) Select Modification Action. Modify behavior for a matching request. The modification could be to entirely skip processing. See [Mum Action](#mum-action) below for details.
 
-`path` - (Optional) Path Matcher. A path matcher specifies multiple criteria for matching an HTTP path string. The match is considered successful if any of the criteria are satisfied. See [Path](#path) below for details.
+`path` - (Optional) Path Matcher. A path matcher specifies multiple criteria for matching an HTTP path string. The match is considered successful if any of the criteria are satisfied. The set of supported match criteria includes a list of path prefixes, a list of exact path values and a list of regular expressions. See [Path](#path) below for details.
 
-`port_matcher` - (Optional) Port Matcher. A port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges. See [Port Matcher](#port-matcher) below for details.
+`port_matcher` - (Optional) Port Matcher. A port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges. The result of the match is inverted if invert_matcher is true. See [Port Matcher](#port-matcher) below for details.
 
-`query_params` - (Optional) HTTP Query Parameters. A list of predicates for all query parameters that need to be matched. See [Query Params](#query-params) below for details.
+`query_params` - (Optional) HTTP Query Parameters. A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name. Note that all specified query parameter predicates must evaluate to true. See [Query Params](#query-params) below for details.
 
 `request_constraints` - (Optional) Request Constraints. See [Request Constraints](#request-constraints) below for details.
 
@@ -132,9 +132,9 @@ The following arguments are optional:
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
-`tls_fingerprint_matcher` - (Optional) TLS Fingerprint Matcher. A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. See [Tls Fingerprint Matcher](#tls-fingerprint-matcher) below for details.
+`tls_fingerprint_matcher` - (Optional) TLS Fingerprint Matcher. A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. The set of supported positve match criteria includes a list of known classes of TLS fingerprints and a list of exact values. The match is considered successful if either of these positive criteria are satisfied and the input fingerprint is not one of the excluded values. See [TLS Fingerprint Matcher](#tls-fingerprint-matcher) below for details.
 
-`waf_action` - (Optional) App Firewall Action. Modify App Firewall behavior for a matching request. See [Waf Action](#waf-action) below for details.
+`waf_action` - (Optional) App Firewall Action. Modify App Firewall behavior for a matching request. The modification could either be to entirely skip firewall processing or to customize the firewall rules to be applied as defined by App Firewall Rule Control settings. See [WAF Action](#waf-action) below for details.
 
 ### Attributes Reference
 
@@ -154,11 +154,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--any_ip"></a>
 
-### Any Ip
+### Any IP
 
 <a id="nestedblock--api_group_matcher"></a>
 
-### Api Group Matcher
+### API Group Matcher
 
 `invert_matcher` - (Optional) Invert String Matcher. Invert the match result (`Bool`).
 
@@ -174,9 +174,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `invert_matcher` - (Optional) Invert Matcher. Invert Match of the expression defined (`Bool`).
 
-`item` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. See [Item](#nestedblock--arg_matchers--item) below.
+`item` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set of supported match criteria includes a list of exact values and a list of regular expressions. See [Item](#nestedblock--arg_matchers--item) below.
 
-`name` - (Optional) Argument Name. x-example: 'phones[_]' x-example: 'cars.make.toyota.models[1]' x-example: 'cars.make.honda.models[_]' x-example: 'cars.make[_] (`String`).
+`name` - (Optional) Argument Name. x-example: 'phones[_]' x-example: 'cars.make.toyota.models[1]' x-example: 'cars.make.honda.models[_]' x-example: 'cars.make[_].models[_]' A case-sensitive JSON path in the HTTP request body (`String`).
 
 <a id="nestedblock--arg_matchers--check_not_present"></a>
 
@@ -200,7 +200,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Asn List
 
-`as_numbers` - (Optional) AS Numbers. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy (`List`).
+`as_numbers` - (Optional) AS Numbers. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer (`List`).
 
 <a id="nestedblock--asn_matcher"></a>
 
@@ -272,7 +272,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `invert_matcher` - (Optional) Invert Matcher. Invert Match of the expression defined (`Bool`).
 
-`item` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. See [Item](#nestedblock--cookie_matchers--item) below.
+`item` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set of supported match criteria includes a list of exact values and a list of regular expressions. See [Item](#nestedblock--cookie_matchers--item) below.
 
 `name` - (Optional) Cookie Name. A case-sensitive cookie name (`String`).
 
@@ -312,7 +312,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `invert_matcher` - (Optional) Invert Header Matcher. Invert the match result (`Bool`).
 
-`item` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. See [Item](#nestedblock--headers--item) below.
+`item` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set of supported match criteria includes a list of exact values and a list of regular expressions. See [Item](#nestedblock--headers--item) below.
 
 `name` - (Optional) Header Name. A case-insensitive HTTP header name (`String`).
 
@@ -336,7 +336,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--http_method"></a>
 
-### Http Method
+### HTTP Method
 
 `invert_matcher` - (Optional) Invert Method Matcher. Invert the match result (`Bool`).
 
@@ -344,7 +344,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ip_matcher"></a>
 
-### Ip Matcher
+### IP Matcher
 
 `invert_matcher` - (Optional) Invert IP Matcher. Invert the match result (`Bool`).
 
@@ -352,7 +352,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ip_matcher--prefix_sets"></a>
 
-### Ip Matcher Prefix Sets
+### IP Matcher Prefix Sets
 
 `kind` - (Optional) Kind. When a configuration object(e.g. virtual_host) refers to another(e.g route) then kind will hold the referred object's kind (e.g. 'route') (`String`).
 
@@ -366,7 +366,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ip_prefix_list"></a>
 
-### Ip Prefix List
+### IP Prefix List
 
 `invert_match` - (Optional) Invert Match Result. Invert the match result (`Bool`).
 
@@ -374,19 +374,19 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ip_threat_category_list"></a>
 
-### Ip Threat Category List
+### IP Threat Category List
 
 `ip_threat_categories` - (Optional) List of IP Threat Categories to choose. The IP threat categories is obtained from the list and is used to auto-generate equivalent label selection expressions (`List`).
 
 <a id="nestedblock--ja4_tls_fingerprint"></a>
 
-### Ja4 Tls Fingerprint
+### Ja4 TLS Fingerprint
 
 `exact_values` - (Optional) Exact Values. A list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against (`List`).
 
 <a id="nestedblock--jwt_claims"></a>
 
-### Jwt Claims
+### JWT Claims
 
 `check_not_present` - (Optional) Empty. This can be used for messages where no values are needed. See [Check Not Present](#nestedblock--jwt_claims--check_not_present) below.
 
@@ -394,21 +394,21 @@ In addition to all arguments above, the following attributes are exported:
 
 `invert_matcher` - (Optional) Invert Matcher. Invert the match result (`Bool`).
 
-`item` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. See [Item](#nestedblock--jwt_claims--item) below.
+`item` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set of supported match criteria includes a list of exact values and a list of regular expressions. See [Item](#nestedblock--jwt_claims--item) below.
 
 `name` - (Optional) JWT Claim Name. JWT claim name (`String`).
 
 <a id="nestedblock--jwt_claims--check_not_present"></a>
 
-### Jwt Claims Check Not Present
+### JWT Claims Check Not Present
 
 <a id="nestedblock--jwt_claims--check_present"></a>
 
-### Jwt Claims Check Present
+### JWT Claims Check Present
 
 <a id="nestedblock--jwt_claims--item"></a>
 
-### Jwt Claims Item
+### JWT Claims Item
 
 `exact_values` - (Optional) Exact Values. A list of exact values to match the input against (`List`).
 
@@ -472,7 +472,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `invert_matcher` - (Optional) Invert Query Parameter Matcher. Invert the match result (`Bool`).
 
-`item` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. See [Item](#nestedblock--query_params--item) below.
+`item` - (Optional) Matcher. A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set of supported match criteria includes a list of exact values and a list of regular expressions. See [Item](#nestedblock--query_params--item) below.
 
 `key` - (Optional) Query Parameter Name. A case-sensitive HTTP query parameter name (`String`).
 
@@ -548,7 +548,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `max_url_size_exceeds` - (Optional) Match on the URL Size that exceed this value (`Number`).
 
-`max_url_size_none` - (Optional) Empty. This can be used for messages where no values are needed. See [Max Url Size None](#nestedblock--request_constraints--max_url_size_none) below.
+`max_url_size_none` - (Optional) Empty. This can be used for messages where no values are needed. See [Max URL Size None](#nestedblock--request_constraints--max_url_size_none) below.
 
 <a id="nestedblock--request_constraints--max_cookie_count_none"></a>
 
@@ -600,7 +600,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--request_constraints--max_url_size_none"></a>
 
-### Request Constraints Max Url Size None
+### Request Constraints Max URL Size None
 
 <a id="nestedblock--segment_policy"></a>
 
@@ -664,37 +664,37 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--tls_fingerprint_matcher"></a>
 
-### Tls Fingerprint Matcher
+### TLS Fingerprint Matcher
 
 `classes` - (Optional) TLS fingerprint classes. A list of known classes of TLS fingerprints to match the input TLS JA3 fingerprint against (`List`).
 
 `exact_values` - (Optional) Exact Values. A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against (`List`).
 
-`excluded_values` - (Optional) Excluded Values. A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint (`List`).
+`excluded_values` - (Optional) Excluded Values. A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint. This can be used to skip known false positives when using one or more known TLS fingerprint classes in the enclosing matcher (`List`).
 
 <a id="nestedblock--waf_action"></a>
 
-### Waf Action
+### WAF Action
 
 `app_firewall_detection_control` - (Optional) App Firewall Detection Control. Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria. See [App Firewall Detection Control](#nestedblock--waf_action--app_firewall_detection_control) below.
 
 `none` - (Optional) Empty. This can be used for messages where no values are needed. See [None](#nestedblock--waf_action--none) below.
 
-`waf_skip_processing` - (Optional) Empty. This can be used for messages where no values are needed. See [Waf Skip Processing](#nestedblock--waf_action--waf_skip_processing) below.
+`waf_skip_processing` - (Optional) Empty. This can be used for messages where no values are needed. See [WAF Skip Processing](#nestedblock--waf_action--waf_skip_processing) below.
 
 <a id="nestedblock--waf_action--app_firewall_detection_control"></a>
 
-### Waf Action App Firewall Detection Control
+### WAF Action App Firewall Detection Control
 
 `exclude_attack_type_contexts` - (Optional) Attack Types. Attack Types to be excluded for the defined match criteria. See [Exclude Attack Type Contexts](#nestedblock--waf_action--app_firewall_detection_control--exclude_attack_type_contexts) below.
 
@@ -706,47 +706,47 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--waf_action--app_firewall_detection_control--exclude_attack_type_contexts"></a>
 
-### Waf Action App Firewall Detection Control Exclude Attack Type Contexts
+### WAF Action App Firewall Detection Control Exclude Attack Type Contexts
 
-`context` - (Optional) WAF Exclusion Context Options. The available contexts for Exclusion rules. - CONTEXT_ANY: CONTEXT_ANY Detection will be excluded for all contexts (`String`).
+`context` - (Optional) WAF Exclusion Context Options. The available contexts for Exclusion rules. - CONTEXT_ANY: CONTEXT_ANY Detection will be excluded for all contexts. - CONTEXT_BODY: CONTEXT_BODY Detection will be excluded for the request body. - CONTEXT_REQUEST: CONTEXT_REQUEST Detection will be excluded for the request. - CONTEXT_RESPONSE: CONTEXT_RESPONSE - CONTEXT_PARAMETER: CONTEXT_PARAMETER Detection will be excluded for the parameters. The parameter name is required in the Context name field. If the field... Possible values are `CONTEXT_ANY`, `CONTEXT_BODY`, `CONTEXT_REQUEST`, `CONTEXT_RESPONSE`, `CONTEXT_PARAMETER`, `CONTEXT_HEADER`, `CONTEXT_COOKIE`, `CONTEXT_URL`, `CONTEXT_URI`. Defaults to `CONTEXT_ANY` (`String`).
 
-`context_name` - (Optional) Context Name. Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check (`String`).
+`context_name` - (Optional) Context Name. Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check. Wildcard matching can be used by prefixing or suffixing the context name with an wildcard asterisk (*) (`String`).
 
-`exclude_attack_type` - (Optional) Attack Types. List of all Attack Types ATTACK_TYPE_NONE ATTACK_TYPE_NON_BROWSER_CLIENT ATTACK_TYPE_OTHER_APPLICATION_ATTACKS ATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE ATTACK_TYPE_DETECTION_EVASION ATTACK... (`String`).
+`exclude_attack_type` - (Optional) Attack Types. List of all Attack Types ATTACK_TYPE_NONE ATTACK_TYPE_NON_BROWSER_CLIENT ATTACK_TYPE_OTHER_APPLICATION_ATTACKS ATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE ATTACK_TYPE_DETECTION_EVASION ATTACK_TYPE_VULNERABILITY_SCAN ATTACK_TYPE_ABUSE_OF_FUNCTIONALITY ATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS ATTACK_TYPE_BUFFER_OVERFLOW ATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION ATTACK_TYPE_INFORMATION_LEAKAGE ATTACK_TYPE_DIRECTORY_INDEXING ATTACK_TYPE_PATH_TRAVERSAL ATTACK_TYPE_XPATH_INJECTION ATT... Possible values include `ATTACK_TYPE_NONE`, `ATTACK_TYPE_NON_BROWSER_CLIENT`, `ATTACK_TYPE_OTHER_APPLICATION_ATTACKS`, `ATTACK_TYPE_TROJAN_BACKDOOR_SPYWARE`, `ATTACK_TYPE_DETECTION_EVASION`, `ATTACK_TYPE_VULNERABILITY_SCAN`, `ATTACK_TYPE_ABUSE_OF_FUNCTIONALITY`, `ATTACK_TYPE_AUTHENTICATION_AUTHORIZATION_ATTACKS`, `ATTACK_TYPE_BUFFER_OVERFLOW`, `ATTACK_TYPE_PREDICTABLE_RESOURCE_LOCATION`, and others (`String`).
 
 <a id="nestedblock--waf_action--app_firewall_detection_control--exclude_bot_name_contexts"></a>
 
-### Waf Action App Firewall Detection Control Exclude Bot Name Contexts
+### WAF Action App Firewall Detection Control Exclude Bot Name Contexts
 
 `bot_name` - (Optional) Bot Name (`String`).
 
 <a id="nestedblock--waf_action--app_firewall_detection_control--exclude_signature_contexts"></a>
 
-### Waf Action App Firewall Detection Control Exclude Signature Contexts
+### WAF Action App Firewall Detection Control Exclude Signature Contexts
 
-`context` - (Optional) WAF Exclusion Context Options. The available contexts for Exclusion rules. - CONTEXT_ANY: CONTEXT_ANY Detection will be excluded for all contexts (`String`).
+`context` - (Optional) WAF Exclusion Context Options. The available contexts for Exclusion rules. - CONTEXT_ANY: CONTEXT_ANY Detection will be excluded for all contexts. - CONTEXT_BODY: CONTEXT_BODY Detection will be excluded for the request body. - CONTEXT_REQUEST: CONTEXT_REQUEST Detection will be excluded for the request. - CONTEXT_RESPONSE: CONTEXT_RESPONSE - CONTEXT_PARAMETER: CONTEXT_PARAMETER Detection will be excluded for the parameters. The parameter name is required in the Context name field. If the field... Possible values are `CONTEXT_ANY`, `CONTEXT_BODY`, `CONTEXT_REQUEST`, `CONTEXT_RESPONSE`, `CONTEXT_PARAMETER`, `CONTEXT_HEADER`, `CONTEXT_COOKIE`, `CONTEXT_URL`, `CONTEXT_URI`. Defaults to `CONTEXT_ANY` (`String`).
 
-`context_name` - (Optional) Context Name. Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check (`String`).
+`context_name` - (Optional) Context Name. Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check. Wildcard matching can be used by prefixing or suffixing the context name with an wildcard asterisk (*) (`String`).
 
 `signature_id` - (Optional) SignatureID. The allowed values for signature id are 0 and in the range of 200000001-299999999. 0 implies that all signatures will be excluded for the specified context (`Number`).
 
 <a id="nestedblock--waf_action--app_firewall_detection_control--exclude_violation_contexts"></a>
 
-### Waf Action App Firewall Detection Control Exclude Violation Contexts
+### WAF Action App Firewall Detection Control Exclude Violation Contexts
 
-`context` - (Optional) WAF Exclusion Context Options. The available contexts for Exclusion rules. - CONTEXT_ANY: CONTEXT_ANY Detection will be excluded for all contexts (`String`).
+`context` - (Optional) WAF Exclusion Context Options. The available contexts for Exclusion rules. - CONTEXT_ANY: CONTEXT_ANY Detection will be excluded for all contexts. - CONTEXT_BODY: CONTEXT_BODY Detection will be excluded for the request body. - CONTEXT_REQUEST: CONTEXT_REQUEST Detection will be excluded for the request. - CONTEXT_RESPONSE: CONTEXT_RESPONSE - CONTEXT_PARAMETER: CONTEXT_PARAMETER Detection will be excluded for the parameters. The parameter name is required in the Context name field. If the field... Possible values are `CONTEXT_ANY`, `CONTEXT_BODY`, `CONTEXT_REQUEST`, `CONTEXT_RESPONSE`, `CONTEXT_PARAMETER`, `CONTEXT_HEADER`, `CONTEXT_COOKIE`, `CONTEXT_URL`, `CONTEXT_URI`. Defaults to `CONTEXT_ANY` (`String`).
 
-`context_name` - (Optional) Context Name. Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check (`String`).
+`context_name` - (Optional) Context Name. Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check. Wildcard matching can be used by prefixing or suffixing the context name with an wildcard asterisk (*) (`String`).
 
-`exclude_violation` - (Optional) App Firewall Violation Type. List of all supported Violation Types VIOL_NONE VIOL_FILETYPE VIOL_METHOD VIOL_MANDATORY_HEADER VIOL_HTTP_RESPONSE_STATUS VIOL_REQUEST_MAX_LENGTH VIOL_FILE_UPLOAD VIOL_... (`String`).
+`exclude_violation` - (Optional) App Firewall Violation Type. List of all supported Violation Types VIOL_NONE VIOL_FILETYPE VIOL_METHOD VIOL_MANDATORY_HEADER VIOL_HTTP_RESPONSE_STATUS VIOL_REQUEST_MAX_LENGTH VIOL_FILE_UPLOAD VIOL_FILE_UPLOAD_IN_BODY VIOL_XML_MALFORMED VIOL_JSON_MALFORMED VIOL_ASM_COOKIE_MODIFIED VIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS VIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE VIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT VIOL_HTTP_PROTOCOL_NULL_IN_REQUEST VIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION VIOL_HTTP_PROTOCO... Possible values include `VIOL_NONE`, `VIOL_FILETYPE`, `VIOL_METHOD`, `VIOL_MANDATORY_HEADER`, `VIOL_HTTP_RESPONSE_STATUS`, `VIOL_REQUEST_MAX_LENGTH`, `VIOL_FILE_UPLOAD`, `VIOL_FILE_UPLOAD_IN_BODY`, `VIOL_XML_MALFORMED`, `VIOL_JSON_MALFORMED`, and others (`String`).
 
 <a id="nestedblock--waf_action--none"></a>
 
-### Waf Action None
+### WAF Action None
 
 <a id="nestedblock--waf_action--waf_skip_processing"></a>
 
-### Waf Action Waf Skip Processing
+### WAF Action WAF Skip Processing
 
 ## Import
 

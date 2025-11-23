@@ -96,17 +96,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `forwarding_class_list` - (Optional) Forwarding Class. Ordered list of forwarding Class to be used if no rule match. See [Forwarding Class List](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--forwarding_class_list) below.
 
-`http_list` - (Optional) URLListType. See [Http List](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--http_list) below.
+`http_list` - (Optional) URLListType. See [HTTP List](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--http_list) below.
 
-`ip_prefix_set` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Ip Prefix Set](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--ip_prefix_set) below.
+`ip_prefix_set` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [IP Prefix Set](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--ip_prefix_set) below.
 
-`label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Label Selector](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--label_selector) below.
+`label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Label Selector](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--label_selector) below.
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--metadata) below.
 
 `prefix_list` - (Optional) IPv4 Prefix List. x-example: '192.168.20.0/24' List of IPv4 prefixes that represent an endpoint. See [Prefix List](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--prefix_list) below.
 
-`tls_list` - (Optional) DomainListType. See [Tls List](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--tls_list) below.
+`tls_list` - (Optional) DomainListType. See [TLS List](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--tls_list) below.
 
 <a id="nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--all_destinations"></a>
 
@@ -128,17 +128,17 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--http_list"></a>
 
-### Forward Proxy Pbr Forward Proxy Pbr Rules Http List
+### Forward Proxy Pbr Forward Proxy Pbr Rules HTTP List
 
-`http_list` - (Optional) HTTP URLs. URLs for HTTP connections. See [Http List](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--http_list--http_list) below.
+`http_list` - (Optional) HTTP URLs. URLs for HTTP connections. See [HTTP List](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--http_list--http_list) below.
 
 <a id="nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--http_list--http_list"></a>
 
-### Forward Proxy Pbr Forward Proxy Pbr Rules Http List Http List
+### Forward Proxy Pbr Forward Proxy Pbr Rules HTTP List HTTP List
 
 <a id="nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--ip_prefix_set"></a>
 
-### Forward Proxy Pbr Forward Proxy Pbr Rules Ip Prefix Set
+### Forward Proxy Pbr Forward Proxy Pbr Rules IP Prefix Set
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -168,13 +168,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--tls_list"></a>
 
-### Forward Proxy Pbr Forward Proxy Pbr Rules Tls List
+### Forward Proxy Pbr Forward Proxy Pbr Rules TLS List
 
-`tls_list` - (Optional) TLS Domains. Domains in SNI for TLS connections. See [Tls List](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--tls_list--tls_list) below.
+`tls_list` - (Optional) TLS Domains. Domains in SNI for TLS connections. See [TLS List](#nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--tls_list--tls_list) below.
 
 <a id="nestedblock--forward_proxy_pbr--forward_proxy_pbr_rules--tls_list--tls_list"></a>
 
-### Forward Proxy Pbr Forward Proxy Pbr Rules Tls List Tls List
+### Forward Proxy Pbr Forward Proxy Pbr Rules TLS List TLS List
 
 <a id="nestedblock--forwarding_class_list"></a>
 
@@ -192,7 +192,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `any` - (Optional) Empty. This can be used for messages where no values are needed. See [Any](#nestedblock--network_pbr--any) below.
 
-`label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Label Selector](#nestedblock--network_pbr--label_selector) below.
+`label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Label Selector](#nestedblock--network_pbr--label_selector) below.
 
 `network_pbr_rules` - (Optional) L3/L4 Destination Routing Rules. Network(L3/L4) routing policy rule. See [Network Pbr Rules](#nestedblock--network_pbr--network_pbr_rules) below.
 
@@ -212,11 +212,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Network Pbr Network Pbr Rules
 
-`all_tcp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All Tcp Traffic](#nestedblock--network_pbr--network_pbr_rules--all_tcp_traffic) below.
+`all_tcp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All TCP Traffic](#nestedblock--network_pbr--network_pbr_rules--all_tcp_traffic) below.
 
 `all_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All Traffic](#nestedblock--network_pbr--network_pbr_rules--all_traffic) below.
 
-`all_udp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All Udp Traffic](#nestedblock--network_pbr--network_pbr_rules--all_udp_traffic) below.
+`all_udp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All UDP Traffic](#nestedblock--network_pbr--network_pbr_rules--all_udp_traffic) below.
 
 `any` - (Optional) Empty. This can be used for messages where no values are needed. See [Any](#nestedblock--network_pbr--network_pbr_rules--any) below.
 
@@ -226,9 +226,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `forwarding_class_list` - (Optional) Forwarding Classes. Ordered list of forwarding Class to be used if rule match. See [Forwarding Class List](#nestedblock--network_pbr--network_pbr_rules--forwarding_class_list) below.
 
-`ip_prefix_set` - (Optional) IP Prefix Set Reference. A list of references to ip_prefix_set objects. See [Ip Prefix Set](#nestedblock--network_pbr--network_pbr_rules--ip_prefix_set) below.
+`ip_prefix_set` - (Optional) IP Prefix Set Reference. A list of references to ip_prefix_set objects. See [IP Prefix Set](#nestedblock--network_pbr--network_pbr_rules--ip_prefix_set) below.
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--network_pbr--network_pbr_rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--network_pbr--network_pbr_rules--metadata) below.
 
 `prefix_list` - (Optional) IPv4 Prefix List. x-example: '192.168.20.0/24' List of IPv4 prefixes that represent an endpoint. See [Prefix List](#nestedblock--network_pbr--network_pbr_rules--prefix_list) below.
 
@@ -236,7 +236,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--network_pbr--network_pbr_rules--all_tcp_traffic"></a>
 
-### Network Pbr Network Pbr Rules All Tcp Traffic
+### Network Pbr Network Pbr Rules All TCP Traffic
 
 <a id="nestedblock--network_pbr--network_pbr_rules--all_traffic"></a>
 
@@ -244,7 +244,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--network_pbr--network_pbr_rules--all_udp_traffic"></a>
 
-### Network Pbr Network Pbr Rules All Udp Traffic
+### Network Pbr Network Pbr Rules All UDP Traffic
 
 <a id="nestedblock--network_pbr--network_pbr_rules--any"></a>
 
@@ -268,13 +268,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--network_pbr--network_pbr_rules--ip_prefix_set"></a>
 
-### Network Pbr Network Pbr Rules Ip Prefix Set
+### Network Pbr Network Pbr Rules IP Prefix Set
 
 `ref` - (Optional) Reference. A list of references to ip_prefix_set objects. See [Ref](#nestedblock--network_pbr--network_pbr_rules--ip_prefix_set--ref) below.
 
 <a id="nestedblock--network_pbr--network_pbr_rules--ip_prefix_set--ref"></a>
 
-### Network Pbr Network Pbr Rules Ip Prefix Set Ref
+### Network Pbr Network Pbr Rules IP Prefix Set Ref
 
 <a id="nestedblock--network_pbr--network_pbr_rules--metadata"></a>
 
@@ -296,7 +296,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `port_ranges` - (Optional) List of Port Ranges. List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`List`).
 
-`protocol` - (Optional) Protocol. Protocol in IP packet to be used as match criteria Values are tcp, udp, and icmp (`String`).
+`protocol` - (Optional) Protocol. Protocol in IP packet to be used as match criteria Values are TCP, UDP, and ICMP (`String`).
 
 <a id="nestedblock--network_pbr--prefix_list"></a>
 
@@ -308,13 +308,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

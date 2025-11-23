@@ -92,13 +92,13 @@ In addition to all arguments above, the following attributes are exported:
 
 `default` - (Optional) Empty. This can be used for messages where no values are needed. See [Default](#nestedblock--notification_parameters--default) below.
 
-`group_interval` - (Optional) Notify Interval for a Group. Group Interval is used to specify how long to wait before sending a notification about new alerts that are added to the group for which an initial notification has alre... (`String`).
+`group_interval` - (Optional) Notify Interval for a Group. Group Interval is used to specify how long to wait before sending a notification about new alerts that are added to the group for which an initial notification has already been sent. Format: [0-9]\[smhd], where s - seconds, m - minutes, h - hours, d - days If not specified, group_interval defaults to '1m' (`String`).
 
-`group_wait` - (Optional) Wait to Notify. Time value used to specify how long to initially wait for an inhibiting alert to arrive or collect more alerts for the same group (`String`).
+`group_wait` - (Optional) Wait to Notify. Time value used to specify how long to initially wait for an inhibiting alert to arrive or collect more alerts for the same group. Format: [0-9]\[smhd], where s - seconds, m - minutes, h - hours, d - days If not specified, group_wait defaults to '30s' (`String`).
 
 `individual` - (Optional) Empty. This can be used for messages where no values are needed. See [Individual](#nestedblock--notification_parameters--individual) below.
 
-`repeat_interval` - (Optional) Notify Interval For a Alert. Repeat Interval is used to specify how long to wait before sending a notification again if it has already been sent successfully (`String`).
+`repeat_interval` - (Optional) Notify Interval For a Alert. Repeat Interval is used to specify how long to wait before sending a notification again if it has already been sent successfully. Format: [0-9]\[smhd], where s - seconds, m - minutes, h - hours, d - days If not specified, group_interval defaults to '4h' (`String`).
 
 `ves_io_group` - (Optional) Empty. This can be used for messages where no values are needed. See [Ves Io Group](#nestedblock--notification_parameters--ves_io_group) below.
 
@@ -138,7 +138,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Routes
 
-`alertname` - (Optional) AlertName. List of Alert Names Customer tunnel interface down Physical Interface down Tunnel Interfaces to Customer Site Down Virutal Host server error Virtual Host client error Service Health Low ... (`String`).
+`alertname` - (Optional) AlertName. List of Alert Names Customer tunnel interface down Physical Interface down Tunnel Interfaces to Customer Site Down Virutal Host server error Virtual Host client error Service Health Low Service Unavailable Virtual Host server error Virtual Host client error Endpoint Healthcheck failure Synthetic monitor health critical Malicious user detected Virtual Host WAF security events detected Virtual Host API security events detected Virtual Host Service Policy security events detected Virt... Possible values include `SITE_CUSTOMER_TUNNEL_INTERFACE_DOWN`, `SITE_PHYSICAL_INTERFACE_DOWN`, `TUNNELS_TO_CUSTOMER_SITE_DOWN`, `SERVICE_SERVER_ERROR`, `SERVICE_CLIENT_ERROR`, `SERVICE_HEALTH_LOW`, `SERVICE_UNAVAILABLE`, `SERVICE_SERVER_ERROR_PER_SOURCE_SITE`, `SERVICE_CLIENT_ERROR_PER_SOURCE_SITE`, `SERVICE_ENDPOINT_HEALTHCHECK_FAILURE`, and others. Defaults to `SITE_CUSTOMER_TUNNEL_INTERFACE_DOWN` (`String`).
 
 `alertname_regex` - (Optional) Matching RegEx of Alertname. Regular Expression match for the alertname (`String`).
 
@@ -218,13 +218,13 @@ In addition to all arguments above, the following attributes are exported:
 
 `default` - (Optional) Empty. This can be used for messages where no values are needed. See [Default](#nestedblock--routes--notification_parameters--default) below.
 
-`group_interval` - (Optional) Notify Interval for a Group. Group Interval is used to specify how long to wait before sending a notification about new alerts that are added to the group for which an initial notification has alre... (`String`).
+`group_interval` - (Optional) Notify Interval for a Group. Group Interval is used to specify how long to wait before sending a notification about new alerts that are added to the group for which an initial notification has already been sent. Format: [0-9]\[smhd], where s - seconds, m - minutes, h - hours, d - days If not specified, group_interval defaults to '1m' (`String`).
 
-`group_wait` - (Optional) Wait to Notify. Time value used to specify how long to initially wait for an inhibiting alert to arrive or collect more alerts for the same group (`String`).
+`group_wait` - (Optional) Wait to Notify. Time value used to specify how long to initially wait for an inhibiting alert to arrive or collect more alerts for the same group. Format: [0-9]\[smhd], where s - seconds, m - minutes, h - hours, d - days If not specified, group_wait defaults to '30s' (`String`).
 
 `individual` - (Optional) Empty. This can be used for messages where no values are needed. See [Individual](#nestedblock--routes--notification_parameters--individual) below.
 
-`repeat_interval` - (Optional) Notify Interval For a Alert. Repeat Interval is used to specify how long to wait before sending a notification again if it has already been sent successfully (`String`).
+`repeat_interval` - (Optional) Notify Interval For a Alert. Repeat Interval is used to specify how long to wait before sending a notification again if it has already been sent successfully. Format: [0-9]\[smhd], where s - seconds, m - minutes, h - hours, d - days If not specified, group_interval defaults to '4h' (`String`).
 
 `ves_io_group` - (Optional) Empty. This can be used for messages where no values are needed. See [Ves Io Group](#nestedblock--routes--notification_parameters--ves_io_group) below.
 
@@ -260,13 +260,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

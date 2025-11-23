@@ -110,7 +110,7 @@ The following arguments are optional:
 
 `coordinates` - (Optional) Site Coordinates. Coordinates of the site which provides the site physical location. See [Coordinates](#coordinates) below for details.
 
-`custom_dns` - (Optional) Custom DNS. Custom DNS is the configured for specify CE site. See [Custom Dns](#custom-dns) below for details.
+`custom_dns` - (Optional) Custom DNS. Custom DNS is the configured for specify CE site. See [Custom DNS](#custom-dns) below for details.
 
 `default_blocked_services` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Blocked Services](#default-blocked-services) below for details.
 
@@ -136,7 +136,7 @@ The following arguments are optional:
 
 `logs_streaming_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Logs Streaming Disabled](#logs-streaming-disabled) below for details.
 
-`machine_type` - (Optional) Azure Machine Type for Node. Select Instance size based on performance needed (`String`).
+`machine_type` - (Optional) Azure Machine Type for Node. Select Instance size based on performance needed. The default setting for Accelerated Networking is enabled, thus make sure you select a Virtual Machine that supports accelerated networking or disable the setting under, Select Ingress Gateway or Ingress/Egress Gateway > advanced options (`String`).
 
 > **Note:** One of the arguments from this list "no_worker_nodes, nodes_per_az, total_nodes" must be set.
 
@@ -144,9 +144,9 @@ The following arguments are optional:
 
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Desired Worker Nodes Per AZ. Max limit is up to 21 (`Number`).
 
-`offline_survivability_mode` - (Optional) Offline Survivability Mode. Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global C.... See [Offline Survivability Mode](#offline-survivability-mode) below for details.
+`offline_survivability_mode` - (Optional) Offline Survivability Mode. Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC). When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline. The certificates needed to keep the services running on this site are signed using a local CA. Secrets would also be cached locally to handl... See [Offline Survivability Mode](#offline-survivability-mode) below for details.
 
-`os` - (Optional) Operating System Version. Select the F5XC Operating System Version for the site. By default, latest available OS Version will be used. Refer to release notes to find required released OS versions. See [Os](#os) below for details.
+`os` - (Optional) Operating System Version. Select the F5XC Operating System Version for the site. By default, latest available OS Version will be used. Refer to release notes to find required released OS versions. See [OS](#os) below for details.
 
 `resource_group` - (Optional) Resource Group. Azure resource group for resources that will be created (`String`).
 
@@ -188,17 +188,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--admin_password--clear_secret_info"></a>
 
 ### Admin Password Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--azure_cred"></a>
 
@@ -224,21 +224,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Blocked Services Blocked Sevice
 
-`dns` - (Optional) Empty. This can be used for messages where no values are needed. See [Dns](#nestedblock--blocked_services--blocked_sevice--dns) below.
+`dns` - (Optional) Empty. This can be used for messages where no values are needed. See [DNS](#nestedblock--blocked_services--blocked_sevice--dns) below.
 
-`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
-`ssh` - (Optional) Empty. This can be used for messages where no values are needed. See [Ssh](#nestedblock--blocked_services--blocked_sevice--ssh) below.
+`ssh` - (Optional) Empty. This can be used for messages where no values are needed. See [SSH](#nestedblock--blocked_services--blocked_sevice--ssh) below.
 
 `web_user_interface` - (Optional) Empty. This can be used for messages where no values are needed. See [Web User Interface](#nestedblock--blocked_services--blocked_sevice--web_user_interface) below.
 
 <a id="nestedblock--blocked_services--blocked_sevice--dns"></a>
 
-### Blocked Services Blocked Sevice Dns
+### Blocked Services Blocked Sevice DNS
 
 <a id="nestedblock--blocked_services--blocked_sevice--ssh"></a>
 
-### Blocked Services Blocked Sevice Ssh
+### Blocked Services Blocked Sevice SSH
 
 <a id="nestedblock--blocked_services--blocked_sevice--web_user_interface"></a>
 
@@ -254,7 +254,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--custom_dns"></a>
 
-### Custom Dns
+### Custom DNS
 
 `inside_nameserver` - (Optional) DNS Server for Inside Network. Optional DNS server IP to be used for name resolution in inside network (`String`).
 
@@ -270,7 +270,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `accelerated_networking` - (Optional) Accelerated Networking Type. x-required Accelerated Networking to reduce Latency, When Mode is toggled, traffic disruption will be seen. See [Accelerated Networking](#nestedblock--ingress_egress_gw--accelerated_networking) below.
 
-`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option .... See [Active Enhanced Firewall Policies](#nestedblock--ingress_egress_gw--active_enhanced_firewall_policies) below.
+`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option for service insertion. See [Active Enhanced Firewall Policies](#nestedblock--ingress_egress_gw--active_enhanced_firewall_policies) below.
 
 `active_forward_proxy_policies` - (Optional) Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active. See [Active Forward Proxy Policies](#nestedblock--ingress_egress_gw--active_forward_proxy_policies) below.
 
@@ -310,9 +310,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `performance_enhancement_mode` - (Optional) Performance Enhancement Mode. x-required Optimize the site for L3 or L7 traffic processing. L7 optimized is the default. See [Performance Enhancement Mode](#nestedblock--ingress_egress_gw--performance_enhancement_mode) below.
 
-`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public Ip](#nestedblock--ingress_egress_gw--sm_connection_public_ip) below.
+`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public IP](#nestedblock--ingress_egress_gw--sm_connection_public_ip) below.
 
-`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt Ip](#nestedblock--ingress_egress_gw--sm_connection_pvt_ip) below.
+`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt IP](#nestedblock--ingress_egress_gw--sm_connection_pvt_ip) below.
 
 <a id="nestedblock--ingress_egress_gw--accelerated_networking"></a>
 
@@ -454,17 +454,17 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Ingress Egress Gw Global Network List Global Network Connections
 
-`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global Dr](#nestedblock--ingress_egress_gw--global_network_list--global_network_connections--sli_to_global_dr) below.
+`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global DR](#nestedblock--ingress_egress_gw--global_network_list--global_network_connections--sli_to_global_dr) below.
 
-`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global Dr](#nestedblock--ingress_egress_gw--global_network_list--global_network_connections--slo_to_global_dr) below.
+`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global DR](#nestedblock--ingress_egress_gw--global_network_list--global_network_connections--slo_to_global_dr) below.
 
 <a id="nestedblock--ingress_egress_gw--global_network_list--global_network_connections--sli_to_global_dr"></a>
 
-### Ingress Egress Gw Global Network List Global Network Connections Sli To Global Dr
+### Ingress Egress Gw Global Network List Global Network Connections Sli To Global DR
 
 <a id="nestedblock--ingress_egress_gw--global_network_list--global_network_connections--slo_to_global_dr"></a>
 
-### Ingress Egress Gw Global Network List Global Network Connections Slo To Global Dr
+### Ingress Egress Gw Global Network List Global Network Connections Slo To Global DR
 
 <a id="nestedblock--ingress_egress_gw--hub"></a>
 
@@ -564,7 +564,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `auto` - (Optional) Empty. This can be used for messages where no values are needed. See [Auto](#nestedblock--ingress_egress_gw--hub--spoke_vnets--auto) below.
 
-`labels` - (Optional) Labels For VNets Peering. Add Labels for each of the VNets peered with transit VNet, these labels can be used in firewall policy These labels used must be from known key and label defined in shared.... See [Labels](#nestedblock--ingress_egress_gw--hub--spoke_vnets--labels) below.
+`labels` - (Optional) Labels For VNets Peering. Add Labels for each of the VNets peered with transit VNet, these labels can be used in firewall policy These labels used must be from known key and label defined in shared namespace. See [Labels](#nestedblock--ingress_egress_gw--hub--spoke_vnets--labels) below.
 
 `manual` - (Optional) Empty. This can be used for messages where no values are needed. See [Manual](#nestedblock--ingress_egress_gw--hub--spoke_vnets--manual) below.
 
@@ -680,11 +680,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ingress_egress_gw--sm_connection_public_ip"></a>
 
-### Ingress Egress Gw Sm Connection Public Ip
+### Ingress Egress Gw Sm Connection Public IP
 
 <a id="nestedblock--ingress_egress_gw--sm_connection_pvt_ip"></a>
 
-### Ingress Egress Gw Sm Connection Pvt Ip
+### Ingress Egress Gw Sm Connection Pvt IP
 
 <a id="nestedblock--ingress_egress_gw_ar"></a>
 
@@ -692,7 +692,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `accelerated_networking` - (Optional) Accelerated Networking Type. x-required Accelerated Networking to reduce Latency, When Mode is toggled, traffic disruption will be seen. See [Accelerated Networking](#nestedblock--ingress_egress_gw_ar--accelerated_networking) below.
 
-`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option .... See [Active Enhanced Firewall Policies](#nestedblock--ingress_egress_gw_ar--active_enhanced_firewall_policies) below.
+`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option for service insertion. See [Active Enhanced Firewall Policies](#nestedblock--ingress_egress_gw_ar--active_enhanced_firewall_policies) below.
 
 `active_forward_proxy_policies` - (Optional) Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active. See [Active Forward Proxy Policies](#nestedblock--ingress_egress_gw_ar--active_forward_proxy_policies) below.
 
@@ -732,9 +732,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `performance_enhancement_mode` - (Optional) Performance Enhancement Mode. x-required Optimize the site for L3 or L7 traffic processing. L7 optimized is the default. See [Performance Enhancement Mode](#nestedblock--ingress_egress_gw_ar--performance_enhancement_mode) below.
 
-`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public Ip](#nestedblock--ingress_egress_gw_ar--sm_connection_public_ip) below.
+`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public IP](#nestedblock--ingress_egress_gw_ar--sm_connection_public_ip) below.
 
-`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt Ip](#nestedblock--ingress_egress_gw_ar--sm_connection_pvt_ip) below.
+`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt IP](#nestedblock--ingress_egress_gw_ar--sm_connection_pvt_ip) below.
 
 <a id="nestedblock--ingress_egress_gw_ar--accelerated_networking"></a>
 
@@ -834,17 +834,17 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Ingress Egress Gw Ar Global Network List Global Network Connections
 
-`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global Dr](#nestedblock--ingress_egress_gw_ar--global_network_list--global_network_connections--sli_to_global_dr) below.
+`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global DR](#nestedblock--ingress_egress_gw_ar--global_network_list--global_network_connections--sli_to_global_dr) below.
 
-`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global Dr](#nestedblock--ingress_egress_gw_ar--global_network_list--global_network_connections--slo_to_global_dr) below.
+`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global DR](#nestedblock--ingress_egress_gw_ar--global_network_list--global_network_connections--slo_to_global_dr) below.
 
 <a id="nestedblock--ingress_egress_gw_ar--global_network_list--global_network_connections--sli_to_global_dr"></a>
 
-### Ingress Egress Gw Ar Global Network List Global Network Connections Sli To Global Dr
+### Ingress Egress Gw Ar Global Network List Global Network Connections Sli To Global DR
 
 <a id="nestedblock--ingress_egress_gw_ar--global_network_list--global_network_connections--slo_to_global_dr"></a>
 
-### Ingress Egress Gw Ar Global Network List Global Network Connections Slo To Global Dr
+### Ingress Egress Gw Ar Global Network List Global Network Connections Slo To Global DR
 
 <a id="nestedblock--ingress_egress_gw_ar--hub"></a>
 
@@ -944,7 +944,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `auto` - (Optional) Empty. This can be used for messages where no values are needed. See [Auto](#nestedblock--ingress_egress_gw_ar--hub--spoke_vnets--auto) below.
 
-`labels` - (Optional) Labels For VNets Peering. Add Labels for each of the VNets peered with transit VNet, these labels can be used in firewall policy These labels used must be from known key and label defined in shared.... See [Labels](#nestedblock--ingress_egress_gw_ar--hub--spoke_vnets--labels) below.
+`labels` - (Optional) Labels For VNets Peering. Add Labels for each of the VNets peered with transit VNet, these labels can be used in firewall policy These labels used must be from known key and label defined in shared namespace. See [Labels](#nestedblock--ingress_egress_gw_ar--hub--spoke_vnets--labels) below.
 
 `manual` - (Optional) Empty. This can be used for messages where no values are needed. See [Manual](#nestedblock--ingress_egress_gw_ar--hub--spoke_vnets--manual) below.
 
@@ -1106,11 +1106,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ingress_egress_gw_ar--sm_connection_public_ip"></a>
 
-### Ingress Egress Gw Ar Sm Connection Public Ip
+### Ingress Egress Gw Ar Sm Connection Public IP
 
 <a id="nestedblock--ingress_egress_gw_ar--sm_connection_pvt_ip"></a>
 
-### Ingress Egress Gw Ar Sm Connection Pvt Ip
+### Ingress Egress Gw Ar Sm Connection Pvt IP
 
 <a id="nestedblock--ingress_gw"></a>
 
@@ -1296,7 +1296,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `drain_max_unavailable_node_count` - (Optional) Node Batch Size Count (`Number`).
 
-`drain_node_timeout` - (Optional) Upgrade Wait Time. Seconds to wait before initiating upgrade on the next set of nodes (`Number`).
+`drain_node_timeout` - (Optional) Upgrade Wait Time. Seconds to wait before initiating upgrade on the next set of nodes. Setting it to 0 will wait indefinitely for all services on nodes to be upgraded gracefully before proceeding to the next set of nodes. (Warning: It may block upgrade if services on a node cannot be gracefully upgraded. It is recommended to use the default value) (`Number`).
 
 `enable_vega_upgrade_mode` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Vega Upgrade Mode](#nestedblock--kubernetes_upgrade_drain--enable_upgrade_drain--enable_vega_upgrade_mode) below.
 
@@ -1344,15 +1344,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--os"></a>
 
-### Os
+### OS
 
-`default_os_version` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Os Version](#nestedblock--os--default_os_version) below.
+`default_os_version` - (Optional) Empty. This can be used for messages where no values are needed. See [Default OS Version](#nestedblock--os--default_os_version) below.
 
 `operating_system_version` - (Optional) Operating System Version. Specify a OS version to be used e.g. 9.2024.6 (`String`).
 
 <a id="nestedblock--os--default_os_version"></a>
 
-### Os Default Os Version
+### OS Default OS Version
 
 <a id="nestedblock--sw"></a>
 
@@ -1374,13 +1374,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--vnet"></a>
 
@@ -1430,7 +1430,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `accelerated_networking` - (Optional) Accelerated Networking Type. x-required Accelerated Networking to reduce Latency, When Mode is toggled, traffic disruption will be seen. See [Accelerated Networking](#nestedblock--voltstack_cluster--accelerated_networking) below.
 
-`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option .... See [Active Enhanced Firewall Policies](#nestedblock--voltstack_cluster--active_enhanced_firewall_policies) below.
+`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option for service insertion. See [Active Enhanced Firewall Policies](#nestedblock--voltstack_cluster--active_enhanced_firewall_policies) below.
 
 `active_forward_proxy_policies` - (Optional) Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active. See [Active Forward Proxy Policies](#nestedblock--voltstack_cluster--active_forward_proxy_policies) below.
 
@@ -1464,9 +1464,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `outside_static_routes` - (Optional) Static Route List Type. List of static routes. See [Outside Static Routes](#nestedblock--voltstack_cluster--outside_static_routes) below.
 
-`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public Ip](#nestedblock--voltstack_cluster--sm_connection_public_ip) below.
+`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public IP](#nestedblock--voltstack_cluster--sm_connection_public_ip) below.
 
-`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt Ip](#nestedblock--voltstack_cluster--sm_connection_pvt_ip) below.
+`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt IP](#nestedblock--voltstack_cluster--sm_connection_pvt_ip) below.
 
 `storage_class_list` - (Optional) Custom Storage Class List. Add additional custom storage classes in kubernetes for this site. See [Storage Class List](#nestedblock--voltstack_cluster--storage_class_list) below.
 
@@ -1586,17 +1586,17 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Voltstack Cluster Global Network List Global Network Connections
 
-`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global Dr](#nestedblock--voltstack_cluster--global_network_list--global_network_connections--sli_to_global_dr) below.
+`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global DR](#nestedblock--voltstack_cluster--global_network_list--global_network_connections--sli_to_global_dr) below.
 
-`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global Dr](#nestedblock--voltstack_cluster--global_network_list--global_network_connections--slo_to_global_dr) below.
+`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global DR](#nestedblock--voltstack_cluster--global_network_list--global_network_connections--slo_to_global_dr) below.
 
 <a id="nestedblock--voltstack_cluster--global_network_list--global_network_connections--sli_to_global_dr"></a>
 
-### Voltstack Cluster Global Network List Global Network Connections Sli To Global Dr
+### Voltstack Cluster Global Network List Global Network Connections Sli To Global DR
 
 <a id="nestedblock--voltstack_cluster--global_network_list--global_network_connections--slo_to_global_dr"></a>
 
-### Voltstack Cluster Global Network List Global Network Connections Slo To Global Dr
+### Voltstack Cluster Global Network List Global Network Connections Slo To Global DR
 
 <a id="nestedblock--voltstack_cluster--k8s_cluster"></a>
 
@@ -1652,11 +1652,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--voltstack_cluster--sm_connection_public_ip"></a>
 
-### Voltstack Cluster Sm Connection Public Ip
+### Voltstack Cluster Sm Connection Public IP
 
 <a id="nestedblock--voltstack_cluster--sm_connection_pvt_ip"></a>
 
-### Voltstack Cluster Sm Connection Pvt Ip
+### Voltstack Cluster Sm Connection Pvt IP
 
 <a id="nestedblock--voltstack_cluster--storage_class_list"></a>
 
@@ -1678,7 +1678,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `accelerated_networking` - (Optional) Accelerated Networking Type. x-required Accelerated Networking to reduce Latency, When Mode is toggled, traffic disruption will be seen. See [Accelerated Networking](#nestedblock--voltstack_cluster_ar--accelerated_networking) below.
 
-`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option .... See [Active Enhanced Firewall Policies](#nestedblock--voltstack_cluster_ar--active_enhanced_firewall_policies) below.
+`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option for service insertion. See [Active Enhanced Firewall Policies](#nestedblock--voltstack_cluster_ar--active_enhanced_firewall_policies) below.
 
 `active_forward_proxy_policies` - (Optional) Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active. See [Active Forward Proxy Policies](#nestedblock--voltstack_cluster_ar--active_forward_proxy_policies) below.
 
@@ -1712,9 +1712,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `outside_static_routes` - (Optional) Static Route List Type. List of static routes. See [Outside Static Routes](#nestedblock--voltstack_cluster_ar--outside_static_routes) below.
 
-`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public Ip](#nestedblock--voltstack_cluster_ar--sm_connection_public_ip) below.
+`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public IP](#nestedblock--voltstack_cluster_ar--sm_connection_public_ip) below.
 
-`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt Ip](#nestedblock--voltstack_cluster_ar--sm_connection_pvt_ip) below.
+`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt IP](#nestedblock--voltstack_cluster_ar--sm_connection_pvt_ip) below.
 
 `storage_class_list` - (Optional) Custom Storage Class List. Add additional custom storage classes in kubernetes for this site. See [Storage Class List](#nestedblock--voltstack_cluster_ar--storage_class_list) below.
 
@@ -1810,17 +1810,17 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Voltstack Cluster Ar Global Network List Global Network Connections
 
-`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global Dr](#nestedblock--voltstack_cluster_ar--global_network_list--global_network_connections--sli_to_global_dr) below.
+`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global DR](#nestedblock--voltstack_cluster_ar--global_network_list--global_network_connections--sli_to_global_dr) below.
 
-`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global Dr](#nestedblock--voltstack_cluster_ar--global_network_list--global_network_connections--slo_to_global_dr) below.
+`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global DR](#nestedblock--voltstack_cluster_ar--global_network_list--global_network_connections--slo_to_global_dr) below.
 
 <a id="nestedblock--voltstack_cluster_ar--global_network_list--global_network_connections--sli_to_global_dr"></a>
 
-### Voltstack Cluster Ar Global Network List Global Network Connections Sli To Global Dr
+### Voltstack Cluster Ar Global Network List Global Network Connections Sli To Global DR
 
 <a id="nestedblock--voltstack_cluster_ar--global_network_list--global_network_connections--slo_to_global_dr"></a>
 
-### Voltstack Cluster Ar Global Network List Global Network Connections Slo To Global Dr
+### Voltstack Cluster Ar Global Network List Global Network Connections Slo To Global DR
 
 <a id="nestedblock--voltstack_cluster_ar--k8s_cluster"></a>
 
@@ -1904,11 +1904,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--voltstack_cluster_ar--sm_connection_public_ip"></a>
 
-### Voltstack Cluster Ar Sm Connection Public Ip
+### Voltstack Cluster Ar Sm Connection Public IP
 
 <a id="nestedblock--voltstack_cluster_ar--sm_connection_pvt_ip"></a>
 
-### Voltstack Cluster Ar Sm Connection Pvt Ip
+### Voltstack Cluster Ar Sm Connection Pvt IP
 
 <a id="nestedblock--voltstack_cluster_ar--storage_class_list"></a>
 

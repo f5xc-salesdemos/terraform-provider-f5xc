@@ -91,7 +91,7 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
-`aws_cred` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Aws Cred](#aws-cred) below for details.
+`aws_cred` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [AWS Cred](#aws-cred) below for details.
 
 `aws_region` - (Optional) AWS Region. Name for AWS Region (`String`).
 
@@ -103,7 +103,7 @@ The following arguments are optional:
 
 `coordinates` - (Optional) Site Coordinates. Coordinates of the site which provides the site physical location. See [Coordinates](#coordinates) below for details.
 
-`custom_dns` - (Optional) Custom DNS. Custom DNS is the configured for specify CE site. See [Custom Dns](#custom-dns) below for details.
+`custom_dns` - (Optional) Custom DNS. Custom DNS is the configured for specify CE site. See [Custom DNS](#custom-dns) below for details.
 
 > **Note:** One of the arguments from this list "custom_security_group, f5xc_security_group" must be set.
 
@@ -119,7 +119,7 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set.
 
-`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet Vip](#disable-internet-vip) below for details.
+`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet VIP](#disable-internet-vip) below for details.
 
 `disk_size` - (Optional) Cloud Disk Size. Disk size to be used for this instance in GiB. 80 is 80 GiB (`Number`).
 
@@ -127,11 +127,11 @@ The following arguments are optional:
 
 `egress_gateway_default` - (Optional) Empty. This can be used for messages where no values are needed. See [Egress Gateway Default](#egress-gateway-default) below for details.
 
-`egress_nat_gw` - (Optional) AWS NAT Gateway choice. With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway. See [Egress Nat Gw](#egress-nat-gw) below for details.
+`egress_nat_gw` - (Optional) AWS NAT Gateway choice. With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway. See [Egress NAT Gw](#egress-nat-gw) below for details.
 
 `egress_virtual_private_gateway` - (Optional) AWS Virtual Private Gateway choice. With this option, egress site traffic will be routed through an Virtual Private Gateway. See [Egress Virtual Private Gateway](#egress-virtual-private-gateway) below for details.
 
-`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet Vip](#enable-internet-vip) below for details.
+`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet VIP](#enable-internet-vip) below for details.
 
 > **Note:** One of the arguments from this list "f5_orchestrated_routing, manual_routing" must be set.
 
@@ -165,9 +165,9 @@ The following arguments are optional:
 
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Desired Worker Nodes Per AZ. Max limit is up to 21 (`Number`).
 
-`offline_survivability_mode` - (Optional) Offline Survivability Mode. Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global C.... See [Offline Survivability Mode](#offline-survivability-mode) below for details.
+`offline_survivability_mode` - (Optional) Offline Survivability Mode. Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC). When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline. The certificates needed to keep the services running on this site are signed using a local CA. Secrets would also be cached locally to handl... See [Offline Survivability Mode](#offline-survivability-mode) below for details.
 
-`os` - (Optional) Operating System Version. Select the F5XC Operating System Version for the site. By default, latest available OS Version will be used. Refer to release notes to find required released OS versions. See [Os](#os) below for details.
+`os` - (Optional) Operating System Version. Select the F5XC Operating System Version for the site. By default, latest available OS Version will be used. Refer to release notes to find required released OS versions. See [OS](#os) below for details.
 
 `private_connectivity` - (Optional) Private Connect Configuration. Private Connect Configuration. See [Private Connectivity](#private-connectivity) below for details.
 
@@ -207,21 +207,21 @@ In addition to all arguments above, the following attributes are exported:
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--admin_password--clear_secret_info"></a>
 
 ### Admin Password Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--aws_cred"></a>
 
-### Aws Cred
+### AWS Cred
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -243,21 +243,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Blocked Services Blocked Sevice
 
-`dns` - (Optional) Empty. This can be used for messages where no values are needed. See [Dns](#nestedblock--blocked_services--blocked_sevice--dns) below.
+`dns` - (Optional) Empty. This can be used for messages where no values are needed. See [DNS](#nestedblock--blocked_services--blocked_sevice--dns) below.
 
-`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
-`ssh` - (Optional) Empty. This can be used for messages where no values are needed. See [Ssh](#nestedblock--blocked_services--blocked_sevice--ssh) below.
+`ssh` - (Optional) Empty. This can be used for messages where no values are needed. See [SSH](#nestedblock--blocked_services--blocked_sevice--ssh) below.
 
 `web_user_interface` - (Optional) Empty. This can be used for messages where no values are needed. See [Web User Interface](#nestedblock--blocked_services--blocked_sevice--web_user_interface) below.
 
 <a id="nestedblock--blocked_services--blocked_sevice--dns"></a>
 
-### Blocked Services Blocked Sevice Dns
+### Blocked Services Blocked Sevice DNS
 
 <a id="nestedblock--blocked_services--blocked_sevice--ssh"></a>
 
-### Blocked Services Blocked Sevice Ssh
+### Blocked Services Blocked Sevice SSH
 
 <a id="nestedblock--blocked_services--blocked_sevice--web_user_interface"></a>
 
@@ -273,7 +273,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--custom_dns"></a>
 
-### Custom Dns
+### Custom DNS
 
 `inside_nameserver` - (Optional) DNS Server for Inside Network. Optional DNS server IP to be used for name resolution in inside network (`String`).
 
@@ -325,7 +325,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Direct Connect Enabled Hosted Vifs Site Registration Over Direct Connect
 
-`cloudlink_network_name` - (Optional) Private ADN Network. Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network (`String`).
+`cloudlink_network_name` - (Optional) Private ADN Network. Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support (`String`).
 
 <a id="nestedblock--direct_connect_enabled--hosted_vifs--site_registration_over_internet"></a>
 
@@ -351,7 +351,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--disable_internet_vip"></a>
 
-### Disable Internet Vip
+### Disable Internet VIP
 
 <a id="nestedblock--egress_gateway_default"></a>
 
@@ -359,7 +359,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--egress_nat_gw"></a>
 
-### Egress Nat Gw
+### Egress NAT Gw
 
 `nat_gw_id` - (Optional) Existing NAT Gateway ID (`String`).
 
@@ -371,7 +371,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--enable_internet_vip"></a>
 
-### Enable Internet Vip
+### Enable Internet VIP
 
 <a id="nestedblock--f5_orchestrated_routing"></a>
 
@@ -385,15 +385,15 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Ingress Egress Gw
 
-`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option .... See [Active Enhanced Firewall Policies](#nestedblock--ingress_egress_gw--active_enhanced_firewall_policies) below.
+`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option for service insertion. See [Active Enhanced Firewall Policies](#nestedblock--ingress_egress_gw--active_enhanced_firewall_policies) below.
 
 `active_forward_proxy_policies` - (Optional) Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active. See [Active Forward Proxy Policies](#nestedblock--ingress_egress_gw--active_forward_proxy_policies) below.
 
 `active_network_policies` - (Optional) Active Firewall Policies Type. List of firewall policy views. See [Active Network Policies](#nestedblock--ingress_egress_gw--active_network_policies) below.
 
-`allowed_vip_port` - (Optional) Allowed VIP Ports. This defines the TCP port(s) which will be opened on the cloud loadbalancer. See [Allowed Vip Port](#nestedblock--ingress_egress_gw--allowed_vip_port) below.
+`allowed_vip_port` - (Optional) Allowed VIP Ports. This defines the TCP port(s) which will be opened on the cloud loadbalancer. Such that the client can use the cloud VIP IP and port combination to reach TCP/HTTP LB configured on the F5XC Site. See [Allowed VIP Port](#nestedblock--ingress_egress_gw--allowed_vip_port) below.
 
-`allowed_vip_port_sli` - (Optional) Allowed VIP Ports. This defines the TCP port(s) which will be opened on the cloud loadbalancer. See [Allowed Vip Port Sli](#nestedblock--ingress_egress_gw--allowed_vip_port_sli) below.
+`allowed_vip_port_sli` - (Optional) Allowed VIP Ports. This defines the TCP port(s) which will be opened on the cloud loadbalancer. Such that the client can use the cloud VIP IP and port combination to reach TCP/HTTP LB configured on the F5XC Site. See [Allowed VIP Port Sli](#nestedblock--ingress_egress_gw--allowed_vip_port_sli) below.
 
 `aws_certified_hw` - (Optional) AWS Certified Hardware. Name for AWS certified hardware (`String`).
 
@@ -425,9 +425,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `performance_enhancement_mode` - (Optional) Performance Enhancement Mode. x-required Optimize the site for L3 or L7 traffic processing. L7 optimized is the default. See [Performance Enhancement Mode](#nestedblock--ingress_egress_gw--performance_enhancement_mode) below.
 
-`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public Ip](#nestedblock--ingress_egress_gw--sm_connection_public_ip) below.
+`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public IP](#nestedblock--ingress_egress_gw--sm_connection_public_ip) below.
 
-`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt Ip](#nestedblock--ingress_egress_gw--sm_connection_pvt_ip) below.
+`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt IP](#nestedblock--ingress_egress_gw--sm_connection_pvt_ip) below.
 
 <a id="nestedblock--ingress_egress_gw--active_enhanced_firewall_policies"></a>
 
@@ -479,75 +479,75 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ingress_egress_gw--allowed_vip_port"></a>
 
-### Ingress Egress Gw Allowed Vip Port
+### Ingress Egress Gw Allowed VIP Port
 
 `custom_ports` - (Optional) Custom Ports. List of Custom port. See [Custom Ports](#nestedblock--ingress_egress_gw--allowed_vip_port--custom_ports) below.
 
-`disable_allowed_vip_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Allowed Vip Port](#nestedblock--ingress_egress_gw--allowed_vip_port--disable_allowed_vip_port) below.
+`disable_allowed_vip_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Allowed VIP Port](#nestedblock--ingress_egress_gw--allowed_vip_port--disable_allowed_vip_port) below.
 
-`use_http_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Http Https Port](#nestedblock--ingress_egress_gw--allowed_vip_port--use_http_https_port) below.
+`use_http_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTP HTTPS Port](#nestedblock--ingress_egress_gw--allowed_vip_port--use_http_https_port) below.
 
-`use_http_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Http Port](#nestedblock--ingress_egress_gw--allowed_vip_port--use_http_port) below.
+`use_http_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTP Port](#nestedblock--ingress_egress_gw--allowed_vip_port--use_http_port) below.
 
-`use_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Https Port](#nestedblock--ingress_egress_gw--allowed_vip_port--use_https_port) below.
+`use_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTPS Port](#nestedblock--ingress_egress_gw--allowed_vip_port--use_https_port) below.
 
 <a id="nestedblock--ingress_egress_gw--allowed_vip_port--custom_ports"></a>
 
-### Ingress Egress Gw Allowed Vip Port Custom Ports
+### Ingress Egress Gw Allowed VIP Port Custom Ports
 
 `port_ranges` - (Optional) Port Ranges. Port Ranges (`String`).
 
 <a id="nestedblock--ingress_egress_gw--allowed_vip_port--disable_allowed_vip_port"></a>
 
-### Ingress Egress Gw Allowed Vip Port Disable Allowed Vip Port
+### Ingress Egress Gw Allowed VIP Port Disable Allowed VIP Port
 
 <a id="nestedblock--ingress_egress_gw--allowed_vip_port--use_http_https_port"></a>
 
-### Ingress Egress Gw Allowed Vip Port Use Http Https Port
+### Ingress Egress Gw Allowed VIP Port Use HTTP HTTPS Port
 
 <a id="nestedblock--ingress_egress_gw--allowed_vip_port--use_http_port"></a>
 
-### Ingress Egress Gw Allowed Vip Port Use Http Port
+### Ingress Egress Gw Allowed VIP Port Use HTTP Port
 
 <a id="nestedblock--ingress_egress_gw--allowed_vip_port--use_https_port"></a>
 
-### Ingress Egress Gw Allowed Vip Port Use Https Port
+### Ingress Egress Gw Allowed VIP Port Use HTTPS Port
 
 <a id="nestedblock--ingress_egress_gw--allowed_vip_port_sli"></a>
 
-### Ingress Egress Gw Allowed Vip Port Sli
+### Ingress Egress Gw Allowed VIP Port Sli
 
 `custom_ports` - (Optional) Custom Ports. List of Custom port. See [Custom Ports](#nestedblock--ingress_egress_gw--allowed_vip_port_sli--custom_ports) below.
 
-`disable_allowed_vip_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Allowed Vip Port](#nestedblock--ingress_egress_gw--allowed_vip_port_sli--disable_allowed_vip_port) below.
+`disable_allowed_vip_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Allowed VIP Port](#nestedblock--ingress_egress_gw--allowed_vip_port_sli--disable_allowed_vip_port) below.
 
-`use_http_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Http Https Port](#nestedblock--ingress_egress_gw--allowed_vip_port_sli--use_http_https_port) below.
+`use_http_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTP HTTPS Port](#nestedblock--ingress_egress_gw--allowed_vip_port_sli--use_http_https_port) below.
 
-`use_http_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Http Port](#nestedblock--ingress_egress_gw--allowed_vip_port_sli--use_http_port) below.
+`use_http_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTP Port](#nestedblock--ingress_egress_gw--allowed_vip_port_sli--use_http_port) below.
 
-`use_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Https Port](#nestedblock--ingress_egress_gw--allowed_vip_port_sli--use_https_port) below.
+`use_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTPS Port](#nestedblock--ingress_egress_gw--allowed_vip_port_sli--use_https_port) below.
 
 <a id="nestedblock--ingress_egress_gw--allowed_vip_port_sli--custom_ports"></a>
 
-### Ingress Egress Gw Allowed Vip Port Sli Custom Ports
+### Ingress Egress Gw Allowed VIP Port Sli Custom Ports
 
 `port_ranges` - (Optional) Port Ranges. Port Ranges (`String`).
 
 <a id="nestedblock--ingress_egress_gw--allowed_vip_port_sli--disable_allowed_vip_port"></a>
 
-### Ingress Egress Gw Allowed Vip Port Sli Disable Allowed Vip Port
+### Ingress Egress Gw Allowed VIP Port Sli Disable Allowed VIP Port
 
 <a id="nestedblock--ingress_egress_gw--allowed_vip_port_sli--use_http_https_port"></a>
 
-### Ingress Egress Gw Allowed Vip Port Sli Use Http Https Port
+### Ingress Egress Gw Allowed VIP Port Sli Use HTTP HTTPS Port
 
 <a id="nestedblock--ingress_egress_gw--allowed_vip_port_sli--use_http_port"></a>
 
-### Ingress Egress Gw Allowed Vip Port Sli Use Http Port
+### Ingress Egress Gw Allowed VIP Port Sli Use HTTP Port
 
 <a id="nestedblock--ingress_egress_gw--allowed_vip_port_sli--use_https_port"></a>
 
-### Ingress Egress Gw Allowed Vip Port Sli Use Https Port
+### Ingress Egress Gw Allowed VIP Port Sli Use HTTPS Port
 
 <a id="nestedblock--ingress_egress_gw--az_nodes"></a>
 
@@ -637,17 +637,17 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Ingress Egress Gw Global Network List Global Network Connections
 
-`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global Dr](#nestedblock--ingress_egress_gw--global_network_list--global_network_connections--sli_to_global_dr) below.
+`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global DR](#nestedblock--ingress_egress_gw--global_network_list--global_network_connections--sli_to_global_dr) below.
 
-`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global Dr](#nestedblock--ingress_egress_gw--global_network_list--global_network_connections--slo_to_global_dr) below.
+`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global DR](#nestedblock--ingress_egress_gw--global_network_list--global_network_connections--slo_to_global_dr) below.
 
 <a id="nestedblock--ingress_egress_gw--global_network_list--global_network_connections--sli_to_global_dr"></a>
 
-### Ingress Egress Gw Global Network List Global Network Connections Sli To Global Dr
+### Ingress Egress Gw Global Network List Global Network Connections Sli To Global DR
 
 <a id="nestedblock--ingress_egress_gw--global_network_list--global_network_connections--slo_to_global_dr"></a>
 
-### Ingress Egress Gw Global Network List Global Network Connections Slo To Global Dr
+### Ingress Egress Gw Global Network List Global Network Connections Slo To Global DR
 
 <a id="nestedblock--ingress_egress_gw--inside_static_routes"></a>
 
@@ -739,17 +739,17 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ingress_egress_gw--sm_connection_public_ip"></a>
 
-### Ingress Egress Gw Sm Connection Public Ip
+### Ingress Egress Gw Sm Connection Public IP
 
 <a id="nestedblock--ingress_egress_gw--sm_connection_pvt_ip"></a>
 
-### Ingress Egress Gw Sm Connection Pvt Ip
+### Ingress Egress Gw Sm Connection Pvt IP
 
 <a id="nestedblock--ingress_gw"></a>
 
 ### Ingress Gw
 
-`allowed_vip_port` - (Optional) Allowed VIP Ports. This defines the TCP port(s) which will be opened on the cloud loadbalancer. See [Allowed Vip Port](#nestedblock--ingress_gw--allowed_vip_port) below.
+`allowed_vip_port` - (Optional) Allowed VIP Ports. This defines the TCP port(s) which will be opened on the cloud loadbalancer. Such that the client can use the cloud VIP IP and port combination to reach TCP/HTTP LB configured on the F5XC Site. See [Allowed VIP Port](#nestedblock--ingress_gw--allowed_vip_port) below.
 
 `aws_certified_hw` - (Optional) AWS Certified Hardware. Name for AWS certified hardware (`String`).
 
@@ -759,39 +759,39 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ingress_gw--allowed_vip_port"></a>
 
-### Ingress Gw Allowed Vip Port
+### Ingress Gw Allowed VIP Port
 
 `custom_ports` - (Optional) Custom Ports. List of Custom port. See [Custom Ports](#nestedblock--ingress_gw--allowed_vip_port--custom_ports) below.
 
-`disable_allowed_vip_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Allowed Vip Port](#nestedblock--ingress_gw--allowed_vip_port--disable_allowed_vip_port) below.
+`disable_allowed_vip_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Allowed VIP Port](#nestedblock--ingress_gw--allowed_vip_port--disable_allowed_vip_port) below.
 
-`use_http_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Http Https Port](#nestedblock--ingress_gw--allowed_vip_port--use_http_https_port) below.
+`use_http_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTP HTTPS Port](#nestedblock--ingress_gw--allowed_vip_port--use_http_https_port) below.
 
-`use_http_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Http Port](#nestedblock--ingress_gw--allowed_vip_port--use_http_port) below.
+`use_http_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTP Port](#nestedblock--ingress_gw--allowed_vip_port--use_http_port) below.
 
-`use_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Https Port](#nestedblock--ingress_gw--allowed_vip_port--use_https_port) below.
+`use_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTPS Port](#nestedblock--ingress_gw--allowed_vip_port--use_https_port) below.
 
 <a id="nestedblock--ingress_gw--allowed_vip_port--custom_ports"></a>
 
-### Ingress Gw Allowed Vip Port Custom Ports
+### Ingress Gw Allowed VIP Port Custom Ports
 
 `port_ranges` - (Optional) Port Ranges. Port Ranges (`String`).
 
 <a id="nestedblock--ingress_gw--allowed_vip_port--disable_allowed_vip_port"></a>
 
-### Ingress Gw Allowed Vip Port Disable Allowed Vip Port
+### Ingress Gw Allowed VIP Port Disable Allowed VIP Port
 
 <a id="nestedblock--ingress_gw--allowed_vip_port--use_http_https_port"></a>
 
-### Ingress Gw Allowed Vip Port Use Http Https Port
+### Ingress Gw Allowed VIP Port Use HTTP HTTPS Port
 
 <a id="nestedblock--ingress_gw--allowed_vip_port--use_http_port"></a>
 
-### Ingress Gw Allowed Vip Port Use Http Port
+### Ingress Gw Allowed VIP Port Use HTTP Port
 
 <a id="nestedblock--ingress_gw--allowed_vip_port--use_https_port"></a>
 
-### Ingress Gw Allowed Vip Port Use Https Port
+### Ingress Gw Allowed VIP Port Use HTTPS Port
 
 <a id="nestedblock--ingress_gw--az_nodes"></a>
 
@@ -861,7 +861,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `drain_max_unavailable_node_count` - (Optional) Node Batch Size Count (`Number`).
 
-`drain_node_timeout` - (Optional) Upgrade Wait Time. Seconds to wait before initiating upgrade on the next set of nodes (`Number`).
+`drain_node_timeout` - (Optional) Upgrade Wait Time. Seconds to wait before initiating upgrade on the next set of nodes. Setting it to 0 will wait indefinitely for all services on nodes to be upgraded gracefully before proceeding to the next set of nodes. (Warning: It may block upgrade if services on a node cannot be gracefully upgraded. It is recommended to use the default value) (`Number`).
 
 `enable_vega_upgrade_mode` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Vega Upgrade Mode](#nestedblock--kubernetes_upgrade_drain--enable_upgrade_drain--enable_vega_upgrade_mode) below.
 
@@ -913,15 +913,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--os"></a>
 
-### Os
+### OS
 
-`default_os_version` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Os Version](#nestedblock--os--default_os_version) below.
+`default_os_version` - (Optional) Empty. This can be used for messages where no values are needed. See [Default OS Version](#nestedblock--os--default_os_version) below.
 
 `operating_system_version` - (Optional) Operating System Version. Specify a OS version to be used e.g. 9.2024.6 (`String`).
 
 <a id="nestedblock--os--default_os_version"></a>
 
-### Os Default Os Version
+### OS Default OS Version
 
 <a id="nestedblock--private_connectivity"></a>
 
@@ -971,25 +971,25 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--voltstack_cluster"></a>
 
 ### Voltstack Cluster
 
-`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option .... See [Active Enhanced Firewall Policies](#nestedblock--voltstack_cluster--active_enhanced_firewall_policies) below.
+`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option for service insertion. See [Active Enhanced Firewall Policies](#nestedblock--voltstack_cluster--active_enhanced_firewall_policies) below.
 
 `active_forward_proxy_policies` - (Optional) Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active. See [Active Forward Proxy Policies](#nestedblock--voltstack_cluster--active_forward_proxy_policies) below.
 
 `active_network_policies` - (Optional) Active Firewall Policies Type. List of firewall policy views. See [Active Network Policies](#nestedblock--voltstack_cluster--active_network_policies) below.
 
-`allowed_vip_port` - (Optional) Allowed VIP Ports. This defines the TCP port(s) which will be opened on the cloud loadbalancer. See [Allowed Vip Port](#nestedblock--voltstack_cluster--allowed_vip_port) below.
+`allowed_vip_port` - (Optional) Allowed VIP Ports. This defines the TCP port(s) which will be opened on the cloud loadbalancer. Such that the client can use the cloud VIP IP and port combination to reach TCP/HTTP LB configured on the F5XC Site. See [Allowed VIP Port](#nestedblock--voltstack_cluster--allowed_vip_port) below.
 
 `aws_certified_hw` - (Optional) AWS Certified Hardware. Name for AWS certified hardware (`String`).
 
@@ -1019,9 +1019,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `outside_static_routes` - (Optional) Static Route List Type. List of static routes. See [Outside Static Routes](#nestedblock--voltstack_cluster--outside_static_routes) below.
 
-`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public Ip](#nestedblock--voltstack_cluster--sm_connection_public_ip) below.
+`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public IP](#nestedblock--voltstack_cluster--sm_connection_public_ip) below.
 
-`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt Ip](#nestedblock--voltstack_cluster--sm_connection_pvt_ip) below.
+`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt IP](#nestedblock--voltstack_cluster--sm_connection_pvt_ip) below.
 
 `storage_class_list` - (Optional) Custom Storage Class List. Add additional custom storage classes in kubernetes for this site. See [Storage Class List](#nestedblock--voltstack_cluster--storage_class_list) below.
 
@@ -1075,39 +1075,39 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--voltstack_cluster--allowed_vip_port"></a>
 
-### Voltstack Cluster Allowed Vip Port
+### Voltstack Cluster Allowed VIP Port
 
 `custom_ports` - (Optional) Custom Ports. List of Custom port. See [Custom Ports](#nestedblock--voltstack_cluster--allowed_vip_port--custom_ports) below.
 
-`disable_allowed_vip_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Allowed Vip Port](#nestedblock--voltstack_cluster--allowed_vip_port--disable_allowed_vip_port) below.
+`disable_allowed_vip_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Allowed VIP Port](#nestedblock--voltstack_cluster--allowed_vip_port--disable_allowed_vip_port) below.
 
-`use_http_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Http Https Port](#nestedblock--voltstack_cluster--allowed_vip_port--use_http_https_port) below.
+`use_http_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTP HTTPS Port](#nestedblock--voltstack_cluster--allowed_vip_port--use_http_https_port) below.
 
-`use_http_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Http Port](#nestedblock--voltstack_cluster--allowed_vip_port--use_http_port) below.
+`use_http_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTP Port](#nestedblock--voltstack_cluster--allowed_vip_port--use_http_port) below.
 
-`use_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Https Port](#nestedblock--voltstack_cluster--allowed_vip_port--use_https_port) below.
+`use_https_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTPS Port](#nestedblock--voltstack_cluster--allowed_vip_port--use_https_port) below.
 
 <a id="nestedblock--voltstack_cluster--allowed_vip_port--custom_ports"></a>
 
-### Voltstack Cluster Allowed Vip Port Custom Ports
+### Voltstack Cluster Allowed VIP Port Custom Ports
 
 `port_ranges` - (Optional) Port Ranges. Port Ranges (`String`).
 
 <a id="nestedblock--voltstack_cluster--allowed_vip_port--disable_allowed_vip_port"></a>
 
-### Voltstack Cluster Allowed Vip Port Disable Allowed Vip Port
+### Voltstack Cluster Allowed VIP Port Disable Allowed VIP Port
 
 <a id="nestedblock--voltstack_cluster--allowed_vip_port--use_http_https_port"></a>
 
-### Voltstack Cluster Allowed Vip Port Use Http Https Port
+### Voltstack Cluster Allowed VIP Port Use HTTP HTTPS Port
 
 <a id="nestedblock--voltstack_cluster--allowed_vip_port--use_http_port"></a>
 
-### Voltstack Cluster Allowed Vip Port Use Http Port
+### Voltstack Cluster Allowed VIP Port Use HTTP Port
 
 <a id="nestedblock--voltstack_cluster--allowed_vip_port--use_https_port"></a>
 
-### Voltstack Cluster Allowed Vip Port Use Https Port
+### Voltstack Cluster Allowed VIP Port Use HTTPS Port
 
 <a id="nestedblock--voltstack_cluster--az_nodes"></a>
 
@@ -1157,17 +1157,17 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Voltstack Cluster Global Network List Global Network Connections
 
-`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global Dr](#nestedblock--voltstack_cluster--global_network_list--global_network_connections--sli_to_global_dr) below.
+`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global DR](#nestedblock--voltstack_cluster--global_network_list--global_network_connections--sli_to_global_dr) below.
 
-`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global Dr](#nestedblock--voltstack_cluster--global_network_list--global_network_connections--slo_to_global_dr) below.
+`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global DR](#nestedblock--voltstack_cluster--global_network_list--global_network_connections--slo_to_global_dr) below.
 
 <a id="nestedblock--voltstack_cluster--global_network_list--global_network_connections--sli_to_global_dr"></a>
 
-### Voltstack Cluster Global Network List Global Network Connections Sli To Global Dr
+### Voltstack Cluster Global Network List Global Network Connections Sli To Global DR
 
 <a id="nestedblock--voltstack_cluster--global_network_list--global_network_connections--slo_to_global_dr"></a>
 
-### Voltstack Cluster Global Network List Global Network Connections Slo To Global Dr
+### Voltstack Cluster Global Network List Global Network Connections Slo To Global DR
 
 <a id="nestedblock--voltstack_cluster--k8s_cluster"></a>
 
@@ -1223,11 +1223,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--voltstack_cluster--sm_connection_public_ip"></a>
 
-### Voltstack Cluster Sm Connection Public Ip
+### Voltstack Cluster Sm Connection Public IP
 
 <a id="nestedblock--voltstack_cluster--sm_connection_pvt_ip"></a>
 
-### Voltstack Cluster Sm Connection Pvt Ip
+### Voltstack Cluster Sm Connection Pvt IP
 
 <a id="nestedblock--voltstack_cluster--storage_class_list"></a>
 

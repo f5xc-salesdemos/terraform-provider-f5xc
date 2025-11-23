@@ -96,7 +96,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Ct Groups Namespace Roles
 
-`namespace` - (Optional) Namespace. All Namespaces with custom names will be created in the new Child Tenant. Input a '*' to apply to all application namespaces (`String`).
+`namespace` - (Optional) Namespace. All Namespaces with custom names will be created in the new Child Tenant. Input a '*' to apply to all application namespaces. The System, Shared, and Default namespaces will be created automatically (`String`).
 
 `role` - (Optional) Role. User role that users in the newly created group will inherit (`String`).
 
@@ -104,7 +104,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Favicon
 
-`aws_s3` - (Optional) Empty. This can be used for messages where no values are needed. See [Aws S3](#nestedblock--favicon--aws_s3) below.
+`aws_s3` - (Optional) Empty. This can be used for messages where no values are needed. See [AWS S3](#nestedblock--favicon--aws_s3) below.
 
 `content` - (Optional) Content. Content of the file (`String`).
 
@@ -112,13 +112,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--favicon--aws_s3"></a>
 
-### Favicon Aws S3
+### Favicon AWS S3
 
 <a id="nestedblock--logo"></a>
 
 ### Logo
 
-`aws_s3` - (Optional) Empty. This can be used for messages where no values are needed. See [Aws S3](#nestedblock--logo--aws_s3) below.
+`aws_s3` - (Optional) Empty. This can be used for messages where no values are needed. See [AWS S3](#nestedblock--logo--aws_s3) below.
 
 `content` - (Optional) Content. Content of the file (`String`).
 
@@ -126,7 +126,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--logo--aws_s3"></a>
 
-### Logo Aws S3
+### Logo AWS S3
 
 <a id="nestedblock--plan"></a>
 
@@ -142,13 +142,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

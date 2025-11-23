@@ -88,13 +88,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Opsgenie
 
-`api_key` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Api Key](#nestedblock--opsgenie--api_key) below.
+`api_key` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [API Key](#nestedblock--opsgenie--api_key) below.
 
 `url` - (Optional) API URL. URL to send API requests to (`String`).
 
 <a id="nestedblock--opsgenie--api_key"></a>
 
-### Opsgenie Api Key
+### Opsgenie API Key
 
 `blindfold_secret_info` - (Optional) Blindfold Secret. BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management. See [Blindfold Secret Info](#nestedblock--opsgenie--api_key--blindfold_secret_info) below.
 
@@ -102,21 +102,21 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--opsgenie--api_key--blindfold_secret_info"></a>
 
-### Opsgenie Api Key Blindfold Secret Info
+### Opsgenie API Key Blindfold Secret Info
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--opsgenie--api_key--clear_secret_info"></a>
 
-### Opsgenie Api Key Clear Secret Info
+### Opsgenie API Key Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--pagerduty"></a>
 
@@ -140,17 +140,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--pagerduty--routing_key--clear_secret_info"></a>
 
 ### Pagerduty Routing Key Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--slack"></a>
 
@@ -158,11 +158,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `channel` - (Optional) Channel. Channel or user to send notifications to (`String`).
 
-`url` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Url](#nestedblock--slack--url) below.
+`url` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [URL](#nestedblock--slack--url) below.
 
 <a id="nestedblock--slack--url"></a>
 
-### Slack Url
+### Slack URL
 
 `blindfold_secret_info` - (Optional) Blindfold Secret. BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management. See [Blindfold Secret Info](#nestedblock--slack--url--blindfold_secret_info) below.
 
@@ -170,21 +170,21 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--slack--url--blindfold_secret_info"></a>
 
-### Slack Url Blindfold Secret Info
+### Slack URL Blindfold Secret Info
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--slack--url--clear_secret_info"></a>
 
-### Slack Url Clear Secret Info
+### Slack URL Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--sms"></a>
 
@@ -196,25 +196,25 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--webhook"></a>
 
 ### Webhook
 
-`http_config` - (Optional) HTTP Configuration. Configuration for HTTP endpoint. See [Http Config](#nestedblock--webhook--http_config) below.
+`http_config` - (Optional) HTTP Configuration. Configuration for HTTP endpoint. See [HTTP Config](#nestedblock--webhook--http_config) below.
 
-`url` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Url](#nestedblock--webhook--url) below.
+`url` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [URL](#nestedblock--webhook--url) below.
 
 <a id="nestedblock--webhook--http_config"></a>
 
-### Webhook Http Config
+### Webhook HTTP Config
 
 `auth_token` - (Optional) Access Token. Authentication Token for access. See [Auth Token](#nestedblock--webhook--http_config--auth_token) below.
 
@@ -228,23 +228,23 @@ In addition to all arguments above, the following attributes are exported:
 
 `no_authorization` - (Optional) Empty. This can be used for messages where no values are needed. See [No Authorization](#nestedblock--webhook--http_config--no_authorization) below.
 
-`no_tls` - (Optional) Empty. This can be used for messages where no values are needed. See [No Tls](#nestedblock--webhook--http_config--no_tls) below.
+`no_tls` - (Optional) Empty. This can be used for messages where no values are needed. See [No TLS](#nestedblock--webhook--http_config--no_tls) below.
 
-`use_tls` - (Optional) TLS Config. Configures the token request's TLS settings. See [Use Tls](#nestedblock--webhook--http_config--use_tls) below.
+`use_tls` - (Optional) TLS Config. Configures the token request's TLS settings. See [Use TLS](#nestedblock--webhook--http_config--use_tls) below.
 
 <a id="nestedblock--webhook--http_config--auth_token"></a>
 
-### Webhook Http Config Auth Token
+### Webhook HTTP Config Auth Token
 
 `token` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Token](#nestedblock--webhook--http_config--auth_token--token) below.
 
 <a id="nestedblock--webhook--http_config--auth_token--token"></a>
 
-### Webhook Http Config Auth Token Token
+### Webhook HTTP Config Auth Token Token
 
 <a id="nestedblock--webhook--http_config--basic_auth"></a>
 
-### Webhook Http Config Basic Auth
+### Webhook HTTP Config Basic Auth
 
 `password` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Password](#nestedblock--webhook--http_config--basic_auth--password) below.
 
@@ -252,57 +252,57 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--webhook--http_config--basic_auth--password"></a>
 
-### Webhook Http Config Basic Auth Password
+### Webhook HTTP Config Basic Auth Password
 
 <a id="nestedblock--webhook--http_config--client_cert_obj"></a>
 
-### Webhook Http Config Client Cert Obj
+### Webhook HTTP Config Client Cert Obj
 
-`use_tls_obj` - (Optional) Certificate Object. Reference to client certificate object. See [Use Tls Obj](#nestedblock--webhook--http_config--client_cert_obj--use_tls_obj) below.
+`use_tls_obj` - (Optional) Certificate Object. Reference to client certificate object. See [Use TLS Obj](#nestedblock--webhook--http_config--client_cert_obj--use_tls_obj) below.
 
 <a id="nestedblock--webhook--http_config--client_cert_obj--use_tls_obj"></a>
 
-### Webhook Http Config Client Cert Obj Use Tls Obj
+### Webhook HTTP Config Client Cert Obj Use TLS Obj
 
 <a id="nestedblock--webhook--http_config--no_authorization"></a>
 
-### Webhook Http Config No Authorization
+### Webhook HTTP Config No Authorization
 
 <a id="nestedblock--webhook--http_config--no_tls"></a>
 
-### Webhook Http Config No Tls
+### Webhook HTTP Config No TLS
 
 <a id="nestedblock--webhook--http_config--use_tls"></a>
 
-### Webhook Http Config Use Tls
+### Webhook HTTP Config Use TLS
 
 `disable_sni` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Sni](#nestedblock--webhook--http_config--use_tls--disable_sni) below.
 
-`max_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3` (`String`).
+`max_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3`. Defaults to `TLS_AUTO` (`String`).
 
-`min_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3` (`String`).
+`min_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3`. Defaults to `TLS_AUTO` (`String`).
 
 `sni` - (Optional) SNI Value. SNI value to be used (`String`).
 
 `use_server_verification` - (Optional) TLS Validation Context for Servers. Upstream TLS Validation Context. See [Use Server Verification](#nestedblock--webhook--http_config--use_tls--use_server_verification) below.
 
-`volterra_trusted_ca` - (Optional) Empty. This can be used for messages where no values are needed. See [Volterra Trusted Ca](#nestedblock--webhook--http_config--use_tls--volterra_trusted_ca) below.
+`volterra_trusted_ca` - (Optional) Empty. This can be used for messages where no values are needed. See [Volterra Trusted CA](#nestedblock--webhook--http_config--use_tls--volterra_trusted_ca) below.
 
 <a id="nestedblock--webhook--http_config--use_tls--disable_sni"></a>
 
-### Webhook Http Config Use Tls Disable Sni
+### Webhook HTTP Config Use TLS Disable Sni
 
 <a id="nestedblock--webhook--http_config--use_tls--use_server_verification"></a>
 
-### Webhook Http Config Use Tls Use Server Verification
+### Webhook HTTP Config Use TLS Use Server Verification
 
 <a id="nestedblock--webhook--http_config--use_tls--volterra_trusted_ca"></a>
 
-### Webhook Http Config Use Tls Volterra Trusted Ca
+### Webhook HTTP Config Use TLS Volterra Trusted CA
 
 <a id="nestedblock--webhook--url"></a>
 
-### Webhook Url
+### Webhook URL
 
 `blindfold_secret_info` - (Optional) Blindfold Secret. BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management. See [Blindfold Secret Info](#nestedblock--webhook--url--blindfold_secret_info) below.
 
@@ -310,21 +310,21 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--webhook--url--blindfold_secret_info"></a>
 
-### Webhook Url Blindfold Secret Info
+### Webhook URL Blindfold Secret Info
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--webhook--url--clear_secret_info"></a>
 
-### Webhook Url Clear Secret Info
+### Webhook URL Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 ## Import
 

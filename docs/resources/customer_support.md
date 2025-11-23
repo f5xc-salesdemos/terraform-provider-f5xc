@@ -62,7 +62,7 @@ The following arguments are optional:
 
 `category` - (Optional) Category. ticket area further narrows down the ticket - infrastructure, application, dashboards can be examples (`String`).
 
-`comments` - (Optional) Comments. Comments are all public comments on an issue. They're usually conversation between the support personnel and the customer. See [Comments](#comments) below for details.
+`comments` - (Optional) Comments. Comments are all public comments on an issue. They'RE usually conversation between the support personnel and the customer. See [Comments](#comments) below for details.
 
 `description` - (Optional) Description. customer's description of the issue (free text) (`String`).
 
@@ -70,15 +70,15 @@ The following arguments are optional:
 
 `ongoing` - (Optional) Ongoing. Ongoing is a flag that indicates whether the issue is ongoing or not (`Bool`).
 
-`priority` - (Optional) Priority. Support ticket priority helps understand importance of the ticket and focus more on more critical issues (`String`).
+`priority` - (Optional) Priority. Support ticket priority helps understand importance of the ticket and focus more on more critical issues. Unknown/empty priority Normal priority issue High priority issue Urgent priority issue. Possible values are `PRIORITY_UNKNOWN`, `PRIORITY_NORMAL`, `PRIORITY_HIGH`, `PRIORITY_URGENT` (`String`).
 
 `product_data` - (Optional) Product Data. Product data is a free text field that can be used to describe the issue in more detail (`String`).
 
 `relates_to` - (Optional) Ticket which this one relates to. Optional reference to any original ticket in case the ticket being created is a followup. See [Relates To](#relates-to) below for details.
 
-`service` - (Optional) Support Service. Indicates the list of support service Unknown Support Service Account Protection Support Service Administration Support Service Application Traffic Insight Support Service Audit Lo... (`String`).
+`service` - (Optional) Support Service. Indicates the list of support service Unknown Support Service Account Protection Support Service Administration Support Service Application Traffic Insight Support Service Audit Logs & Alerts Support Service Authentication Intelligence Support Service Billing Support Service Client Side Defense Support Service Cloud & Edge Sites Support Service deprecated: use SS_MULTI_CLOUD_NETWORK_CONNECT instead DDOS & Transit Support Service Deprecated: use SS_ROUTED_DDOS instead Distribu... Possible values include `SS_UNKNOWN`, `SS_ACCOUNT_PROTECTION`, `SS_ADMINISTRATION`, `SS_APPLICATION_TRAFFIC_INSIGHT`, `SS_AUDIT_LOGS_AND_ALERTS`, `SS_AUTHENTICATION_INTELLIGENCE`, `SS_BILLING`, `SS_CLIENT_SIDE_DEFENSE`, `SS_CLOUD_AND_EDGE_SITES`, `SS_DDOS_AND_TRANSIT_SERVICES`, and others (`String`).
 
-`status` - (Optional) Support Ticket Status. State of the ticket so the customers know if the problem is being looked into Unknown or empty support ticket status Indicates a new ticket, waiting to be assigned to an agen... (`String`).
+`status` - (Optional) Support Ticket Status. State of the ticket so the customers know if the problem is being looked into Unknown or empty support ticket status Indicates a new ticket, waiting to be assigned to an agent Indicates an open issues, actively being looked into Indicates a pending issue, an open issue not actively being looked into Indicates on issue that on-hold, waiting for more information Indicates a solved issue, waiting for customer's confirmation Indicates a closed issue, resolved and customer a... Possible values are `STATUS_UNKNOWN`, `STATUS_NEW`, `STATUS_OPEN`, `STATUS_PENDING`, `STATUS_ONHOLD`, `STATUS_SOLVED`, `STATUS_CLOSED`, `STATUS_FAILED` (`String`).
 
 `subject` - (Optional) Subject. subject of the ticket (`String`).
 
@@ -86,11 +86,11 @@ The following arguments are optional:
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
-`topic` - (Optional) Support Topic. Support Topic indicates the list of topics for service tickets Unknown/empty priority ACCOUNT_SUPPORT_TOPIC_ACCESS_REQUEST ACCOUNT_SUPPORT_TOPIC_ACCOUNT ACCOUNT_SUPPORT_TOPIC_BILLING... (`String`).
+`topic` - (Optional) Support Topic. Support Topic indicates the list of topics for service tickets Unknown/empty priority ACCOUNT_SUPPORT_TOPIC_ACCESS_REQUEST ACCOUNT_SUPPORT_TOPIC_ACCOUNT ACCOUNT_SUPPORT_TOPIC_BILLING ACCOUNT_SUPPORT_TOPIC_BILLING_PLAN_CHANGE ACCOUNT_SUPPORT_TOPIC_PUBLIC_IP ACCOUNT_SUPPORT_TOPIC_QUOTA_INCREASE ACCOUNT_SUPPORT_TOPIC_RMA ACCOUNT_SUPPORT_TOPIC_TAX_EXEMPT_VERIFICATION ACCOUNT_SUPPORT_TOPIC_OTHERS TECHNICAL_SUPPORT_TOPIC_CONFIGURATION_CHANGES TECHNICAL_SUPPORT_TOPIC_ERROR_MESSAGE TEC... Possible values include `TOPIC_UNKNOWN`, `ACCOUNT_SUPPORT_TOPIC_ACCESS_REQUEST`, `ACCOUNT_SUPPORT_TOPIC_ACCOUNT`, `ACCOUNT_SUPPORT_TOPIC_BILLING`, `ACCOUNT_SUPPORT_TOPIC_BILLING_PLAN_CHANGE`, `ACCOUNT_SUPPORT_TOPIC_PUBLIC_IP`, `ACCOUNT_SUPPORT_TOPIC_QUOTA_INCREASE`, `ACCOUNT_SUPPORT_TOPIC_RMA`, `ACCOUNT_SUPPORT_TOPIC_TAX_EXEMPT_VERIFICATION`, `ACCOUNT_SUPPORT_TOPIC_OTHERS`, and others (`String`).
 
 `tp_id` - (Optional) Third Party ID. ID assigned to this ticket by our support provider (`String`).
 
-`type` - (Optional) Support Ticket. Several types of issues are supported, such as problems, questions. Unknown or empty ticket type Indicates a problem (e.g (`String`).
+`type` - (Optional) Support Ticket. Several types of issues are supported, such as problems, questions. Unknown or empty ticket type Indicates a problem (e.g. misconfiguration) Indicates a task (a request to do something) Indicates a question (billing, services related) Indicates an incident (something is not working) Indicates a technical support ticket Indicates an account support ticket Indicates an Incident support ticket. Possible values are `TYPE_UNKNOWN`, `TYPE_PROBLEM`, `TYPE_TASK`, `TYPE_QUESTION`, `TYPE_INCIDENT`, `TYPE_TECHNICAL_SUPPORT`, `TYPE_ACCOUNT_SUPPORT`, `TYPE_INCIDENT_SUPPORT` (`String`).
 
 ### Attributes Reference
 
@@ -148,13 +148,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

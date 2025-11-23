@@ -67,7 +67,7 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
-`bgp_parameters` - (Optional) BGP Parameters. BGP parameters for the local site. See [Bgp Parameters](#bgp-parameters) below for details.
+`bgp_parameters` - (Optional) BGP Parameters. BGP parameters for the local site. See [BGP Parameters](#bgp-parameters) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
@@ -87,7 +87,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--bgp_parameters"></a>
 
-### Bgp Parameters
+### BGP Parameters
 
 `asn` - (Optional) ASN. Autonomous System Number (`Number`).
 
@@ -99,11 +99,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--bgp_parameters--from_site"></a>
 
-### Bgp Parameters From Site
+### BGP Parameters From Site
 
 <a id="nestedblock--bgp_parameters--local_address"></a>
 
-### Bgp Parameters Local Address
+### BGP Parameters Local Address
 
 <a id="nestedblock--peers"></a>
 
@@ -119,7 +119,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `label` - (Optional) Label. Specify whether this peer should be (`String`).
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--peers--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--peers--metadata) below.
 
 `passive_mode_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Passive Mode Disabled](#nestedblock--peers--passive_mode_disabled) below.
 
@@ -149,7 +149,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Peers External
 
-`address` - (Optional) Peer Address. Specify IPV4 peer address (`String`).
+`address` - (Optional) Peer Address. Specify IPv4 peer address (`String`).
 
 `address_ipv6` - (Optional) Peer IPv6 Address. Specify peer IPv6 address (`String`).
 
@@ -317,13 +317,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--where"></a>
 
@@ -337,21 +337,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Where Site
 
-`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet Vip](#nestedblock--where--site--disable_internet_vip) below.
+`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet VIP](#nestedblock--where--site--disable_internet_vip) below.
 
-`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet Vip](#nestedblock--where--site--enable_internet_vip) below.
+`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet VIP](#nestedblock--where--site--enable_internet_vip) below.
 
-`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
 `ref` - (Optional) Reference. A site direct reference. See [Ref](#nestedblock--where--site--ref) below.
 
 <a id="nestedblock--where--site--disable_internet_vip"></a>
 
-### Where Site Disable Internet Vip
+### Where Site Disable Internet VIP
 
 <a id="nestedblock--where--site--enable_internet_vip"></a>
 
-### Where Site Enable Internet Vip
+### Where Site Enable Internet VIP
 
 <a id="nestedblock--where--site--ref"></a>
 
@@ -371,21 +371,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Where Virtual Site
 
-`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet Vip](#nestedblock--where--virtual_site--disable_internet_vip) below.
+`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet VIP](#nestedblock--where--virtual_site--disable_internet_vip) below.
 
-`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet Vip](#nestedblock--where--virtual_site--enable_internet_vip) below.
+`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet VIP](#nestedblock--where--virtual_site--enable_internet_vip) below.
 
-`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
 `ref` - (Optional) Reference. A virtual_site direct reference. See [Ref](#nestedblock--where--virtual_site--ref) below.
 
 <a id="nestedblock--where--virtual_site--disable_internet_vip"></a>
 
-### Where Virtual Site Disable Internet Vip
+### Where Virtual Site Disable Internet VIP
 
 <a id="nestedblock--where--virtual_site--enable_internet_vip"></a>
 
-### Where Virtual Site Enable Internet Vip
+### Where Virtual Site Enable Internet VIP
 
 <a id="nestedblock--where--virtual_site--ref"></a>
 

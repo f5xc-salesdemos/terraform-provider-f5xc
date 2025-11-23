@@ -62,7 +62,7 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "aws_tgw_site, azure_vnet_site" must be set.
 
-`aws_tgw_site` - (Optional) AWS TGW Site Type. Cloud Connect AWS TGW Site Type. See [Aws Tgw Site](#aws-tgw-site) below for details.
+`aws_tgw_site` - (Optional) AWS TGW Site Type. Cloud Connect AWS TGW Site Type. See [AWS Tgw Site](#aws-tgw-site) below for details.
 
 `azure_vnet_site` - (Optional) Azure VNET Site Type. Cloud Connect Azure VNET Site Type. See [Azure Vnet Site](#azure-vnet-site) below for details.
 
@@ -82,7 +82,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--aws_tgw_site"></a>
 
-### Aws Tgw Site
+### AWS Tgw Site
 
 `cred` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Cred](#nestedblock--aws_tgw_site--cred) below.
 
@@ -92,7 +92,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--aws_tgw_site--cred"></a>
 
-### Aws Tgw Site Cred
+### AWS Tgw Site Cred
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -102,7 +102,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--aws_tgw_site--site"></a>
 
-### Aws Tgw Site Site
+### AWS Tgw Site Site
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -112,13 +112,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--aws_tgw_site--vpc_attachments"></a>
 
-### Aws Tgw Site Vpc Attachments
+### AWS Tgw Site Vpc Attachments
 
 `vpc_list` - (Optional) VPC List. See [Vpc List](#nestedblock--aws_tgw_site--vpc_attachments--vpc_list) below.
 
 <a id="nestedblock--aws_tgw_site--vpc_attachments--vpc_list"></a>
 
-### Aws Tgw Site Vpc Attachments Vpc List
+### AWS Tgw Site Vpc Attachments Vpc List
 
 `custom_routing` - (Optional) AWS Route Table List. AWS Route Table List. See [Custom Routing](#nestedblock--aws_tgw_site--vpc_attachments--vpc_list--custom_routing) below.
 
@@ -132,19 +132,19 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--aws_tgw_site--vpc_attachments--vpc_list--custom_routing"></a>
 
-### Aws Tgw Site Vpc Attachments Vpc List Custom Routing
+### AWS Tgw Site Vpc Attachments Vpc List Custom Routing
 
 <a id="nestedblock--aws_tgw_site--vpc_attachments--vpc_list--default_route"></a>
 
-### Aws Tgw Site Vpc Attachments Vpc List Default Route
+### AWS Tgw Site Vpc Attachments Vpc List Default Route
 
 <a id="nestedblock--aws_tgw_site--vpc_attachments--vpc_list--labels"></a>
 
-### Aws Tgw Site Vpc Attachments Vpc List Labels
+### AWS Tgw Site Vpc Attachments Vpc List Labels
 
 <a id="nestedblock--aws_tgw_site--vpc_attachments--vpc_list--manual_routing"></a>
 
-### Aws Tgw Site Vpc Attachments Vpc List Manual Routing
+### AWS Tgw Site Vpc Attachments Vpc List Manual Routing
 
 <a id="nestedblock--azure_vnet_site"></a>
 
@@ -216,13 +216,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

@@ -98,7 +98,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `monitor_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Monitor Disabled](#nestedblock--dedicated_interface--monitor_disabled) below.
 
-`mtu` - (Optional) Maximum Packet Size (MTU). Maximum packet size (Maximum Transfer Unit) of the interface When configured, mtu must be between 512 and 16384 (`Number`).
+`mtu` - (Optional) Maximum Packet Size (MTU). Maximum packet size (Maximum Transfer Unit) of the interface When configured, MTU must be between 512 and 16384 (`Number`).
 
 `node` - (Optional) Specific Node. Configuration will apply to a device on the given node of the site (`String`).
 
@@ -134,7 +134,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `device` - (Optional) Interface Device. Name of the device for which interface is configured (`String`).
 
-`mtu` - (Optional) Maximum Packet Size (MTU). Maximum packet size (Maximum Transfer Unit) of the interface When configured, mtu must be between 512 and 16384 (`Number`).
+`mtu` - (Optional) Maximum Packet Size (MTU). Maximum packet size (Maximum Transfer Unit) of the interface When configured, MTU must be between 512 and 16384 (`Number`).
 
 `node` - (Optional) Specific Node. Configuration will apply to a device on the given node of the site (`String`).
 
@@ -150,11 +150,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `device` - (Optional) Ethernet Device. Interface configuration for the ethernet device (`String`).
 
-`dhcp_client` - (Optional) Empty. This can be used for messages where no values are needed. See [Dhcp Client](#nestedblock--ethernet_interface--dhcp_client) below.
+`dhcp_client` - (Optional) Empty. This can be used for messages where no values are needed. See [DHCP Client](#nestedblock--ethernet_interface--dhcp_client) below.
 
-`dhcp_server` - (Optional) DHCPServerParametersType. See [Dhcp Server](#nestedblock--ethernet_interface--dhcp_server) below.
+`dhcp_server` - (Optional) DHCPServerParametersType. See [DHCP Server](#nestedblock--ethernet_interface--dhcp_server) below.
 
-`ipv6_auto_config` - (Optional) IPV6AutoConfigType. See [Ipv6 Auto Config](#nestedblock--ethernet_interface--ipv6_auto_config) below.
+`ipv6_auto_config` - (Optional) IPV6AutoConfigType. See [IPv6 Auto Config](#nestedblock--ethernet_interface--ipv6_auto_config) below.
 
 `is_primary` - (Optional) Empty. This can be used for messages where no values are needed. See [Is Primary](#nestedblock--ethernet_interface--is_primary) below.
 
@@ -162,9 +162,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `monitor_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Monitor Disabled](#nestedblock--ethernet_interface--monitor_disabled) below.
 
-`mtu` - (Optional) Maximum Packet Size (MTU). Maximum packet size (Maximum Transfer Unit) of the interface When configured, mtu must be between 512 and 16384 (`Number`).
+`mtu` - (Optional) Maximum Packet Size (MTU). Maximum packet size (Maximum Transfer Unit) of the interface When configured, MTU must be between 512 and 16384 (`Number`).
 
-`no_ipv6_address` - (Optional) Empty. This can be used for messages where no values are needed. See [No Ipv6 Address](#nestedblock--ethernet_interface--no_ipv6_address) below.
+`no_ipv6_address` - (Optional) Empty. This can be used for messages where no values are needed. See [No IPv6 Address](#nestedblock--ethernet_interface--no_ipv6_address) below.
 
 `node` - (Optional) Specific Node. Configuration will apply to a device on the given node (`String`).
 
@@ -176,9 +176,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `site_local_network` - (Optional) Empty. This can be used for messages where no values are needed. See [Site Local Network](#nestedblock--ethernet_interface--site_local_network) below.
 
-`static_ip` - (Optional) Static IP Parameters. Configure Static IP parameters. See [Static Ip](#nestedblock--ethernet_interface--static_ip) below.
+`static_ip` - (Optional) Static IP Parameters. Configure Static IP parameters. See [Static IP](#nestedblock--ethernet_interface--static_ip) below.
 
-`static_ipv6_address` - (Optional) Static IP Parameters. Configure Static IP parameters. See [Static Ipv6 Address](#nestedblock--ethernet_interface--static_ipv6_address) below.
+`static_ipv6_address` - (Optional) Static IP Parameters. Configure Static IP parameters. See [Static IPv6 Address](#nestedblock--ethernet_interface--static_ipv6_address) below.
 
 `storage_network` - (Optional) Empty. This can be used for messages where no values are needed. See [Storage Network](#nestedblock--ethernet_interface--storage_network) below.
 
@@ -192,33 +192,33 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ethernet_interface--dhcp_client"></a>
 
-### Ethernet Interface Dhcp Client
+### Ethernet Interface DHCP Client
 
 <a id="nestedblock--ethernet_interface--dhcp_server"></a>
 
-### Ethernet Interface Dhcp Server
+### Ethernet Interface DHCP Server
 
 `automatic_from_end` - (Optional) Empty. This can be used for messages where no values are needed. See [Automatic From End](#nestedblock--ethernet_interface--dhcp_server--automatic_from_end) below.
 
 `automatic_from_start` - (Optional) Empty. This can be used for messages where no values are needed. See [Automatic From Start](#nestedblock--ethernet_interface--dhcp_server--automatic_from_start) below.
 
-`dhcp_networks` - (Optional) DHCP Networks. List of networks from which DHCP Server can allocate IPv4 Addresses. See [Dhcp Networks](#nestedblock--ethernet_interface--dhcp_server--dhcp_networks) below.
+`dhcp_networks` - (Optional) DHCP Networks. List of networks from which DHCP Server can allocate IPv4 Addresses. See [DHCP Networks](#nestedblock--ethernet_interface--dhcp_server--dhcp_networks) below.
 
-`fixed_ip_map` - (Optional) Fixed MAC Address to IPv4 Assignments. Assign fixed IPv4 addresses based on the MAC Address of the DHCP Client. See [Fixed Ip Map](#nestedblock--ethernet_interface--dhcp_server--fixed_ip_map) below.
+`fixed_ip_map` - (Optional) Fixed MAC Address to IPv4 Assignments. Assign fixed IPv4 addresses based on the MAC Address of the DHCP Client. See [Fixed IP Map](#nestedblock--ethernet_interface--dhcp_server--fixed_ip_map) below.
 
-`interface_ip_map` - (Optional) Interface IPv4 Assignments. Specify static IPv4 addresses per node. See [Interface Ip Map](#nestedblock--ethernet_interface--dhcp_server--interface_ip_map) below.
+`interface_ip_map` - (Optional) Interface IPv4 Assignments. Specify static IPv4 addresses per node. See [Interface IP Map](#nestedblock--ethernet_interface--dhcp_server--interface_ip_map) below.
 
 <a id="nestedblock--ethernet_interface--dhcp_server--automatic_from_end"></a>
 
-### Ethernet Interface Dhcp Server Automatic From End
+### Ethernet Interface DHCP Server Automatic From End
 
 <a id="nestedblock--ethernet_interface--dhcp_server--automatic_from_start"></a>
 
-### Ethernet Interface Dhcp Server Automatic From Start
+### Ethernet Interface DHCP Server Automatic From Start
 
 <a id="nestedblock--ethernet_interface--dhcp_server--dhcp_networks"></a>
 
-### Ethernet Interface Dhcp Server Dhcp Networks
+### Ethernet Interface DHCP Server DHCP Networks
 
 `dgw_address` - (Optional) Static IPv4 Configuration. Enter a IPv4 address from the network prefix to be used as the default gateway (`String`).
 
@@ -230,45 +230,45 @@ In addition to all arguments above, the following attributes are exported:
 
 `network_prefix` - (Optional) Network Prefix. Set the network prefix for the site. ex: 10.1.1.0/24 (`String`).
 
-`pool_settings` - (Optional) Interface Network Type. Identifies the how to pick the network for Interface (`String`).
+`pool_settings` - (Optional) Interface Network Type. Identifies the how to pick the network for Interface. Address ranges in DHCP pool list are used for IP Address allocation Address ranges in DHCP pool list are excluded from IP Address allocation. Possible values are `INCLUDE_IP_ADDRESSES_FROM_DHCP_POOLS`, `EXCLUDE_IP_ADDRESSES_FROM_DHCP_POOLS`. Defaults to `INCLUDE_IP_ADDRESSES_FROM_DHCP_POOLS` (`String`).
 
-`pools` - (Optional) DHCP Pools. List of non overlapping ip address ranges. See [Pools](#nestedblock--ethernet_interface--dhcp_server--dhcp_networks--pools) below.
+`pools` - (Optional) DHCP Pools. List of non overlapping IP address ranges. See [Pools](#nestedblock--ethernet_interface--dhcp_server--dhcp_networks--pools) below.
 
 `same_as_dgw` - (Optional) Empty. This can be used for messages where no values are needed. See [Same As Dgw](#nestedblock--ethernet_interface--dhcp_server--dhcp_networks--same_as_dgw) below.
 
 <a id="nestedblock--ethernet_interface--dhcp_server--dhcp_networks--first_address"></a>
 
-### Ethernet Interface Dhcp Server Dhcp Networks First Address
+### Ethernet Interface DHCP Server DHCP Networks First Address
 
 <a id="nestedblock--ethernet_interface--dhcp_server--dhcp_networks--last_address"></a>
 
-### Ethernet Interface Dhcp Server Dhcp Networks Last Address
+### Ethernet Interface DHCP Server DHCP Networks Last Address
 
 <a id="nestedblock--ethernet_interface--dhcp_server--dhcp_networks--pools"></a>
 
-### Ethernet Interface Dhcp Server Dhcp Networks Pools
+### Ethernet Interface DHCP Server DHCP Networks Pools
 
 <a id="nestedblock--ethernet_interface--dhcp_server--dhcp_networks--same_as_dgw"></a>
 
-### Ethernet Interface Dhcp Server Dhcp Networks Same As Dgw
+### Ethernet Interface DHCP Server DHCP Networks Same As Dgw
 
 <a id="nestedblock--ethernet_interface--dhcp_server--fixed_ip_map"></a>
 
-### Ethernet Interface Dhcp Server Fixed Ip Map
+### Ethernet Interface DHCP Server Fixed IP Map
 
 <a id="nestedblock--ethernet_interface--dhcp_server--interface_ip_map"></a>
 
-### Ethernet Interface Dhcp Server Interface Ip Map
+### Ethernet Interface DHCP Server Interface IP Map
 
-`interface_ip_map` - (Optional) Site:Node to IPv4 Address Mapping. Specify static IPv4 addresses per site:node. See [Interface Ip Map](#nestedblock--ethernet_interface--dhcp_server--interface_ip_map--interface_ip_map) below.
+`interface_ip_map` - (Optional) Site:Node to IPv4 Address Mapping. Specify static IPv4 addresses per site:node. See [Interface IP Map](#nestedblock--ethernet_interface--dhcp_server--interface_ip_map--interface_ip_map) below.
 
 <a id="nestedblock--ethernet_interface--dhcp_server--interface_ip_map--interface_ip_map"></a>
 
-### Ethernet Interface Dhcp Server Interface Ip Map Interface Ip Map
+### Ethernet Interface DHCP Server Interface IP Map Interface IP Map
 
 <a id="nestedblock--ethernet_interface--ipv6_auto_config"></a>
 
-### Ethernet Interface Ipv6 Auto Config
+### Ethernet Interface IPv6 Auto Config
 
 `host` - (Optional) Empty. This can be used for messages where no values are needed. See [Host](#nestedblock--ethernet_interface--ipv6_auto_config--host) below.
 
@@ -276,13 +276,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ethernet_interface--ipv6_auto_config--host"></a>
 
-### Ethernet Interface Ipv6 Auto Config Host
+### Ethernet Interface IPv6 Auto Config Host
 
 <a id="nestedblock--ethernet_interface--ipv6_auto_config--router"></a>
 
-### Ethernet Interface Ipv6 Auto Config Router
+### Ethernet Interface IPv6 Auto Config Router
 
-`dns_config` - (Optional) IPV6DnsConfig. See [Dns Config](#nestedblock--ethernet_interface--ipv6_auto_config--router--dns_config) below.
+`dns_config` - (Optional) IPV6DnsConfig. See [DNS Config](#nestedblock--ethernet_interface--ipv6_auto_config--router--dns_config) below.
 
 `network_prefix` - (Optional) Network Prefix. Nework prefix that is used as Prefix information Allowed only /64 prefix length as per RFC 4862 (`String`).
 
@@ -290,11 +290,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ethernet_interface--ipv6_auto_config--router--dns_config"></a>
 
-### Ethernet Interface Ipv6 Auto Config Router Dns Config
+### Ethernet Interface IPv6 Auto Config Router DNS Config
 
 <a id="nestedblock--ethernet_interface--ipv6_auto_config--router--stateful"></a>
 
-### Ethernet Interface Ipv6 Auto Config Router Stateful
+### Ethernet Interface IPv6 Auto Config Router Stateful
 
 <a id="nestedblock--ethernet_interface--is_primary"></a>
 
@@ -310,7 +310,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ethernet_interface--no_ipv6_address"></a>
 
-### Ethernet Interface No Ipv6 Address
+### Ethernet Interface No IPv6 Address
 
 <a id="nestedblock--ethernet_interface--not_primary"></a>
 
@@ -326,25 +326,25 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ethernet_interface--static_ip"></a>
 
-### Ethernet Interface Static Ip
+### Ethernet Interface Static IP
 
-`cluster_static_ip` - (Optional) Cluster: Static IP Parameters. Configure Static IP parameters for cluster. See [Cluster Static Ip](#nestedblock--ethernet_interface--static_ip--cluster_static_ip) below.
+`cluster_static_ip` - (Optional) Cluster: Static IP Parameters. Configure Static IP parameters for cluster. See [Cluster Static IP](#nestedblock--ethernet_interface--static_ip--cluster_static_ip) below.
 
-`node_static_ip` - (Optional) Node: Static IP Parameters. Configure Static IP parameters for a node. See [Node Static Ip](#nestedblock--ethernet_interface--static_ip--node_static_ip) below.
+`node_static_ip` - (Optional) Node: Static IP Parameters. Configure Static IP parameters for a node. See [Node Static IP](#nestedblock--ethernet_interface--static_ip--node_static_ip) below.
 
 <a id="nestedblock--ethernet_interface--static_ip--cluster_static_ip"></a>
 
-### Ethernet Interface Static Ip Cluster Static Ip
+### Ethernet Interface Static IP Cluster Static IP
 
-`interface_ip_map` - (Optional) Node to IP Mapping. Map of Node to Static ip configuration value, Key:Node, Value:IP Address. See [Interface Ip Map](#nestedblock--ethernet_interface--static_ip--cluster_static_ip--interface_ip_map) below.
+`interface_ip_map` - (Optional) Node to IP Mapping. Map of Node to Static IP configuration value, Key:Node, Value:IP Address. See [Interface IP Map](#nestedblock--ethernet_interface--static_ip--cluster_static_ip--interface_ip_map) below.
 
 <a id="nestedblock--ethernet_interface--static_ip--cluster_static_ip--interface_ip_map"></a>
 
-### Ethernet Interface Static Ip Cluster Static Ip Interface Ip Map
+### Ethernet Interface Static IP Cluster Static IP Interface IP Map
 
 <a id="nestedblock--ethernet_interface--static_ip--node_static_ip"></a>
 
-### Ethernet Interface Static Ip Node Static Ip
+### Ethernet Interface Static IP Node Static IP
 
 `default_gw` - (Optional) Default Gateway. IP address of the default gateway (`String`).
 
@@ -352,25 +352,25 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ethernet_interface--static_ipv6_address"></a>
 
-### Ethernet Interface Static Ipv6 Address
+### Ethernet Interface Static IPv6 Address
 
-`cluster_static_ip` - (Optional) Cluster: Static IP Parameters. Configure Static IP parameters for cluster. See [Cluster Static Ip](#nestedblock--ethernet_interface--static_ipv6_address--cluster_static_ip) below.
+`cluster_static_ip` - (Optional) Cluster: Static IP Parameters. Configure Static IP parameters for cluster. See [Cluster Static IP](#nestedblock--ethernet_interface--static_ipv6_address--cluster_static_ip) below.
 
-`node_static_ip` - (Optional) Node: Static IP Parameters. Configure Static IP parameters for a node. See [Node Static Ip](#nestedblock--ethernet_interface--static_ipv6_address--node_static_ip) below.
+`node_static_ip` - (Optional) Node: Static IP Parameters. Configure Static IP parameters for a node. See [Node Static IP](#nestedblock--ethernet_interface--static_ipv6_address--node_static_ip) below.
 
 <a id="nestedblock--ethernet_interface--static_ipv6_address--cluster_static_ip"></a>
 
-### Ethernet Interface Static Ipv6 Address Cluster Static Ip
+### Ethernet Interface Static IPv6 Address Cluster Static IP
 
-`interface_ip_map` - (Optional) Node to IP Mapping. Map of Node to Static ip configuration value, Key:Node, Value:IP Address. See [Interface Ip Map](#nestedblock--ethernet_interface--static_ipv6_address--cluster_static_ip--interface_ip_map) below.
+`interface_ip_map` - (Optional) Node to IP Mapping. Map of Node to Static IP configuration value, Key:Node, Value:IP Address. See [Interface IP Map](#nestedblock--ethernet_interface--static_ipv6_address--cluster_static_ip--interface_ip_map) below.
 
 <a id="nestedblock--ethernet_interface--static_ipv6_address--cluster_static_ip--interface_ip_map"></a>
 
-### Ethernet Interface Static Ipv6 Address Cluster Static Ip Interface Ip Map
+### Ethernet Interface Static IPv6 Address Cluster Static IP Interface IP Map
 
 <a id="nestedblock--ethernet_interface--static_ipv6_address--node_static_ip"></a>
 
-### Ethernet Interface Static Ipv6 Address Node Static Ip
+### Ethernet Interface Static IPv6 Address Node Static IP
 
 `default_gw` - (Optional) Default Gateway. IP address of the default gateway (`String`).
 
@@ -426,19 +426,19 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--tunnel_interface"></a>
 
 ### Tunnel Interface
 
-`mtu` - (Optional) Maximum Packet Size (MTU). Maximum packet size (Maximum Transfer Unit) of the interface When configured, mtu must be between 512 and 16384 (`Number`).
+`mtu` - (Optional) Maximum Packet Size (MTU). Maximum packet size (Maximum Transfer Unit) of the interface When configured, MTU must be between 512 and 16384 (`Number`).
 
 `node` - (Optional) Specific Node. Configuration will apply to a given device on the given node (`String`).
 
@@ -448,7 +448,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `site_local_network` - (Optional) Empty. This can be used for messages where no values are needed. See [Site Local Network](#nestedblock--tunnel_interface--site_local_network) below.
 
-`static_ip` - (Optional) Static IP Parameters. Configure Static IP parameters. See [Static Ip](#nestedblock--tunnel_interface--static_ip) below.
+`static_ip` - (Optional) Static IP Parameters. Configure Static IP parameters. See [Static IP](#nestedblock--tunnel_interface--static_ip) below.
 
 `tunnel` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Tunnel](#nestedblock--tunnel_interface--tunnel) below.
 
@@ -462,25 +462,25 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--tunnel_interface--static_ip"></a>
 
-### Tunnel Interface Static Ip
+### Tunnel Interface Static IP
 
-`cluster_static_ip` - (Optional) Cluster: Static IP Parameters. Configure Static IP parameters for cluster. See [Cluster Static Ip](#nestedblock--tunnel_interface--static_ip--cluster_static_ip) below.
+`cluster_static_ip` - (Optional) Cluster: Static IP Parameters. Configure Static IP parameters for cluster. See [Cluster Static IP](#nestedblock--tunnel_interface--static_ip--cluster_static_ip) below.
 
-`node_static_ip` - (Optional) Node: Static IP Parameters. Configure Static IP parameters for a node. See [Node Static Ip](#nestedblock--tunnel_interface--static_ip--node_static_ip) below.
+`node_static_ip` - (Optional) Node: Static IP Parameters. Configure Static IP parameters for a node. See [Node Static IP](#nestedblock--tunnel_interface--static_ip--node_static_ip) below.
 
 <a id="nestedblock--tunnel_interface--static_ip--cluster_static_ip"></a>
 
-### Tunnel Interface Static Ip Cluster Static Ip
+### Tunnel Interface Static IP Cluster Static IP
 
-`interface_ip_map` - (Optional) Node to IP Mapping. Map of Node to Static ip configuration value, Key:Node, Value:IP Address. See [Interface Ip Map](#nestedblock--tunnel_interface--static_ip--cluster_static_ip--interface_ip_map) below.
+`interface_ip_map` - (Optional) Node to IP Mapping. Map of Node to Static IP configuration value, Key:Node, Value:IP Address. See [Interface IP Map](#nestedblock--tunnel_interface--static_ip--cluster_static_ip--interface_ip_map) below.
 
 <a id="nestedblock--tunnel_interface--static_ip--cluster_static_ip--interface_ip_map"></a>
 
-### Tunnel Interface Static Ip Cluster Static Ip Interface Ip Map
+### Tunnel Interface Static IP Cluster Static IP Interface IP Map
 
 <a id="nestedblock--tunnel_interface--static_ip--node_static_ip"></a>
 
-### Tunnel Interface Static Ip Node Static Ip
+### Tunnel Interface Static IP Node Static IP
 
 `default_gw` - (Optional) Default Gateway. IP address of the default gateway (`String`).
 

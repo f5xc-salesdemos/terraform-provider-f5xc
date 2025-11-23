@@ -58,7 +58,7 @@ The following arguments are required:
 
 The following arguments are optional:
 
-`address` - (Optional) VIP. Optional. VIP to advertise. This VIP can be either V4/V6 address You can not specify this if where contains a site or virtual site of type REGIONAL_EDGE or public network If not specified and ... (`String`).
+`address` - (Optional) VIP. Optional. VIP to advertise. This VIP can be either V4/V6 address You can not specify this if where contains a site or virtual site of type REGIONAL_EDGE or public network If not specified and 'where' is specified with site or virtual site option, inside_vip or outside_vip specified in the site object will be used based on the network type. If inside_vip/outside_vip is not configured in the site object, system use interface IP in the respected networks (`String`).
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
@@ -72,15 +72,15 @@ The following arguments are optional:
 
 `protocol` - (Optional) Protocol. Protocol to advertise (`String`).
 
-`public_ip` - (Optional) Public IP. Optional. Public VIP to advertise This field is mutually exclusive with where and address fields. See [Public Ip](#public-ip) below for details.
+`public_ip` - (Optional) Public IP. Optional. Public VIP to advertise This field is mutually exclusive with where and address fields. See [Public IP](#public-ip) below for details.
 
 `skip_xff_append` - (Optional) Disable X-Forwarded-For Header. If set, the loadbalancer will not append the remote address to the x-forwarded-for HTTP header (`Bool`).
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
-`tls_parameters` - (Optional) Downstream TLS Parameters. TLS configuration for downstream connections. See [Tls Parameters](#tls-parameters) below for details.
+`tls_parameters` - (Optional) Downstream TLS Parameters. TLS configuration for downstream connections. See [TLS Parameters](#tls-parameters) below for details.
 
-`where` - (Optional) Network or Site Reference. NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network or reference to virtual_site It is used to determine virtual network using fol.... See [Where](#where) below for details.
+`where` - (Optional) Network or Site Reference. NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network or reference to virtual_site It is used to determine virtual network using following rules * Direct reference to virtual_network object * Site local network when refering to site object * All site local networks for sites selected by refering to virtual_site object. See [Where](#where) below for details.
 
 ### Attributes Reference
 
@@ -92,7 +92,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--public_ip"></a>
 
-### Public Ip
+### Public IP
 
 `kind` - (Optional) Kind. When a configuration object(e.g. virtual_host) refers to another(e.g route) then kind will hold the referred object's kind (e.g. 'route') (`String`).
 
@@ -108,17 +108,17 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--tls_parameters"></a>
 
-### Tls Parameters
+### TLS Parameters
 
 `client_certificate_optional` - (Optional) Empty. This can be used for messages where no values are needed. See [Client Certificate Optional](#nestedblock--tls_parameters--client_certificate_optional) below.
 
@@ -132,29 +132,29 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--tls_parameters--client_certificate_optional"></a>
 
-### Tls Parameters Client Certificate Optional
+### TLS Parameters Client Certificate Optional
 
 <a id="nestedblock--tls_parameters--client_certificate_required"></a>
 
-### Tls Parameters Client Certificate Required
+### TLS Parameters Client Certificate Required
 
 <a id="nestedblock--tls_parameters--common_params"></a>
 
-### Tls Parameters Common Params
+### TLS Parameters Common Params
 
-`cipher_suites` - (Optional) Cipher Suites. The following list specifies the supported cipher suite TLS_AES_128_GCM_SHA256 TLS_AES_256_GCM_SHA384 TLS_CHACHA20_POLY1305_SHA256 TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_E... (`List`).
+`cipher_suites` - (Optional) Cipher Suites. The following list specifies the supported cipher suite TLS_AES_128_GCM_SHA256 TLS_AES_256_GCM_SHA384 TLS_CHACHA20_POLY1305_SHA256 TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA TLS_ECDHE_RSA_WITH_AES_128_CBC_.. (`List`).
 
-`maximum_protocol_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3` (`String`).
+`maximum_protocol_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3`. Defaults to `TLS_AUTO` (`String`).
 
-`minimum_protocol_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3` (`String`).
+`minimum_protocol_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3`. Defaults to `TLS_AUTO` (`String`).
 
-`tls_certificates` - (Optional) TLS Certificates. Set of TLS certificates. See [Tls Certificates](#nestedblock--tls_parameters--common_params--tls_certificates) below.
+`tls_certificates` - (Optional) TLS Certificates. Set of TLS certificates. See [TLS Certificates](#nestedblock--tls_parameters--common_params--tls_certificates) below.
 
 `validation_params` - (Optional) TLS Certificate Validation Parameters. This includes URL for a trust store, whether SAN verification is required and list of Subject Alt Names for verification. See [Validation Params](#nestedblock--tls_parameters--common_params--validation_params) below.
 
 <a id="nestedblock--tls_parameters--common_params--tls_certificates"></a>
 
-### Tls Parameters Common Params Tls Certificates
+### TLS Parameters Common Params TLS Certificates
 
 `certificate_url` - (Optional) Certificate. TLS certificate. Certificate or certificate chain in PEM format including the PEM headers (`String`).
 
@@ -162,7 +162,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `description` - (Optional) Description. Description for the certificate (`String`).
 
-`disable_ocsp_stapling` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Ocsp Stapling](#nestedblock--tls_parameters--common_params--tls_certificates--disable_ocsp_stapling) below.
+`disable_ocsp_stapling` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable OCSP Stapling](#nestedblock--tls_parameters--common_params--tls_certificates--disable_ocsp_stapling) below.
 
 `private_key` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Private Key](#nestedblock--tls_parameters--common_params--tls_certificates--private_key) below.
 
@@ -170,39 +170,39 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--tls_parameters--common_params--tls_certificates--custom_hash_algorithms"></a>
 
-### Tls Parameters Common Params Tls Certificates Custom Hash Algorithms
+### TLS Parameters Common Params TLS Certificates Custom Hash Algorithms
 
 <a id="nestedblock--tls_parameters--common_params--tls_certificates--disable_ocsp_stapling"></a>
 
-### Tls Parameters Common Params Tls Certificates Disable Ocsp Stapling
+### TLS Parameters Common Params TLS Certificates Disable OCSP Stapling
 
 <a id="nestedblock--tls_parameters--common_params--tls_certificates--private_key"></a>
 
-### Tls Parameters Common Params Tls Certificates Private Key
+### TLS Parameters Common Params TLS Certificates Private Key
 
 <a id="nestedblock--tls_parameters--common_params--tls_certificates--use_system_defaults"></a>
 
-### Tls Parameters Common Params Tls Certificates Use System Defaults
+### TLS Parameters Common Params TLS Certificates Use System Defaults
 
 <a id="nestedblock--tls_parameters--common_params--validation_params"></a>
 
-### Tls Parameters Common Params Validation Params
+### TLS Parameters Common Params Validation Params
 
 `skip_hostname_verification` - (Optional) Skip verification of hostname. When True, skip verification of hostname i.e. CN/Subject Alt Name of certificate is not matched to the connecting hostname (`Bool`).
 
-`trusted_ca` - (Optional) Root CA Certificate Reference. Reference to Root CA Certificate. See [Trusted Ca](#nestedblock--tls_parameters--common_params--validation_params--trusted_ca) below.
+`trusted_ca` - (Optional) Root CA Certificate Reference. Reference to Root CA Certificate. See [Trusted CA](#nestedblock--tls_parameters--common_params--validation_params--trusted_ca) below.
 
 `trusted_ca_url` - (Optional) Inline Root CA Certificate (legacy). Inline Root CA Certificate (`String`).
 
-`verify_subject_alt_names` - (Optional) List of SANs for matching. List of acceptable Subject Alt Names/CN in the peer's certificate (`List`).
+`verify_subject_alt_names` - (Optional) List of SANs for matching. List of acceptable Subject Alt Names/CN in the peer's certificate. When skip_hostname_verification is false and verify_subject_alt_names is empty, the hostname of the peer will be used for matching against SAN/CN of peer's certificate (`List`).
 
 <a id="nestedblock--tls_parameters--common_params--validation_params--trusted_ca"></a>
 
-### Tls Parameters Common Params Validation Params Trusted Ca
+### TLS Parameters Common Params Validation Params Trusted CA
 
 <a id="nestedblock--tls_parameters--no_client_certificate"></a>
 
-### Tls Parameters No Client Certificate
+### TLS Parameters No Client Certificate
 
 <a id="nestedblock--where"></a>
 
@@ -218,21 +218,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Where Site
 
-`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet Vip](#nestedblock--where--site--disable_internet_vip) below.
+`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet VIP](#nestedblock--where--site--disable_internet_vip) below.
 
-`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet Vip](#nestedblock--where--site--enable_internet_vip) below.
+`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet VIP](#nestedblock--where--site--enable_internet_vip) below.
 
-`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
 `ref` - (Optional) Reference. A site direct reference. See [Ref](#nestedblock--where--site--ref) below.
 
 <a id="nestedblock--where--site--disable_internet_vip"></a>
 
-### Where Site Disable Internet Vip
+### Where Site Disable Internet VIP
 
 <a id="nestedblock--where--site--enable_internet_vip"></a>
 
-### Where Site Enable Internet Vip
+### Where Site Enable Internet VIP
 
 <a id="nestedblock--where--site--ref"></a>
 
@@ -272,21 +272,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Where Virtual Site
 
-`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet Vip](#nestedblock--where--virtual_site--disable_internet_vip) below.
+`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet VIP](#nestedblock--where--virtual_site--disable_internet_vip) below.
 
-`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet Vip](#nestedblock--where--virtual_site--enable_internet_vip) below.
+`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet VIP](#nestedblock--where--virtual_site--enable_internet_vip) below.
 
-`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
 `ref` - (Optional) Reference. A virtual_site direct reference. See [Ref](#nestedblock--where--virtual_site--ref) below.
 
 <a id="nestedblock--where--virtual_site--disable_internet_vip"></a>
 
-### Where Virtual Site Disable Internet Vip
+### Where Virtual Site Disable Internet VIP
 
 <a id="nestedblock--where--virtual_site--enable_internet_vip"></a>
 
-### Where Virtual Site Enable Internet Vip
+### Where Virtual Site Enable Internet VIP
 
 <a id="nestedblock--where--virtual_site--ref"></a>
 

@@ -146,11 +146,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `all_sources` - (Optional) Empty. This can be used for messages where no values are needed. See [All Sources](#nestedblock--rule_list--rules--all_sources) below.
 
-`all_tcp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All Tcp Traffic](#nestedblock--rule_list--rules--all_tcp_traffic) below.
+`all_tcp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All TCP Traffic](#nestedblock--rule_list--rules--all_tcp_traffic) below.
 
 `all_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All Traffic](#nestedblock--rule_list--rules--all_traffic) below.
 
-`all_udp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All Udp Traffic](#nestedblock--rule_list--rules--all_udp_traffic) below.
+`all_udp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All UDP Traffic](#nestedblock--rule_list--rules--all_udp_traffic) below.
 
 `allow` - (Optional) Empty. This can be used for messages where no values are needed. See [Allow](#nestedblock--rule_list--rules--allow) below.
 
@@ -158,11 +158,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `deny` - (Optional) Empty. This can be used for messages where no values are needed. See [Deny](#nestedblock--rule_list--rules--deny) below.
 
-`destination_aws_vpc_ids` - (Optional) AWS VPC List. List of VPC Identifiers in AWS. See [Destination Aws Vpc Ids](#nestedblock--rule_list--rules--destination_aws_vpc_ids) below.
+`destination_aws_vpc_ids` - (Optional) AWS VPC List. List of VPC Identifiers in AWS. See [Destination AWS Vpc Ids](#nestedblock--rule_list--rules--destination_aws_vpc_ids) below.
 
-`destination_ip_prefix_set` - (Optional) IP Prefix Set Reference. A list of references to ip_prefix_set objects. See [Destination Ip Prefix Set](#nestedblock--rule_list--rules--destination_ip_prefix_set) below.
+`destination_ip_prefix_set` - (Optional) IP Prefix Set Reference. A list of references to ip_prefix_set objects. See [Destination IP Prefix Set](#nestedblock--rule_list--rules--destination_ip_prefix_set) below.
 
-`destination_label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Destination Label Selector](#nestedblock--rule_list--rules--destination_label_selector) below.
+`destination_label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Destination Label Selector](#nestedblock--rule_list--rules--destination_label_selector) below.
 
 `destination_prefix_list` - (Optional) IPv4 Prefix List. x-example: '192.168.20.0/24' List of IPv4 prefixes that represent an endpoint. See [Destination Prefix List](#nestedblock--rule_list--rules--destination_prefix_list) below.
 
@@ -172,9 +172,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `inside_sources` - (Optional) Empty. This can be used for messages where no values are needed. See [Inside Sources](#nestedblock--rule_list--rules--inside_sources) below.
 
-`label_matcher` - (Optional) Label Matcher. A label matcher specifies a list of label keys whose values need to match for source/client and destination/server. See [Label Matcher](#nestedblock--rule_list--rules--label_matcher) below.
+`label_matcher` - (Optional) Label Matcher. A label matcher specifies a list of label keys whose values need to match for source/client and destination/server. Note that the actual label values are not specified and do not matter. This allows an ability to scope grouping by the label key name. See [Label Matcher](#nestedblock--rule_list--rules--label_matcher) below.
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--rule_list--rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--rule_list--rules--metadata) below.
 
 `outside_destinations` - (Optional) Empty. This can be used for messages where no values are needed. See [Outside Destinations](#nestedblock--rule_list--rules--outside_destinations) below.
 
@@ -182,11 +182,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `protocol_port_range` - (Optional) Protocol and Port. Protocol and Port ranges. See [Protocol Port Range](#nestedblock--rule_list--rules--protocol_port_range) below.
 
-`source_aws_vpc_ids` - (Optional) AWS VPC List. List of VPC Identifiers in AWS. See [Source Aws Vpc Ids](#nestedblock--rule_list--rules--source_aws_vpc_ids) below.
+`source_aws_vpc_ids` - (Optional) AWS VPC List. List of VPC Identifiers in AWS. See [Source AWS Vpc Ids](#nestedblock--rule_list--rules--source_aws_vpc_ids) below.
 
-`source_ip_prefix_set` - (Optional) IP Prefix Set Reference. A list of references to ip_prefix_set objects. See [Source Ip Prefix Set](#nestedblock--rule_list--rules--source_ip_prefix_set) below.
+`source_ip_prefix_set` - (Optional) IP Prefix Set Reference. A list of references to ip_prefix_set objects. See [Source IP Prefix Set](#nestedblock--rule_list--rules--source_ip_prefix_set) below.
 
-`source_label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Source Label Selector](#nestedblock--rule_list--rules--source_label_selector) below.
+`source_label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Source Label Selector](#nestedblock--rule_list--rules--source_label_selector) below.
 
 `source_prefix_list` - (Optional) IPv4 Prefix List. x-example: '192.168.20.0/24' List of IPv4 prefixes that represent an endpoint. See [Source Prefix List](#nestedblock--rule_list--rules--source_prefix_list) below.
 
@@ -194,7 +194,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Rule List Rules Advanced Action
 
-`action` - (Optional) Log Action. Choice to choose logging or no logging This works together with option selected via NetworkPolicyRuleAction or any other action specified x-example: (No Selection in NetworkPolicyRuleAc... (`String`).
+`action` - (Optional) Log Action. Choice to choose logging or no logging This works together with option selected via NetworkPolicyRuleAction or any other action specified x-example: (No Selection in NetworkPolicyRuleAction + AdvancedAction as LOG) = LOG Only, (ALLOW/DENY in NetworkPolicyRuleAction + AdvancedAction as LOG) = Log and Allow/Deny, (ALLOW/DENY in NetworkPolicyRuleAction + NOLOG in AdvancedAction) = Allow/Deny with no log Don't sample the traffic hitting the rule Sample the traffic hitting the rule. Possible values are `NOLOG`, `LOG`. Defaults to `NOLOG` (`String`).
 
 <a id="nestedblock--rule_list--rules--all_destinations"></a>
 
@@ -214,7 +214,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rule_list--rules--all_tcp_traffic"></a>
 
-### Rule List Rules All Tcp Traffic
+### Rule List Rules All TCP Traffic
 
 <a id="nestedblock--rule_list--rules--all_traffic"></a>
 
@@ -222,7 +222,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rule_list--rules--all_udp_traffic"></a>
 
-### Rule List Rules All Udp Traffic
+### Rule List Rules All UDP Traffic
 
 <a id="nestedblock--rule_list--rules--allow"></a>
 
@@ -240,19 +240,19 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rule_list--rules--destination_aws_vpc_ids"></a>
 
-### Rule List Rules Destination Aws Vpc Ids
+### Rule List Rules Destination AWS Vpc Ids
 
 `vpc_id` - (Optional) AWS VPC List. List of VPC Identifiers in AWS (`List`).
 
 <a id="nestedblock--rule_list--rules--destination_ip_prefix_set"></a>
 
-### Rule List Rules Destination Ip Prefix Set
+### Rule List Rules Destination IP Prefix Set
 
 `ref` - (Optional) Reference. A list of references to ip_prefix_set objects. See [Ref](#nestedblock--rule_list--rules--destination_ip_prefix_set--ref) below.
 
 <a id="nestedblock--rule_list--rules--destination_ip_prefix_set--ref"></a>
 
-### Rule List Rules Destination Ip Prefix Set Ref
+### Rule List Rules Destination IP Prefix Set Ref
 
 <a id="nestedblock--rule_list--rules--destination_label_selector"></a>
 
@@ -312,23 +312,23 @@ In addition to all arguments above, the following attributes are exported:
 
 `port_ranges` - (Optional) List of Port Ranges. List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`List`).
 
-`protocol` - (Optional) Protocol. Protocol in IP packet to be used as match criteria Values are tcp, udp, and icmp (`String`).
+`protocol` - (Optional) Protocol. Protocol in IP packet to be used as match criteria Values are TCP, UDP, and ICMP (`String`).
 
 <a id="nestedblock--rule_list--rules--source_aws_vpc_ids"></a>
 
-### Rule List Rules Source Aws Vpc Ids
+### Rule List Rules Source AWS Vpc Ids
 
 `vpc_id` - (Optional) AWS VPC List. List of VPC Identifiers in AWS (`List`).
 
 <a id="nestedblock--rule_list--rules--source_ip_prefix_set"></a>
 
-### Rule List Rules Source Ip Prefix Set
+### Rule List Rules Source IP Prefix Set
 
 `ref` - (Optional) Reference. A list of references to ip_prefix_set objects. See [Ref](#nestedblock--rule_list--rules--source_ip_prefix_set--ref) below.
 
 <a id="nestedblock--rule_list--rules--source_ip_prefix_set--ref"></a>
 
-### Rule List Rules Source Ip Prefix Set Ref
+### Rule List Rules Source IP Prefix Set Ref
 
 <a id="nestedblock--rule_list--rules--source_label_selector"></a>
 
@@ -346,13 +346,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

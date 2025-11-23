@@ -66,7 +66,7 @@ The following arguments are optional:
 
 `notification_preference` - (Optional) Notification Preference. NotificationPreference preference for receiving addon subscription notifications. See [Notification Preference](#notification-preference) below for details.
 
-`status` - (Optional) Addon Subscription Type. Represents the different states of an addon subscription. - SUBSCRIPTION_PENDING: Subscription Pending Indicates that the subscription is pending enablement (`String`).
+`status` - (Optional) Addon Subscription Type. Represents the different states of an addon subscription. - SUBSCRIPTION_PENDING: Subscription Pending Indicates that the subscription is pending enablement. - SUBSCRIPTION_ENABLED: Subscription Enabled Indicates that the subscription is currently enabled and active. - SUBSCRIPTION_DISABLE_PENDING: Subscription Disable Pending Indicates that the addon disable process is pending. - SUBSCRIPTION_DISABLED: Subscription Disabled Indicates that the addon has been disabled. Possible values are `SUBSCRIPTION_PENDING`, `SUBSCRIPTION_ENABLED`, `SUBSCRIPTION_DISABLE_PENDING`, `SUBSCRIPTION_DISABLED`. Defaults to `SUBSCRIPTION_PENDING` (`String`).
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
@@ -114,13 +114,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

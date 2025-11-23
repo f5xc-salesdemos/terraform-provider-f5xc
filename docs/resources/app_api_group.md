@@ -64,11 +64,11 @@ The following arguments are optional:
 
 `bigip_virtual_server` - (Optional) API Group Scope BIGIP Virtual Server. Set the scope of the API Group to a specific BIGIP Virtual Server. See [Bigip Virtual Server](#bigip-virtual-server) below for details.
 
-`cdn_loadbalancer` - (Optional) API Group Scope CDN Loadbalancer. Set the scope of the API Group to a specific CDN Loadbalancer. See [Cdn Loadbalancer](#cdn-loadbalancer) below for details.
+`cdn_loadbalancer` - (Optional) API Group Scope CDN Loadbalancer. Set the scope of the API Group to a specific CDN Loadbalancer. See [CDN Loadbalancer](#cdn-loadbalancer) below for details.
 
 `elements` - (Optional) API Group Elements. List of API group elements with methods and path regex for matching requests. See [Elements](#elements) below for details.
 
-`http_loadbalancer` - (Optional) API Group Scope HTTP Loadbalancer. Set the scope of the API Group to a specific HTTP Loadbalancer. See [Http Loadbalancer](#http-loadbalancer) below for details.
+`http_loadbalancer` - (Optional) API Group Scope HTTP Loadbalancer. Set the scope of the API Group to a specific HTTP Loadbalancer. See [HTTP Loadbalancer](#http-loadbalancer) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
@@ -100,13 +100,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--cdn_loadbalancer"></a>
 
-### Cdn Loadbalancer
+### CDN Loadbalancer
 
-`cdn_loadbalancer` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Cdn Loadbalancer](#nestedblock--cdn_loadbalancer--cdn_loadbalancer) below.
+`cdn_loadbalancer` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [CDN Loadbalancer](#nestedblock--cdn_loadbalancer--cdn_loadbalancer) below.
 
 <a id="nestedblock--cdn_loadbalancer--cdn_loadbalancer"></a>
 
-### Cdn Loadbalancer Cdn Loadbalancer
+### CDN Loadbalancer CDN Loadbalancer
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -124,13 +124,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--http_loadbalancer"></a>
 
-### Http Loadbalancer
+### HTTP Loadbalancer
 
-`http_loadbalancer` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Http Loadbalancer](#nestedblock--http_loadbalancer--http_loadbalancer) below.
+`http_loadbalancer` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [HTTP Loadbalancer](#nestedblock--http_loadbalancer--http_loadbalancer) below.
 
 <a id="nestedblock--http_loadbalancer--http_loadbalancer"></a>
 
-### Http Loadbalancer Http Loadbalancer
+### HTTP Loadbalancer HTTP Loadbalancer
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -142,13 +142,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

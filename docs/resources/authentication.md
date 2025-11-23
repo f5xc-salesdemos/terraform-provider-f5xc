@@ -80,19 +80,19 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Cookie Params
 
-`auth_hmac` - (Optional) HMAC Key Pair. HMAC primary and secondary keys to be used for hashing the Cookie. Each key also have an associated expiry timestamp, beyond which key is invalid. See [Auth Hmac](#nestedblock--cookie_params--auth_hmac) below.
+`auth_hmac` - (Optional) HMAC Key Pair. HMAC primary and secondary keys to be used for hashing the Cookie. Each key also have an associated expiry timestamp, beyond which key is invalid. See [Auth HMAC](#nestedblock--cookie_params--auth_hmac) below.
 
-`cookie_expiry` - (Optional) Cookie Expiry duration. specifies in seconds max duration of the allocated cookie. This maps to “Max-Age” attribute in the session cookie (`Number`).
+`cookie_expiry` - (Optional) Cookie Expiry duration. specifies in seconds max duration of the allocated cookie. This maps to “Max-Age” attribute in the session cookie. This will act as an expiry duration on the client side after which client will not be setting the cookie as part of the request. Default cookie expiry is 3600 seconds (`Number`).
 
-`cookie_refresh_interval` - (Optional) Cookie Refresh Interval. Specifies in seconds refresh interval for session cookie. This is used to keep the active user active and reduce re-login (`Number`).
+`cookie_refresh_interval` - (Optional) Cookie Refresh Interval. Specifies in seconds refresh interval for session cookie. This is used to keep the active user active and reduce RE-login. When an incoming cookie's session expiry is still valid, and time to expire falls behind this interval, RE-issue a cookie with new expiry and with the same original session expiry. Default refresh interval is 3000 seconds (`Number`).
 
-`kms_key_hmac` - (Optional) KMS Key Reference. Reference to KMS Key Object. See [Kms Key Hmac](#nestedblock--cookie_params--kms_key_hmac) below.
+`kms_key_hmac` - (Optional) KMS Key Reference. Reference to KMS Key Object. See [Kms Key HMAC](#nestedblock--cookie_params--kms_key_hmac) below.
 
 `session_expiry` - (Optional) Session Expiry duration. specifies in seconds max lifetime of an authenticated session after which the user will be forced to login again. Default session expiry is 86400 seconds(24 hours) (`Number`).
 
 <a id="nestedblock--cookie_params--auth_hmac"></a>
 
-### Cookie Params Auth Hmac
+### Cookie Params Auth HMAC
 
 `prim_key` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Prim Key](#nestedblock--cookie_params--auth_hmac--prim_key) below.
 
@@ -104,7 +104,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--cookie_params--auth_hmac--prim_key"></a>
 
-### Cookie Params Auth Hmac Prim Key
+### Cookie Params Auth HMAC Prim Key
 
 `blindfold_secret_info` - (Optional) Blindfold Secret. BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management. See [Blindfold Secret Info](#nestedblock--cookie_params--auth_hmac--prim_key--blindfold_secret_info) below.
 
@@ -112,15 +112,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--cookie_params--auth_hmac--prim_key--blindfold_secret_info"></a>
 
-### Cookie Params Auth Hmac Prim Key Blindfold Secret Info
+### Cookie Params Auth HMAC Prim Key Blindfold Secret Info
 
 <a id="nestedblock--cookie_params--auth_hmac--prim_key--clear_secret_info"></a>
 
-### Cookie Params Auth Hmac Prim Key Clear Secret Info
+### Cookie Params Auth HMAC Prim Key Clear Secret Info
 
 <a id="nestedblock--cookie_params--auth_hmac--sec_key"></a>
 
-### Cookie Params Auth Hmac Sec Key
+### Cookie Params Auth HMAC Sec Key
 
 `blindfold_secret_info` - (Optional) Blindfold Secret. BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management. See [Blindfold Secret Info](#nestedblock--cookie_params--auth_hmac--sec_key--blindfold_secret_info) below.
 
@@ -128,15 +128,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--cookie_params--auth_hmac--sec_key--blindfold_secret_info"></a>
 
-### Cookie Params Auth Hmac Sec Key Blindfold Secret Info
+### Cookie Params Auth HMAC Sec Key Blindfold Secret Info
 
 <a id="nestedblock--cookie_params--auth_hmac--sec_key--clear_secret_info"></a>
 
-### Cookie Params Auth Hmac Sec Key Clear Secret Info
+### Cookie Params Auth HMAC Sec Key Clear Secret Info
 
 <a id="nestedblock--cookie_params--kms_key_hmac"></a>
 
-### Cookie Params Kms Key Hmac
+### Cookie Params Kms Key HMAC
 
 <a id="nestedblock--oidc_auth"></a>
 
@@ -164,17 +164,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--oidc_auth--client_secret--clear_secret_info"></a>
 
 ### Oidc Auth Client Secret Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--oidc_auth--oidc_auth_params"></a>
 
@@ -190,13 +190,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

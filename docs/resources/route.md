@@ -84,11 +84,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `bot_defense_javascript_injection` - (Optional) Bot Defense Javascript Injection Configuration for inline deployments. Bot Defense Javascript Injection Configuration for inline bot defense deployments. See [Bot Defense Javascript Injection](#nestedblock--routes--bot_defense_javascript_injection) below.
 
-`disable_location_add` - (Optional) Disable Location Addition. disables append of x-volterra-location = <re-site-name> at route level, if it is configured at virtual-host level. This configuration is ignored on CE sites (`Bool`).
+`disable_location_add` - (Optional) Disable Location Addition. disables append of x-volterra-location = <RE-site-name> at route level, if it is configured at virtual-host level. This configuration is ignored on CE sites (`Bool`).
 
 `inherited_bot_defense_javascript_injection` - (Optional) Empty. This can be used for messages where no values are needed. See [Inherited Bot Defense Javascript Injection](#nestedblock--routes--inherited_bot_defense_javascript_injection) below.
 
-`inherited_waf_exclusion` - (Optional) Empty. This can be used for messages where no values are needed. See [Inherited Waf Exclusion](#nestedblock--routes--inherited_waf_exclusion) below.
+`inherited_waf_exclusion` - (Optional) Empty. This can be used for messages where no values are needed. See [Inherited WAF Exclusion](#nestedblock--routes--inherited_waf_exclusion) below.
 
 `match` - (Optional) Match. route match condition. See [Match](#nestedblock--routes--match) below.
 
@@ -96,7 +96,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `request_cookies_to_remove` - (Optional) Remove Cookies from Cookie Header. List of keys of Cookies to be removed from the HTTP request being sent towards upstream (`List`).
 
-`request_headers_to_add` - (Optional) Request Headers to Add. Headers are key-value pairs to be added to HTTP requests being sent towards upstream. See [Request Headers To Add](#nestedblock--routes--request_headers_to_add) below.
+`request_headers_to_add` - (Optional) Request Headers to Add. Headers are key-value pairs to be added to HTTP requests being sent towards upstream. Headers specified at this level are applied before headers from the enclosing VirtualHost object level. See [Request Headers To Add](#nestedblock--routes--request_headers_to_add) below.
 
 `request_headers_to_remove` - (Optional) Request Headers to Remove. List of keys of Headers to be removed from the HTTP request being sent towards upstream (`List`).
 
@@ -104,7 +104,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `response_cookies_to_remove` - (Optional) Remove Cookies from Set-Cookie Headers. List of name of Cookies to be removed from the HTTP response being sent towards downstream. Entire set-cookie header will be removed (`List`).
 
-`response_headers_to_add` - (Optional) Response Headers to Add. Headers are key-value pairs to be added to HTTP response being sent towards downstream. See [Response Headers To Add](#nestedblock--routes--response_headers_to_add) below.
+`response_headers_to_add` - (Optional) Response Headers to Add. Headers are key-value pairs to be added to HTTP response being sent towards downstream. Headers specified at this level are applied before headers from the enclosing VirtualHost object level. See [Response Headers To Add](#nestedblock--routes--response_headers_to_add) below.
 
 `response_headers_to_remove` - (Optional) Response Headers to Remove. List of keys of Headers to be removed from the HTTP response being sent towards downstream (`List`).
 
@@ -116,15 +116,15 @@ In addition to all arguments above, the following attributes are exported:
 
 `service_policy` - (Optional) Service Policy Configuration. ServicePolicy configuration details at route level. See [Service Policy](#nestedblock--routes--service_policy) below.
 
-`waf_exclusion_policy` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Waf Exclusion Policy](#nestedblock--routes--waf_exclusion_policy) below.
+`waf_exclusion_policy` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [WAF Exclusion Policy](#nestedblock--routes--waf_exclusion_policy) below.
 
-`waf_type` - (Optional) WAF Instance. WAF instance will be pointing to an app_firewall object. See [Waf Type](#nestedblock--routes--waf_type) below.
+`waf_type` - (Optional) WAF Instance. WAF instance will be pointing to an app_firewall object. See [WAF Type](#nestedblock--routes--waf_type) below.
 
 <a id="nestedblock--routes--bot_defense_javascript_injection"></a>
 
 ### Routes Bot Defense Javascript Injection
 
-`javascript_location` - (Optional) JavaScript Location. All inside networks. Insert JavaScript after <head> tag Insert JavaScript after </title> tag. Insert JavaScript before first <script> tag (`String`).
+`javascript_location` - (Optional) JavaScript Location. All inside networks. Insert JavaScript after <head> tag Insert JavaScript after </title> tag. Insert JavaScript before first <script> tag. Possible values are `AFTER_HEAD`, `AFTER_TITLE_END`, `BEFORE_SCRIPT`. Defaults to `AFTER_HEAD` (`String`).
 
 `javascript_tags` - (Optional) JavaScript Tags. Select Add item to configure your javascript tag. If adding both Bot Adv and Fraud, the Bot Javascript should be added first. See [Javascript Tags](#nestedblock--routes--bot_defense_javascript_injection--javascript_tags) below.
 
@@ -146,7 +146,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--routes--inherited_waf_exclusion"></a>
 
-### Routes Inherited Waf Exclusion
+### Routes Inherited WAF Exclusion
 
 <a id="nestedblock--routes--match"></a>
 
@@ -154,7 +154,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `headers` - (Optional) Headers. List of (key, value) headers. See [Headers](#nestedblock--routes--match--headers) below.
 
-`http_method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method (`String`).
+`http_method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method. Possible values include `ANY`, `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`, and others. Defaults to `ANY` (`String`).
 
 `incoming_port` - (Optional) Port to Match. Port match of the request can be a range or a specific port. See [Incoming Port](#nestedblock--routes--match--incoming_port) below.
 
@@ -426,27 +426,27 @@ In addition to all arguments above, the following attributes are exported:
 
 `auto_host_rewrite` - (Optional) Automatic Host Rewrite. Indicates that during forwarding, the host header will be swapped with the hostname of the upstream host chosen by the cluster (`Bool`).
 
-`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. See [Buffer Policy](#nestedblock--routes--route_destination--buffer_policy) below.
+`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. We can specify the maximum buffer size and buffer interval with this config. Buffering can be enabled and disabled at VirtualHost and Route levels Route level buffer configuration takes precedence. See [Buffer Policy](#nestedblock--routes--route_destination--buffer_policy) below.
 
-`cors_policy` - (Optional) CORS Policy. Cross-Origin Resource Sharing requests configuration specified at Virtual-host or Route level. Route level configuration takes precedence. See [Cors Policy](#nestedblock--routes--route_destination--cors_policy) below.
+`cors_policy` - (Optional) CORS Policy. Cross-Origin Resource Sharing requests configuration specified at Virtual-host or Route level. Route level configuration takes precedence. An example of an Cross origin HTTP request GET /resources/public-data/ HTTP/1.1 Host: bar.other User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3pre) Gecko/20081130 Minefield/3.1b3pre Accept: text/HTML,application/xhtml+XML,application/XML;q=0.9,*/*;q=0.8 Accept-Language: en-us,en;q=0.5 Accept-Encoding: gzip,deflate... See [CORS Policy](#nestedblock--routes--route_destination--cors_policy) below.
 
-`csrf_policy` - (Optional) CSRF Policy. To mitigate CSRF attack , the policy checks where a request is coming from to determine if the request's origin is the same as its detination. See [Csrf Policy](#nestedblock--routes--route_destination--csrf_policy) below.
+`csrf_policy` - (Optional) CSRF Policy. To mitigate CSRF attack , the policy checks where a request is coming from to determine if the request's origin is the same as its detination.The policy relies on two pieces of information used in determining if a request originated from the same host. 1. The origin that caused the user agent to issue the request (source origin). 2. The origin that the request is going to (target origin). When the policy evaluating a request, it ensures both pieces of information are present and ... See [CSRF Policy](#nestedblock--routes--route_destination--csrf_policy) below.
 
-`destinations` - (Optional) Destination Origin pools (clusters). When requests have to distributed among multiple upstream clusters, multiple destinations are configured, each having its own cluster and weight. See [Destinations](#nestedblock--routes--route_destination--destinations) below.
+`destinations` - (Optional) Destination Origin pools (clusters). When requests have to distributed among multiple upstream clusters, multiple destinations are configured, each having its own cluster and weight. Traffic is distributed among clusters based on the weight configured. destinations: - cluster: - kind: ves.io.vega.cfg.adc.cluster.Object uid: cluster-1 weight: 20 - cluster: - kind: ves.io.vega.cfg.adc.cluster.Object uid: cluster-2 weight: 30 - cluster: - kind: ves.io.vega.cfg.adc.cluster.Object uid: cluster-3 w... See [Destinations](#nestedblock--routes--route_destination--destinations) below.
 
 `do_not_retract_cluster` - (Optional) Empty. This can be used for messages where no values are needed. See [Do Not Retract Cluster](#nestedblock--routes--route_destination--do_not_retract_cluster) below.
 
-`endpoint_subsets` - (Optional) Endpoint Subsets. Upstream cluster may be configured to divide its endpoints into subsets based on metadata attached to the endpoints. See [Endpoint Subsets](#nestedblock--routes--route_destination--endpoint_subsets) below.
+`endpoint_subsets` - (Optional) Endpoint Subsets. Upstream cluster may be configured to divide its endpoints into subsets based on metadata attached to the endpoints. Routes may then specify the metadata that a endpoint must match in order to be selected by the load balancer Labels field of endpoint object's metadata is used for subset matching. For endpoint's which are discovered in K8S or Consul cluster, the label of the service is merged with endpoint's labels. In case of Consul, the label is derived from the 'Tag' field... See [Endpoint Subsets](#nestedblock--routes--route_destination--endpoint_subsets) below.
 
 `hash_policy` - (Optional) Hash Policy. Specifies a list of hash policies to use for ring hash load balancing. Each hash policy is evaluated individually and the combined result is used to route the request. See [Hash Policy](#nestedblock--routes--route_destination--hash_policy) below.
 
 `host_rewrite` - (Optional) Host Rewrite. Indicates that during forwarding, the host header will be swapped with this value (`String`).
 
-`mirror_policy` - (Optional) Mirror Policy. MirrorPolicy is used for shadowing traffic from one cluster to another. See [Mirror Policy](#nestedblock--routes--route_destination--mirror_policy) below.
+`mirror_policy` - (Optional) Mirror Policy. MirrorPolicy is used for shadowing traffic from one cluster to another. The approach used is 'fire and forget', meaning it will not wait for the shadow cluster to respond before returning the response from the primary cluster. All normal statistics are collected for the shadow cluster making this feature useful for testing and troubleshooting. See [Mirror Policy](#nestedblock--routes--route_destination--mirror_policy) below.
 
-`prefix_rewrite` - (Optional) Prefix Rewrite. prefix_rewrite indicates that during forwarding, the matched prefix (or path) should be swapped with its value (`String`).
+`prefix_rewrite` - (Optional) Prefix Rewrite. prefix_rewrite indicates that during forwarding, the matched prefix (or path) should be swapped with its value. When using regex path matching, the entire path (not including the query string) will be swapped with this value. This option allows application URLs to be rooted at a different path from those exposed at the reverse proxy layer. Example : gcSpec: routes: - match: - headers: [] path: prefix : /register/ query_params: [] - headers: [] path: prefix: /register query_par.. (`String`).
 
-`priority` - (Optional) Routing Priority. Priority routing for each request. Different connection pools are used based on the priority selected for the request (`String`).
+`priority` - (Optional) Routing Priority. Priority routing for each request. Different connection pools are used based on the priority selected for the request. Also, circuit-breaker configuration at destination cluster is chosen based on selected priority. Default routing mechanism High-Priority routing mechanism. Possible values are `DEFAULT`, `HIGH`. Defaults to `DEFAULT` (`String`).
 
 `query_params` - (Optional) Query Parameters. Handling of incoming query parameters in simple route. See [Query Params](#nestedblock--routes--route_destination--query_params) below.
 
@@ -456,11 +456,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `retry_policy` - (Optional) Retry Policy. Retry policy configuration for route destination. See [Retry Policy](#nestedblock--routes--route_destination--retry_policy) below.
 
-`spdy_config` - (Optional) SPDY Configuration. Request headers of such upgrade looks like below 'connection', 'Upgrade' 'upgrade', 'SPDY/3. See [Spdy Config](#nestedblock--routes--route_destination--spdy_config) below.
+`spdy_config` - (Optional) SPDY Configuration. Request headers of such upgrade looks like below 'connection', 'Upgrade' 'upgrade', 'SPDY/3.1' Configuration to allow UPGRADE of connection to SPDY and any additional tuning With configuration to allow SPDY upgrade, ADC will produce following response 'HTTP/1.1 101 Switching Protocols 'Upgrade': 'SPDY/3.1' 'Connection': 'Upgrade'. See [Spdy Config](#nestedblock--routes--route_destination--spdy_config) below.
 
-`timeout` - (Optional) Timeout. Specifies the timeout for the route in milliseconds. This timeout includes all retries (`Number`).
+`timeout` - (Optional) Timeout. Specifies the timeout for the route in milliseconds. This timeout includes all retries. For server side streaming, configure this field with higher value or leave it un-configured for infinite timeout (`Number`).
 
-`web_socket_config` - (Optional) Websocket Configuration. Configuration to allow Websocket Request headers of such upgrade looks like below 'connection', 'Upgrade' 'upgrade', 'websocket' With configuration to allow websocket upgra.... See [Web Socket Config](#nestedblock--routes--route_destination--web_socket_config) below.
+`web_socket_config` - (Optional) WebSocket Configuration. Configuration to allow WebSocket Request headers of such upgrade looks like below 'connection', 'Upgrade' 'upgrade', 'WebSocket' With configuration to allow WebSocket upgrade, ADC will produce following response 'HTTP/1.1 101 Switching Protocols 'Upgrade': 'WebSocket' 'Connection': 'Upgrade'. See [Web Socket Config](#nestedblock--routes--route_destination--web_socket_config) below.
 
 <a id="nestedblock--routes--route_destination--buffer_policy"></a>
 
@@ -472,7 +472,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--routes--route_destination--cors_policy"></a>
 
-### Routes Route Destination Cors Policy
+### Routes Route Destination CORS Policy
 
 `allow_credentials` - (Optional) Allow Credentials. Specifies whether the resource allows credentials (`Bool`).
 
@@ -484,15 +484,15 @@ In addition to all arguments above, the following attributes are exported:
 
 `allow_origin_regex` - (Optional) Allow Origin Regex. Specifies regex patterns that match allowed origins. An origin is allowed if either allow_origin or allow_origin_regex match (`List`).
 
-`disabled` - (Optional) Disabled. Disable the CorsPolicy for a particular route. This is useful when virtual-host has CorsPolicy, but we need to disable it on a specific route (`Bool`).
+`disabled` - (Optional) Disabled. Disable the CorsPolicy for a particular route. This is useful when virtual-host has CorsPolicy, but we need to disable it on a specific route. The value of this field is ignored for virtual-host (`Bool`).
 
 `expose_headers` - (Optional) Expose Headers. Specifies the content for the access-control-expose-headers header (`String`).
 
-`maximum_age` - (Optional) Maximum Age. Specifies the content for the access-control-max-age header in seconds. This indicates the maximum number of seconds the results can be cached A value of -1 will disable caching (`Number`).
+`maximum_age` - (Optional) Maximum Age. Specifies the content for the access-control-max-age header in seconds. This indicates the maximum number of seconds the results can be cached A value of -1 will disable caching. Maximum permitted value is 86400 seconds (24 hours) (`Number`).
 
 <a id="nestedblock--routes--route_destination--csrf_policy"></a>
 
-### Routes Route Destination Csrf Policy
+### Routes Route Destination CSRF Policy
 
 `all_load_balancer_domains` - (Optional) Empty. This can be used for messages where no values are needed. See [All Load Balancer Domains](#nestedblock--routes--route_destination--csrf_policy--all_load_balancer_domains) below.
 
@@ -502,15 +502,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--routes--route_destination--csrf_policy--all_load_balancer_domains"></a>
 
-### Routes Route Destination Csrf Policy All Load Balancer Domains
+### Routes Route Destination CSRF Policy All Load Balancer Domains
 
 <a id="nestedblock--routes--route_destination--csrf_policy--custom_domain_list"></a>
 
-### Routes Route Destination Csrf Policy Custom Domain List
+### Routes Route Destination CSRF Policy Custom Domain List
 
 <a id="nestedblock--routes--route_destination--csrf_policy--disabled"></a>
 
-### Routes Route Destination Csrf Policy Disabled
+### Routes Route Destination CSRF Policy Disabled
 
 <a id="nestedblock--routes--route_destination--destinations"></a>
 
@@ -518,11 +518,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `cluster` - (Optional) Cluster. Indicates the upstream cluster to which the request should be sent. If the cluster does not exist ServiceUnavailable response will be sent. See [Cluster](#nestedblock--routes--route_destination--destinations--cluster) below.
 
-`endpoint_subsets` - (Optional) Endpoint Subsets. Upstream cluster may be configured to divide its endpoints into subsets based on metadata attached to the endpoints. See [Endpoint Subsets](#nestedblock--routes--route_destination--destinations--endpoint_subsets) below.
+`endpoint_subsets` - (Optional) Endpoint Subsets. Upstream cluster may be configured to divide its endpoints into subsets based on metadata attached to the endpoints. Routes may then specify the metadata that a endpoint must match in order to be selected by the load balancer Labels field of endpoint object's metadata is used for subset matching. For endpoints which are discovered in K8S or Consul cluster, the label of the service is merged with endpoint's labels. In case of Consul, the label is derived from the 'Tag' field.... See [Endpoint Subsets](#nestedblock--routes--route_destination--destinations--endpoint_subsets) below.
 
-`priority` - (Optional) Priority. Priority of this cluster, valid only with multiple destinations are configured (`Number`).
+`priority` - (Optional) Priority. Priority of this cluster, valid only with multiple destinations are configured. Value of 0 will make the cluster as lowest priority upstream cluster Priority of 1 means highest priority and is considered active. When active cluster is not available, lower priority clusters are made active as per the increasing priority (`Number`).
 
-`weight` - (Optional) Weight. When requests have to distributed among multiple upstream clusters, multiple destinations are configured, each having its own cluster and weight (`Number`).
+`weight` - (Optional) Weight. When requests have to distributed among multiple upstream clusters, multiple destinations are configured, each having its own cluster and weight. Traffic is distributed among clusters based on the weight configured. destinations: - cluster: - kind: ves.io.vega.cfg.adc.cluster.Object uid: cluster-1 weight: 20 - cluster: - kind: ves.io.vega.cfg.adc.cluster.Object uid: cluster-2 weight: 30 - cluster: - kind: ves.io.vega.cfg.adc.cluster.Object uid: cluster-3 weight: 10 This indicates that.. (`Number`).
 
 <a id="nestedblock--routes--route_destination--destinations--cluster"></a>
 
@@ -544,7 +544,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Routes Route Destination Hash Policy
 
-`cookie` - (Optional) Hashing using Cookie. Two types of cookie affinity: 1. Passive. Takes a cookie that's present in the cookies header and hashes on its value. 2. Generated. See [Cookie](#nestedblock--routes--route_destination--hash_policy--cookie) below.
+`cookie` - (Optional) Hashing using Cookie. Two types of cookie affinity: 1. Passive. Takes a cookie that's present in the cookies header and hashes on its value. 2. Generated. Generates and sets a cookie with an expiration (TTL) on the first request from the client in its response to the client, based on the endpoint the request gets sent to. The client then presents this on the next and all subsequent requests. The hash of this is sufficient to ensure these requests get sent to the same endpoint. The cookie is g... See [Cookie](#nestedblock--routes--route_destination--hash_policy--cookie) below.
 
 `header_name` - (Optional) Header Name. The name or key of the request header that will be used to obtain the hash key (`String`).
 
@@ -614,7 +614,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `retriable_status_codes` - (Optional) Status Code to Retry. HTTP status codes that should trigger a retry in addition to those specified by retry_on (`List`).
 
-`retry_condition` - (Optional) Retry Condition. Specifies the conditions under which retry takes place. Retries can be on different types of condition depending on application requirements (`List`).
+`retry_condition` - (Optional) Retry Condition. Specifies the conditions under which retry takes place. Retries can be on different types of condition depending on application requirements. For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc The possible values are '5xx' : Retry will be done if the upstream server responds with any 5xx response code, or does not respond at all (disconnect/reset/read timeout). 'gateway-error' : Retry will be done only if the upstream server responds with.. (`List`).
 
 <a id="nestedblock--routes--route_destination--retry_policy--back_off"></a>
 
@@ -630,13 +630,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Routes Route Destination Web Socket Config
 
-`use_websocket` - (Optional) Use Websocket. Specifies that the HTTP client connection to this route is allowed to upgrade to a WebSocket connection (`Bool`).
+`use_websocket` - (Optional) Use WebSocket. Specifies that the HTTP client connection to this route is allowed to upgrade to a WebSocket connection (`Bool`).
 
 <a id="nestedblock--routes--route_direct_response"></a>
 
 ### Routes Route Direct Response
 
-`response_body_encoded` - (Optional) Response Body. Response body to send. Currently supported URL schemes is string:/// for which message should be encoded in Base64 format. The message can be either plain text or html. E.g (`String`).
+`response_body_encoded` - (Optional) Response Body. Response body to send. Currently supported URL schemes is string:/// for which message should be encoded in Base64 format. The message can be either plain text or HTML. E.g. '<p> Access Denied </p>'. Base64 encoded string URL for this is string:///PHA+IEFjY2VzcyBEZW5pZWQgPC9wPg== (`String`).
 
 `response_code` - (Optional) Response Code. response code to send (`Number`).
 
@@ -650,7 +650,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `prefix_rewrite` - (Optional) Prefix Rewrite. In Redirect response, the matched prefix (or path) should be swapped with this value. This option allows redirect URLs be dynamically created based on the request (`String`).
 
-`proto_redirect` - (Optional) Protocol. swap protocol part of incoming URL in redirect URL The protocol can be swapped with either http or https When incoming-proto option is specified, swapping of protocol is not done (`String`).
+`proto_redirect` - (Optional) Protocol. swap protocol part of incoming URL in redirect URL The protocol can be swapped with either HTTP or HTTPS When incoming-proto option is specified, swapping of protocol is not done (`String`).
 
 `remove_all_params` - (Optional) Empty. This can be used for messages where no values are needed. See [Remove All Params](#nestedblock--routes--route_redirect--remove_all_params) below.
 
@@ -676,7 +676,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--routes--waf_exclusion_policy"></a>
 
-### Routes Waf Exclusion Policy
+### Routes WAF Exclusion Policy
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -686,43 +686,43 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--routes--waf_type"></a>
 
-### Routes Waf Type
+### Routes WAF Type
 
 `app_firewall` - (Optional) App Firewall Reference. A list of references to the app_firewall configuration objects. See [App Firewall](#nestedblock--routes--waf_type--app_firewall) below.
 
-`disable_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Waf](#nestedblock--routes--waf_type--disable_waf) below.
+`disable_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable WAF](#nestedblock--routes--waf_type--disable_waf) below.
 
-`inherit_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Inherit Waf](#nestedblock--routes--waf_type--inherit_waf) below.
+`inherit_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Inherit WAF](#nestedblock--routes--waf_type--inherit_waf) below.
 
 <a id="nestedblock--routes--waf_type--app_firewall"></a>
 
-### Routes Waf Type App Firewall
+### Routes WAF Type App Firewall
 
 `app_firewall` - (Optional) Application Firewall. References to an Application Firewall configuration object. See [App Firewall](#nestedblock--routes--waf_type--app_firewall--app_firewall) below.
 
 <a id="nestedblock--routes--waf_type--app_firewall--app_firewall"></a>
 
-### Routes Waf Type App Firewall App Firewall
+### Routes WAF Type App Firewall App Firewall
 
 <a id="nestedblock--routes--waf_type--disable_waf"></a>
 
-### Routes Waf Type Disable Waf
+### Routes WAF Type Disable WAF
 
 <a id="nestedblock--routes--waf_type--inherit_waf"></a>
 
-### Routes Waf Type Inherit Waf
+### Routes WAF Type Inherit WAF
 
 <a id="nestedblock--timeouts"></a>
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

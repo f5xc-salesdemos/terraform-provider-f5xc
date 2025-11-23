@@ -117,7 +117,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `eui64_record` - (Optional) DNS EUI64 Record. DNS EUI64 Record. See [Eui64 Record](#nestedblock--default_rr_set_group--eui64_record) below.
 
-`lb_record` - (Optional) DNS Load Balancer Record. DNS Load Balancer Record. See [Lb Record](#nestedblock--default_rr_set_group--lb_record) below.
+`lb_record` - (Optional) DNS Load Balancer Record. DNS Load Balancer Record. See [LB Record](#nestedblock--default_rr_set_group--lb_record) below.
 
 `loc_record` - (Optional) DNS LOC Record. DNS LOC Record. See [Loc Record](#nestedblock--default_rr_set_group--loc_record) below.
 
@@ -169,7 +169,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `hostname` - (Optional) Hostname. Server name of the AFS cell database server or the DCE name server (`String`).
 
-`subtype` - (Optional) AFSDB Record Subtype. AFS Volume Location Server or DCE Authentication Server. - NONE: NONE - AFSVolumeLocationServer: AFS Volume Location Server - DCEAuthenticationServer: DCE Authentication Server (`String`).
+`subtype` - (Optional) AFSDB Record Subtype. AFS Volume Location Server or DCE Authentication Server. - NONE: NONE - AFSVolumeLocationServer: AFS Volume Location Server - DCEAuthenticationServer: DCE Authentication Server. Possible values are `NONE`, `AFSVolumeLocationServer`, `DCEAuthenticationServer` (`String`).
 
 <a id="nestedblock--default_rr_set_group--alias_record"></a>
 
@@ -207,7 +207,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Default Rr Set Group Cds Record Values
 
-`ds_key_algorithm` - (Optional) DS Key algorithm. DS key value must be compatible with the specified algorithm (`String`).
+`ds_key_algorithm` - (Optional) DS Key algorithm. DS key value must be compatible with the specified algorithm. - UNSPECIFIED: UNSPECIFIED - RSASHA1: RSASHA1 - RSASHA1NSEC3SHA1: RSASHA1-NSEC3-SHA1 - RSASHA256: RSASHA256 - RSASHA512: RSASHA512 - ECDSAP256SHA256: ECDSAP256SHA256 - ECDSAP384SHA384: ECDSAP384SHA384 - ED25519: ED25519 - ED448: ED448. Possible values are `UNSPECIFIED`, `RSASHA1`, `RSASHA1NSEC3SHA1`, `RSASHA256`, `RSASHA512`, `ECDSAP256SHA256`, `ECDSAP384SHA384`, `ED25519`, `ED448` (`String`).
 
 `key_tag` - (Optional) Key Tag. A short numeric value which can help quickly identify the referenced DNSKEY-record (`Number`).
 
@@ -241,11 +241,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Default Rr Set Group Cert Record Values
 
-`algorithm` - (Optional) CERT Algorithm. CERT algorithm value must be compatible with the specified algorithm (`String`).
+`algorithm` - (Optional) CERT Algorithm. CERT algorithm value must be compatible with the specified algorithm. - RESERVEDALGORITHM: RESERVEDALGORITHM - RSAMD5: RSAMD5 - DH: DH - DSASHA1: DSASHA1 - ECC: ECC - RSASHA1ALGORITHM: RSA-SHA1 - INDIRECT: INDIRECT - PRIVATEDNS: PRIVATEDNS - PRIVATEOID: PRIVATEOID. Possible values are `RESERVEDALGORITHM`, `RSAMD5`, `DH`, `DSASHA1`, `ECC`, `RSASHA1ALGORITHM`, `INDIRECT`, `PRIVATEDNS`, `PRIVATEOID`. Defaults to `RESERVEDALGORITHM` (`String`).
 
 `cert_key_tag` - (Optional) Key Tag (`Number`).
 
-`cert_type` - (Optional) CERT Type. CERT type value must be compatible with the specified types (`String`).
+`cert_type` - (Optional) CERT Type. CERT type value must be compatible with the specified types. - INVALIDCERTTYPE: INVALIDCERTTYPE - PKIX: PKIX - SPKI: SPKI - PGP: PGP - IPKIX: IPKIX - ISPKI: ISPKI - IPGP: IPGP - ACPKIX: ACPKIX - IACPKIX: IACPKIX - URI_: URI - OID: OID. Possible values include `INVALIDCERTTYPE`, `PKIX`, `SPKI`, `PGP`, `IPKIX`, `ISPKI`, `IPGP`, `ACPKIX`, `IACPKIX`, `URI_`, and others (`String`).
 
 `certificate` - (Optional) Certificate. Certificate in base 64 format (`String`).
 
@@ -269,7 +269,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Default Rr Set Group Ds Record Values
 
-`ds_key_algorithm` - (Optional) DS Key algorithm. DS key value must be compatible with the specified algorithm (`String`).
+`ds_key_algorithm` - (Optional) DS Key algorithm. DS key value must be compatible with the specified algorithm. - UNSPECIFIED: UNSPECIFIED - RSASHA1: RSASHA1 - RSASHA1NSEC3SHA1: RSASHA1-NSEC3-SHA1 - RSASHA256: RSASHA256 - RSASHA512: RSASHA512 - ECDSAP256SHA256: ECDSAP256SHA256 - ECDSAP384SHA384: ECDSAP384SHA384 - ED25519: ED25519 - ED448: ED448. Possible values are `UNSPECIFIED`, `RSASHA1`, `RSASHA1NSEC3SHA1`, `RSASHA256`, `RSASHA512`, `ECDSAP256SHA256`, `ECDSAP384SHA384`, `ED25519`, `ED448` (`String`).
 
 `key_tag` - (Optional) Key Tag. A short numeric value which can help quickly identify the referenced DNSKEY-record (`Number`).
 
@@ -309,7 +309,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--default_rr_set_group--lb_record"></a>
 
-### Default Rr Set Group Lb Record
+### Default Rr Set Group LB Record
 
 `name` - (Optional) Record Name (Excluding Domain name). Load Balancer record name (except for SRV DNS Load balancer record) should be a simple record name and not a subdomain of a subdomain (`String`).
 
@@ -317,7 +317,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--default_rr_set_group--lb_record--value"></a>
 
-### Default Rr Set Group Lb Record Value
+### Default Rr Set Group LB Record Value
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -343,7 +343,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `latitude_degree` - (Optional) Latitude degree. Latitude degree, an integer between 0 and 90, including 0 and 90 (`Number`).
 
-`latitude_hemisphere` - (Optional) Latitude hemisphere. Latitude hemisphere can only be N or S - N: North Hemisphere - S: South Hemisphere. Possible values are `N`, `S` (`String`).
+`latitude_hemisphere` - (Optional) Latitude hemisphere. Latitude hemisphere can only be N or S - N: North Hemisphere - S: South Hemisphere. Possible values are `N`, `S`. Defaults to `N` (`String`).
 
 `latitude_minute` - (Optional) Latitude minute. Latitude minute, an integer between 0 and 59, including 0 and 59 (`Number`).
 
@@ -353,7 +353,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `longitude_degree` - (Optional) Longitude degree. Longitude degree, an integer between 0 and 180, including 0 and 180 (`Number`).
 
-`longitude_hemisphere` - (Optional) Longitude hemisphere. Longitude hemisphere can only be E or W - E: East Hemisphere - W: West Hemisphere. Possible values are `E`, `W` (`String`).
+`longitude_hemisphere` - (Optional) Longitude hemisphere. Longitude hemisphere can only be E or W - E: East Hemisphere - W: West Hemisphere. Possible values are `E`, `W`. Defaults to `E` (`String`).
 
 `longitude_minute` - (Optional) Longitude minute. Longitude minute, an integer between 0 and 59, including 0 and 59 (`Number`).
 
@@ -449,7 +449,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Default Rr Set Group Sshfp Record Values
 
-`algorithm` - (Optional) SSHFP Algorithm. SSHFP algorithm value must be compatible with the specified algorithm (`String`).
+`algorithm` - (Optional) SSHFP Algorithm. SSHFP algorithm value must be compatible with the specified algorithm. - UNSPECIFIEDALGORITHM: UNSPECIFIEDALGORITHM - RSA: RSA - DSA: DSA - ECDSA: ECDSA - Ed25519: Ed25519 - Ed448: Ed448. Possible values are `UNSPECIFIEDALGORITHM`, `RSA`, `DSA`, `ECDSA`, `Ed25519`, `Ed448` (`String`).
 
 `sha1_fingerprint` - (Optional) SHA1 Fingerprint. See [Sha1 Fingerprint](#nestedblock--default_rr_set_group--sshfp_record--values--sha1_fingerprint) below.
 
@@ -477,11 +477,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `certificate_association_data` - (Optional) Certificate Association Data. The actual data to be matched given the settings of the other fields (`String`).
 
-`certificate_usage` - (Optional) TLSA Record Certificate Usage. - CertificateAuthorityConstraint: Certificate Authority Constraint - ServiceCertificateConstraint: Service Certificate Constraint - TrustAnchorAssertion: Trust Anchor... (`String`).
+`certificate_usage` - (Optional) TLSA Record Certificate Usage. - CertificateAuthorityConstraint: Certificate Authority Constraint - ServiceCertificateConstraint: Service Certificate Constraint - TrustAnchorAssertion: Trust Anchor Assertion - DomainIssuedCertificate: Domain Issued Certificate. Possible values are `CertificateAuthorityConstraint`, `ServiceCertificateConstraint`, `TrustAnchorAssertion`, `DomainIssuedCertificate`. Defaults to `CertificateAuthorityConstraint` (`String`).
 
-`matching_type` - (Optional) TLSA Record Matching Type. - NoHash: No Hash - SHA256: SHA-256 - SHA512: SHA-512. Possible values are `NoHash`, `SHA256`, `SHA512` (`String`).
+`matching_type` - (Optional) TLSA Record Matching Type. - NoHash: No Hash - SHA256: SHA-256 - SHA512: SHA-512. Possible values are `NoHash`, `SHA256`, `SHA512`. Defaults to `NoHash` (`String`).
 
-`selector` - (Optional) TLSA Record Selector. - FullCertificate: Full Certificate - UseSubjectPublicKey: Use Subject Public Key. Possible values are `FullCertificate`, `UseSubjectPublicKey` (`String`).
+`selector` - (Optional) TLSA Record Selector. - FullCertificate: Full Certificate - UseSubjectPublicKey: Use Subject Public Key. Possible values are `FullCertificate`, `UseSubjectPublicKey`. Defaults to `FullCertificate` (`String`).
 
 <a id="nestedblock--default_rr_set_group--txt_record"></a>
 
@@ -515,7 +515,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Rr Set Group
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--rr_set_group--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--rr_set_group--metadata) below.
 
 `rr_set` - (Optional) Resource Record Sets. Collection of DNS resource record sets. See [Rr Set](#nestedblock--rr_set_group--rr_set) below.
 
@@ -555,7 +555,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `eui64_record` - (Optional) DNS EUI64 Record. DNS EUI64 Record. See [Eui64 Record](#nestedblock--rr_set_group--rr_set--eui64_record) below.
 
-`lb_record` - (Optional) DNS Load Balancer Record. DNS Load Balancer Record. See [Lb Record](#nestedblock--rr_set_group--rr_set--lb_record) below.
+`lb_record` - (Optional) DNS Load Balancer Record. DNS Load Balancer Record. See [LB Record](#nestedblock--rr_set_group--rr_set--lb_record) below.
 
 `loc_record` - (Optional) DNS LOC Record. DNS LOC Record. See [Loc Record](#nestedblock--rr_set_group--rr_set--loc_record) below.
 
@@ -685,7 +685,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rr_set_group--rr_set--lb_record"></a>
 
-### Rr Set Group Rr Set Lb Record
+### Rr Set Group Rr Set LB Record
 
 `name` - (Optional) Record Name (Excluding Domain name). Load Balancer record name (except for SRV DNS Load balancer record) should be a simple record name and not a subdomain of a subdomain (`String`).
 
@@ -693,7 +693,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rr_set_group--rr_set--lb_record--value"></a>
 
-### Rr Set Group Rr Set Lb Record Value
+### Rr Set Group Rr Set LB Record Value
 
 <a id="nestedblock--rr_set_group--rr_set--loc_record"></a>
 
@@ -797,7 +797,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `expire` - (Optional) Expire. expire value indicates when secondary nameservers should stop answering request for this zone if primary does not respond (`Number`).
 
-`negative_ttl` - (Optional) Negative TTL. negative ttl value indicates how long to cache non-existent resource record for this zone (`Number`).
+`negative_ttl` - (Optional) Negative TTL. negative TTL value indicates how long to cache non-existent resource record for this zone (`Number`).
 
 `refresh` - (Optional) Refresh interval. refresh value indicates when secondary nameservers should query for the SOA record to detect zone changes (`Number`).
 
@@ -809,13 +809,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

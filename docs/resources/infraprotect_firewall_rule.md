@@ -90,15 +90,15 @@ The following arguments are optional:
 
 `protocol_gre` - (Optional) Empty. This can be used for messages where no values are needed. See [Protocol Gre](#protocol-gre) below for details.
 
-`protocol_icmp` - (Optional) ICMP Protocol. x-required ICMP Protocol. See [Protocol Icmp](#protocol-icmp) below for details.
+`protocol_icmp` - (Optional) ICMP Protocol. x-required ICMP Protocol. See [Protocol ICMP](#protocol-icmp) below for details.
 
 `protocol_icmp6` - (Optional) ICMP6 Protocol. x-required ICMP6 Protocol. See [Protocol Icmp6](#protocol-icmp6) below for details.
 
-`protocol_ipv6` - (Optional) Empty. This can be used for messages where no values are needed. See [Protocol Ipv6](#protocol-ipv6) below for details.
+`protocol_ipv6` - (Optional) Empty. This can be used for messages where no values are needed. See [Protocol IPv6](#protocol-ipv6) below for details.
 
-`protocol_tcp` - (Optional) TCP Protocol. x-required TCP Protocol. See [Protocol Tcp](#protocol-tcp) below for details.
+`protocol_tcp` - (Optional) TCP Protocol. x-required TCP Protocol. See [Protocol TCP](#protocol-tcp) below for details.
 
-`protocol_udp` - (Optional) UDP Protocol. x-required UDP Protocol. See [Protocol Udp](#protocol-udp) below for details.
+`protocol_udp` - (Optional) UDP Protocol. x-required UDP Protocol. See [Protocol UDP](#protocol-udp) below for details.
 
 > **Note:** One of the arguments from this list "source_prefix_all, source_prefix_single" must be set.
 
@@ -116,9 +116,9 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "version_ipv4, version_ipv6" must be set.
 
-`version_ipv4` - (Optional) Empty. This can be used for messages where no values are needed. See [Version Ipv4](#version-ipv4) below for details.
+`version_ipv4` - (Optional) Empty. This can be used for messages where no values are needed. See [Version IPv4](#version-ipv4) below for details.
 
-`version_ipv6` - (Optional) Empty. This can be used for messages where no values are needed. See [Version Ipv6](#version-ipv6) below for details.
+`version_ipv6` - (Optional) Empty. This can be used for messages where no values are needed. See [Version IPv6](#version-ipv6) below for details.
 
 ### Attributes Reference
 
@@ -166,7 +166,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--protocol_icmp"></a>
 
-### Protocol Icmp
+### Protocol ICMP
 
 `echo_reply` - (Optional) Echo-Reply. Echo-Reply (`Bool`).
 
@@ -210,11 +210,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--protocol_ipv6"></a>
 
-### Protocol Ipv6
+### Protocol IPv6
 
 <a id="nestedblock--protocol_tcp"></a>
 
-### Protocol Tcp
+### Protocol TCP
 
 `description` - (Optional) Description. Description (`String`).
 
@@ -228,15 +228,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--protocol_tcp--destination_port_all"></a>
 
-### Protocol Tcp Destination Port All
+### Protocol TCP Destination Port All
 
 <a id="nestedblock--protocol_tcp--source_port_all"></a>
 
-### Protocol Tcp Source Port All
+### Protocol TCP Source Port All
 
 <a id="nestedblock--protocol_udp"></a>
 
-### Protocol Udp
+### Protocol UDP
 
 `description` - (Optional) Description. Description (`String`).
 
@@ -250,11 +250,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--protocol_udp--destination_port_all"></a>
 
-### Protocol Udp Destination Port All
+### Protocol UDP Destination Port All
 
 <a id="nestedblock--protocol_udp--source_port_all"></a>
 
-### Protocol Udp Source Port All
+### Protocol UDP Source Port All
 
 <a id="nestedblock--source_prefix_all"></a>
 
@@ -272,21 +272,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--version_ipv4"></a>
 
-### Version Ipv4
+### Version IPv4
 
 <a id="nestedblock--version_ipv6"></a>
 
-### Version Ipv6
+### Version IPv6
 
 ## Import
 

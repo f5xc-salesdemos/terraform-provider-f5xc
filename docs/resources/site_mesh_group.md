@@ -65,9 +65,9 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "disable_re_fallback, enable_re_fallback" must be set.
 
-`disable_re_fallback` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Re Fallback](#disable-re-fallback) below for details.
+`disable_re_fallback` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable RE Fallback](#disable-re-fallback) below for details.
 
-`enable_re_fallback` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Re Fallback](#enable-re-fallback) below for details.
+`enable_re_fallback` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable RE Fallback](#enable-re-fallback) below for details.
 
 > **Note:** One of the arguments from this list "full_mesh, hub_mesh, spoke_mesh" must be set.
 
@@ -81,7 +81,7 @@ The following arguments are optional:
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
-`virtual_site` - (Optional) Virtual Site (Sites in this group). Set of sites for which this mesh group config is valid. If 'Type' is Spoke, then it gives set of spoke sites. If 'Type' is Hub, then it gives set of hub sites. See [Virtual Site](#virtual-site) below for details.
+`virtual_site` - (Optional) Virtual Site (Sites in this group). Set of sites for which this mesh group config is valid. If 'Type' is Spoke, then it gives set of spoke sites. If 'Type' is Hub, then it gives set of hub sites. If 'Type' is Full Mesh, then it gives set of sites that are connected in full mesh. See [Virtual Site](#virtual-site) below for details.
 
 ### Attributes Reference
 
@@ -93,11 +93,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--disable_re_fallback"></a>
 
-### Disable Re Fallback
+### Disable RE Fallback
 
 <a id="nestedblock--enable_re_fallback"></a>
 
-### Enable Re Fallback
+### Enable RE Fallback
 
 <a id="nestedblock--full_mesh"></a>
 
@@ -163,13 +163,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--virtual_site"></a>
 

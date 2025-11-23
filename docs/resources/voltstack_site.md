@@ -86,7 +86,7 @@ The following arguments are optional:
 
 `coordinates` - (Optional) Site Coordinates. Coordinates of the site which provides the site physical location. See [Coordinates](#coordinates) below for details.
 
-`custom_dns` - (Optional) Custom DNS. Custom DNS is the configured for specify CE site. See [Custom Dns](#custom-dns) below for details.
+`custom_dns` - (Optional) Custom DNS. Custom DNS is the configured for specify CE site. See [Custom DNS](#custom-dns) below for details.
 
 > **Note:** One of the arguments from this list "custom_network_config, default_network_config" must be set.
 
@@ -110,17 +110,17 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "disable_gpu, enable_gpu, enable_vgpu" must be set.
 
-`disable_gpu` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Gpu](#disable-gpu) below for details.
+`disable_gpu` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable GPU](#disable-gpu) below for details.
 
 > **Note:** One of the arguments from this list "disable_vm, enable_vm" must be set.
 
-`disable_vm` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Vm](#disable-vm) below for details.
+`disable_vm` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable VM](#disable-vm) below for details.
 
-`enable_gpu` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Gpu](#enable-gpu) below for details.
+`enable_gpu` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable GPU](#enable-gpu) below for details.
 
 `enable_vgpu` - (Optional) vGPU Configuration. Licensing configuration for NVIDIA vGPU. See [Enable Vgpu](#enable-vgpu) below for details.
 
-`enable_vm` - (Optional) VM Configuration. VMs support configuration. See [Enable Vm](#enable-vm) below for details.
+`enable_vm` - (Optional) VM Configuration. VMs support configuration. See [Enable VM](#enable-vm) below for details.
 
 > **Note:** One of the arguments from this list "k8s_cluster, no_k8s_cluster" must be set.
 
@@ -148,9 +148,9 @@ The following arguments are optional:
 
 `no_local_control_plane` - (Optional) Empty. This can be used for messages where no values are needed. See [No Local Control Plane](#no-local-control-plane) below for details.
 
-`offline_survivability_mode` - (Optional) Offline Survivability Mode. Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global C.... See [Offline Survivability Mode](#offline-survivability-mode) below for details.
+`offline_survivability_mode` - (Optional) Offline Survivability Mode. Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC). When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline. The certificates needed to keep the services running on this site are signed using a local CA. Secrets would also be cached locally to handl... See [Offline Survivability Mode](#offline-survivability-mode) below for details.
 
-`os` - (Optional) Operating System Version. Select the F5XC Operating System Version for the site. By default, latest available OS Version will be used. Refer to release notes to find required released OS versions. See [Os](#os) below for details.
+`os` - (Optional) Operating System Version. Select the F5XC Operating System Version for the site. By default, latest available OS Version will be used. Refer to release notes to find required released OS versions. See [OS](#os) below for details.
 
 `sriov_interfaces` - (Optional) Custom SR-IOV interfaces Configuration List. List of all custom SR-IOV interfaces configuration. See [Sriov Interfaces](#sriov-interfaces) below for details.
 
@@ -186,21 +186,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Blocked Services Blocked Sevice
 
-`dns` - (Optional) Empty. This can be used for messages where no values are needed. See [Dns](#nestedblock--blocked_services--blocked_sevice--dns) below.
+`dns` - (Optional) Empty. This can be used for messages where no values are needed. See [DNS](#nestedblock--blocked_services--blocked_sevice--dns) below.
 
-`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
-`ssh` - (Optional) Empty. This can be used for messages where no values are needed. See [Ssh](#nestedblock--blocked_services--blocked_sevice--ssh) below.
+`ssh` - (Optional) Empty. This can be used for messages where no values are needed. See [SSH](#nestedblock--blocked_services--blocked_sevice--ssh) below.
 
 `web_user_interface` - (Optional) Empty. This can be used for messages where no values are needed. See [Web User Interface](#nestedblock--blocked_services--blocked_sevice--web_user_interface) below.
 
 <a id="nestedblock--blocked_services--blocked_sevice--dns"></a>
 
-### Blocked Services Blocked Sevice Dns
+### Blocked Services Blocked Sevice DNS
 
 <a id="nestedblock--blocked_services--blocked_sevice--ssh"></a>
 
-### Blocked Services Blocked Sevice Ssh
+### Blocked Services Blocked Sevice SSH
 
 <a id="nestedblock--blocked_services--blocked_sevice--web_user_interface"></a>
 
@@ -248,7 +248,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--custom_dns"></a>
 
-### Custom Dns
+### Custom DNS
 
 `inside_nameserver` - (Optional) DNS Server for Inside Network. Optional DNS server IP to be used for name resolution in inside network (`String`).
 
@@ -258,15 +258,15 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Custom Network Config
 
-`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option .... See [Active Enhanced Firewall Policies](#nestedblock--custom_network_config--active_enhanced_firewall_policies) below.
+`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option for service insertion. See [Active Enhanced Firewall Policies](#nestedblock--custom_network_config--active_enhanced_firewall_policies) below.
 
 `active_forward_proxy_policies` - (Optional) Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active. See [Active Forward Proxy Policies](#nestedblock--custom_network_config--active_forward_proxy_policies) below.
 
 `active_network_policies` - (Optional) Active Firewall Policies Type. List of firewall policy views. See [Active Network Policies](#nestedblock--custom_network_config--active_network_policies) below.
 
-`bgp_peer_address` - (Optional) BGP Peer Address. Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured to fetch BGP peer address from site Object (`String`).
+`bgp_peer_address` - (Optional) BGP Peer Address. Optional BGP peer address that can be used as parameter for BGP configuration when BGP is configured to fetch BGP peer address from site Object. This can be used to change peer address per site in fleet (`String`).
 
-`bgp_router_id` - (Optional) BGP Router ID. Optional bgp router id that can be used as parameter for BGP configuration when BGP is configured to fetch BGP router ID from site object (`String`).
+`bgp_router_id` - (Optional) BGP Router ID. Optional BGP router id that can be used as parameter for BGP configuration when BGP is configured to fetch BGP router ID from site object (`String`).
 
 `default_config` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Config](#nestedblock--custom_network_config--default_config) below.
 
@@ -290,17 +290,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `outside_vip` - (Optional) Common V4 VIP. Optional common virtual V4 IP across all nodes to be used as automatic VIP for site local network (`String`).
 
-`site_to_site_tunnel_ip` - (Optional) Site Mesh Group Connection Via Virtual Ip. Site Mesh Group Connection Via Virtual IP (`String`).
+`site_to_site_tunnel_ip` - (Optional) Site Mesh Group Connection Via Virtual IP. Site Mesh Group Connection Via Virtual IP. This option will use the Virtual IP provided for creating ipsec between two sites which are part of the site mesh group (`String`).
 
 `sli_config` - (Optional) Site Local Inside Network Configuration. Site local inside network configuration. See [Sli Config](#nestedblock--custom_network_config--sli_config) below.
 
 `slo_config` - (Optional) Site Local Network Configuration. Site local network configuration. See [Slo Config](#nestedblock--custom_network_config--slo_config) below.
 
-`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public Ip](#nestedblock--custom_network_config--sm_connection_public_ip) below.
+`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public IP](#nestedblock--custom_network_config--sm_connection_public_ip) below.
 
-`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt Ip](#nestedblock--custom_network_config--sm_connection_pvt_ip) below.
+`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt IP](#nestedblock--custom_network_config--sm_connection_pvt_ip) below.
 
-`tunnel_dead_timeout` - (Optional) Tunnel Dead Timeout (msec). Time interval, in millisec, within which any ipsec / ssl connection from the site going down is detected. When not set (== 0), a default value of 10000 msec will be used (`Number`).
+`tunnel_dead_timeout` - (Optional) Tunnel Dead Timeout (msec). Time interval, in millisec, within which any ipsec / SSL connection from the site going down is detected. When not set (== 0), a default value of 10000 msec will be used (`Number`).
 
 `vip_vrrp_mode` - (Optional) VRRP Virtual-IP. VRRP advertisement mode for VIP Invalid VRRP mode. Possible values are `VIP_VRRP_INVALID`, `VIP_VRRP_ENABLE`, `VIP_VRRP_DISABLE` (`String`).
 
@@ -378,17 +378,17 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Custom Network Config Global Network List Global Network Connections
 
-`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global Dr](#nestedblock--custom_network_config--global_network_list--global_network_connections--sli_to_global_dr) below.
+`sli_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Sli To Global DR](#nestedblock--custom_network_config--global_network_list--global_network_connections--sli_to_global_dr) below.
 
-`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global Dr](#nestedblock--custom_network_config--global_network_list--global_network_connections--slo_to_global_dr) below.
+`slo_to_global_dr` - (Optional) Global Network. Global network reference for direct connection. See [Slo To Global DR](#nestedblock--custom_network_config--global_network_list--global_network_connections--slo_to_global_dr) below.
 
 <a id="nestedblock--custom_network_config--global_network_list--global_network_connections--sli_to_global_dr"></a>
 
-### Custom Network Config Global Network List Global Network Connections Sli To Global Dr
+### Custom Network Config Global Network List Global Network Connections Sli To Global DR
 
 <a id="nestedblock--custom_network_config--global_network_list--global_network_connections--slo_to_global_dr"></a>
 
-### Custom Network Config Global Network List Global Network Connections Slo To Global Dr
+### Custom Network Config Global Network List Global Network Connections Slo To Global DR
 
 <a id="nestedblock--custom_network_config--interface_list"></a>
 
@@ -562,11 +562,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--custom_network_config--sm_connection_public_ip"></a>
 
-### Custom Network Config Sm Connection Public Ip
+### Custom Network Config Sm Connection Public IP
 
 <a id="nestedblock--custom_network_config--sm_connection_pvt_ip"></a>
 
-### Custom Network Config Sm Connection Pvt Ip
+### Custom Network Config Sm Connection Pvt IP
 
 <a id="nestedblock--custom_storage_config"></a>
 
@@ -618,7 +618,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `default_gateway` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Gateway](#nestedblock--custom_storage_config--static_routes--static_routes--default_gateway) below.
 
-`ip_address` - (Optional) IP Address. Traffic matching the ip prefixes is sent to this IP Address (`String`).
+`ip_address` - (Optional) IP Address. Traffic matching the IP prefixes is sent to this IP Address (`String`).
 
 `ip_prefixes` - (Optional) IP Prefixes. List of route prefixes that have common next hop and attributes (`List`).
 
@@ -772,21 +772,21 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--disable_gpu"></a>
 
-### Disable Gpu
+### Disable GPU
 
 <a id="nestedblock--disable_vm"></a>
 
-### Disable Vm
+### Disable VM
 
 <a id="nestedblock--enable_gpu"></a>
 
-### Enable Gpu
+### Enable GPU
 
 <a id="nestedblock--enable_vgpu"></a>
 
 ### Enable Vgpu
 
-`feature_type` - (Optional) Feature Type. Set feature to be enabled Operate with a degraded vGPU performance Enable NVIDIA vGPU Enable NVIDIA RTX Virtual Workstation Enable NVIDIA Virtual Compute Server (`String`).
+`feature_type` - (Optional) Feature Type. Set feature to be enabled Operate with a degraded vGPU performance Enable NVIDIA vGPU Enable NVIDIA RTX Virtual Workstation Enable NVIDIA Virtual Compute Server. Possible values are `UNLICENSED`, `VGPU`, `VWS`, `VCS`. Defaults to `UNLICENSED` (`String`).
 
 `server_address` - (Optional) License Server Address. Set License Server Address (`String`).
 
@@ -794,7 +794,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--enable_vm"></a>
 
-### Enable Vm
+### Enable VM
 
 <a id="nestedblock--k8s_cluster"></a>
 
@@ -826,7 +826,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `drain_max_unavailable_node_count` - (Optional) Node Batch Size Count (`Number`).
 
-`drain_node_timeout` - (Optional) Upgrade Wait Time. Seconds to wait before initiating upgrade on the next set of nodes (`Number`).
+`drain_node_timeout` - (Optional) Upgrade Wait Time. Seconds to wait before initiating upgrade on the next set of nodes. Setting it to 0 will wait indefinitely for all services on nodes to be upgraded gracefully before proceeding to the next set of nodes. (Warning: It may block upgrade if services on a node cannot be gracefully upgraded. It is recommended to use the default value) (`Number`).
 
 `enable_vega_upgrade_mode` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Vega Upgrade Mode](#nestedblock--kubernetes_upgrade_drain--enable_upgrade_drain--enable_vega_upgrade_mode) below.
 
@@ -842,7 +842,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Local Control Plane
 
-`bgp_config` - (Optional) BGP Configuration. BGP configuration parameters. See [Bgp Config](#nestedblock--local_control_plane--bgp_config) below.
+`bgp_config` - (Optional) BGP Configuration. BGP configuration parameters. See [BGP Config](#nestedblock--local_control_plane--bgp_config) below.
 
 `inside_vn` - (Optional) Empty. This can be used for messages where no values are needed. See [Inside Vn](#nestedblock--local_control_plane--inside_vn) below.
 
@@ -850,7 +850,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--local_control_plane--bgp_config"></a>
 
-### Local Control Plane Bgp Config
+### Local Control Plane BGP Config
 
 `asn` - (Optional) ASN. Autonomous System Number (`Number`).
 
@@ -858,7 +858,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--local_control_plane--bgp_config--peers"></a>
 
-### Local Control Plane Bgp Config Peers
+### Local Control Plane BGP Config Peers
 
 `bfd_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Bfd Disabled](#nestedblock--local_control_plane--bgp_config--peers--bfd_disabled) below.
 
@@ -870,7 +870,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `label` - (Optional) Label. Specify whether this peer should be (`String`).
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--local_control_plane--bgp_config--peers--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--local_control_plane--bgp_config--peers--metadata) below.
 
 `passive_mode_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Passive Mode Disabled](#nestedblock--local_control_plane--bgp_config--peers--passive_mode_disabled) below.
 
@@ -880,35 +880,35 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--local_control_plane--bgp_config--peers--bfd_disabled"></a>
 
-### Local Control Plane Bgp Config Peers Bfd Disabled
+### Local Control Plane BGP Config Peers Bfd Disabled
 
 <a id="nestedblock--local_control_plane--bgp_config--peers--bfd_enabled"></a>
 
-### Local Control Plane Bgp Config Peers Bfd Enabled
+### Local Control Plane BGP Config Peers Bfd Enabled
 
 <a id="nestedblock--local_control_plane--bgp_config--peers--disable"></a>
 
-### Local Control Plane Bgp Config Peers Disable
+### Local Control Plane BGP Config Peers Disable
 
 <a id="nestedblock--local_control_plane--bgp_config--peers--external"></a>
 
-### Local Control Plane Bgp Config Peers External
+### Local Control Plane BGP Config Peers External
 
 <a id="nestedblock--local_control_plane--bgp_config--peers--metadata"></a>
 
-### Local Control Plane Bgp Config Peers Metadata
+### Local Control Plane BGP Config Peers Metadata
 
 <a id="nestedblock--local_control_plane--bgp_config--peers--passive_mode_disabled"></a>
 
-### Local Control Plane Bgp Config Peers Passive Mode Disabled
+### Local Control Plane BGP Config Peers Passive Mode Disabled
 
 <a id="nestedblock--local_control_plane--bgp_config--peers--passive_mode_enabled"></a>
 
-### Local Control Plane Bgp Config Peers Passive Mode Enabled
+### Local Control Plane BGP Config Peers Passive Mode Enabled
 
 <a id="nestedblock--local_control_plane--bgp_config--peers--routing_policies"></a>
 
-### Local Control Plane Bgp Config Peers Routing Policies
+### Local Control Plane BGP Config Peers Routing Policies
 
 <a id="nestedblock--local_control_plane--inside_vn"></a>
 
@@ -938,7 +938,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `name` - (Optional) Name. Names of master node (`String`).
 
-`public_ip` - (Optional) Public IP. IP Address of the master node. This ip will be used when other sites connect via Site Mesh Group (`String`).
+`public_ip` - (Optional) Public IP. IP Address of the master node. This IP will be used when other sites connect via Site Mesh Group (`String`).
 
 <a id="nestedblock--no_bond_devices"></a>
 
@@ -970,15 +970,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--os"></a>
 
-### Os
+### OS
 
-`default_os_version` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Os Version](#nestedblock--os--default_os_version) below.
+`default_os_version` - (Optional) Empty. This can be used for messages where no values are needed. See [Default OS Version](#nestedblock--os--default_os_version) below.
 
 `operating_system_version` - (Optional) Operating System Version. Specify a OS version to be used e.g. 9.2024.6 (`String`).
 
 <a id="nestedblock--os--default_os_version"></a>
 
-### Os Default Os Version
+### OS Default OS Version
 
 <a id="nestedblock--sriov_interfaces"></a>
 
@@ -1012,13 +1012,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--usb_policy"></a>
 

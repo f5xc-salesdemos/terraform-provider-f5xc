@@ -100,45 +100,45 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Protocol Policer Protocol
 
-`dns` - (Optional) DNS Packets. Match all DNS packets inclusing UDP and TCP. See [Dns](#nestedblock--protocol_policer--protocol--dns) below.
+`dns` - (Optional) DNS Packets. Match all DNS packets inclusing UDP and TCP. See [DNS](#nestedblock--protocol_policer--protocol--dns) below.
 
-`icmp` - (Optional) ICMP Packet Type. ICMP message type to match in packet. See [Icmp](#nestedblock--protocol_policer--protocol--icmp) below.
+`icmp` - (Optional) ICMP Packet Type. ICMP message type to match in packet. See [ICMP](#nestedblock--protocol_policer--protocol--icmp) below.
 
-`tcp` - (Optional) TCP Packet Type. Specification of TCP flag to be matched in a TCP packet. See [Tcp](#nestedblock--protocol_policer--protocol--tcp) below.
+`tcp` - (Optional) TCP Packet Type. Specification of TCP flag to be matched in a TCP packet. See [TCP](#nestedblock--protocol_policer--protocol--tcp) below.
 
-`udp` - (Optional) UDP Packets. Match all UDP packets. See [Udp](#nestedblock--protocol_policer--protocol--udp) below.
+`udp` - (Optional) UDP Packets. Match all UDP packets. See [UDP](#nestedblock--protocol_policer--protocol--udp) below.
 
 <a id="nestedblock--protocol_policer--protocol--dns"></a>
 
-### Protocol Policer Protocol Dns
+### Protocol Policer Protocol DNS
 
 <a id="nestedblock--protocol_policer--protocol--icmp"></a>
 
-### Protocol Policer Protocol Icmp
+### Protocol Policer Protocol ICMP
 
 `type` - (Optional) ICMP type. ICMP message type to be matched in packet (`List`).
 
 <a id="nestedblock--protocol_policer--protocol--tcp"></a>
 
-### Protocol Policer Protocol Tcp
+### Protocol Policer Protocol TCP
 
 `flags` - (Optional) TCP flags. TCP flag to be matched in a TCP packet (`List`).
 
 <a id="nestedblock--protocol_policer--protocol--udp"></a>
 
-### Protocol Policer Protocol Udp
+### Protocol Policer Protocol UDP
 
 <a id="nestedblock--timeouts"></a>
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

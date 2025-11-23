@@ -53,9 +53,9 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
-`api_inventory_exclusion_list` - (Optional) API Inventory Exclusion List. List of API Endpoints excluded from the API Inventory. See [Api Inventory Exclusion List](#api-inventory-exclusion-list) below for details.
+`api_inventory_exclusion_list` - (Optional) API Inventory Exclusion List. List of API Endpoints excluded from the API Inventory. See [API Inventory Exclusion List](#api-inventory-exclusion-list) below for details.
 
-`api_inventory_inclusion_list` - (Optional) API Inventory Inclusion List. List of API Endpoints included in the API Inventory. Typically, discovered API endpoints are added to the API Inventory using this list. See [Api Inventory Inclusion List](#api-inventory-inclusion-list) below for details.
+`api_inventory_inclusion_list` - (Optional) API Inventory Inclusion List. List of API Endpoints included in the API Inventory. Typically, discovered API endpoints are added to the API Inventory using this list. See [API Inventory Inclusion List](#api-inventory-inclusion-list) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
@@ -63,11 +63,11 @@ The following arguments are optional:
 
 `mixed_schema_origin` - (Optional) Empty. This can be used for messages where no values are needed. See [Mixed Schema Origin](#mixed-schema-origin) below for details.
 
-`non_api_endpoints` - (Optional) API Discovery Exclusion List. List of Non-API Endpoints. See [Non Api Endpoints](#non-api-endpoints) below for details.
+`non_api_endpoints` - (Optional) API Discovery Exclusion List. List of Non-API Endpoints. See [Non API Endpoints](#non-api-endpoints) below for details.
 
 `strict_schema_origin` - (Optional) Empty. This can be used for messages where no values are needed. See [Strict Schema Origin](#strict-schema-origin) below for details.
 
-`swagger_specs` - (Optional) File Path. Define your application API by single or multiple OpenAPI files. 1. Upload your OpenAPI files via Web App & API Protection-> Files-> Swagger Files. 2 (`List`).
+`swagger_specs` - (Optional) File Path. Define your application API by single or multiple OpenAPI files. 1. Upload your OpenAPI files via Web App & API Protection-> Files-> Swagger Files. 2. Select from the list of uploaded files. Notice file versions. If OpenAPI file is updated, need to select a new version here to redefine the API (`List`).
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
@@ -81,17 +81,17 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_inventory_exclusion_list"></a>
 
-### Api Inventory Exclusion List
+### API Inventory Exclusion List
 
-`method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method (`String`).
+`method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method. Possible values include `ANY`, `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`, and others. Defaults to `ANY` (`String`).
 
 `path` - (Optional) Path. An endpoint path, as specified in OpenAPI, including parameters. The path should comply with RFC 3986 and may have parameters according to OpenAPI specification (`String`).
 
 <a id="nestedblock--api_inventory_inclusion_list"></a>
 
-### Api Inventory Inclusion List
+### API Inventory Inclusion List
 
-`method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method (`String`).
+`method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method. Possible values include `ANY`, `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`, and others. Defaults to `ANY` (`String`).
 
 `path` - (Optional) Path. An endpoint path, as specified in OpenAPI, including parameters. The path should comply with RFC 3986 and may have parameters according to OpenAPI specification (`String`).
 
@@ -101,9 +101,9 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--non_api_endpoints"></a>
 
-### Non Api Endpoints
+### Non API Endpoints
 
-`method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method (`String`).
+`method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method. Possible values include `ANY`, `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`, and others. Defaults to `ANY` (`String`).
 
 `path` - (Optional) Path. An endpoint path, as specified in OpenAPI, including parameters. The path should comply with RFC 3986 and may have parameters according to OpenAPI specification (`String`).
 
@@ -115,13 +115,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

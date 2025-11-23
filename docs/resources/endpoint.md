@@ -62,13 +62,13 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "dns_name, dns_name_advanced, ip, service_info" must be set.
 
-`dns_name` - (Optional) Endpoint Name. Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name (`String`).
+`dns_name` - (Optional) Endpoint Name. Endpoint's IP address is discovered using DNS name resolution. The name given here is fully qualified domain name (`String`).
 
-`dns_name_advanced` - (Optional) DNS Name Advanced Type. Specifies name and TTL used for DNS resolution. See [Dns Name Advanced](#dns-name-advanced) below for details.
+`dns_name_advanced` - (Optional) DNS Name Advanced Type. Specifies name and TTL used for DNS resolution. See [DNS Name Advanced](#dns-name-advanced) below for details.
 
-`health_check_port` - (Optional) Port used for health check. By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port (`Number`).
+`health_check_port` - (Optional) Port used for health check. By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port. Setting this with a non-zero value allows an endpoint to have different health check port (`Number`).
 
-`ip` - (Optional) Endpoint IP Address. Endpoint is reachable at the given ipv4/ipv6 address (`String`).
+`ip` - (Optional) Endpoint IP Address. Endpoint is reachable at the given IPv4/IPv6 address (`String`).
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
@@ -82,7 +82,7 @@ The following arguments are optional:
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
-`where` - (Optional) Network or Site Reference. NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network or reference to virtual_site It is used to determine virtual network using fol.... See [Where](#where) below for details.
+`where` - (Optional) Network or Site Reference. NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network or reference to virtual_site It is used to determine virtual network using following rules * Direct reference to virtual_network object * Site local network when refering to site object * All site local networks for sites selected by refering to virtual_site object. See [Where](#where) below for details.
 
 ### Attributes Reference
 
@@ -94,9 +94,9 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--dns_name_advanced"></a>
 
-### Dns Name Advanced
+### DNS Name Advanced
 
-`name` - (Optional) Endpoint DNS Name. Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name (`String`).
+`name` - (Optional) Endpoint DNS Name. Endpoint's IP address is discovered using DNS name resolution. The name given here is fully qualified domain name (`String`).
 
 `refresh_interval` - (Optional) DNS Refresh Interval. Interval for DNS refresh in seconds (`Number`).
 
@@ -104,11 +104,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Service Info
 
-`discovery_type` - (Optional) Discovery Type. Specifies whether the discovery is from Kubernetes or Consul cluster Invalid Discovery mechanism Discover from Kubernetes cluster Discover from Consul service Discover from Classic ... (`String`).
+`discovery_type` - (Optional) Discovery Type. Specifies whether the discovery is from Kubernetes or Consul cluster Invalid Discovery mechanism Discover from Kubernetes cluster Discover from Consul service Discover from Classic BIG-IP Clusters Discover for Third Party Application. Possible values are `INVALID_DISCOVERY`, `K8S`, `CONSUL`, `CLASSIC_BIGIP`, `THIRD_PARTY` (`String`).
 
-`service_name` - (Optional) Service Name. Name of the service to discover with an optional namespace and cluster identifier. The format is service_name (`String`).
+`service_name` - (Optional) Service Name. Name of the service to discover with an optional namespace and cluster identifier. The format is service_name.namespace_name:cluster_identifier for K8S and service_name:cluster_identifier for Consul Endpoint will be discovered in all discovery objects where the cluster identifier matches. If cluster identifier is not specified then discovery will be done in all discovery objects of the site (`String`).
 
-`service_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Service Selector](#nestedblock--service_info--service_selector) below.
+`service_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Service Selector](#nestedblock--service_info--service_selector) below.
 
 <a id="nestedblock--service_info--service_selector"></a>
 
@@ -138,13 +138,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--where"></a>
 
@@ -160,21 +160,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Where Site
 
-`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet Vip](#nestedblock--where--site--disable_internet_vip) below.
+`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet VIP](#nestedblock--where--site--disable_internet_vip) below.
 
-`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet Vip](#nestedblock--where--site--enable_internet_vip) below.
+`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet VIP](#nestedblock--where--site--enable_internet_vip) below.
 
-`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
 `ref` - (Optional) Reference. A site direct reference. See [Ref](#nestedblock--where--site--ref) below.
 
 <a id="nestedblock--where--site--disable_internet_vip"></a>
 
-### Where Site Disable Internet Vip
+### Where Site Disable Internet VIP
 
 <a id="nestedblock--where--site--enable_internet_vip"></a>
 
-### Where Site Enable Internet Vip
+### Where Site Enable Internet VIP
 
 <a id="nestedblock--where--site--ref"></a>
 
@@ -214,21 +214,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Where Virtual Site
 
-`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet Vip](#nestedblock--where--virtual_site--disable_internet_vip) below.
+`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet VIP](#nestedblock--where--virtual_site--disable_internet_vip) below.
 
-`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet Vip](#nestedblock--where--virtual_site--enable_internet_vip) below.
+`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet VIP](#nestedblock--where--virtual_site--enable_internet_vip) below.
 
-`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
 `ref` - (Optional) Reference. A virtual_site direct reference. See [Ref](#nestedblock--where--virtual_site--ref) below.
 
 <a id="nestedblock--where--virtual_site--disable_internet_vip"></a>
 
-### Where Virtual Site Disable Internet Vip
+### Where Virtual Site Disable Internet VIP
 
 <a id="nestedblock--where--virtual_site--enable_internet_vip"></a>
 
-### Where Virtual Site Enable Internet Vip
+### Where Virtual Site Enable Internet VIP
 
 <a id="nestedblock--where--virtual_site--ref"></a>
 

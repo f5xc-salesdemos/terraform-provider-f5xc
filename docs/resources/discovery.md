@@ -88,7 +88,7 @@ The following arguments are optional:
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
-`where` - (Optional) Network or Site Reference. NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network or reference to virtual_site It is used to determine virtual network using fol.... See [Where](#where) below for details.
+`where` - (Optional) Network or Site Reference. NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network or reference to virtual_site It is used to determine virtual network using following rules * Direct reference to virtual_network object * Site local network when refering to site object * All site local networks for sites selected by refering to virtual_site object. See [Where](#where) below for details.
 
 ### Attributes Reference
 
@@ -110,9 +110,9 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Discovery Consul Access Info
 
-`connection_info` - (Optional) REST API Config. Configuration details to access discovery service rest API. See [Connection Info](#nestedblock--discovery_consul--access_info--connection_info) below.
+`connection_info` - (Optional) REST API Config. Configuration details to access discovery service REST API. See [Connection Info](#nestedblock--discovery_consul--access_info--connection_info) below.
 
-`http_basic_auth_info` - (Optional) Hashicorp Consul Credentials. Authentication parameters to access Hashicorp Consul. See [Http Basic Auth Info](#nestedblock--discovery_consul--access_info--http_basic_auth_info) below.
+`http_basic_auth_info` - (Optional) Hashicorp Consul Credentials. Authentication parameters to access Hashicorp Consul. See [HTTP Basic Auth Info](#nestedblock--discovery_consul--access_info--http_basic_auth_info) below.
 
 <a id="nestedblock--discovery_consul--access_info--connection_info"></a>
 
@@ -120,23 +120,23 @@ In addition to all arguments above, the following attributes are exported:
 
 `api_server` - (Optional) API Server and Port. API server must be a fully qualified domain string and port specified as host:port pair (`String`).
 
-`tls_info` - (Optional) Client TLS Config. TLS config for client of discovery service. See [Tls Info](#nestedblock--discovery_consul--access_info--connection_info--tls_info) below.
+`tls_info` - (Optional) Client TLS Config. TLS config for client of discovery service. See [TLS Info](#nestedblock--discovery_consul--access_info--connection_info--tls_info) below.
 
 <a id="nestedblock--discovery_consul--access_info--connection_info--tls_info"></a>
 
-### Discovery Consul Access Info Connection Info Tls Info
+### Discovery Consul Access Info Connection Info TLS Info
 
 <a id="nestedblock--discovery_consul--access_info--http_basic_auth_info"></a>
 
-### Discovery Consul Access Info Http Basic Auth Info
+### Discovery Consul Access Info HTTP Basic Auth Info
 
-`passwd_url` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Passwd Url](#nestedblock--discovery_consul--access_info--http_basic_auth_info--passwd_url) below.
+`passwd_url` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Passwd URL](#nestedblock--discovery_consul--access_info--http_basic_auth_info--passwd_url) below.
 
 `user_name` - (Optional) User Name. username in consul (`String`).
 
 <a id="nestedblock--discovery_consul--access_info--http_basic_auth_info--passwd_url"></a>
 
-### Discovery Consul Access Info Http Basic Auth Info Passwd Url
+### Discovery Consul Access Info HTTP Basic Auth Info Passwd URL
 
 <a id="nestedblock--discovery_consul--publish_info"></a>
 
@@ -170,11 +170,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Discovery K8s Access Info
 
-`connection_info` - (Optional) REST API Config. Configuration details to access discovery service rest API. See [Connection Info](#nestedblock--discovery_k8s--access_info--connection_info) below.
+`connection_info` - (Optional) REST API Config. Configuration details to access discovery service REST API. See [Connection Info](#nestedblock--discovery_k8s--access_info--connection_info) below.
 
 `isolated` - (Optional) Empty. This can be used for messages where no values are needed. See [Isolated](#nestedblock--discovery_k8s--access_info--isolated) below.
 
-`kubeconfig_url` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Kubeconfig Url](#nestedblock--discovery_k8s--access_info--kubeconfig_url) below.
+`kubeconfig_url` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Kubeconfig URL](#nestedblock--discovery_k8s--access_info--kubeconfig_url) below.
 
 `reachable` - (Optional) Empty. This can be used for messages where no values are needed. See [Reachable](#nestedblock--discovery_k8s--access_info--reachable) below.
 
@@ -184,11 +184,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `api_server` - (Optional) API Server and Port. API server must be a fully qualified domain string and port specified as host:port pair (`String`).
 
-`tls_info` - (Optional) Client TLS Config. TLS config for client of discovery service. See [Tls Info](#nestedblock--discovery_k8s--access_info--connection_info--tls_info) below.
+`tls_info` - (Optional) Client TLS Config. TLS config for client of discovery service. See [TLS Info](#nestedblock--discovery_k8s--access_info--connection_info--tls_info) below.
 
 <a id="nestedblock--discovery_k8s--access_info--connection_info--tls_info"></a>
 
-### Discovery K8s Access Info Connection Info Tls Info
+### Discovery K8s Access Info Connection Info TLS Info
 
 <a id="nestedblock--discovery_k8s--access_info--isolated"></a>
 
@@ -196,7 +196,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--discovery_k8s--access_info--kubeconfig_url"></a>
 
-### Discovery K8s Access Info Kubeconfig Url
+### Discovery K8s Access Info Kubeconfig URL
 
 `blindfold_secret_info` - (Optional) Blindfold Secret. BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management. See [Blindfold Secret Info](#nestedblock--discovery_k8s--access_info--kubeconfig_url--blindfold_secret_info) below.
 
@@ -204,11 +204,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--discovery_k8s--access_info--kubeconfig_url--blindfold_secret_info"></a>
 
-### Discovery K8s Access Info Kubeconfig Url Blindfold Secret Info
+### Discovery K8s Access Info Kubeconfig URL Blindfold Secret Info
 
 <a id="nestedblock--discovery_k8s--access_info--kubeconfig_url--clear_secret_info"></a>
 
-### Discovery K8s Access Info Kubeconfig Url Clear Secret Info
+### Discovery K8s Access Info Kubeconfig URL Clear Secret Info
 
 <a id="nestedblock--discovery_k8s--access_info--reachable"></a>
 
@@ -238,7 +238,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `disable` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable](#nestedblock--discovery_k8s--publish_info--disable) below.
 
-`dns_delegation` - (Optional) K8SDelegationType. See [Dns Delegation](#nestedblock--discovery_k8s--publish_info--dns_delegation) below.
+`dns_delegation` - (Optional) K8SDelegationType. See [DNS Delegation](#nestedblock--discovery_k8s--publish_info--dns_delegation) below.
 
 `publish` - (Optional) K8SPublishType. See [Publish](#nestedblock--discovery_k8s--publish_info--publish) below.
 
@@ -250,9 +250,9 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--discovery_k8s--publish_info--dns_delegation"></a>
 
-### Discovery K8s Publish Info Dns Delegation
+### Discovery K8s Publish Info DNS Delegation
 
-`dns_mode` - (Optional) DNS Mode. Two modes are possible CoreDNS: Whether external K8s cluster is running core-dns KubeDNS: External K8s cluster is running kube-dns. Possible values are `CORE_DNS`, `KUBE_DNS` (`String`).
+`dns_mode` - (Optional) DNS Mode. Two modes are possible CoreDNS: Whether external K8s cluster is running core-DNS KubeDNS: External K8s cluster is running kube-DNS. Possible values are `CORE_DNS`, `KUBE_DNS`. Defaults to `CORE_DNS` (`String`).
 
 `subdomain` - (Optional) Subdomain. The DNS subdomain for which F5XC will respond to DNS queries (`String`).
 
@@ -274,13 +274,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--where"></a>
 
@@ -296,21 +296,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Where Site
 
-`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet Vip](#nestedblock--where--site--disable_internet_vip) below.
+`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet VIP](#nestedblock--where--site--disable_internet_vip) below.
 
-`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet Vip](#nestedblock--where--site--enable_internet_vip) below.
+`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet VIP](#nestedblock--where--site--enable_internet_vip) below.
 
-`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
 `ref` - (Optional) Reference. A site direct reference. See [Ref](#nestedblock--where--site--ref) below.
 
 <a id="nestedblock--where--site--disable_internet_vip"></a>
 
-### Where Site Disable Internet Vip
+### Where Site Disable Internet VIP
 
 <a id="nestedblock--where--site--enable_internet_vip"></a>
 
-### Where Site Enable Internet Vip
+### Where Site Enable Internet VIP
 
 <a id="nestedblock--where--site--ref"></a>
 
@@ -350,21 +350,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Where Virtual Site
 
-`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet Vip](#nestedblock--where--virtual_site--disable_internet_vip) below.
+`disable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Internet VIP](#nestedblock--where--virtual_site--disable_internet_vip) below.
 
-`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet Vip](#nestedblock--where--virtual_site--enable_internet_vip) below.
+`enable_internet_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Internet VIP](#nestedblock--where--virtual_site--enable_internet_vip) below.
 
-`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
 `ref` - (Optional) Reference. A virtual_site direct reference. See [Ref](#nestedblock--where--virtual_site--ref) below.
 
 <a id="nestedblock--where--virtual_site--disable_internet_vip"></a>
 
-### Where Virtual Site Disable Internet Vip
+### Where Virtual Site Disable Internet VIP
 
 <a id="nestedblock--where--virtual_site--enable_internet_vip"></a>
 
-### Where Virtual Site Enable Internet Vip
+### Where Virtual Site Enable Internet VIP
 
 <a id="nestedblock--where--virtual_site--ref"></a>
 

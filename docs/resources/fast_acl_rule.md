@@ -64,7 +64,7 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "ip_prefix_set, prefix" must be set.
 
-`ip_prefix_set` - (Optional) IP Prefix Set Reference. A list of references to ip_prefix_set objects. See [Ip Prefix Set](#ip-prefix-set) below for details.
+`ip_prefix_set` - (Optional) IP Prefix Set Reference. A list of references to ip_prefix_set objects. See [IP Prefix Set](#ip-prefix-set) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
@@ -90,7 +90,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `protocol_policer_action` - (Optional) Protocol Policer Reference. Reference to policer object. See [Protocol Policer Action](#nestedblock--action--protocol_policer_action) below.
 
-`simple_action` - (Optional) Simple Action. FastAclRuleSimpleAction specifies simple action like PASS or DENY Drop the traffic Forward the traffic. Possible values are `DENY`, `ALLOW` (`String`).
+`simple_action` - (Optional) Simple Action. FastAclRuleSimpleAction specifies simple action like PASS or DENY Drop the traffic Forward the traffic. Possible values are `DENY`, `ALLOW`. Defaults to `DENY` (`String`).
 
 <a id="nestedblock--action--policer_action"></a>
 
@@ -134,13 +134,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ip_prefix_set"></a>
 
-### Ip Prefix Set
+### IP Prefix Set
 
 `ref` - (Optional) Reference. A list of references to ip_prefix_set objects. See [Ref](#nestedblock--ip_prefix_set--ref) below.
 
 <a id="nestedblock--ip_prefix_set--ref"></a>
 
-### Ip Prefix Set Ref
+### IP Prefix Set Ref
 
 `kind` - (Optional) Kind. When a configuration object(e.g. virtual_host) refers to another(e.g route) then kind will hold the referred object's kind (e.g. 'route') (`String`).
 
@@ -158,7 +158,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `all` - (Optional) Empty. This can be used for messages where no values are needed. See [All](#nestedblock--port--all) below.
 
-`dns` - (Optional) Empty. This can be used for messages where no values are needed. See [Dns](#nestedblock--port--dns) below.
+`dns` - (Optional) Empty. This can be used for messages where no values are needed. See [DNS](#nestedblock--port--dns) below.
 
 `user_defined` - (Optional) User defined port. Matches the user defined port (`Number`).
 
@@ -168,7 +168,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--port--dns"></a>
 
-### Port Dns
+### Port DNS
 
 <a id="nestedblock--prefix"></a>
 
@@ -180,13 +180,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

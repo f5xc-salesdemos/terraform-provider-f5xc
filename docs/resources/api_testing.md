@@ -60,7 +60,7 @@ The following arguments are optional:
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
-`custom_header_value` - (Optional) Custom Header. Add x-f5-api-testing-identifier header value to prevent security flags on API testing traffic (`String`).
+`custom_header_value` - (Optional) Custom Header. Add x-f5-API-testing-identifier header value to prevent security flags on API testing traffic (`String`).
 
 `domains` - (Optional) Testing Environments. Add and configure testing domains and credentials. See [Domains](#domains) below for details.
 
@@ -92,7 +92,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `credentials` - (Optional) Credentials. Add credentials for API testing to use in the selected environment. See [Credentials](#nestedblock--domains--credentials) below.
 
-`domain` - (Optional) Domain. Add your testing environment domain. Be aware that running tests on a production domain can impact live applications, as API testing cannot distinguish between production and testing enviro... (`String`).
+`domain` - (Optional) Domain. Add your testing environment domain. Be aware that running tests on a production domain can impact live applications, as API testing cannot distinguish between production and testing environments (`String`).
 
 <a id="nestedblock--domains--credentials"></a>
 
@@ -100,7 +100,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `admin` - (Optional) Empty. This can be used for messages where no values are needed. See [Admin](#nestedblock--domains--credentials--admin) below.
 
-`api_key` - (Optional) Api Key. See [Api Key](#nestedblock--domains--credentials--api_key) below.
+`api_key` - (Optional) API Key. See [API Key](#nestedblock--domains--credentials--api_key) below.
 
 `basic_auth` - (Optional) Basic Authentication. See [Basic Auth](#nestedblock--domains--credentials--basic_auth) below.
 
@@ -118,7 +118,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--domains--credentials--api_key"></a>
 
-### Domains Credentials Api Key
+### Domains Credentials API Key
 
 `key` - (Optional) Key (`String`).
 
@@ -126,7 +126,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--domains--credentials--api_key--value"></a>
 
-### Domains Credentials Api Key Value
+### Domains Credentials API Key Value
 
 <a id="nestedblock--domains--credentials--basic_auth"></a>
 
@@ -154,9 +154,9 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Domains Credentials Login Endpoint
 
-`json_payload` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Json Payload](#nestedblock--domains--credentials--login_endpoint--json_payload) below.
+`json_payload` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [JSON Payload](#nestedblock--domains--credentials--login_endpoint--json_payload) below.
 
-`method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method (`String`).
+`method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method. Possible values include `ANY`, `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`, and others. Defaults to `ANY` (`String`).
 
 `path` - (Optional) Path (`String`).
 
@@ -164,7 +164,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--domains--credentials--login_endpoint--json_payload"></a>
 
-### Domains Credentials Login Endpoint Json Payload
+### Domains Credentials Login Endpoint JSON Payload
 
 <a id="nestedblock--domains--credentials--standard"></a>
 
@@ -186,13 +186,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

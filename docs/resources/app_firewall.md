@@ -62,7 +62,7 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "ai_risk_based_blocking, default_detection_settings, detection_settings" must be set.
 
-`ai_risk_based_blocking` - (Optional) Risk-Based Blocking (Powered by AI) - Preview. All Attack Types, including high, medium, and low accuracy signatures, automatic Attack Signature tuning, Threat Campaigns, and all Violations will be.... See [Ai Risk Based Blocking](#ai-risk-based-blocking) below for details.
+`ai_risk_based_blocking` - (Optional) Risk-Based Blocking (Powered by AI) - Preview. All Attack Types, including high, medium, and low accuracy signatures, automatic Attack Signature tuning, Threat Campaigns, and all Violations will be enabled. AI and ML algorithms will assess request risk, and only high-risk requests will be blocked by default. This feature is in preview mode. See [Ai Risk Based Blocking](#ai-risk-based-blocking) below for details.
 
 > **Note:** One of the arguments from this list "allow_all_response_codes, allowed_response_codes" must be set.
 
@@ -118,11 +118,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Ai Risk Based Blocking
 
-`high_risk_action` - (Optional) Risk Based Blocking Action. Action to be performed on the request Log and block Log only. Possible values are `AI_BLOCK`, `AI_REPORT` (`String`).
+`high_risk_action` - (Optional) Risk Based Blocking Action. Action to be performed on the request Log and block Log only. Possible values are `AI_BLOCK`, `AI_REPORT`. Defaults to `AI_BLOCK` (`String`).
 
-`low_risk_action` - (Optional) Risk Based Blocking Action. Action to be performed on the request Log and block Log only. Possible values are `AI_BLOCK`, `AI_REPORT` (`String`).
+`low_risk_action` - (Optional) Risk Based Blocking Action. Action to be performed on the request Log and block Log only. Possible values are `AI_BLOCK`, `AI_REPORT`. Defaults to `AI_BLOCK` (`String`).
 
-`medium_risk_action` - (Optional) Risk Based Blocking Action. Action to be performed on the request Log and block Log only. Possible values are `AI_BLOCK`, `AI_REPORT` (`String`).
+`medium_risk_action` - (Optional) Risk Based Blocking Action. Action to be performed on the request Log and block Log only. Possible values are `AI_BLOCK`, `AI_REPORT`. Defaults to `AI_BLOCK` (`String`).
 
 <a id="nestedblock--allow_all_response_codes"></a>
 
@@ -142,19 +142,19 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Blocking Page
 
-`blocking_page` - (Optional) Blocking Response Page Body. Define the content of the response page (e.g (`String`).
+`blocking_page` - (Optional) Blocking Response Page Body. Define the content of the response page (e.g., an HTML document or a JSON object), use the {{request_id}} placeholder to provide users with a unique identifier to be able to trace the blocked request in the logs. The maximum allowed size of response body is 4096 bytes after base64 encoding, which would be about 3070 bytes in plain text (`String`).
 
-`response_code` - (Optional) HTTP Status Code. HTTP response status codes EmptyStatusCode response codes means it is not specified Continue status code OK status code Created status code Accepted status code Non Authoritative ... (`String`).
+`response_code` - (Optional) HTTP Status Code. HTTP response status codes EmptyStatusCode response codes means it is not specified Continue status code OK status code Created status code Accepted status code Non Authoritative Information status code No Content status code Reset Content status code Partial Content status code Multi Status status code Already Reported status code Im Used status code Multiple Choices status code Moved Permanently status code Found status code See Other status code Not Modified status code U... Possible values include `EmptyStatusCode`, `Continue`, `OK`, `Created`, `Accepted`, `NonAuthoritativeInformation`, `NoContent`, `ResetContent`, `PartialContent`, `MultiStatus`, and others. Defaults to `EmptyStatusCode` (`String`).
 
 <a id="nestedblock--bot_protection_setting"></a>
 
 ### Bot Protection Setting
 
-`good_bot_action` - (Optional) Bot Action. Action to be performed on the request Log and block Log only Disable detection. Possible values are `BLOCK`, `REPORT`, `IGNORE` (`String`).
+`good_bot_action` - (Optional) Bot Action. Action to be performed on the request Log and block Log only Disable detection. Possible values are `BLOCK`, `REPORT`, `IGNORE`. Defaults to `BLOCK` (`String`).
 
-`malicious_bot_action` - (Optional) Bot Action. Action to be performed on the request Log and block Log only Disable detection. Possible values are `BLOCK`, `REPORT`, `IGNORE` (`String`).
+`malicious_bot_action` - (Optional) Bot Action. Action to be performed on the request Log and block Log only Disable detection. Possible values are `BLOCK`, `REPORT`, `IGNORE`. Defaults to `BLOCK` (`String`).
 
-`suspicious_bot_action` - (Optional) Bot Action. Action to be performed on the request Log and block Log only Disable detection. Possible values are `BLOCK`, `REPORT`, `IGNORE` (`String`).
+`suspicious_bot_action` - (Optional) Bot Action. Action to be performed on the request Log and block Log only Disable detection. Possible values are `BLOCK`, `REPORT`, `IGNORE`. Defaults to `BLOCK` (`String`).
 
 <a id="nestedblock--custom_anonymization"></a>
 
@@ -168,7 +168,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `cookie` - (Optional) Anonymize HTTP Cookie. Configure anonymization for HTTP Cookies. See [Cookie](#nestedblock--custom_anonymization--anonymization_config--cookie) below.
 
-`http_header` - (Optional) Anonymize HTTP Header. Configure anonymization for HTTP Headers. See [Http Header](#nestedblock--custom_anonymization--anonymization_config--http_header) below.
+`http_header` - (Optional) Anonymize HTTP Header. Configure anonymization for HTTP Headers. See [HTTP Header](#nestedblock--custom_anonymization--anonymization_config--http_header) below.
 
 `query_parameter` - (Optional) Anonymize HTTP Query Parameter. Configure anonymization for HTTP Parameters. See [Query Parameter](#nestedblock--custom_anonymization--anonymization_config--query_parameter) below.
 
@@ -180,7 +180,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--custom_anonymization--anonymization_config--http_header"></a>
 
-### Custom Anonymization Anonymization Config Http Header
+### Custom Anonymization Anonymization Config HTTP Header
 
 `header_name` - (Optional) Header Name. Masks the HTTP header value. The setting does not mask the HTTP header name (`String`).
 
@@ -234,11 +234,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Detection Settings Bot Protection Setting
 
-`good_bot_action` - (Optional) Bot Action. Action to be performed on the request Log and block Log only Disable detection. Possible values are `BLOCK`, `REPORT`, `IGNORE` (`String`).
+`good_bot_action` - (Optional) Bot Action. Action to be performed on the request Log and block Log only Disable detection. Possible values are `BLOCK`, `REPORT`, `IGNORE`. Defaults to `BLOCK` (`String`).
 
-`malicious_bot_action` - (Optional) Bot Action. Action to be performed on the request Log and block Log only Disable detection. Possible values are `BLOCK`, `REPORT`, `IGNORE` (`String`).
+`malicious_bot_action` - (Optional) Bot Action. Action to be performed on the request Log and block Log only Disable detection. Possible values are `BLOCK`, `REPORT`, `IGNORE`. Defaults to `BLOCK` (`String`).
 
-`suspicious_bot_action` - (Optional) Bot Action. Action to be performed on the request Log and block Log only Disable detection. Possible values are `BLOCK`, `REPORT`, `IGNORE` (`String`).
+`suspicious_bot_action` - (Optional) Bot Action. Action to be performed on the request Log and block Log only Disable detection. Possible values are `BLOCK`, `REPORT`, `IGNORE`. Defaults to `BLOCK` (`String`).
 
 <a id="nestedblock--detection_settings--default_bot_setting"></a>
 
@@ -334,13 +334,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--use_default_blocking_page"></a>
 

@@ -94,13 +94,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Cache Rules Eligible For Cache
 
-`scheme_proxy_host_request_uri` - (Optional) Cache TTL Enable Props. Cache TTL Enable Values. See [Scheme Proxy Host Request Uri](#nestedblock--cache_rules--eligible_for_cache--scheme_proxy_host_request_uri) below.
+`scheme_proxy_host_request_uri` - (Optional) Cache TTL Enable Props. Cache TTL Enable Values. See [Scheme Proxy Host Request URI](#nestedblock--cache_rules--eligible_for_cache--scheme_proxy_host_request_uri) below.
 
-`scheme_proxy_host_uri` - (Optional) Cache TTL Enable Props. Cache TTL Enable Values. See [Scheme Proxy Host Uri](#nestedblock--cache_rules--eligible_for_cache--scheme_proxy_host_uri) below.
+`scheme_proxy_host_uri` - (Optional) Cache TTL Enable Props. Cache TTL Enable Values. See [Scheme Proxy Host URI](#nestedblock--cache_rules--eligible_for_cache--scheme_proxy_host_uri) below.
 
 <a id="nestedblock--cache_rules--eligible_for_cache--scheme_proxy_host_request_uri"></a>
 
-### Cache Rules Eligible For Cache Scheme Proxy Host Request Uri
+### Cache Rules Eligible For Cache Scheme Proxy Host Request URI
 
 `cache_override` - (Optional) Cache Override. Honour Cache Override (`Bool`).
 
@@ -110,7 +110,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--cache_rules--eligible_for_cache--scheme_proxy_host_uri"></a>
 
-### Cache Rules Eligible For Cache Scheme Proxy Host Uri
+### Cache Rules Eligible For Cache Scheme Proxy Host URI
 
 `cache_override` - (Optional) Cache Override. Honour Cache Override (`Bool`).
 
@@ -132,7 +132,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `cache_headers` - (Optional) Cache Headers. Configure cache rule headers to match the criteria. See [Cache Headers](#nestedblock--cache_rules--rule_expression_list--cache_rule_expression--cache_headers) below.
 
-`cookie_matcher` - (Optional) Cookie Matchers. A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances of CookieMatcherType. See [Cookie Matcher](#nestedblock--cache_rules--rule_expression_list--cache_rule_expression--cookie_matcher) below.
+`cookie_matcher` - (Optional) Cookie Matchers. A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances of CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name. Note that all specified cookie matcher predicates must evaluate to true. See [Cookie Matcher](#nestedblock--cache_rules--rule_expression_list--cache_rule_expression--cookie_matcher) below.
 
 `path_match` - (Optional) Path to Match. Path match of the URI can be either be, Prefix match or exact match or regular expression match. See [Path Match](#nestedblock--cache_rules--rule_expression_list--cache_rule_expression--path_match) below.
 
@@ -158,13 +158,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

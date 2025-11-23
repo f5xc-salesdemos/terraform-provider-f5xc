@@ -82,15 +82,15 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Egress Rules
 
-`action` - (Optional) Network Policy Rule Action. Network policy rule action configures the action to be taken on rule match Apply deny action on rule match Apply allow action on rule match (`String`).
+`action` - (Optional) Network Policy Rule Action. Network policy rule action configures the action to be taken on rule match Apply deny action on rule match Apply allow action on rule match. Possible values are `DENY`, `ALLOW`. Defaults to `DENY` (`String`).
 
 `adv_action` - (Optional) Network Policy Rule Advanced Action. Network Policy Rule Advanced Action provides additional options along with RuleAction and PBRRuleAction. See [Adv Action](#nestedblock--egress_rules--adv_action) below.
 
-`all_tcp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All Tcp Traffic](#nestedblock--egress_rules--all_tcp_traffic) below.
+`all_tcp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All TCP Traffic](#nestedblock--egress_rules--all_tcp_traffic) below.
 
 `all_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All Traffic](#nestedblock--egress_rules--all_traffic) below.
 
-`all_udp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All Udp Traffic](#nestedblock--egress_rules--all_udp_traffic) below.
+`all_udp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All UDP Traffic](#nestedblock--egress_rules--all_udp_traffic) below.
 
 `any` - (Optional) Empty. This can be used for messages where no values are needed. See [Any](#nestedblock--egress_rules--any) below.
 
@@ -98,13 +98,13 @@ In addition to all arguments above, the following attributes are exported:
 
 `inside_endpoints` - (Optional) Empty. This can be used for messages where no values are needed. See [Inside Endpoints](#nestedblock--egress_rules--inside_endpoints) below.
 
-`ip_prefix_set` - (Optional) IP Prefix Set Reference. A list of references to ip_prefix_set objects. See [Ip Prefix Set](#nestedblock--egress_rules--ip_prefix_set) below.
+`ip_prefix_set` - (Optional) IP Prefix Set Reference. A list of references to ip_prefix_set objects. See [IP Prefix Set](#nestedblock--egress_rules--ip_prefix_set) below.
 
-`label_matcher` - (Optional) Label Matcher. A label matcher specifies a list of label keys whose values need to match for source/client and destination/server. See [Label Matcher](#nestedblock--egress_rules--label_matcher) below.
+`label_matcher` - (Optional) Label Matcher. A label matcher specifies a list of label keys whose values need to match for source/client and destination/server. Note that the actual label values are not specified and do not matter. This allows an ability to scope grouping by the label key name. See [Label Matcher](#nestedblock--egress_rules--label_matcher) below.
 
-`label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Label Selector](#nestedblock--egress_rules--label_selector) below.
+`label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Label Selector](#nestedblock--egress_rules--label_selector) below.
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--egress_rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--egress_rules--metadata) below.
 
 `outside_endpoints` - (Optional) Empty. This can be used for messages where no values are needed. See [Outside Endpoints](#nestedblock--egress_rules--outside_endpoints) below.
 
@@ -116,11 +116,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Egress Rules Adv Action
 
-`action` - (Optional) Log Action. Choice to choose logging or no logging This works together with option selected via NetworkPolicyRuleAction or any other action specified x-example: (No Selection in NetworkPolicyRuleAc... (`String`).
+`action` - (Optional) Log Action. Choice to choose logging or no logging This works together with option selected via NetworkPolicyRuleAction or any other action specified x-example: (No Selection in NetworkPolicyRuleAction + AdvancedAction as LOG) = LOG Only, (ALLOW/DENY in NetworkPolicyRuleAction + AdvancedAction as LOG) = Log and Allow/Deny, (ALLOW/DENY in NetworkPolicyRuleAction + NOLOG in AdvancedAction) = Allow/Deny with no log Don't sample the traffic hitting the rule Sample the traffic hitting the rule. Possible values are `NOLOG`, `LOG`. Defaults to `NOLOG` (`String`).
 
 <a id="nestedblock--egress_rules--all_tcp_traffic"></a>
 
-### Egress Rules All Tcp Traffic
+### Egress Rules All TCP Traffic
 
 <a id="nestedblock--egress_rules--all_traffic"></a>
 
@@ -128,7 +128,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--egress_rules--all_udp_traffic"></a>
 
-### Egress Rules All Udp Traffic
+### Egress Rules All UDP Traffic
 
 <a id="nestedblock--egress_rules--any"></a>
 
@@ -146,13 +146,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--egress_rules--ip_prefix_set"></a>
 
-### Egress Rules Ip Prefix Set
+### Egress Rules IP Prefix Set
 
 `ref` - (Optional) Reference. A list of references to ip_prefix_set objects. See [Ref](#nestedblock--egress_rules--ip_prefix_set--ref) below.
 
 <a id="nestedblock--egress_rules--ip_prefix_set--ref"></a>
 
-### Egress Rules Ip Prefix Set Ref
+### Egress Rules IP Prefix Set Ref
 
 `kind` - (Optional) Kind. When a configuration object(e.g. virtual_host) refers to another(e.g route) then kind will hold the referred object's kind (e.g. 'route') (`String`).
 
@@ -200,7 +200,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `port_ranges` - (Optional) List of Port Ranges. List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`List`).
 
-`protocol` - (Optional) Protocol. Protocol in IP packet to be used as match criteria Values are tcp, udp, and icmp (`String`).
+`protocol` - (Optional) Protocol. Protocol in IP packet to be used as match criteria Values are TCP, UDP, and ICMP (`String`).
 
 <a id="nestedblock--endpoint"></a>
 
@@ -210,7 +210,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `inside_endpoints` - (Optional) Empty. This can be used for messages where no values are needed. See [Inside Endpoints](#nestedblock--endpoint--inside_endpoints) below.
 
-`label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Label Selector](#nestedblock--endpoint--label_selector) below.
+`label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Label Selector](#nestedblock--endpoint--label_selector) below.
 
 `outside_endpoints` - (Optional) Empty. This can be used for messages where no values are needed. See [Outside Endpoints](#nestedblock--endpoint--outside_endpoints) below.
 
@@ -244,15 +244,15 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Ingress Rules
 
-`action` - (Optional) Network Policy Rule Action. Network policy rule action configures the action to be taken on rule match Apply deny action on rule match Apply allow action on rule match (`String`).
+`action` - (Optional) Network Policy Rule Action. Network policy rule action configures the action to be taken on rule match Apply deny action on rule match Apply allow action on rule match. Possible values are `DENY`, `ALLOW`. Defaults to `DENY` (`String`).
 
 `adv_action` - (Optional) Network Policy Rule Advanced Action. Network Policy Rule Advanced Action provides additional options along with RuleAction and PBRRuleAction. See [Adv Action](#nestedblock--ingress_rules--adv_action) below.
 
-`all_tcp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All Tcp Traffic](#nestedblock--ingress_rules--all_tcp_traffic) below.
+`all_tcp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All TCP Traffic](#nestedblock--ingress_rules--all_tcp_traffic) below.
 
 `all_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All Traffic](#nestedblock--ingress_rules--all_traffic) below.
 
-`all_udp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All Udp Traffic](#nestedblock--ingress_rules--all_udp_traffic) below.
+`all_udp_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [All UDP Traffic](#nestedblock--ingress_rules--all_udp_traffic) below.
 
 `any` - (Optional) Empty. This can be used for messages where no values are needed. See [Any](#nestedblock--ingress_rules--any) below.
 
@@ -260,13 +260,13 @@ In addition to all arguments above, the following attributes are exported:
 
 `inside_endpoints` - (Optional) Empty. This can be used for messages where no values are needed. See [Inside Endpoints](#nestedblock--ingress_rules--inside_endpoints) below.
 
-`ip_prefix_set` - (Optional) IP Prefix Set Reference. A list of references to ip_prefix_set objects. See [Ip Prefix Set](#nestedblock--ingress_rules--ip_prefix_set) below.
+`ip_prefix_set` - (Optional) IP Prefix Set Reference. A list of references to ip_prefix_set objects. See [IP Prefix Set](#nestedblock--ingress_rules--ip_prefix_set) below.
 
-`label_matcher` - (Optional) Label Matcher. A label matcher specifies a list of label keys whose values need to match for source/client and destination/server. See [Label Matcher](#nestedblock--ingress_rules--label_matcher) below.
+`label_matcher` - (Optional) Label Matcher. A label matcher specifies a list of label keys whose values need to match for source/client and destination/server. Note that the actual label values are not specified and do not matter. This allows an ability to scope grouping by the label key name. See [Label Matcher](#nestedblock--ingress_rules--label_matcher) below.
 
-`label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Label Selector](#nestedblock--ingress_rules--label_selector) below.
+`label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Label Selector](#nestedblock--ingress_rules--label_selector) below.
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--ingress_rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--ingress_rules--metadata) below.
 
 `outside_endpoints` - (Optional) Empty. This can be used for messages where no values are needed. See [Outside Endpoints](#nestedblock--ingress_rules--outside_endpoints) below.
 
@@ -278,11 +278,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Ingress Rules Adv Action
 
-`action` - (Optional) Log Action. Choice to choose logging or no logging This works together with option selected via NetworkPolicyRuleAction or any other action specified x-example: (No Selection in NetworkPolicyRuleAc... (`String`).
+`action` - (Optional) Log Action. Choice to choose logging or no logging This works together with option selected via NetworkPolicyRuleAction or any other action specified x-example: (No Selection in NetworkPolicyRuleAction + AdvancedAction as LOG) = LOG Only, (ALLOW/DENY in NetworkPolicyRuleAction + AdvancedAction as LOG) = Log and Allow/Deny, (ALLOW/DENY in NetworkPolicyRuleAction + NOLOG in AdvancedAction) = Allow/Deny with no log Don't sample the traffic hitting the rule Sample the traffic hitting the rule. Possible values are `NOLOG`, `LOG`. Defaults to `NOLOG` (`String`).
 
 <a id="nestedblock--ingress_rules--all_tcp_traffic"></a>
 
-### Ingress Rules All Tcp Traffic
+### Ingress Rules All TCP Traffic
 
 <a id="nestedblock--ingress_rules--all_traffic"></a>
 
@@ -290,7 +290,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ingress_rules--all_udp_traffic"></a>
 
-### Ingress Rules All Udp Traffic
+### Ingress Rules All UDP Traffic
 
 <a id="nestedblock--ingress_rules--any"></a>
 
@@ -308,13 +308,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ingress_rules--ip_prefix_set"></a>
 
-### Ingress Rules Ip Prefix Set
+### Ingress Rules IP Prefix Set
 
 `ref` - (Optional) Reference. A list of references to ip_prefix_set objects. See [Ref](#nestedblock--ingress_rules--ip_prefix_set--ref) below.
 
 <a id="nestedblock--ingress_rules--ip_prefix_set--ref"></a>
 
-### Ingress Rules Ip Prefix Set Ref
+### Ingress Rules IP Prefix Set Ref
 
 `kind` - (Optional) Kind. When a configuration object(e.g. virtual_host) refers to another(e.g route) then kind will hold the referred object's kind (e.g. 'route') (`String`).
 
@@ -362,19 +362,19 @@ In addition to all arguments above, the following attributes are exported:
 
 `port_ranges` - (Optional) List of Port Ranges. List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`List`).
 
-`protocol` - (Optional) Protocol. Protocol in IP packet to be used as match criteria Values are tcp, udp, and icmp (`String`).
+`protocol` - (Optional) Protocol. Protocol in IP packet to be used as match criteria Values are TCP, UDP, and ICMP (`String`).
 
 <a id="nestedblock--timeouts"></a>
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

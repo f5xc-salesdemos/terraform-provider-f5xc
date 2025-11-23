@@ -74,7 +74,7 @@ The following arguments are optional:
 
 `automatic_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Automatic Port](#automatic-port) below for details.
 
-`endpoint_selection` - (Optional) Endpoint Selection Policy. Policy for selection of endpoints from local site/remote site/both Consider both remote and local endpoints for load balancing LOCAL_ONLY: Consider only local endpoints f... (`String`).
+`endpoint_selection` - (Optional) Endpoint Selection Policy. Policy for selection of endpoints from local site/remote site/both Consider both remote and local endpoints for load balancing LOCAL_ONLY: Consider only local endpoints for load balancing Enable this policy to load balance ONLY among locally discovered endpoints Prefer the local endpoints for load balancing. If local endpoints are not present remote endpoints will be considered. Possible values are `DISTRIBUTED`, `LOCAL_ONLY`, `LOCAL_PREFERRED`. Defaults to `DISTRIBUTED` (`String`).
 
 > **Note:** One of the arguments from this list "health_check_port, same_as_endpoint_port" must be set.
 
@@ -84,13 +84,13 @@ The following arguments are optional:
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
-`lb_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Lb Port](#lb-port) below for details.
+`lb_port` - (Optional) Empty. This can be used for messages where no values are needed. See [LB Port](#lb-port) below for details.
 
-`loadbalancer_algorithm` - (Optional) Load Balancer Algorithm. Different load balancing algorithms supported When a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm to determine... (`String`).
+`loadbalancer_algorithm` - (Optional) Load Balancer Algorithm. Different load balancing algorithms supported When a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm to determine which host is selected. - ROUND_ROBIN: ROUND_ROBIN Policy in which each healthy/available upstream endpoint is selected in round robin order. - LEAST_REQUEST: LEAST_REQUEST Policy in which loadbalancer picks the upstream endpoint which has the fewest active requests - RING_HASH: RING_HASH Policy im... Possible values are `ROUND_ROBIN`, `LEAST_REQUEST`, `RING_HASH`, `RANDOM`, `LB_OVERRIDE`. Defaults to `ROUND_ROBIN` (`String`).
 
 > **Note:** One of the arguments from this list "no_tls, use_tls" must be set.
 
-`no_tls` - (Optional) Empty. This can be used for messages where no values are needed. See [No Tls](#no-tls) below for details.
+`no_tls` - (Optional) Empty. This can be used for messages where no values are needed. See [No TLS](#no-tls) below for details.
 
 `origin_servers` - (Optional) Origin Servers. List of origin servers in this pool. See [Origin Servers](#origin-servers) below for details.
 
@@ -102,7 +102,7 @@ The following arguments are optional:
 
 `upstream_conn_pool_reuse_type` - (Optional) Select upstream connection pool reuse state. Select upstream connection pool reuse state for every downstream connection. This configuration choice is for HTTP(S) LB only. See [Upstream Conn Pool Reuse Type](#upstream-conn-pool-reuse-type) below for details.
 
-`use_tls` - (Optional) TLS Parameters for Origin Servers. Upstream TLS Parameters. See [Use Tls](#use-tls) below for details.
+`use_tls` - (Optional) TLS Parameters for Origin Servers. Upstream TLS Parameters. See [Use TLS](#use-tls) below for details.
 
 ### Attributes Reference
 
@@ -116,9 +116,9 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Advanced Options
 
-`auto_http_config` - (Optional) Empty. This can be used for messages where no values are needed. See [Auto Http Config](#nestedblock--advanced_options--auto_http_config) below.
+`auto_http_config` - (Optional) Empty. This can be used for messages where no values are needed. See [Auto HTTP Config](#nestedblock--advanced_options--auto_http_config) below.
 
-`circuit_breaker` - (Optional) Circuit Breaker. CircuitBreaker provides a mechanism for watching failures in upstream connections or requests and if the failures reach a certain threshold, automatically fail subsequent requests .... See [Circuit Breaker](#nestedblock--advanced_options--circuit_breaker) below.
+`circuit_breaker` - (Optional) Circuit Breaker. CircuitBreaker provides a mechanism for watching failures in upstream connections or requests and if the failures reach a certain threshold, automatically fail subsequent requests which allows to apply back pressure on downstream quickly. See [Circuit Breaker](#nestedblock--advanced_options--circuit_breaker) below.
 
 `connection_timeout` - (Optional) Connection Timeout. The timeout for new network connections to endpoints in the cluster. This is specified in milliseconds. The default value is 2 seconds (`Number`).
 
@@ -126,7 +126,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `disable_circuit_breaker` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Circuit Breaker](#nestedblock--advanced_options--disable_circuit_breaker) below.
 
-`disable_lb_source_ip_persistance` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Lb Source Ip Persistance](#nestedblock--advanced_options--disable_lb_source_ip_persistance) below.
+`disable_lb_source_ip_persistance` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable LB Source IP Persistance](#nestedblock--advanced_options--disable_lb_source_ip_persistance) below.
 
 `disable_outlier_detection` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Outlier Detection](#nestedblock--advanced_options--disable_outlier_detection) below.
 
@@ -134,7 +134,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `disable_subsets` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Subsets](#nestedblock--advanced_options--disable_subsets) below.
 
-`enable_lb_source_ip_persistance` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Lb Source Ip Persistance](#nestedblock--advanced_options--enable_lb_source_ip_persistance) below.
+`enable_lb_source_ip_persistance` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable LB Source IP Persistance](#nestedblock--advanced_options--enable_lb_source_ip_persistance) below.
 
 `enable_subsets` - (Optional) Origin Pool Subset Options. Configure subset options for origin pool. See [Enable Subsets](#nestedblock--advanced_options--enable_subsets) below.
 
@@ -142,11 +142,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `http2_options` - (Optional) Http2 Protocol Options. Http2 Protocol options for upstream connections. See [Http2 Options](#nestedblock--advanced_options--http2_options) below.
 
-`http_idle_timeout` - (Optional) HTTP Idle Timeout. The idle timeout for upstream connection pool connections. The idle timeout is defined as the period in which there are no active requests (`Number`).
+`http_idle_timeout` - (Optional) HTTP Idle Timeout. The idle timeout for upstream connection pool connections. The idle timeout is defined as the period in which there are no active requests. When the idle timeout is reached the connection will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive. This is specified in milliseconds. The default value is 5 minutes (`Number`).
 
 `no_panic_threshold` - (Optional) Empty. This can be used for messages where no values are needed. See [No Panic Threshold](#nestedblock--advanced_options--no_panic_threshold) below.
 
-`outlier_detection` - (Optional) Outlier Detection. Outlier detection and ejection is the process of dynamically determining whether some number of hosts in an upstream cluster are performing unlike the others and removing them fr.... See [Outlier Detection](#nestedblock--advanced_options--outlier_detection) below.
+`outlier_detection` - (Optional) Outlier Detection. Outlier detection and ejection is the process of dynamically determining whether some number of hosts in an upstream cluster are performing unlike the others and removing them from the healthy load balancing set. Outlier detection is a form of passive health checking. Algorithm 1. A endpoint is determined to be an outlier (based on configured number of consecutive_5xx or consecutive_gateway_failures) . 2. If no endpoints have been ejected, loadbalancer will eject the host i... See [Outlier Detection](#nestedblock--advanced_options--outlier_detection) below.
 
 `panic_threshold` - (Optional) Panic threshold. x-example:'25' Configure a threshold (percentage of unhealthy endpoints) below which all endpoints will be considered for load balancing ignoring its health status (`Number`).
 
@@ -156,19 +156,19 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--advanced_options--auto_http_config"></a>
 
-### Advanced Options Auto Http Config
+### Advanced Options Auto HTTP Config
 
 <a id="nestedblock--advanced_options--circuit_breaker"></a>
 
 ### Advanced Options Circuit Breaker
 
-`connection_limit` - (Optional) Connection Limit. The maximum number of connections that loadbalancer will establish to all hosts in an upstream cluster. In practice this is only applicable to TCP and HTTP/1 (`Number`).
+`connection_limit` - (Optional) Connection Limit. The maximum number of connections that loadbalancer will establish to all hosts in an upstream cluster. In practice this is only applicable to TCP and HTTP/1.1 clusters since HTTP/2 uses a single connection to each host. Remove endpoint out of load balancing decision, if number of connections reach connection limit (`Number`).
 
-`max_requests` - (Optional) Maximum Request Count. The maximum number of requests that can be outstanding to all hosts in a cluster at any given time. In practice this is applicable to HTTP/2 clusters since HTTP/1 (`Number`).
+`max_requests` - (Optional) Maximum Request Count. The maximum number of requests that can be outstanding to all hosts in a cluster at any given time. In practice this is applicable to HTTP/2 clusters since HTTP/1.1 clusters are governed by the maximum connections (connection_limit). Remove endpoint out of load balancing decision, if requests exceed this count (`Number`).
 
-`pending_requests` - (Optional) Pending Requests. The maximum number of requests that will be queued while waiting for a ready connection pool connection (`Number`).
+`pending_requests` - (Optional) Pending Requests. The maximum number of requests that will be queued while waiting for a ready connection pool connection. Since HTTP/2 requests are sent over a single connection, this circuit breaker only comes into play as the initial connection is created, as requests will be multiplexed immediately afterwards. For HTTP/1.1, requests are added to the list of pending requests whenever there aren’t enough upstream connections available to immediately dispatch the request, so this circuit b.. (`Number`).
 
-`priority` - (Optional) Routing Priority. Priority routing for each request. Different connection pools are used based on the priority selected for the request (`String`).
+`priority` - (Optional) Routing Priority. Priority routing for each request. Different connection pools are used based on the priority selected for the request. Also, circuit-breaker configuration at destination cluster is chosen based on selected priority. Default routing mechanism High-Priority routing mechanism. Possible values are `DEFAULT`, `HIGH`. Defaults to `DEFAULT` (`String`).
 
 `retries` - (Optional) Retry Count. The maximum number of retries that can be outstanding to all hosts in a cluster at any given time. Remove endpoint out of load balancing decision, if retries for request exceed this count (`Number`).
 
@@ -182,7 +182,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--advanced_options--disable_lb_source_ip_persistance"></a>
 
-### Advanced Options Disable Lb Source Ip Persistance
+### Advanced Options Disable LB Source IP Persistance
 
 <a id="nestedblock--advanced_options--disable_outlier_detection"></a>
 
@@ -198,7 +198,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--advanced_options--enable_lb_source_ip_persistance"></a>
 
-### Advanced Options Enable Lb Source Ip Persistance
+### Advanced Options Enable LB Source IP Persistance
 
 <a id="nestedblock--advanced_options--enable_subsets"></a>
 
@@ -284,13 +284,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Advanced Options Outlier Detection
 
-`base_ejection_time` - (Optional) Base Ejection Time. The base time that a host is ejected for. The real time is equal to the base time multiplied by the number of times the host has been ejected (`Number`).
+`base_ejection_time` - (Optional) Base Ejection Time. The base time that a host is ejected for. The real time is equal to the base time multiplied by the number of times the host has been ejected. This causes hosts to get ejected for longer periods if they continue to fail. Defaults to 30000ms or 30s. Specified in milliseconds (`Number`).
 
-`consecutive_5xx` - (Optional) Consecutive 5xx Count. If an upstream endpoint returns some number of consecutive 5xx, it will be ejected (`Number`).
+`consecutive_5xx` - (Optional) Consecutive 5xx Count. If an upstream endpoint returns some number of consecutive 5xx, it will be ejected. Note that in this case a 5xx means an actual 5xx respond code, or an event that would cause the HTTP router to return one on the upstream’s behalf(reset, connection failure, etc.) consecutive_5xx indicates the number of consecutive 5xx responses required before a consecutive 5xx ejection occurs. Defaults to 5 (`Number`).
 
-`consecutive_gateway_failure` - (Optional) Consecutive Gateway Failure. If an upstream endpoint returns some number of consecutive “gateway errors” (502, 503 or 504 status code), it will be ejected (`Number`).
+`consecutive_gateway_failure` - (Optional) Consecutive Gateway Failure. If an upstream endpoint returns some number of consecutive “gateway errors” (502, 503 or 504 status code), it will be ejected. Note that this includes events that would cause the HTTP router to return one of these status codes on the upstream’s behalf (reset, connection failure, etc.). consecutive_gateway_failure indicates the number of consecutive gateway failures before a consecutive gateway failure ejection occurs. Defaults to 5 (`Number`).
 
-`interval` - (Optional) Interval. The time interval between ejection analysis sweeps. This can result in both new ejections as well as endpoints being returned to service. Defaults to 10000ms or 10s (`Number`).
+`interval` - (Optional) Interval. The time interval between ejection analysis sweeps. This can result in both new ejections as well as endpoints being returned to service. Defaults to 10000ms or 10s. Specified in milliseconds (`Number`).
 
 `max_ejection_percent` - (Optional) Max Ejection Percentage. The maximum % of an upstream cluster that can be ejected due to outlier detection. Defaults to 10% but will eject at least one host regardless of the value (`Number`).
 
@@ -318,11 +318,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--lb_port"></a>
 
-### Lb Port
+### LB Port
 
 <a id="nestedblock--no_tls"></a>
 
-### No Tls
+### No TLS
 
 <a id="nestedblock--origin_servers"></a>
 
@@ -338,15 +338,15 @@ In addition to all arguments above, the following attributes are exported:
 
 `labels` - (Optional) Origin Server Labels. Add Labels for this origin server, these labels can be used to form subset. See [Labels](#nestedblock--origin_servers--labels) below.
 
-`private_ip` - (Optional) IP address on given Sites. Specify origin server with private or public IP address and site information. See [Private Ip](#nestedblock--origin_servers--private_ip) below.
+`private_ip` - (Optional) IP address on given Sites. Specify origin server with private or public IP address and site information. See [Private IP](#nestedblock--origin_servers--private_ip) below.
 
 `private_name` - (Optional) DNS Name on given Sites. Specify origin server with private or public DNS name and site information. See [Private Name](#nestedblock--origin_servers--private_name) below.
 
-`public_ip` - (Optional) Public IP. Specify origin server with public IP address. See [Public Ip](#nestedblock--origin_servers--public_ip) below.
+`public_ip` - (Optional) Public IP. Specify origin server with public IP address. See [Public IP](#nestedblock--origin_servers--public_ip) below.
 
 `public_name` - (Optional) Public DNS Name. Specify origin server with public DNS name. See [Public Name](#nestedblock--origin_servers--public_name) below.
 
-`vn_private_ip` - (Optional) IP address Virtual Network. Specify origin server with IP on Virtual Network. See [Vn Private Ip](#nestedblock--origin_servers--vn_private_ip) below.
+`vn_private_ip` - (Optional) IP address Virtual Network. Specify origin server with IP on Virtual Network. See [Vn Private IP](#nestedblock--origin_servers--vn_private_ip) below.
 
 `vn_private_name` - (Optional) DNS Name on Virtual Network. Specify origin server with DNS name on Virtual Network. See [Vn Private Name](#nestedblock--origin_servers--vn_private_name) below.
 
@@ -434,9 +434,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `outside_network` - (Optional) Empty. This can be used for messages where no values are needed. See [Outside Network](#nestedblock--origin_servers--k8s_service--outside_network) below.
 
-`protocol` - (Optional) Protocol Type. Type of protocol - PROTOCOL_TCP: TCP - PROTOCOL_UDP: UDP. Possible values are `PROTOCOL_TCP`, `PROTOCOL_UDP` (`String`).
+`protocol` - (Optional) Protocol Type. Type of protocol - PROTOCOL_TCP: TCP - PROTOCOL_UDP: UDP. Possible values are `PROTOCOL_TCP`, `PROTOCOL_UDP`. Defaults to `PROTOCOL_TCP` (`String`).
 
-`service_name` - (Optional) Service Name. K8s service name of the origin server will be listed, including the namespace and cluster-id. For vK8s services, you need to enter a string with the format servicename (`String`).
+`service_name` - (Optional) Service Name. K8s service name of the origin server will be listed, including the namespace and cluster-id. For vK8s services, you need to enter a string with the format servicename.namespace:cluster-id. If the servicename is 'frontend', namespace is 'speedtest' and cluster-id is 'prod', then you will enter 'frontend.speedtest:prod'. Both namespace and cluster-id are optional (`String`).
 
 `site_locator` - (Optional) Site or Virtual Site. This message defines a reference to a site or virtual site object. See [Site Locator](#nestedblock--origin_servers--k8s_service--site_locator) below.
 
@@ -494,11 +494,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--origin_servers--private_ip"></a>
 
-### Origin Servers Private Ip
+### Origin Servers Private IP
 
 `inside_network` - (Optional) Empty. This can be used for messages where no values are needed. See [Inside Network](#nestedblock--origin_servers--private_ip--inside_network) below.
 
-`ip` - (Optional) IP. Private IPV4 address (`String`).
+`ip` - (Optional) IP. Private IPv4 address (`String`).
 
 `outside_network` - (Optional) Empty. This can be used for messages where no values are needed. See [Outside Network](#nestedblock--origin_servers--private_ip--outside_network) below.
 
@@ -510,15 +510,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--origin_servers--private_ip--inside_network"></a>
 
-### Origin Servers Private Ip Inside Network
+### Origin Servers Private IP Inside Network
 
 <a id="nestedblock--origin_servers--private_ip--outside_network"></a>
 
-### Origin Servers Private Ip Outside Network
+### Origin Servers Private IP Outside Network
 
 <a id="nestedblock--origin_servers--private_ip--segment"></a>
 
-### Origin Servers Private Ip Segment
+### Origin Servers Private IP Segment
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -528,7 +528,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--origin_servers--private_ip--site_locator"></a>
 
-### Origin Servers Private Ip Site Locator
+### Origin Servers Private IP Site Locator
 
 `site` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Site](#nestedblock--origin_servers--private_ip--site_locator--site) below.
 
@@ -536,15 +536,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--origin_servers--private_ip--site_locator--site"></a>
 
-### Origin Servers Private Ip Site Locator Site
+### Origin Servers Private IP Site Locator Site
 
 <a id="nestedblock--origin_servers--private_ip--site_locator--virtual_site"></a>
 
-### Origin Servers Private Ip Site Locator Virtual Site
+### Origin Servers Private IP Site Locator Virtual Site
 
 <a id="nestedblock--origin_servers--private_ip--snat_pool"></a>
 
-### Origin Servers Private Ip Snat Pool
+### Origin Servers Private IP Snat Pool
 
 `no_snat_pool` - (Optional) Empty. This can be used for messages where no values are needed. See [No Snat Pool](#nestedblock--origin_servers--private_ip--snat_pool--no_snat_pool) below.
 
@@ -552,11 +552,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--origin_servers--private_ip--snat_pool--no_snat_pool"></a>
 
-### Origin Servers Private Ip Snat Pool No Snat Pool
+### Origin Servers Private IP Snat Pool No Snat Pool
 
 <a id="nestedblock--origin_servers--private_ip--snat_pool--snat_pool"></a>
 
-### Origin Servers Private Ip Snat Pool Snat Pool
+### Origin Servers Private IP Snat Pool Snat Pool
 
 <a id="nestedblock--origin_servers--private_name"></a>
 
@@ -568,7 +568,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `outside_network` - (Optional) Empty. This can be used for messages where no values are needed. See [Outside Network](#nestedblock--origin_servers--private_name--outside_network) below.
 
-`refresh_interval` - (Optional) DNS Refresh Interval. Interval for DNS refresh in seconds. Max value is 7 days as per `https://datatracker.ietf.org/doc/html/rfc8767` (`Number`).
+`refresh_interval` - (Optional) DNS Refresh Interval. Interval for DNS refresh in seconds. Max value is 7 days as per `HTTPS://datatracker.ietf.org/doc/HTML/rfc8767` (`Number`).
 
 `segment` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Segment](#nestedblock--origin_servers--private_name--segment) below.
 
@@ -628,9 +628,9 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--origin_servers--public_ip"></a>
 
-### Origin Servers Public Ip
+### Origin Servers Public IP
 
-`ip` - (Optional) Public IPV4. Public IPV4 address (`String`).
+`ip` - (Optional) Public IPv4. Public IPv4 address (`String`).
 
 <a id="nestedblock--origin_servers--public_name"></a>
 
@@ -638,19 +638,19 @@ In addition to all arguments above, the following attributes are exported:
 
 `dns_name` - (Optional) DNS Name. DNS Name (`String`).
 
-`refresh_interval` - (Optional) DNS Refresh Interval. Interval for DNS refresh in seconds. Max value is 7 days as per `https://datatracker.ietf.org/doc/html/rfc8767` (`Number`).
+`refresh_interval` - (Optional) DNS Refresh Interval. Interval for DNS refresh in seconds. Max value is 7 days as per `HTTPS://datatracker.ietf.org/doc/HTML/rfc8767` (`Number`).
 
 <a id="nestedblock--origin_servers--vn_private_ip"></a>
 
-### Origin Servers Vn Private Ip
+### Origin Servers Vn Private IP
 
-`ip` - (Optional) IPV4. IPV4 address (`String`).
+`ip` - (Optional) IPv4. IPv4 address (`String`).
 
 `virtual_network` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Virtual Network](#nestedblock--origin_servers--vn_private_ip--virtual_network) below.
 
 <a id="nestedblock--origin_servers--vn_private_ip--virtual_network"></a>
 
-### Origin Servers Vn Private Ip Virtual Network
+### Origin Servers Vn Private IP Virtual Network
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -684,13 +684,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--upstream_conn_pool_reuse_type"></a>
 
@@ -710,7 +710,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--use_tls"></a>
 
-### Use Tls
+### Use TLS
 
 `default_session_key_caching` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Session Key Caching](#nestedblock--use_tls--default_session_key_caching) below.
 
@@ -720,47 +720,47 @@ In addition to all arguments above, the following attributes are exported:
 
 `max_session_keys` - (Optional) Max Session Keys Cached. x-example:'25' Number of session keys that are cached (`Number`).
 
-`no_mtls` - (Optional) Empty. This can be used for messages where no values are needed. See [No Mtls](#nestedblock--use_tls--no_mtls) below.
+`no_mtls` - (Optional) Empty. This can be used for messages where no values are needed. See [No mTLS](#nestedblock--use_tls--no_mtls) below.
 
 `skip_server_verification` - (Optional) Empty. This can be used for messages where no values are needed. See [Skip Server Verification](#nestedblock--use_tls--skip_server_verification) below.
 
 `sni` - (Optional) SNI Value. SNI value to be used (`String`).
 
-`tls_config` - (Optional) TLS Config. This defines various options to configure TLS configuration parameters. See [Tls Config](#nestedblock--use_tls--tls_config) below.
+`tls_config` - (Optional) TLS Config. This defines various options to configure TLS configuration parameters. See [TLS Config](#nestedblock--use_tls--tls_config) below.
 
 `use_host_header_as_sni` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Host Header As Sni](#nestedblock--use_tls--use_host_header_as_sni) below.
 
-`use_mtls` - (Optional) mTLS Certificate. mTLS Client Certificate. See [Use Mtls](#nestedblock--use_tls--use_mtls) below.
+`use_mtls` - (Optional) mTLS Certificate. mTLS Client Certificate. See [Use mTLS](#nestedblock--use_tls--use_mtls) below.
 
-`use_mtls_obj` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Use Mtls Obj](#nestedblock--use_tls--use_mtls_obj) below.
+`use_mtls_obj` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Use mTLS Obj](#nestedblock--use_tls--use_mtls_obj) below.
 
 `use_server_verification` - (Optional) TLS Validation Context for Origin Servers. Upstream TLS Validation Context. See [Use Server Verification](#nestedblock--use_tls--use_server_verification) below.
 
-`volterra_trusted_ca` - (Optional) Empty. This can be used for messages where no values are needed. See [Volterra Trusted Ca](#nestedblock--use_tls--volterra_trusted_ca) below.
+`volterra_trusted_ca` - (Optional) Empty. This can be used for messages where no values are needed. See [Volterra Trusted CA](#nestedblock--use_tls--volterra_trusted_ca) below.
 
 <a id="nestedblock--use_tls--default_session_key_caching"></a>
 
-### Use Tls Default Session Key Caching
+### Use TLS Default Session Key Caching
 
 <a id="nestedblock--use_tls--disable_session_key_caching"></a>
 
-### Use Tls Disable Session Key Caching
+### Use TLS Disable Session Key Caching
 
 <a id="nestedblock--use_tls--disable_sni"></a>
 
-### Use Tls Disable Sni
+### Use TLS Disable Sni
 
 <a id="nestedblock--use_tls--no_mtls"></a>
 
-### Use Tls No Mtls
+### Use TLS No mTLS
 
 <a id="nestedblock--use_tls--skip_server_verification"></a>
 
-### Use Tls Skip Server Verification
+### Use TLS Skip Server Verification
 
 <a id="nestedblock--use_tls--tls_config"></a>
 
-### Use Tls Tls Config
+### Use TLS TLS Config
 
 `custom_security` - (Optional) Custom Ciphers. This defines TLS protocol config including min/max versions and allowed ciphers. See [Custom Security](#nestedblock--use_tls--tls_config--custom_security) below.
 
@@ -772,39 +772,39 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--use_tls--tls_config--custom_security"></a>
 
-### Use Tls Tls Config Custom Security
+### Use TLS TLS Config Custom Security
 
 `cipher_suites` - (Optional) Cipher Suites. The TLS listener will only support the specified cipher list (`List`).
 
-`max_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3` (`String`).
+`max_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3`. Defaults to `TLS_AUTO` (`String`).
 
-`min_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3` (`String`).
+`min_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3`. Defaults to `TLS_AUTO` (`String`).
 
 <a id="nestedblock--use_tls--tls_config--default_security"></a>
 
-### Use Tls Tls Config Default Security
+### Use TLS TLS Config Default Security
 
 <a id="nestedblock--use_tls--tls_config--low_security"></a>
 
-### Use Tls Tls Config Low Security
+### Use TLS TLS Config Low Security
 
 <a id="nestedblock--use_tls--tls_config--medium_security"></a>
 
-### Use Tls Tls Config Medium Security
+### Use TLS TLS Config Medium Security
 
 <a id="nestedblock--use_tls--use_host_header_as_sni"></a>
 
-### Use Tls Use Host Header As Sni
+### Use TLS Use Host Header As Sni
 
 <a id="nestedblock--use_tls--use_mtls"></a>
 
-### Use Tls Use Mtls
+### Use TLS Use mTLS
 
-`tls_certificates` - (Optional) mTLS Client Certificate. mTLS Client Certificate. See [Tls Certificates](#nestedblock--use_tls--use_mtls--tls_certificates) below.
+`tls_certificates` - (Optional) mTLS Client Certificate. mTLS Client Certificate. See [TLS Certificates](#nestedblock--use_tls--use_mtls--tls_certificates) below.
 
 <a id="nestedblock--use_tls--use_mtls--tls_certificates"></a>
 
-### Use Tls Use Mtls Tls Certificates
+### Use TLS Use mTLS TLS Certificates
 
 `certificate_url` - (Optional) Certificate. TLS certificate. Certificate or certificate chain in PEM format including the PEM headers (`String`).
 
@@ -812,7 +812,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `description` - (Optional) Description. Description for the certificate (`String`).
 
-`disable_ocsp_stapling` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Ocsp Stapling](#nestedblock--use_tls--use_mtls--tls_certificates--disable_ocsp_stapling) below.
+`disable_ocsp_stapling` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable OCSP Stapling](#nestedblock--use_tls--use_mtls--tls_certificates--disable_ocsp_stapling) below.
 
 `private_key` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Private Key](#nestedblock--use_tls--use_mtls--tls_certificates--private_key) below.
 
@@ -820,23 +820,23 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--use_tls--use_mtls--tls_certificates--custom_hash_algorithms"></a>
 
-### Use Tls Use Mtls Tls Certificates Custom Hash Algorithms
+### Use TLS Use mTLS TLS Certificates Custom Hash Algorithms
 
 <a id="nestedblock--use_tls--use_mtls--tls_certificates--disable_ocsp_stapling"></a>
 
-### Use Tls Use Mtls Tls Certificates Disable Ocsp Stapling
+### Use TLS Use mTLS TLS Certificates Disable OCSP Stapling
 
 <a id="nestedblock--use_tls--use_mtls--tls_certificates--private_key"></a>
 
-### Use Tls Use Mtls Tls Certificates Private Key
+### Use TLS Use mTLS TLS Certificates Private Key
 
 <a id="nestedblock--use_tls--use_mtls--tls_certificates--use_system_defaults"></a>
 
-### Use Tls Use Mtls Tls Certificates Use System Defaults
+### Use TLS Use mTLS TLS Certificates Use System Defaults
 
 <a id="nestedblock--use_tls--use_mtls_obj"></a>
 
-### Use Tls Use Mtls Obj
+### Use TLS Use mTLS Obj
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -846,15 +846,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--use_tls--use_server_verification"></a>
 
-### Use Tls Use Server Verification
+### Use TLS Use Server Verification
 
-`trusted_ca` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Trusted Ca](#nestedblock--use_tls--use_server_verification--trusted_ca) below.
+`trusted_ca` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Trusted CA](#nestedblock--use_tls--use_server_verification--trusted_ca) below.
 
 `trusted_ca_url` - (Optional) Inline Root CA Certificate (legacy). Upload a Root CA Certificate specifically for this Origin Pool for verification of server's certificate (`String`).
 
 <a id="nestedblock--use_tls--use_server_verification--trusted_ca"></a>
 
-### Use Tls Use Server Verification Trusted Ca
+### Use TLS Use Server Verification Trusted CA
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -864,7 +864,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--use_tls--volterra_trusted_ca"></a>
 
-### Use Tls Volterra Trusted Ca
+### Use TLS Volterra Trusted CA
 
 ## Import
 

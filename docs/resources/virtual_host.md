@@ -58,9 +58,9 @@ The following arguments are required:
 
 The following arguments are optional:
 
-`add_location` - (Optional) Add Location. x-example: true Appends header x-volterra-location = <re-site-name> in responses. This configuration is ignored on CE sites (`Bool`).
+`add_location` - (Optional) Add Location. x-example: true Appends header x-volterra-location = <RE-site-name> in responses. This configuration is ignored on CE sites (`Bool`).
 
-`advertise_policies` - (Optional) Advertise Policies. Advertise Policy allows you to define networks or sites where you want a VIP for this virtual host to be advertised. See [Advertise Policies](#advertise-policies) below for details.
+`advertise_policies` - (Optional) Advertise Policies. Advertise Policy allows you to define networks or sites where you want a VIP for this virtual host to be advertised. Each Policy rule can have different parameters, like TLS configuration, ports, optionally IP address to be used for VIP. If advertise policy is not specified then no VIP is assigned for this virtual host. See [Advertise Policies](#advertise-policies) below for details.
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
@@ -72,23 +72,23 @@ The following arguments are optional:
 
 `authentication` - (Optional) Authentication Details. Authentication related information. This allows to configure the URL to redirect after the authentication Authentication Object Reference, configuration of cookie params etc. See [Authentication](#authentication) below for details.
 
-`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. See [Buffer Policy](#buffer-policy) below for details.
+`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. We can specify the maximum buffer size and buffer interval with this config. Buffering can be enabled and disabled at VirtualHost and Route levels Route level buffer configuration takes precedence. See [Buffer Policy](#buffer-policy) below for details.
 
 > **Note:** One of the arguments from this list "captcha_challenge, js_challenge, no_challenge" must be set.
 
-`captcha_challenge` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. See [Captcha Challenge](#captcha-challenge) below for details.
+`captcha_challenge` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. With this feature enabled, only clients that pass the captcha challenge will be allowed to complete the HTTP request. When loadbalancer is configured to do Captcha Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have captcha challenge embedded in it. Client will be allowed to make the request only if the cap... See [Captcha Challenge](#captcha-challenge) below for details.
 
 `coalescing_options` - (Optional) TLS Coalescing Options. TLS connection coalescing configuration (not compatible with mTLS). See [Coalescing Options](#coalescing-options) below for details.
 
-`compression_params` - (Optional) Compression Parameters. Enables loadbalancer to compress dispatched data from an upstream service upon client request. See [Compression Params](#compression-params) below for details.
+`compression_params` - (Optional) Compression Parameters. Enables loadbalancer to compress dispatched data from an upstream service upon client request. The content is compressed and then sent to the client with the appropriate headers if either response and request allow. Only GZIP compression is supported. By default compression will be skipped when: A request does NOT contain accept-encoding header. A request includes accept-encoding header, but it does not contain “gzip” or “*”. A request includes accept-encoding ... See [Compression Params](#compression-params) below for details.
 
-`connection_idle_timeout` - (Optional) Connection Idle Timeout. The idle timeout for downstream connections. The idle timeout is defined as the period in which there are no active requests (`Number`).
+`connection_idle_timeout` - (Optional) Connection Idle Timeout. The idle timeout for downstream connections. The idle timeout is defined as the period in which there are no active requests. When the idle timeout is reached the connection will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive. This is specified in milliseconds. The default value is 2 minutes (`Number`).
 
-`cors_policy` - (Optional) CORS Policy. Cross-Origin Resource Sharing requests configuration specified at Virtual-host or Route level. Route level configuration takes precedence. See [Cors Policy](#cors-policy) below for details.
+`cors_policy` - (Optional) CORS Policy. Cross-Origin Resource Sharing requests configuration specified at Virtual-host or Route level. Route level configuration takes precedence. An example of an Cross origin HTTP request GET /resources/public-data/ HTTP/1.1 Host: bar.other User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3pre) Gecko/20081130 Minefield/3.1b3pre Accept: text/HTML,application/xhtml+XML,application/XML;q=0.9,*/*;q=0.8 Accept-Language: en-us,en;q=0.5 Accept-Encoding: gzip,deflate... See [CORS Policy](#cors-policy) below for details.
 
-`csrf_policy` - (Optional) CSRF Policy. To mitigate CSRF attack , the policy checks where a request is coming from to determine if the request's origin is the same as its detination. See [Csrf Policy](#csrf-policy) below for details.
+`csrf_policy` - (Optional) CSRF Policy. To mitigate CSRF attack , the policy checks where a request is coming from to determine if the request's origin is the same as its detination.The policy relies on two pieces of information used in determining if a request originated from the same host. 1. The origin that caused the user agent to issue the request (source origin). 2. The origin that the request is going to (target origin). When the policy evaluating a request, it ensures both pieces of information are present and ... See [CSRF Policy](#csrf-policy) below for details.
 
-`custom_errors` - (Optional) Custom Error Responses. Map of integer error codes as keys and string values that can be used to provide custom http pages for each error code. See [Custom Errors](#custom-errors) below for details.
+`custom_errors` - (Optional) Custom Error Responses. Map of integer error codes as keys and string values that can be used to provide custom HTTP pages for each error code. Key of the map can be either response code class or HTTP Error code. Response code classes for key is configured as follows 3 -- for 3xx response code class 4 -- for 4xx response code class 5 -- for 5xx response code class Value is the uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 ... See [Custom Errors](#custom-errors) below for details.
 
 `default_header` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Header](#default-header) below for details.
 
@@ -98,27 +98,27 @@ The following arguments are optional:
 
 `disable_default_error_pages` - (Optional) Disable default error pages. An option to specify whether to disable using default F5XC error pages (`Bool`).
 
-`disable_dns_resolve` - (Optional) Disable DNS resolution. Disable DNS resolution for domains specified in the virtual host When the virtual host is configured as Dynamive Resolve Proxy (DRP), disable DNS resolution for domains conf... (`Bool`).
+`disable_dns_resolve` - (Optional) Disable DNS resolution. Disable DNS resolution for domains specified in the virtual host When the virtual host is configured as Dynamive Resolve Proxy (DRP), disable DNS resolution for domains configured. This configuration is suitable for HTTP CONNECT proxy (`Bool`).
 
 > **Note:** One of the arguments from this list "disable_path_normalize, enable_path_normalize" must be set.
 
 `disable_path_normalize` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Path Normalize](#disable-path-normalize) below for details.
 
-`domains` - (Optional) Domains. A list of Domains (host/authority header) that will be matched to this Virtual Host. Wildcard hosts are supported in the suffix or prefix form Supported Domains and search order: 1 (`List`).
+`domains` - (Optional) Domains. A list of Domains (host/authority header) that will be matched to this Virtual Host. Wildcard hosts are supported in the suffix or prefix form Supported Domains and search order: 1. Exact Domain names: `www.foo.com.` 2. Domains starting with a Wildcard: *.foo.com. Not supported Domains: - Just a Wildcard: * - A Wildcard and TLD with no root Domain: *.com. - A Wildcard not matching a whole DNS label. e.g. *.foo.com and *.bar.foo.com are valid Wildcards however *bar.foo.com, *-bar.foo.co.. (`List`).
 
-`dynamic_reverse_proxy` - (Optional) Dynamic Reverse Proxy Type. In this mode of proxy, virtual host will resolve the destination endpoint dynamically. The dynamic resolution is done using a predefined field in the request. See [Dynamic Reverse Proxy](#dynamic-reverse-proxy) below for details.
+`dynamic_reverse_proxy` - (Optional) Dynamic Reverse Proxy Type. In this mode of proxy, virtual host will resolve the destination endpoint dynamically. The dynamic resolution is done using a predefined field in the request. This predefined field depends on the ProxyType configured on the Virtual Host. For HTTP traffic, i.e. with ProxyType as HTTP_PROXY or HTTPS_PROXY, virtual host will use the 'HOST' HTTP header from the request and perform DNS resolution to select destination endpoint. For TCP traffic with SNI, (If the ProxyTyp... See [Dynamic Reverse Proxy](#dynamic-reverse-proxy) below for details.
 
 `enable_path_normalize` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Path Normalize](#enable-path-normalize) below for details.
 
-`http_protocol_options` - (Optional) HTTP Protocol Configuration Options. HTTP protocol configuration options for downstream connections. See [Http Protocol Options](#http-protocol-options) below for details.
+`http_protocol_options` - (Optional) HTTP Protocol Configuration Options. HTTP protocol configuration options for downstream connections. See [HTTP Protocol Options](#http-protocol-options) below for details.
 
-`idle_timeout` - (Optional) Idle timeout (in milliseconds). Idle timeout is the amount of time that the loadbalancer will allow a stream to exist with no upstream or downstream activity (`Number`).
+`idle_timeout` - (Optional) Idle timeout (in milliseconds). Idle timeout is the amount of time that the loadbalancer will allow a stream to exist with no upstream or downstream activity. Idle timeout and Proxy Type: HTTP_PROXY, HTTPS_PROXY: Idle timer is started when the first byte is received on the connection. Each time an encode/decode event for headers or data is processed for the stream, the timer will be reset. If the timeout fires, the stream is terminated with a 504 (Gateway Timeout) error code if no upstream RE.. (`Number`).
 
-`js_challenge` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. See [Js Challenge](#js-challenge) below for details.
+`js_challenge` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. With this feature enabled, only clients that are capable of executing Javascript(mostly browsers) will be allowed to complete the HTTP request. When loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have Javascript embedded in it. Loadbalancer chooses a set o... See [Js Challenge](#js-challenge) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
-`max_request_header_size` - (Optional) Maximum Request Header Size (KiB). The maximum request header size in KiB for incoming connections. If un-configured, the default max request headers allowed is 60 KiB (`Number`).
+`max_request_header_size` - (Optional) Maximum Request Header Size (KiB). The maximum request header size in KiB for incoming connections. If un-configured, the default max request headers allowed is 60 KiB. Requests that exceed this limit will receive a 431 response. The max configurable limit is 96 KiB, based on current implementation constraints. Note: a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective 'maximu.. (`Number`).
 
 `no_authentication` - (Optional) Empty. This can be used for messages where no values are needed. See [No Authentication](#no-authentication) below for details.
 
@@ -128,11 +128,11 @@ The following arguments are optional:
 
 `pass_through` - (Optional) Empty. This can be used for messages where no values are needed. See [Pass Through](#pass-through) below for details.
 
-`proxy` - (Optional) Type of Proxy. ProxyType tells the type of proxy to install for the virtual host (`String`).
+`proxy` - (Optional) Type of Proxy. ProxyType tells the type of proxy to install for the virtual host. Only the following combination of VirtualHosts within same AdvertisePolicy is permitted (None of them should have '*' in domains when used with other VirtualHosts in same AdvertisePolicy) 1. Multiple TCP_PROXY_WITH_SNI and multiple HTTPS_PROXY 2. Multiple HTTP_PROXY 3. Multiple HTTPS_PROXY 4. Multiple TCP_PROXY_WITH_SNI HTTPS_PROXY without TLS parameters is not permitted HTTP_PROXY/HTTPS_PROXY/TCP_PROXY_WITH_SNI... Possible values are `UDP_PROXY`, `SMA_PROXY`, `DNS_PROXY`, `ZTNA_PROXY`, `UZTNA_PROXY`. Defaults to `HTTP_PROXY` (`String`).
 
 `rate_limiter_allowed_prefixes` - (Optional) Rate Limiter Allowed Prefixes. References to ip_prefix_set objects. Requests from source IP addresses that are covered by one of the allowed IP Prefixes are not subjected to rate limiting. See [Rate Limiter Allowed Prefixes](#rate-limiter-allowed-prefixes) below for details.
 
-`request_cookies_to_add` - (Optional) Add Cookies in Cookie Header. Cookies are key-value pairs to be added to HTTP request being routed towards upstream. See [Request Cookies To Add](#request-cookies-to-add) below for details.
+`request_cookies_to_add` - (Optional) Add Cookies in Cookie Header. Cookies are key-value pairs to be added to HTTP request being routed towards upstream. Cookies specified at this level are applied after cookies from matched Route are applied. See [Request Cookies To Add](#request-cookies-to-add) below for details.
 
 `request_cookies_to_remove` - (Optional) Remove Cookies from Cookie Header. List of keys of Cookies to be removed from the HTTP request being sent towards upstream (`List`).
 
@@ -140,7 +140,7 @@ The following arguments are optional:
 
 `request_headers_to_remove` - (Optional) Remove Request Headers. List of keys of Headers to be removed from the HTTP request being sent towards upstream (`List`).
 
-`response_cookies_to_add` - (Optional) Add Set-Cookie Headers. Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream. See [Response Cookies To Add](#response-cookies-to-add) below for details.
+`response_cookies_to_add` - (Optional) Add Set-Cookie Headers. Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream. Cookies specified at this level are applied after cookies from matched Route are applied. See [Response Cookies To Add](#response-cookies-to-add) below for details.
 
 `response_cookies_to_remove` - (Optional) Remove Cookies from Set-Cookie Headers. List of name of Cookies to be removed from the HTTP response being sent towards downstream. Entire set-cookie header will be removed (`List`).
 
@@ -150,25 +150,25 @@ The following arguments are optional:
 
 `retry_policy` - (Optional) Retry Policy. Retry policy configuration for route destination. See [Retry Policy](#retry-policy) below for details.
 
-`routes` - (Optional) Routes. The list of routes that will be matched, in order, for incoming requests. The first route that matches will be used. Currently route object is redundant in case of TCP proxy but required. See [Routes](#routes) below for details.
+`routes` - (Optional) Routes. The list of routes that will be matched, in order, for incoming requests. The first route that matches will be used. Currently route object is redundant in case of TCP proxy but required. For TCP_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY VirtualHosts, the route object only specifies the cluster/weighted-cluster as route destination without any match condition. In other words, match condition in route object is ignored for TCP_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY VirtualHosts. Routes used for T... See [Routes](#routes) below for details.
 
 `sensitive_data_policy` - (Optional) Sensitive Data Discovery. References to sensitive_data_policy objects. See [Sensitive Data Policy](#sensitive-data-policy) below for details.
 
 `server_name` - (Optional) Server Name. Specifies the value to be used for Server header inserted in responses. This will overwrite existing values if any for Server Header (`String`).
 
-`slow_ddos_mitigation` - (Optional) Slow DDoS Mitigation. 'Slow and low' attacks tie up server resources, leaving none available for servicing requests from actual users. See [Slow Ddos Mitigation](#slow-ddos-mitigation) below for details.
+`slow_ddos_mitigation` - (Optional) Slow DDOS Mitigation. 'Slow and low' attacks tie up server resources, leaving none available for servicing requests from actual users. See [Slow DDOS Mitigation](#slow-ddos-mitigation) below for details.
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
 > **Note:** One of the arguments from this list "tls_cert_params, tls_parameters" must be set.
 
-`tls_cert_params` - (Optional) Certificate Parameters. Certificate Parameters for authentication, TLS ciphers, and trust store. See [Tls Cert Params](#tls-cert-params) below for details.
+`tls_cert_params` - (Optional) Certificate Parameters. Certificate Parameters for authentication, TLS ciphers, and trust store. See [TLS Cert Params](#tls-cert-params) below for details.
 
-`tls_parameters` - (Optional) Downstream TLS Parameters. TLS configuration for downstream connections. See [Tls Parameters](#tls-parameters) below for details.
+`tls_parameters` - (Optional) Downstream TLS Parameters. TLS configuration for downstream connections. See [TLS Parameters](#tls-parameters) below for details.
 
 `user_identification` - (Optional) User Identification Policy. A reference to user_identification object. The rules in the user_identification object are evaluated to determine the user identifier to be rate limited. See [User Identification](#user-identification) below for details.
 
-`waf_type` - (Optional) WAF Instance. WAF instance will be pointing to an app_firewall object. See [Waf Type](#waf-type) below for details.
+`waf_type` - (Optional) WAF Instance. WAF instance will be pointing to an app_firewall object. See [WAF Type](#waf-type) below for details.
 
 ### Attributes Reference
 
@@ -202,7 +202,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `redirect_dynamic` - (Optional) Empty. This can be used for messages where no values are needed. See [Redirect Dynamic](#nestedblock--authentication--redirect_dynamic) below.
 
-`redirect_url` - (Optional) Configure Redirect URL. user can provide a url for e.g `https://abc.xyz.com` where user gets redirected. This URL configured here must match with the redirect URL configured with the OIDC provider (`String`).
+`redirect_url` - (Optional) Configure Redirect URL. user can provide a URL for e.g `HTTPS://abc.xyz.com` where user gets redirected. This URL configured here must match with the redirect URL configured with the OIDC provider (`String`).
 
 `use_auth_object_config` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Auth Object Config](#nestedblock--authentication--use_auth_object_config) below.
 
@@ -224,19 +224,19 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Authentication Cookie Params
 
-`auth_hmac` - (Optional) HMAC Key Pair. HMAC primary and secondary keys to be used for hashing the Cookie. Each key also have an associated expiry timestamp, beyond which key is invalid. See [Auth Hmac](#nestedblock--authentication--cookie_params--auth_hmac) below.
+`auth_hmac` - (Optional) HMAC Key Pair. HMAC primary and secondary keys to be used for hashing the Cookie. Each key also have an associated expiry timestamp, beyond which key is invalid. See [Auth HMAC](#nestedblock--authentication--cookie_params--auth_hmac) below.
 
-`cookie_expiry` - (Optional) Cookie Expiry duration. specifies in seconds max duration of the allocated cookie. This maps to “Max-Age” attribute in the session cookie (`Number`).
+`cookie_expiry` - (Optional) Cookie Expiry duration. specifies in seconds max duration of the allocated cookie. This maps to “Max-Age” attribute in the session cookie. This will act as an expiry duration on the client side after which client will not be setting the cookie as part of the request. Default cookie expiry is 3600 seconds (`Number`).
 
-`cookie_refresh_interval` - (Optional) Cookie Refresh Interval. Specifies in seconds refresh interval for session cookie. This is used to keep the active user active and reduce re-login (`Number`).
+`cookie_refresh_interval` - (Optional) Cookie Refresh Interval. Specifies in seconds refresh interval for session cookie. This is used to keep the active user active and reduce RE-login. When an incoming cookie's session expiry is still valid, and time to expire falls behind this interval, RE-issue a cookie with new expiry and with the same original session expiry. Default refresh interval is 3000 seconds (`Number`).
 
-`kms_key_hmac` - (Optional) KMS Key Reference. Reference to KMS Key Object. See [Kms Key Hmac](#nestedblock--authentication--cookie_params--kms_key_hmac) below.
+`kms_key_hmac` - (Optional) KMS Key Reference. Reference to KMS Key Object. See [Kms Key HMAC](#nestedblock--authentication--cookie_params--kms_key_hmac) below.
 
 `session_expiry` - (Optional) Session Expiry duration. specifies in seconds max lifetime of an authenticated session after which the user will be forced to login again. Default session expiry is 86400 seconds(24 hours) (`Number`).
 
 <a id="nestedblock--authentication--cookie_params--auth_hmac"></a>
 
-### Authentication Cookie Params Auth Hmac
+### Authentication Cookie Params Auth HMAC
 
 `prim_key` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Prim Key](#nestedblock--authentication--cookie_params--auth_hmac--prim_key) below.
 
@@ -248,15 +248,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--authentication--cookie_params--auth_hmac--prim_key"></a>
 
-### Authentication Cookie Params Auth Hmac Prim Key
+### Authentication Cookie Params Auth HMAC Prim Key
 
 <a id="nestedblock--authentication--cookie_params--auth_hmac--sec_key"></a>
 
-### Authentication Cookie Params Auth Hmac Sec Key
+### Authentication Cookie Params Auth HMAC Sec Key
 
 <a id="nestedblock--authentication--cookie_params--kms_key_hmac"></a>
 
-### Authentication Cookie Params Kms Key Hmac
+### Authentication Cookie Params Kms Key HMAC
 
 <a id="nestedblock--authentication--redirect_dynamic"></a>
 
@@ -280,7 +280,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `cookie_expiry` - (Optional) Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge (`Number`).
 
-`custom_page` - (Optional) Custom message for Captcha Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom message for Captcha Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Please Wait.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Please Wait </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 <a id="nestedblock--coalescing_options"></a>
 
@@ -304,15 +304,15 @@ In addition to all arguments above, the following attributes are exported:
 
 `content_length` - (Optional) Content Length. Minimum response length, in bytes, which will trigger compression. The default value is 30 (`Number`).
 
-`content_type` - (Optional) Content Type. Set of strings that allows specifying which mime-types yield compression When this field is not defined, compression will be applied to the following mime-types: 'application/javascri... (`List`).
+`content_type` - (Optional) Content Type. Set of strings that allows specifying which mime-types yield compression When this field is not defined, compression will be applied to the following mime-types: 'application/javascript' 'application/JSON', 'application/xhtml+XML' 'image/svg+XML' 'text/CSS' 'text/HTML' 'text/plain' 'text/XML' (`List`).
 
-`disable_on_etag_header` - (Optional) Disable On Etag Header. If true, disables compression when the response contains an etag header (`Bool`).
+`disable_on_etag_header` - (Optional) Disable On Etag Header. If true, disables compression when the response contains an etag header. When it is false, weak etags will be preserved and the ones that require strong validation will be removed (`Bool`).
 
 `remove_accept_encoding_header` - (Optional) Remove Accept-Encoding Header. If true, removes accept-encoding from the request headers before dispatching it to the upstream so that responses do not get compressed before reaching the filter (`Bool`).
 
 <a id="nestedblock--cors_policy"></a>
 
-### Cors Policy
+### CORS Policy
 
 `allow_credentials` - (Optional) Allow Credentials. Specifies whether the resource allows credentials (`Bool`).
 
@@ -324,15 +324,15 @@ In addition to all arguments above, the following attributes are exported:
 
 `allow_origin_regex` - (Optional) Allow Origin Regex. Specifies regex patterns that match allowed origins. An origin is allowed if either allow_origin or allow_origin_regex match (`List`).
 
-`disabled` - (Optional) Disabled. Disable the CorsPolicy for a particular route. This is useful when virtual-host has CorsPolicy, but we need to disable it on a specific route (`Bool`).
+`disabled` - (Optional) Disabled. Disable the CorsPolicy for a particular route. This is useful when virtual-host has CorsPolicy, but we need to disable it on a specific route. The value of this field is ignored for virtual-host (`Bool`).
 
 `expose_headers` - (Optional) Expose Headers. Specifies the content for the access-control-expose-headers header (`String`).
 
-`maximum_age` - (Optional) Maximum Age. Specifies the content for the access-control-max-age header in seconds. This indicates the maximum number of seconds the results can be cached A value of -1 will disable caching (`Number`).
+`maximum_age` - (Optional) Maximum Age. Specifies the content for the access-control-max-age header in seconds. This indicates the maximum number of seconds the results can be cached A value of -1 will disable caching. Maximum permitted value is 86400 seconds (24 hours) (`Number`).
 
 <a id="nestedblock--csrf_policy"></a>
 
-### Csrf Policy
+### CSRF Policy
 
 `all_load_balancer_domains` - (Optional) Empty. This can be used for messages where no values are needed. See [All Load Balancer Domains](#nestedblock--csrf_policy--all_load_balancer_domains) below.
 
@@ -342,17 +342,17 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--csrf_policy--all_load_balancer_domains"></a>
 
-### Csrf Policy All Load Balancer Domains
+### CSRF Policy All Load Balancer Domains
 
 <a id="nestedblock--csrf_policy--custom_domain_list"></a>
 
-### Csrf Policy Custom Domain List
+### CSRF Policy Custom Domain List
 
 `domains` - (Optional) Domain names. A list of domain names that will be matched to loadbalancer. These domains are not used for SNI match. Wildcard names are supported in the suffix or prefix form (`List`).
 
 <a id="nestedblock--csrf_policy--disabled"></a>
 
-### Csrf Policy Disabled
+### CSRF Policy Disabled
 
 <a id="nestedblock--custom_errors"></a>
 
@@ -376,11 +376,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `connection_timeout` - (Optional) Connection Timeout. The timeout for new network connections to upstream server. This is specified in milliseconds. The default value is 2000 (2 seconds) (`Number`).
 
-`resolution_network` - (Optional) Resolution Network. Reference to virtual network where the endpoint is resolved. Reference is valid only when the network type is VIRTUAL_NETWORK_PER_SITE or VIRTUAL_NETWORK_GLOBAL. See [Resolution Network](#nestedblock--dynamic_reverse_proxy--resolution_network) below.
+`resolution_network` - (Optional) Resolution Network. Reference to virtual network where the endpoint is resolved. Reference is valid only when the network type is VIRTUAL_NETWORK_PER_SITE or VIRTUAL_NETWORK_GLOBAL. It is ignored for all other network types. See [Resolution Network](#nestedblock--dynamic_reverse_proxy--resolution_network) below.
 
-`resolution_network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`resolution_network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
-`resolve_endpoint_dynamically` - (Optional) Dynamic Endpoint Resolution. x-example : true In this mode of proxy, virtual host will resolve the destination endpoint dynamically (`Bool`).
+`resolve_endpoint_dynamically` - (Optional) Dynamic Endpoint Resolution. x-example : true In this mode of proxy, virtual host will resolve the destination endpoint dynamically. The dynamic resolution is done using a predefined field in the request. This predefined field depends on the ProxyType configured on the Virtual Host. For HTTP traffic, i.e. with ProxyType as HTTP_PROXY or HTTPS_PROXY, virtual host will use the 'HOST' HTTP header from the request and perform DNS resolution to select destination endpoint. For TCP traffic with SNI.. (`Bool`).
 
 <a id="nestedblock--dynamic_reverse_proxy--resolution_network"></a>
 
@@ -402,23 +402,23 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--http_protocol_options"></a>
 
-### Http Protocol Options
+### HTTP Protocol Options
 
-`http_protocol_enable_v1_only` - (Optional) HTTP/1.1 Protocol Options. HTTP/1.1 Protocol options for downstream connections. See [Http Protocol Enable V1 Only](#nestedblock--http_protocol_options--http_protocol_enable_v1_only) below.
+`http_protocol_enable_v1_only` - (Optional) HTTP/1.1 Protocol Options. HTTP/1.1 Protocol options for downstream connections. See [HTTP Protocol Enable V1 Only](#nestedblock--http_protocol_options--http_protocol_enable_v1_only) below.
 
-`http_protocol_enable_v1_v2` - (Optional) Empty. This can be used for messages where no values are needed. See [Http Protocol Enable V1 V2](#nestedblock--http_protocol_options--http_protocol_enable_v1_v2) below.
+`http_protocol_enable_v1_v2` - (Optional) Empty. This can be used for messages where no values are needed. See [HTTP Protocol Enable V1 V2](#nestedblock--http_protocol_options--http_protocol_enable_v1_v2) below.
 
-`http_protocol_enable_v2_only` - (Optional) Empty. This can be used for messages where no values are needed. See [Http Protocol Enable V2 Only](#nestedblock--http_protocol_options--http_protocol_enable_v2_only) below.
+`http_protocol_enable_v2_only` - (Optional) Empty. This can be used for messages where no values are needed. See [HTTP Protocol Enable V2 Only](#nestedblock--http_protocol_options--http_protocol_enable_v2_only) below.
 
 <a id="nestedblock--http_protocol_options--http_protocol_enable_v1_only"></a>
 
-### Http Protocol Options Http Protocol Enable V1 Only
+### HTTP Protocol Options HTTP Protocol Enable V1 Only
 
 `header_transformation` - (Optional) Header Transformation. Header Transformation options for HTTP/1.1 request/response headers. See [Header Transformation](#nestedblock--http_protocol_options--http_protocol_enable_v1_only--header_transformation) below.
 
 <a id="nestedblock--http_protocol_options--http_protocol_enable_v1_only--header_transformation"></a>
 
-### Http Protocol Options Http Protocol Enable V1 Only Header Transformation
+### HTTP Protocol Options HTTP Protocol Enable V1 Only Header Transformation
 
 `default_header_transformation` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Header Transformation](#nestedblock--http_protocol_options--http_protocol_enable_v1_only--header_transformation--default_header_transformation) below.
 
@@ -430,27 +430,27 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--http_protocol_options--http_protocol_enable_v1_only--header_transformation--default_header_transformation"></a>
 
-### Http Protocol Options Http Protocol Enable V1 Only Header Transformation Default Header Transformation
+### HTTP Protocol Options HTTP Protocol Enable V1 Only Header Transformation Default Header Transformation
 
 <a id="nestedblock--http_protocol_options--http_protocol_enable_v1_only--header_transformation--legacy_header_transformation"></a>
 
-### Http Protocol Options Http Protocol Enable V1 Only Header Transformation Legacy Header Transformation
+### HTTP Protocol Options HTTP Protocol Enable V1 Only Header Transformation Legacy Header Transformation
 
 <a id="nestedblock--http_protocol_options--http_protocol_enable_v1_only--header_transformation--preserve_case_header_transformation"></a>
 
-### Http Protocol Options Http Protocol Enable V1 Only Header Transformation Preserve Case Header Transformation
+### HTTP Protocol Options HTTP Protocol Enable V1 Only Header Transformation Preserve Case Header Transformation
 
 <a id="nestedblock--http_protocol_options--http_protocol_enable_v1_only--header_transformation--proper_case_header_transformation"></a>
 
-### Http Protocol Options Http Protocol Enable V1 Only Header Transformation Proper Case Header Transformation
+### HTTP Protocol Options HTTP Protocol Enable V1 Only Header Transformation Proper Case Header Transformation
 
 <a id="nestedblock--http_protocol_options--http_protocol_enable_v1_v2"></a>
 
-### Http Protocol Options Http Protocol Enable V1 V2
+### HTTP Protocol Options HTTP Protocol Enable V1 V2
 
 <a id="nestedblock--http_protocol_options--http_protocol_enable_v2_only"></a>
 
-### Http Protocol Options Http Protocol Enable V2 Only
+### HTTP Protocol Options HTTP Protocol Enable V2 Only
 
 <a id="nestedblock--js_challenge"></a>
 
@@ -458,7 +458,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `cookie_expiry` - (Optional) Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge (`Number`).
 
-`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Please Wait.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Please Wait </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 `js_script_delay` - (Optional) Javascript Delay. Delay introduced by Javascript, in milliseconds (`Number`).
 
@@ -518,17 +518,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--request_cookies_to_add--secret_value--clear_secret_info"></a>
 
 ### Request Cookies To Add Secret Value Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--request_headers_to_add"></a>
 
@@ -556,17 +556,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--request_headers_to_add--secret_value--clear_secret_info"></a>
 
 ### Request Headers To Add Secret Value Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--response_cookies_to_add"></a>
 
@@ -692,17 +692,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--response_cookies_to_add--secret_value--clear_secret_info"></a>
 
 ### Response Cookies To Add Secret Value Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--response_headers_to_add"></a>
 
@@ -730,17 +730,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--response_headers_to_add--secret_value--clear_secret_info"></a>
 
 ### Response Headers To Add Secret Value Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--retry_policy"></a>
 
@@ -754,7 +754,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `retriable_status_codes` - (Optional) Status Code to Retry. HTTP status codes that should trigger a retry in addition to those specified by retry_on (`List`).
 
-`retry_condition` - (Optional) Retry Condition. Specifies the conditions under which retry takes place. Retries can be on different types of condition depending on application requirements (`List`).
+`retry_condition` - (Optional) Retry Condition. Specifies the conditions under which retry takes place. Retries can be on different types of condition depending on application requirements. For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc The possible values are '5xx' : Retry will be done if the upstream server responds with any 5xx response code, or does not respond at all (disconnect/reset/read timeout). 'gateway-error' : Retry will be done only if the upstream server responds with.. (`List`).
 
 <a id="nestedblock--retry_policy--back_off"></a>
 
@@ -762,7 +762,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `base_interval` - (Optional) Base Retry Interval. Specifies the base interval between retries in milliseconds (`Number`).
 
-`max_interval` - (Optional) Maximum Retry Interval. Specifies the maximum interval between retries in milliseconds. This parameter is optional, but must be greater than or equal to the base_interval if set (`Number`).
+`max_interval` - (Optional) Maximum Retry Interval. Specifies the maximum interval between retries in milliseconds. This parameter is optional, but must be greater than or equal to the base_interval if set. The default is 10 times the base_interval (`Number`).
 
 <a id="nestedblock--routes"></a>
 
@@ -794,45 +794,45 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--slow_ddos_mitigation"></a>
 
-### Slow Ddos Mitigation
+### Slow DDOS Mitigation
 
 `disable_request_timeout` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Request Timeout](#nestedblock--slow_ddos_mitigation--disable_request_timeout) below.
 
-`request_headers_timeout` - (Optional) Request Headers Timeout. The amount of time the client has to send only the headers on the request stream before the stream is cancelled. The default value is 10000 milliseconds (`Number`).
+`request_headers_timeout` - (Optional) Request Headers Timeout. The amount of time the client has to send only the headers on the request stream before the stream is cancelled. The default value is 10000 milliseconds. This setting provides protection against Slowloris attacks (`Number`).
 
 `request_timeout` - (Optional) Custom Timeout (`Number`).
 
 <a id="nestedblock--slow_ddos_mitigation--disable_request_timeout"></a>
 
-### Slow Ddos Mitigation Disable Request Timeout
+### Slow DDOS Mitigation Disable Request Timeout
 
 <a id="nestedblock--timeouts"></a>
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--tls_cert_params"></a>
 
-### Tls Cert Params
+### TLS Cert Params
 
 `certificates` - (Optional) Certificates. Set of certificates. See [Certificates](#nestedblock--tls_cert_params--certificates) below.
 
-`cipher_suites` - (Optional) Cipher Suites. The following list specifies the supported cipher suite TLS_AES_128_GCM_SHA256 TLS_AES_256_GCM_SHA384 TLS_CHACHA20_POLY1305_SHA256 TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_E... (`List`).
+`cipher_suites` - (Optional) Cipher Suites. The following list specifies the supported cipher suite TLS_AES_128_GCM_SHA256 TLS_AES_256_GCM_SHA384 TLS_CHACHA20_POLY1305_SHA256 TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA TLS_ECDHE_RSA_WITH_AES_128_CBC_.. (`List`).
 
 `client_certificate_optional` - (Optional) Empty. This can be used for messages where no values are needed. See [Client Certificate Optional](#nestedblock--tls_cert_params--client_certificate_optional) below.
 
 `client_certificate_required` - (Optional) Empty. This can be used for messages where no values are needed. See [Client Certificate Required](#nestedblock--tls_cert_params--client_certificate_required) below.
 
-`maximum_protocol_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3` (`String`).
+`maximum_protocol_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3`. Defaults to `TLS_AUTO` (`String`).
 
-`minimum_protocol_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3` (`String`).
+`minimum_protocol_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3`. Defaults to `TLS_AUTO` (`String`).
 
 `no_client_certificate` - (Optional) Empty. This can be used for messages where no values are needed. See [No Client Certificate](#nestedblock--tls_cert_params--no_client_certificate) below.
 
@@ -842,7 +842,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--tls_cert_params--certificates"></a>
 
-### Tls Cert Params Certificates
+### TLS Cert Params Certificates
 
 `kind` - (Optional) Kind. When a configuration object(e.g. virtual_host) refers to another(e.g route) then kind will hold the referred object's kind (e.g. 'route') (`String`).
 
@@ -856,41 +856,41 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--tls_cert_params--client_certificate_optional"></a>
 
-### Tls Cert Params Client Certificate Optional
+### TLS Cert Params Client Certificate Optional
 
 <a id="nestedblock--tls_cert_params--client_certificate_required"></a>
 
-### Tls Cert Params Client Certificate Required
+### TLS Cert Params Client Certificate Required
 
 <a id="nestedblock--tls_cert_params--no_client_certificate"></a>
 
-### Tls Cert Params No Client Certificate
+### TLS Cert Params No Client Certificate
 
 <a id="nestedblock--tls_cert_params--validation_params"></a>
 
-### Tls Cert Params Validation Params
+### TLS Cert Params Validation Params
 
 `skip_hostname_verification` - (Optional) Skip verification of hostname. When True, skip verification of hostname i.e. CN/Subject Alt Name of certificate is not matched to the connecting hostname (`Bool`).
 
-`trusted_ca` - (Optional) Root CA Certificate Reference. Reference to Root CA Certificate. See [Trusted Ca](#nestedblock--tls_cert_params--validation_params--trusted_ca) below.
+`trusted_ca` - (Optional) Root CA Certificate Reference. Reference to Root CA Certificate. See [Trusted CA](#nestedblock--tls_cert_params--validation_params--trusted_ca) below.
 
 `trusted_ca_url` - (Optional) Inline Root CA Certificate (legacy). Inline Root CA Certificate (`String`).
 
-`verify_subject_alt_names` - (Optional) List of SANs for matching. List of acceptable Subject Alt Names/CN in the peer's certificate (`List`).
+`verify_subject_alt_names` - (Optional) List of SANs for matching. List of acceptable Subject Alt Names/CN in the peer's certificate. When skip_hostname_verification is false and verify_subject_alt_names is empty, the hostname of the peer will be used for matching against SAN/CN of peer's certificate (`List`).
 
 <a id="nestedblock--tls_cert_params--validation_params--trusted_ca"></a>
 
-### Tls Cert Params Validation Params Trusted Ca
+### TLS Cert Params Validation Params Trusted CA
 
-`trusted_ca_list` - (Optional) Root CA Certificate Reference. Reference to Root CA Certificate. See [Trusted Ca List](#nestedblock--tls_cert_params--validation_params--trusted_ca--trusted_ca_list) below.
+`trusted_ca_list` - (Optional) Root CA Certificate Reference. Reference to Root CA Certificate. See [Trusted CA List](#nestedblock--tls_cert_params--validation_params--trusted_ca--trusted_ca_list) below.
 
 <a id="nestedblock--tls_cert_params--validation_params--trusted_ca--trusted_ca_list"></a>
 
-### Tls Cert Params Validation Params Trusted Ca Trusted Ca List
+### TLS Cert Params Validation Params Trusted CA Trusted CA List
 
 <a id="nestedblock--tls_parameters"></a>
 
-### Tls Parameters
+### TLS Parameters
 
 `client_certificate_optional` - (Optional) Empty. This can be used for messages where no values are needed. See [Client Certificate Optional](#nestedblock--tls_parameters--client_certificate_optional) below.
 
@@ -904,29 +904,29 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--tls_parameters--client_certificate_optional"></a>
 
-### Tls Parameters Client Certificate Optional
+### TLS Parameters Client Certificate Optional
 
 <a id="nestedblock--tls_parameters--client_certificate_required"></a>
 
-### Tls Parameters Client Certificate Required
+### TLS Parameters Client Certificate Required
 
 <a id="nestedblock--tls_parameters--common_params"></a>
 
-### Tls Parameters Common Params
+### TLS Parameters Common Params
 
-`cipher_suites` - (Optional) Cipher Suites. The following list specifies the supported cipher suite TLS_AES_128_GCM_SHA256 TLS_AES_256_GCM_SHA384 TLS_CHACHA20_POLY1305_SHA256 TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_E... (`List`).
+`cipher_suites` - (Optional) Cipher Suites. The following list specifies the supported cipher suite TLS_AES_128_GCM_SHA256 TLS_AES_256_GCM_SHA384 TLS_CHACHA20_POLY1305_SHA256 TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256 TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA TLS_ECDHE_RSA_WITH_AES_128_CBC_.. (`List`).
 
-`maximum_protocol_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3` (`String`).
+`maximum_protocol_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3`. Defaults to `TLS_AUTO` (`String`).
 
-`minimum_protocol_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3` (`String`).
+`minimum_protocol_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3`. Defaults to `TLS_AUTO` (`String`).
 
-`tls_certificates` - (Optional) TLS Certificates. Set of TLS certificates. See [Tls Certificates](#nestedblock--tls_parameters--common_params--tls_certificates) below.
+`tls_certificates` - (Optional) TLS Certificates. Set of TLS certificates. See [TLS Certificates](#nestedblock--tls_parameters--common_params--tls_certificates) below.
 
 `validation_params` - (Optional) TLS Certificate Validation Parameters. This includes URL for a trust store, whether SAN verification is required and list of Subject Alt Names for verification. See [Validation Params](#nestedblock--tls_parameters--common_params--validation_params) below.
 
 <a id="nestedblock--tls_parameters--common_params--tls_certificates"></a>
 
-### Tls Parameters Common Params Tls Certificates
+### TLS Parameters Common Params TLS Certificates
 
 `certificate_url` - (Optional) Certificate. TLS certificate. Certificate or certificate chain in PEM format including the PEM headers (`String`).
 
@@ -934,7 +934,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `description` - (Optional) Description. Description for the certificate (`String`).
 
-`disable_ocsp_stapling` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Ocsp Stapling](#nestedblock--tls_parameters--common_params--tls_certificates--disable_ocsp_stapling) below.
+`disable_ocsp_stapling` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable OCSP Stapling](#nestedblock--tls_parameters--common_params--tls_certificates--disable_ocsp_stapling) below.
 
 `private_key` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Private Key](#nestedblock--tls_parameters--common_params--tls_certificates--private_key) below.
 
@@ -942,39 +942,39 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--tls_parameters--common_params--tls_certificates--custom_hash_algorithms"></a>
 
-### Tls Parameters Common Params Tls Certificates Custom Hash Algorithms
+### TLS Parameters Common Params TLS Certificates Custom Hash Algorithms
 
 <a id="nestedblock--tls_parameters--common_params--tls_certificates--disable_ocsp_stapling"></a>
 
-### Tls Parameters Common Params Tls Certificates Disable Ocsp Stapling
+### TLS Parameters Common Params TLS Certificates Disable OCSP Stapling
 
 <a id="nestedblock--tls_parameters--common_params--tls_certificates--private_key"></a>
 
-### Tls Parameters Common Params Tls Certificates Private Key
+### TLS Parameters Common Params TLS Certificates Private Key
 
 <a id="nestedblock--tls_parameters--common_params--tls_certificates--use_system_defaults"></a>
 
-### Tls Parameters Common Params Tls Certificates Use System Defaults
+### TLS Parameters Common Params TLS Certificates Use System Defaults
 
 <a id="nestedblock--tls_parameters--common_params--validation_params"></a>
 
-### Tls Parameters Common Params Validation Params
+### TLS Parameters Common Params Validation Params
 
 `skip_hostname_verification` - (Optional) Skip verification of hostname. When True, skip verification of hostname i.e. CN/Subject Alt Name of certificate is not matched to the connecting hostname (`Bool`).
 
-`trusted_ca` - (Optional) Root CA Certificate Reference. Reference to Root CA Certificate. See [Trusted Ca](#nestedblock--tls_parameters--common_params--validation_params--trusted_ca) below.
+`trusted_ca` - (Optional) Root CA Certificate Reference. Reference to Root CA Certificate. See [Trusted CA](#nestedblock--tls_parameters--common_params--validation_params--trusted_ca) below.
 
 `trusted_ca_url` - (Optional) Inline Root CA Certificate (legacy). Inline Root CA Certificate (`String`).
 
-`verify_subject_alt_names` - (Optional) List of SANs for matching. List of acceptable Subject Alt Names/CN in the peer's certificate (`List`).
+`verify_subject_alt_names` - (Optional) List of SANs for matching. List of acceptable Subject Alt Names/CN in the peer's certificate. When skip_hostname_verification is false and verify_subject_alt_names is empty, the hostname of the peer will be used for matching against SAN/CN of peer's certificate (`List`).
 
 <a id="nestedblock--tls_parameters--common_params--validation_params--trusted_ca"></a>
 
-### Tls Parameters Common Params Validation Params Trusted Ca
+### TLS Parameters Common Params Validation Params Trusted CA
 
 <a id="nestedblock--tls_parameters--no_client_certificate"></a>
 
-### Tls Parameters No Client Certificate
+### TLS Parameters No Client Certificate
 
 <a id="nestedblock--user_identification"></a>
 
@@ -992,23 +992,23 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--waf_type"></a>
 
-### Waf Type
+### WAF Type
 
 `app_firewall` - (Optional) App Firewall Reference. A list of references to the app_firewall configuration objects. See [App Firewall](#nestedblock--waf_type--app_firewall) below.
 
-`disable_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Waf](#nestedblock--waf_type--disable_waf) below.
+`disable_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable WAF](#nestedblock--waf_type--disable_waf) below.
 
-`inherit_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Inherit Waf](#nestedblock--waf_type--inherit_waf) below.
+`inherit_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Inherit WAF](#nestedblock--waf_type--inherit_waf) below.
 
 <a id="nestedblock--waf_type--app_firewall"></a>
 
-### Waf Type App Firewall
+### WAF Type App Firewall
 
 `app_firewall` - (Optional) Application Firewall. References to an Application Firewall configuration object. See [App Firewall](#nestedblock--waf_type--app_firewall--app_firewall) below.
 
 <a id="nestedblock--waf_type--app_firewall--app_firewall"></a>
 
-### Waf Type App Firewall App Firewall
+### WAF Type App Firewall App Firewall
 
 `kind` - (Optional) Kind. When a configuration object(e.g. virtual_host) refers to another(e.g route) then kind will hold the referred object's kind (e.g. 'route') (`String`).
 
@@ -1022,11 +1022,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--waf_type--disable_waf"></a>
 
-### Waf Type Disable Waf
+### WAF Type Disable WAF
 
 <a id="nestedblock--waf_type--inherit_waf"></a>
 
-### Waf Type Inherit Waf
+### WAF Type Inherit WAF
 
 ## Import
 

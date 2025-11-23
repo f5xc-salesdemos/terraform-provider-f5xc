@@ -110,17 +110,17 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Site Subnet Params
 
-`dhcp` - (Optional) Empty. This can be used for messages where no values are needed. See [Dhcp](#nestedblock--site_subnet_params--dhcp) below.
+`dhcp` - (Optional) Empty. This can be used for messages where no values are needed. See [DHCP](#nestedblock--site_subnet_params--dhcp) below.
 
 `site` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Site](#nestedblock--site_subnet_params--site) below.
 
-`static_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Static Ip](#nestedblock--site_subnet_params--static_ip) below.
+`static_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Static IP](#nestedblock--site_subnet_params--static_ip) below.
 
-`subnet_dhcp_server_params` - (Optional) Subnet DHCP parameters. Subnet DHCP parameters will be a subset of network_interface.DHCPServerParametersType as all features in network_interface. See [Subnet Dhcp Server Params](#nestedblock--site_subnet_params--subnet_dhcp_server_params) below.
+`subnet_dhcp_server_params` - (Optional) Subnet DHCP parameters. Subnet DHCP parameters will be a subset of network_interface.DHCPServerParametersType as all features in network_interface.DHCPServerParametersType may not be supported in a subnet. See [Subnet DHCP Server Params](#nestedblock--site_subnet_params--subnet_dhcp_server_params) below.
 
 <a id="nestedblock--site_subnet_params--dhcp"></a>
 
-### Site Subnet Params Dhcp
+### Site Subnet Params DHCP
 
 <a id="nestedblock--site_subnet_params--site"></a>
 
@@ -134,17 +134,17 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--site_subnet_params--static_ip"></a>
 
-### Site Subnet Params Static Ip
+### Site Subnet Params Static IP
 
 <a id="nestedblock--site_subnet_params--subnet_dhcp_server_params"></a>
 
-### Site Subnet Params Subnet Dhcp Server Params
+### Site Subnet Params Subnet DHCP Server Params
 
-`dhcp_networks` - (Optional) Subnet DHCP Networks. List of networks from which DHCP server can allocate IP addresses. See [Dhcp Networks](#nestedblock--site_subnet_params--subnet_dhcp_server_params--dhcp_networks) below.
+`dhcp_networks` - (Optional) Subnet DHCP Networks. List of networks from which DHCP server can allocate IP addresses. See [DHCP Networks](#nestedblock--site_subnet_params--subnet_dhcp_server_params--dhcp_networks) below.
 
 <a id="nestedblock--site_subnet_params--subnet_dhcp_server_params--dhcp_networks"></a>
 
-### Site Subnet Params Subnet Dhcp Server Params Dhcp Networks
+### Site Subnet Params Subnet DHCP Server Params DHCP Networks
 
 `network_prefix` - (Optional) Network Prefix. Network prefix for subnet (`String`).
 
@@ -152,13 +152,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

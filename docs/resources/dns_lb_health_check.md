@@ -62,21 +62,21 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "http_health_check, https_health_check, icmp_health_check, tcp_health_check, tcp_hex_health_check, udp_health_check" must be set.
 
-`http_health_check` - (Optional) HTTP Health Check. See [Http Health Check](#http-health-check) below for details.
+`http_health_check` - (Optional) HTTP Health Check. See [HTTP Health Check](#http-health-check) below for details.
 
-`https_health_check` - (Optional) HTTP Health Check. See [Https Health Check](#https-health-check) below for details.
+`https_health_check` - (Optional) HTTP Health Check. See [HTTPS Health Check](#https-health-check) below for details.
 
-`icmp_health_check` - (Optional) Empty. This can be used for messages where no values are needed. See [Icmp Health Check](#icmp-health-check) below for details.
+`icmp_health_check` - (Optional) Empty. This can be used for messages where no values are needed. See [ICMP Health Check](#icmp-health-check) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
-`tcp_health_check` - (Optional) TCP Health Check. See [Tcp Health Check](#tcp-health-check) below for details.
+`tcp_health_check` - (Optional) TCP Health Check. See [TCP Health Check](#tcp-health-check) below for details.
 
-`tcp_hex_health_check` - (Optional) TCP Hex Health Check. See [Tcp Hex Health Check](#tcp-hex-health-check) below for details.
+`tcp_hex_health_check` - (Optional) TCP Hex Health Check. See [TCP Hex Health Check](#tcp-hex-health-check) below for details.
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
-`udp_health_check` - (Optional) UDP Health Check. See [Udp Health Check](#udp-health-check) below for details.
+`udp_health_check` - (Optional) UDP Health Check. See [UDP Health Check](#udp-health-check) below for details.
 
 ### Attributes Reference
 
@@ -88,35 +88,35 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--http_health_check"></a>
 
-### Http Health Check
+### HTTP Health Check
 
 `health_check_port` - (Optional) Health Check Port. Port used for performing health check (`Number`).
 
 `health_check_secondary_port` - (Optional) Health Check Secondary Port. Secondary port used for performing health check. If included, both ports must be healthy for the health check to pass (`Number`).
 
-`receive` - (Optional) Receive String. Regular expression used to match against the response to the health check's request. Mark node up upon receipt of a successful regular expression match (`String`).
+`receive` - (Optional) Receive String. Regular expression used to match against the response to the health check's request. Mark node up upon receipt of a successful regular expression match. Uses re2 regular expression syntax (`String`).
 
 `send` - (Optional) Send String. HTTP payload to send to the target (`String`).
 
 <a id="nestedblock--https_health_check"></a>
 
-### Https Health Check
+### HTTPS Health Check
 
 `health_check_port` - (Optional) Health Check Port. Port used for performing health check (`Number`).
 
 `health_check_secondary_port` - (Optional) Health Check Secondary Port. Secondary port used for performing health check. If included, both ports must be healthy for the health check to pass (`Number`).
 
-`receive` - (Optional) Receive String. Regular expression used to match against the response to the health check's request. Mark node up upon receipt of a successful regular expression match (`String`).
+`receive` - (Optional) Receive String. Regular expression used to match against the response to the health check's request. Mark node up upon receipt of a successful regular expression match. Uses re2 regular expression syntax (`String`).
 
 `send` - (Optional) Send String. HTTP payload to send to the target (`String`).
 
 <a id="nestedblock--icmp_health_check"></a>
 
-### Icmp Health Check
+### ICMP Health Check
 
 <a id="nestedblock--tcp_health_check"></a>
 
-### Tcp Health Check
+### TCP Health Check
 
 `health_check_port` - (Optional) Health Check Port. Port used for performing health check (`Number`).
 
@@ -128,7 +128,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--tcp_hex_health_check"></a>
 
-### Tcp Hex Health Check
+### TCP Hex Health Check
 
 `health_check_port` - (Optional) Health Check Port. Port used for performing health check (`Number`).
 
@@ -142,17 +142,17 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--udp_health_check"></a>
 
-### Udp Health Check
+### UDP Health Check
 
 `health_check_port` - (Optional) Health Check Port. Port used for performing health check (`Number`).
 

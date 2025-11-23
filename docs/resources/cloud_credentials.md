@@ -59,15 +59,15 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "aws_assume_role, aws_secret_key, azure_client_secret, azure_pfx_certificate, gcp_cred_file" must be set.
 
-`aws_assume_role` - (Optional) AWS Assume Role to Handle Delegated Access. AWS Assume Role to Handle Delegated Access. See [Aws Assume Role](#aws-assume-role) below for details.
+`aws_assume_role` - (Optional) AWS Assume Role to Handle Delegated Access. AWS Assume Role to Handle Delegated Access. See [AWS Assume Role](#aws-assume-role) below for details.
 
-`aws_secret_key` - (Optional) AWS Programmatic Access Credentials. AWS Programmatic Access Credentials type. See [Aws Secret Key](#aws-secret-key) below for details.
+`aws_secret_key` - (Optional) AWS Programmatic Access Credentials. AWS Programmatic Access Credentials type. See [AWS Secret Key](#aws-secret-key) below for details.
 
 `azure_client_secret` - (Optional) Azure Client Secret. Azure Credentials Client Secret type. See [Azure Client Secret](#azure-client-secret) below for details.
 
 `azure_pfx_certificate` - (Optional) Client Certificate. Azure Credentials Client Certificate type. See [Azure Pfx Certificate](#azure-pfx-certificate) below for details.
 
-`gcp_cred_file` - (Optional) GCP Credentials. GCP Credentials type. See [Gcp Cred File](#gcp-cred-file) below for details.
+`gcp_cred_file` - (Optional) GCP Credentials. GCP Credentials type. See [GCP Cred File](#gcp-cred-file) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
@@ -83,7 +83,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--aws_assume_role"></a>
 
-### Aws Assume Role
+### AWS Assume Role
 
 `custom_external_id` - (Optional) External ID is Custom ID. External ID is Custom ID (`String`).
 
@@ -101,19 +101,19 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--aws_assume_role--external_id_is_optional"></a>
 
-### Aws Assume Role External Id Is Optional
+### AWS Assume Role External Id Is Optional
 
 <a id="nestedblock--aws_assume_role--external_id_is_tenant_id"></a>
 
-### Aws Assume Role External Id Is Tenant Id
+### AWS Assume Role External Id Is Tenant Id
 
 <a id="nestedblock--aws_assume_role--session_tags"></a>
 
-### Aws Assume Role Session Tags
+### AWS Assume Role Session Tags
 
 <a id="nestedblock--aws_secret_key"></a>
 
-### Aws Secret Key
+### AWS Secret Key
 
 `access_key` - (Optional) Access Key ID. Access key ID for your AWS account (`String`).
 
@@ -121,7 +121,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--aws_secret_key--secret_key"></a>
 
-### Aws Secret Key Secret Key
+### AWS Secret Key Secret Key
 
 `blindfold_secret_info` - (Optional) Blindfold Secret. BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management. See [Blindfold Secret Info](#nestedblock--aws_secret_key--secret_key--blindfold_secret_info) below.
 
@@ -129,21 +129,21 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--aws_secret_key--secret_key--blindfold_secret_info"></a>
 
-### Aws Secret Key Secret Key Blindfold Secret Info
+### AWS Secret Key Secret Key Blindfold Secret Info
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--aws_secret_key--secret_key--clear_secret_info"></a>
 
-### Aws Secret Key Secret Key Clear Secret Info
+### AWS Secret Key Secret Key Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--azure_client_secret"></a>
 
@@ -171,23 +171,23 @@ In addition to all arguments above, the following attributes are exported:
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--azure_client_secret--client_secret--clear_secret_info"></a>
 
 ### Azure Client Secret Client Secret Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--azure_pfx_certificate"></a>
 
 ### Azure Pfx Certificate
 
-`certificate_url` - (Optional) URL for Client Certificate. URL for Client Certificate in '.pfx' or ' (`String`).
+`certificate_url` - (Optional) URL for Client Certificate. URL for Client Certificate in '.pfx' or '.p12' whose certificate is linked to service principal object Certificate URL can contain client certificate in string:///<Base64 of certificate> format. Here <Base64 of certificate> is base64 of '.pfx' or '.p12' binary file (`String`).
 
 `client_id` - (Optional) Client ID. Client ID for your Azure service principal (`String`).
 
@@ -211,27 +211,27 @@ In addition to all arguments above, the following attributes are exported:
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--azure_pfx_certificate--password--clear_secret_info"></a>
 
 ### Azure Pfx Certificate Password Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--gcp_cred_file"></a>
 
-### Gcp Cred File
+### GCP Cred File
 
 `credential_file` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Credential File](#nestedblock--gcp_cred_file--credential_file) below.
 
 <a id="nestedblock--gcp_cred_file--credential_file"></a>
 
-### Gcp Cred File Credential File
+### GCP Cred File Credential File
 
 `blindfold_secret_info` - (Optional) Blindfold Secret. BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management. See [Blindfold Secret Info](#nestedblock--gcp_cred_file--credential_file--blindfold_secret_info) below.
 
@@ -239,33 +239,33 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--gcp_cred_file--credential_file--blindfold_secret_info"></a>
 
-### Gcp Cred File Credential File Blindfold Secret Info
+### GCP Cred File Credential File Blindfold Secret Info
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--gcp_cred_file--credential_file--clear_secret_info"></a>
 
-### Gcp Cred File Credential File Clear Secret Info
+### GCP Cred File Credential File Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--timeouts"></a>
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

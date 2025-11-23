@@ -104,7 +104,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `dynamic` - (Optional) Dynamic Pool. Dynamic Pool Configuration. See [Dynamic](#nestedblock--rules--action--dynamic) below.
 
-`virtual_cidr` - (Optional) Virtual Subnet NAT. Virtual Subnet NAT is static NAT that does a one-to-one translation between the real source IP CIDR in the policy and the virtual CIDR in a bidirectional fashion (`String`).
+`virtual_cidr` - (Optional) Virtual Subnet NAT. Virtual Subnet NAT is static NAT that does a one-to-one translation between the real source IP CIDR in the policy and the virtual CIDR in a bidirectional fashion. The range of the real CIDR and virtual CIDRs should be the same (e.g. if the real CIDR has the CIDR 10.10.10.0/24, the virtual CIDR has 100.100.100.0/24 (`String`).
 
 <a id="nestedblock--rules--action--dynamic"></a>
 
@@ -152,9 +152,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `destination_port` - (Optional) Port to Match. Port match of the request can be a range or a specific port. See [Destination Port](#nestedblock--rules--criteria--destination_port) below.
 
-`icmp` - (Optional) Empty. This can be used for messages where no values are needed. See [Icmp](#nestedblock--rules--criteria--icmp) below.
+`icmp` - (Optional) Empty. This can be used for messages where no values are needed. See [ICMP](#nestedblock--rules--criteria--icmp) below.
 
-`protocol` - (Optional) Protocols. Protocols like TCP, UDP. Possible values are `ALL`, `ICMP`, `TCP`, `UDP` (`String`).
+`protocol` - (Optional) Protocols. Protocols like TCP, UDP. Possible values are `ALL`, `ICMP`, `TCP`, `UDP`. Defaults to `ALL` (`String`).
 
 `segment` - (Optional) Segment Reference Type. Reference to Segment Object. See [Segment](#nestedblock--rules--criteria--segment) below.
 
@@ -162,9 +162,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `source_port` - (Optional) Port to Match. Port match of the request can be a range or a specific port. See [Source Port](#nestedblock--rules--criteria--source_port) below.
 
-`tcp` - (Optional) Port Match Configuration. Action to apply on the packet if the NAT rule is applied. See [Tcp](#nestedblock--rules--criteria--tcp) below.
+`tcp` - (Optional) Port Match Configuration. Action to apply on the packet if the NAT rule is applied. See [TCP](#nestedblock--rules--criteria--tcp) below.
 
-`udp` - (Optional) Port Match Configuration. Action to apply on the packet if the NAT rule is applied. See [Udp](#nestedblock--rules--criteria--udp) below.
+`udp` - (Optional) Port Match Configuration. Action to apply on the packet if the NAT rule is applied. See [UDP](#nestedblock--rules--criteria--udp) below.
 
 `virtual_network` - (Optional) Virtual Network Reference Type. Carries the reference to virtual network. See [Virtual Network](#nestedblock--rules--criteria--virtual_network) below.
 
@@ -188,7 +188,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rules--criteria--icmp"></a>
 
-### Rules Criteria Icmp
+### Rules Criteria ICMP
 
 <a id="nestedblock--rules--criteria--segment"></a>
 
@@ -216,7 +216,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rules--criteria--tcp"></a>
 
-### Rules Criteria Tcp
+### Rules Criteria TCP
 
 `destination_port` - (Optional) Port to Match. Port match of the request can be a range or a specific port. See [Destination Port](#nestedblock--rules--criteria--tcp--destination_port) below.
 
@@ -224,15 +224,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rules--criteria--tcp--destination_port"></a>
 
-### Rules Criteria Tcp Destination Port
+### Rules Criteria TCP Destination Port
 
 <a id="nestedblock--rules--criteria--tcp--source_port"></a>
 
-### Rules Criteria Tcp Source Port
+### Rules Criteria TCP Source Port
 
 <a id="nestedblock--rules--criteria--udp"></a>
 
-### Rules Criteria Udp
+### Rules Criteria UDP
 
 `destination_port` - (Optional) Port to Match. Port match of the request can be a range or a specific port. See [Destination Port](#nestedblock--rules--criteria--udp--destination_port) below.
 
@@ -240,11 +240,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rules--criteria--udp--destination_port"></a>
 
-### Rules Criteria Udp Destination Port
+### Rules Criteria UDP Destination Port
 
 <a id="nestedblock--rules--criteria--udp--source_port"></a>
 
-### Rules Criteria Udp Source Port
+### Rules Criteria UDP Source Port
 
 <a id="nestedblock--rules--criteria--virtual_network"></a>
 
@@ -348,13 +348,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

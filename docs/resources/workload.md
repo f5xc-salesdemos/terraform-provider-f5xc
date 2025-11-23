@@ -71,11 +71,11 @@ The following arguments are optional:
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
-`service` - (Optional) ServiceType. Service does not maintain per replica state, however it can be configured to use persistent storage that is shared amongst all the replicas. See [Service](#service) below for details.
+`service` - (Optional) ServiceType. Service does not maintain per replica state, however it can be configured to use persistent storage that is shared amongst all the replicas. Replicas of a service are fungible and do not have a stable network identity or storage. Common examples of services are web servers, application servers, traditional SQL databases, etc. See [Service](#service) below for details.
 
 `simple_service` - (Optional) SimpleServiceType. SimpleService is a service having one container and one replica that is deployed on all Regional Edges and advertised on Internet via HTTP loadbalancer on default VIP. See [Simple Service](#simple-service) below for details.
 
-`stateful_service` - (Optional) StatefulServiceType. StatefulService maintains per replica state and each replica has its own persistent storage. Each replica has a unique network identity and stable storage. See [Stateful Service](#stateful-service) below for details.
+`stateful_service` - (Optional) StatefulServiceType. StatefulService maintains per replica state and each replica has its own persistent storage. Each replica has a unique network identity and stable storage. Stateful service are used for distributed stateful applications like cassandra, mongodb, redis, etc. See [Stateful Service](#stateful-service) below for details.
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
@@ -135,7 +135,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `default_flavor` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Flavor](#nestedblock--job--containers--default_flavor) below.
 
-`flavor` - (Optional) Container Flavor Type. Container Flavor type - CONTAINER_FLAVOR_TYPE_TINY: Tiny Tiny containers have limit of 0 (`String`).
+`flavor` - (Optional) Container Flavor Type. Container Flavor type - CONTAINER_FLAVOR_TYPE_TINY: Tiny Tiny containers have limit of 0.1 vCPU and 256 MiB (mebibyte) memory - CONTAINER_FLAVOR_TYPE_MEDIUM: Medium Medium containers have limit of 0.25 vCPU and 512 MiB (mebibyte) memory - CONTAINER_FLAVOR_TYPE_LARGE: Large Large containers have limit of 1 vCPU and 2048 MiB (mebibyte) memory. Possible values are `CONTAINER_FLAVOR_TYPE_TINY`, `CONTAINER_FLAVOR_TYPE_MEDIUM`, `CONTAINER_FLAVOR_TYPE_LARGE`. Defaults to `CONTAINER_FLAVOR_TYPE_TINY` (`String`).
 
 `image` - (Optional) Image Configuration. ImageType configures the image to use, how to pull the image, and the associated secrets to use if any. See [Image](#nestedblock--job--containers--image) below.
 
@@ -167,11 +167,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `container_registry` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Container Registry](#nestedblock--job--containers--image--container_registry) below.
 
-`name` - (Optional) Image Name. Name is a container image which are usually given a name such as alpine, ubuntu, or quay.io/etcd:0.13. The format is registry/image:tag or registry/image@image-digest (`String`).
+`name` - (Optional) Image Name. Name is a container image which are usually given a name such as alpine, ubuntu, or quay.io/etcd:0.13. The format is registry/image:tag or registry/image@image-digest. If registry is not specified, the Docker public registry is assumed. If tag is not specified, latest is assumed (`String`).
 
 `public` - (Optional) Empty. This can be used for messages where no values are needed. See [Public](#nestedblock--job--containers--image--public) below.
 
-`pull_policy` - (Optional) Image Pull Policy Type. Image pull policy type enumerates the policy choices to use for pulling the image prior to starting the workload - IMAGE_PULL_POLICY_DEFAULT: Default Default will always pul... (`String`).
+`pull_policy` - (Optional) Image Pull Policy Type. Image pull policy type enumerates the policy choices to use for pulling the image prior to starting the workload - IMAGE_PULL_POLICY_DEFAULT: Default Default will always pull image if :latest tag is specified in image name. If :latest tag is not specified in image name, it will pull image only if it does not already exist on the node - IMAGE_PULL_POLICY_IF_NOT_PRESENT: IfNotPresent Only pull the image if it does not already exist on the node - IMAGE_PULL_POLICY_ALWAYS:... Possible values are `IMAGE_PULL_POLICY_DEFAULT`, `IMAGE_PULL_POLICY_IF_NOT_PRESENT`, `IMAGE_PULL_POLICY_ALWAYS`, `IMAGE_PULL_POLICY_NEVER`. Defaults to `IMAGE_PULL_POLICY_DEFAULT` (`String`).
 
 <a id="nestedblock--job--containers--image--container_registry"></a>
 
@@ -187,17 +187,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `exec_health_check` - (Optional) Exec Health Check. ExecHealthCheckType describes a health check based on 'run in container' action. Exit status of 0 is treated as live/healthy and non-zero is unhealthy. See [Exec Health Check](#nestedblock--job--containers--liveness_check--exec_health_check) below.
 
-`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy (`Number`).
+`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy. Note that during startup and liveliness, only a single successful health check is required to mark a container healthy (`Number`).
 
-`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [Http Health Check](#nestedblock--job--containers--liveness_check--http_health_check) below.
+`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [HTTP Health Check](#nestedblock--job--containers--liveness_check--http_health_check) below.
 
 `initial_delay` - (Optional) Initial Delay. Number of seconds after the container has started before health checks are initiated (`Number`).
 
 `interval` - (Optional) Interval. Time interval in seconds between two health check requests (`Number`).
 
-`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [Tcp Health Check](#nestedblock--job--containers--liveness_check--tcp_health_check) below.
+`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [TCP Health Check](#nestedblock--job--containers--liveness_check--tcp_health_check) below.
 
-`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response (`Number`).
+`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response. If the timeout is reached the health check attempt will be considered a failure (`Number`).
 
 `unhealthy_threshold` - (Optional) Unhealthy Threshold. Number of consecutive failed responses before declaring unhealthy. In other words, this is the number of unhealthy health checks required before a container is marked unhealthy (`Number`).
 
@@ -207,11 +207,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--job--containers--liveness_check--http_health_check"></a>
 
-### Job Containers Liveness Check Http Health Check
+### Job Containers Liveness Check HTTP Health Check
 
 <a id="nestedblock--job--containers--liveness_check--tcp_health_check"></a>
 
-### Job Containers Liveness Check Tcp Health Check
+### Job Containers Liveness Check TCP Health Check
 
 <a id="nestedblock--job--containers--readiness_check"></a>
 
@@ -219,17 +219,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `exec_health_check` - (Optional) Exec Health Check. ExecHealthCheckType describes a health check based on 'run in container' action. Exit status of 0 is treated as live/healthy and non-zero is unhealthy. See [Exec Health Check](#nestedblock--job--containers--readiness_check--exec_health_check) below.
 
-`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy (`Number`).
+`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy. Note that during startup and liveliness, only a single successful health check is required to mark a container healthy (`Number`).
 
-`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [Http Health Check](#nestedblock--job--containers--readiness_check--http_health_check) below.
+`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [HTTP Health Check](#nestedblock--job--containers--readiness_check--http_health_check) below.
 
 `initial_delay` - (Optional) Initial Delay. Number of seconds after the container has started before health checks are initiated (`Number`).
 
 `interval` - (Optional) Interval. Time interval in seconds between two health check requests (`Number`).
 
-`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [Tcp Health Check](#nestedblock--job--containers--readiness_check--tcp_health_check) below.
+`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [TCP Health Check](#nestedblock--job--containers--readiness_check--tcp_health_check) below.
 
-`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response (`Number`).
+`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response. If the timeout is reached the health check attempt will be considered a failure (`Number`).
 
 `unhealthy_threshold` - (Optional) Unhealthy Threshold. Number of consecutive failed responses before declaring unhealthy. In other words, this is the number of unhealthy health checks required before a container is marked unhealthy (`Number`).
 
@@ -239,11 +239,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--job--containers--readiness_check--http_health_check"></a>
 
-### Job Containers Readiness Check Http Health Check
+### Job Containers Readiness Check HTTP Health Check
 
 <a id="nestedblock--job--containers--readiness_check--tcp_health_check"></a>
 
-### Job Containers Readiness Check Tcp Health Check
+### Job Containers Readiness Check TCP Health Check
 
 <a id="nestedblock--job--deploy_options"></a>
 
@@ -253,13 +253,13 @@ In addition to all arguments above, the following attributes are exported:
 
 `default_virtual_sites` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Virtual Sites](#nestedblock--job--deploy_options--default_virtual_sites) below.
 
-`deploy_ce_sites` - (Optional) Customer Sites. This defines a way to deploy a workload on specific Customer sites. See [Deploy Ce Sites](#nestedblock--job--deploy_options--deploy_ce_sites) below.
+`deploy_ce_sites` - (Optional) Customer Sites. This defines a way to deploy a workload on specific Customer sites. See [Deploy CE Sites](#nestedblock--job--deploy_options--deploy_ce_sites) below.
 
-`deploy_ce_virtual_sites` - (Optional) Customer Virtual Sites. This defines a way to deploy a workload on specific Customer virtual sites. See [Deploy Ce Virtual Sites](#nestedblock--job--deploy_options--deploy_ce_virtual_sites) below.
+`deploy_ce_virtual_sites` - (Optional) Customer Virtual Sites. This defines a way to deploy a workload on specific Customer virtual sites. See [Deploy CE Virtual Sites](#nestedblock--job--deploy_options--deploy_ce_virtual_sites) below.
 
-`deploy_re_sites` - (Optional) Regional Edge Sites. This defines a way to deploy a workload on specific Regional Edge sites. See [Deploy Re Sites](#nestedblock--job--deploy_options--deploy_re_sites) below.
+`deploy_re_sites` - (Optional) Regional Edge Sites. This defines a way to deploy a workload on specific Regional Edge sites. See [Deploy RE Sites](#nestedblock--job--deploy_options--deploy_re_sites) below.
 
-`deploy_re_virtual_sites` - (Optional) Regional Edge Virtual Sites. This defines a way to deploy a workload on specific Regional Edge virtual sites. See [Deploy Re Virtual Sites](#nestedblock--job--deploy_options--deploy_re_virtual_sites) below.
+`deploy_re_virtual_sites` - (Optional) Regional Edge Virtual Sites. This defines a way to deploy a workload on specific Regional Edge virtual sites. See [Deploy RE Virtual Sites](#nestedblock--job--deploy_options--deploy_re_virtual_sites) below.
 
 <a id="nestedblock--job--deploy_options--all_res"></a>
 
@@ -271,43 +271,43 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--job--deploy_options--deploy_ce_sites"></a>
 
-### Job Deploy Options Deploy Ce Sites
+### Job Deploy Options Deploy CE Sites
 
 `site` - (Optional) List of Customer Sites to Deploy. Which customer sites should this workload be deployed. See [Site](#nestedblock--job--deploy_options--deploy_ce_sites--site) below.
 
 <a id="nestedblock--job--deploy_options--deploy_ce_sites--site"></a>
 
-### Job Deploy Options Deploy Ce Sites Site
+### Job Deploy Options Deploy CE Sites Site
 
 <a id="nestedblock--job--deploy_options--deploy_ce_virtual_sites"></a>
 
-### Job Deploy Options Deploy Ce Virtual Sites
+### Job Deploy Options Deploy CE Virtual Sites
 
 `virtual_site` - (Optional) List of Customer Virtual Sites to Deploy. Which customer virtual sites should this workload be deployed. See [Virtual Site](#nestedblock--job--deploy_options--deploy_ce_virtual_sites--virtual_site) below.
 
 <a id="nestedblock--job--deploy_options--deploy_ce_virtual_sites--virtual_site"></a>
 
-### Job Deploy Options Deploy Ce Virtual Sites Virtual Site
+### Job Deploy Options Deploy CE Virtual Sites Virtual Site
 
 <a id="nestedblock--job--deploy_options--deploy_re_sites"></a>
 
-### Job Deploy Options Deploy Re Sites
+### Job Deploy Options Deploy RE Sites
 
 `site` - (Optional) List of Regional Edge Sites to Deploy. Which regional edge sites should this workload be deployed. See [Site](#nestedblock--job--deploy_options--deploy_re_sites--site) below.
 
 <a id="nestedblock--job--deploy_options--deploy_re_sites--site"></a>
 
-### Job Deploy Options Deploy Re Sites Site
+### Job Deploy Options Deploy RE Sites Site
 
 <a id="nestedblock--job--deploy_options--deploy_re_virtual_sites"></a>
 
-### Job Deploy Options Deploy Re Virtual Sites
+### Job Deploy Options Deploy RE Virtual Sites
 
 `virtual_site` - (Optional) List of Regional Edge Virtual Sites to Deploy. Which regional edge virtual sites should this workload be deployed. See [Virtual Site](#nestedblock--job--deploy_options--deploy_re_virtual_sites--virtual_site) below.
 
 <a id="nestedblock--job--deploy_options--deploy_re_virtual_sites--virtual_site"></a>
 
-### Job Deploy Options Deploy Re Virtual Sites Virtual Site
+### Job Deploy Options Deploy RE Virtual Sites Virtual Site
 
 <a id="nestedblock--job--volumes"></a>
 
@@ -477,7 +477,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `default_flavor` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Flavor](#nestedblock--service--containers--default_flavor) below.
 
-`flavor` - (Optional) Container Flavor Type. Container Flavor type - CONTAINER_FLAVOR_TYPE_TINY: Tiny Tiny containers have limit of 0 (`String`).
+`flavor` - (Optional) Container Flavor Type. Container Flavor type - CONTAINER_FLAVOR_TYPE_TINY: Tiny Tiny containers have limit of 0.1 vCPU and 256 MiB (mebibyte) memory - CONTAINER_FLAVOR_TYPE_MEDIUM: Medium Medium containers have limit of 0.25 vCPU and 512 MiB (mebibyte) memory - CONTAINER_FLAVOR_TYPE_LARGE: Large Large containers have limit of 1 vCPU and 2048 MiB (mebibyte) memory. Possible values are `CONTAINER_FLAVOR_TYPE_TINY`, `CONTAINER_FLAVOR_TYPE_MEDIUM`, `CONTAINER_FLAVOR_TYPE_LARGE`. Defaults to `CONTAINER_FLAVOR_TYPE_TINY` (`String`).
 
 `image` - (Optional) Image Configuration. ImageType configures the image to use, how to pull the image, and the associated secrets to use if any. See [Image](#nestedblock--service--containers--image) below.
 
@@ -509,11 +509,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `container_registry` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Container Registry](#nestedblock--service--containers--image--container_registry) below.
 
-`name` - (Optional) Image Name. Name is a container image which are usually given a name such as alpine, ubuntu, or quay.io/etcd:0.13. The format is registry/image:tag or registry/image@image-digest (`String`).
+`name` - (Optional) Image Name. Name is a container image which are usually given a name such as alpine, ubuntu, or quay.io/etcd:0.13. The format is registry/image:tag or registry/image@image-digest. If registry is not specified, the Docker public registry is assumed. If tag is not specified, latest is assumed (`String`).
 
 `public` - (Optional) Empty. This can be used for messages where no values are needed. See [Public](#nestedblock--service--containers--image--public) below.
 
-`pull_policy` - (Optional) Image Pull Policy Type. Image pull policy type enumerates the policy choices to use for pulling the image prior to starting the workload - IMAGE_PULL_POLICY_DEFAULT: Default Default will always pul... (`String`).
+`pull_policy` - (Optional) Image Pull Policy Type. Image pull policy type enumerates the policy choices to use for pulling the image prior to starting the workload - IMAGE_PULL_POLICY_DEFAULT: Default Default will always pull image if :latest tag is specified in image name. If :latest tag is not specified in image name, it will pull image only if it does not already exist on the node - IMAGE_PULL_POLICY_IF_NOT_PRESENT: IfNotPresent Only pull the image if it does not already exist on the node - IMAGE_PULL_POLICY_ALWAYS:... Possible values are `IMAGE_PULL_POLICY_DEFAULT`, `IMAGE_PULL_POLICY_IF_NOT_PRESENT`, `IMAGE_PULL_POLICY_ALWAYS`, `IMAGE_PULL_POLICY_NEVER`. Defaults to `IMAGE_PULL_POLICY_DEFAULT` (`String`).
 
 <a id="nestedblock--service--containers--image--container_registry"></a>
 
@@ -529,17 +529,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `exec_health_check` - (Optional) Exec Health Check. ExecHealthCheckType describes a health check based on 'run in container' action. Exit status of 0 is treated as live/healthy and non-zero is unhealthy. See [Exec Health Check](#nestedblock--service--containers--liveness_check--exec_health_check) below.
 
-`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy (`Number`).
+`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy. Note that during startup and liveliness, only a single successful health check is required to mark a container healthy (`Number`).
 
-`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [Http Health Check](#nestedblock--service--containers--liveness_check--http_health_check) below.
+`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [HTTP Health Check](#nestedblock--service--containers--liveness_check--http_health_check) below.
 
 `initial_delay` - (Optional) Initial Delay. Number of seconds after the container has started before health checks are initiated (`Number`).
 
 `interval` - (Optional) Interval. Time interval in seconds between two health check requests (`Number`).
 
-`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [Tcp Health Check](#nestedblock--service--containers--liveness_check--tcp_health_check) below.
+`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [TCP Health Check](#nestedblock--service--containers--liveness_check--tcp_health_check) below.
 
-`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response (`Number`).
+`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response. If the timeout is reached the health check attempt will be considered a failure (`Number`).
 
 `unhealthy_threshold` - (Optional) Unhealthy Threshold. Number of consecutive failed responses before declaring unhealthy. In other words, this is the number of unhealthy health checks required before a container is marked unhealthy (`Number`).
 
@@ -549,11 +549,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--service--containers--liveness_check--http_health_check"></a>
 
-### Service Containers Liveness Check Http Health Check
+### Service Containers Liveness Check HTTP Health Check
 
 <a id="nestedblock--service--containers--liveness_check--tcp_health_check"></a>
 
-### Service Containers Liveness Check Tcp Health Check
+### Service Containers Liveness Check TCP Health Check
 
 <a id="nestedblock--service--containers--readiness_check"></a>
 
@@ -561,17 +561,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `exec_health_check` - (Optional) Exec Health Check. ExecHealthCheckType describes a health check based on 'run in container' action. Exit status of 0 is treated as live/healthy and non-zero is unhealthy. See [Exec Health Check](#nestedblock--service--containers--readiness_check--exec_health_check) below.
 
-`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy (`Number`).
+`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy. Note that during startup and liveliness, only a single successful health check is required to mark a container healthy (`Number`).
 
-`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [Http Health Check](#nestedblock--service--containers--readiness_check--http_health_check) below.
+`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [HTTP Health Check](#nestedblock--service--containers--readiness_check--http_health_check) below.
 
 `initial_delay` - (Optional) Initial Delay. Number of seconds after the container has started before health checks are initiated (`Number`).
 
 `interval` - (Optional) Interval. Time interval in seconds between two health check requests (`Number`).
 
-`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [Tcp Health Check](#nestedblock--service--containers--readiness_check--tcp_health_check) below.
+`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [TCP Health Check](#nestedblock--service--containers--readiness_check--tcp_health_check) below.
 
-`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response (`Number`).
+`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response. If the timeout is reached the health check attempt will be considered a failure (`Number`).
 
 `unhealthy_threshold` - (Optional) Unhealthy Threshold. Number of consecutive failed responses before declaring unhealthy. In other words, this is the number of unhealthy health checks required before a container is marked unhealthy (`Number`).
 
@@ -581,11 +581,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--service--containers--readiness_check--http_health_check"></a>
 
-### Service Containers Readiness Check Http Health Check
+### Service Containers Readiness Check HTTP Health Check
 
 <a id="nestedblock--service--containers--readiness_check--tcp_health_check"></a>
 
-### Service Containers Readiness Check Tcp Health Check
+### Service Containers Readiness Check TCP Health Check
 
 <a id="nestedblock--service--deploy_options"></a>
 
@@ -595,13 +595,13 @@ In addition to all arguments above, the following attributes are exported:
 
 `default_virtual_sites` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Virtual Sites](#nestedblock--service--deploy_options--default_virtual_sites) below.
 
-`deploy_ce_sites` - (Optional) Customer Sites. This defines a way to deploy a workload on specific Customer sites. See [Deploy Ce Sites](#nestedblock--service--deploy_options--deploy_ce_sites) below.
+`deploy_ce_sites` - (Optional) Customer Sites. This defines a way to deploy a workload on specific Customer sites. See [Deploy CE Sites](#nestedblock--service--deploy_options--deploy_ce_sites) below.
 
-`deploy_ce_virtual_sites` - (Optional) Customer Virtual Sites. This defines a way to deploy a workload on specific Customer virtual sites. See [Deploy Ce Virtual Sites](#nestedblock--service--deploy_options--deploy_ce_virtual_sites) below.
+`deploy_ce_virtual_sites` - (Optional) Customer Virtual Sites. This defines a way to deploy a workload on specific Customer virtual sites. See [Deploy CE Virtual Sites](#nestedblock--service--deploy_options--deploy_ce_virtual_sites) below.
 
-`deploy_re_sites` - (Optional) Regional Edge Sites. This defines a way to deploy a workload on specific Regional Edge sites. See [Deploy Re Sites](#nestedblock--service--deploy_options--deploy_re_sites) below.
+`deploy_re_sites` - (Optional) Regional Edge Sites. This defines a way to deploy a workload on specific Regional Edge sites. See [Deploy RE Sites](#nestedblock--service--deploy_options--deploy_re_sites) below.
 
-`deploy_re_virtual_sites` - (Optional) Regional Edge Virtual Sites. This defines a way to deploy a workload on specific Regional Edge virtual sites. See [Deploy Re Virtual Sites](#nestedblock--service--deploy_options--deploy_re_virtual_sites) below.
+`deploy_re_virtual_sites` - (Optional) Regional Edge Virtual Sites. This defines a way to deploy a workload on specific Regional Edge virtual sites. See [Deploy RE Virtual Sites](#nestedblock--service--deploy_options--deploy_re_virtual_sites) below.
 
 <a id="nestedblock--service--deploy_options--all_res"></a>
 
@@ -613,43 +613,43 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--service--deploy_options--deploy_ce_sites"></a>
 
-### Service Deploy Options Deploy Ce Sites
+### Service Deploy Options Deploy CE Sites
 
 `site` - (Optional) List of Customer Sites to Deploy. Which customer sites should this workload be deployed. See [Site](#nestedblock--service--deploy_options--deploy_ce_sites--site) below.
 
 <a id="nestedblock--service--deploy_options--deploy_ce_sites--site"></a>
 
-### Service Deploy Options Deploy Ce Sites Site
+### Service Deploy Options Deploy CE Sites Site
 
 <a id="nestedblock--service--deploy_options--deploy_ce_virtual_sites"></a>
 
-### Service Deploy Options Deploy Ce Virtual Sites
+### Service Deploy Options Deploy CE Virtual Sites
 
 `virtual_site` - (Optional) List of Customer Virtual Sites to Deploy. Which customer virtual sites should this workload be deployed. See [Virtual Site](#nestedblock--service--deploy_options--deploy_ce_virtual_sites--virtual_site) below.
 
 <a id="nestedblock--service--deploy_options--deploy_ce_virtual_sites--virtual_site"></a>
 
-### Service Deploy Options Deploy Ce Virtual Sites Virtual Site
+### Service Deploy Options Deploy CE Virtual Sites Virtual Site
 
 <a id="nestedblock--service--deploy_options--deploy_re_sites"></a>
 
-### Service Deploy Options Deploy Re Sites
+### Service Deploy Options Deploy RE Sites
 
 `site` - (Optional) List of Regional Edge Sites to Deploy. Which regional edge sites should this workload be deployed. See [Site](#nestedblock--service--deploy_options--deploy_re_sites--site) below.
 
 <a id="nestedblock--service--deploy_options--deploy_re_sites--site"></a>
 
-### Service Deploy Options Deploy Re Sites Site
+### Service Deploy Options Deploy RE Sites Site
 
 <a id="nestedblock--service--deploy_options--deploy_re_virtual_sites"></a>
 
-### Service Deploy Options Deploy Re Virtual Sites
+### Service Deploy Options Deploy RE Virtual Sites
 
 `virtual_site` - (Optional) List of Regional Edge Virtual Sites to Deploy. Which regional edge virtual sites should this workload be deployed. See [Virtual Site](#nestedblock--service--deploy_options--deploy_re_virtual_sites--virtual_site) below.
 
 <a id="nestedblock--service--deploy_options--deploy_re_virtual_sites--virtual_site"></a>
 
-### Service Deploy Options Deploy Re Virtual Sites Virtual Site
+### Service Deploy Options Deploy RE Virtual Sites Virtual Site
 
 <a id="nestedblock--service--scale_to_zero"></a>
 
@@ -759,7 +759,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `default_flavor` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Flavor](#nestedblock--simple_service--container--default_flavor) below.
 
-`flavor` - (Optional) Container Flavor Type. Container Flavor type - CONTAINER_FLAVOR_TYPE_TINY: Tiny Tiny containers have limit of 0 (`String`).
+`flavor` - (Optional) Container Flavor Type. Container Flavor type - CONTAINER_FLAVOR_TYPE_TINY: Tiny Tiny containers have limit of 0.1 vCPU and 256 MiB (mebibyte) memory - CONTAINER_FLAVOR_TYPE_MEDIUM: Medium Medium containers have limit of 0.25 vCPU and 512 MiB (mebibyte) memory - CONTAINER_FLAVOR_TYPE_LARGE: Large Large containers have limit of 1 vCPU and 2048 MiB (mebibyte) memory. Possible values are `CONTAINER_FLAVOR_TYPE_TINY`, `CONTAINER_FLAVOR_TYPE_MEDIUM`, `CONTAINER_FLAVOR_TYPE_LARGE`. Defaults to `CONTAINER_FLAVOR_TYPE_TINY` (`String`).
 
 `image` - (Optional) Image Configuration. ImageType configures the image to use, how to pull the image, and the associated secrets to use if any. See [Image](#nestedblock--simple_service--container--image) below.
 
@@ -791,11 +791,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `container_registry` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Container Registry](#nestedblock--simple_service--container--image--container_registry) below.
 
-`name` - (Optional) Image Name. Name is a container image which are usually given a name such as alpine, ubuntu, or quay.io/etcd:0.13. The format is registry/image:tag or registry/image@image-digest (`String`).
+`name` - (Optional) Image Name. Name is a container image which are usually given a name such as alpine, ubuntu, or quay.io/etcd:0.13. The format is registry/image:tag or registry/image@image-digest. If registry is not specified, the Docker public registry is assumed. If tag is not specified, latest is assumed (`String`).
 
 `public` - (Optional) Empty. This can be used for messages where no values are needed. See [Public](#nestedblock--simple_service--container--image--public) below.
 
-`pull_policy` - (Optional) Image Pull Policy Type. Image pull policy type enumerates the policy choices to use for pulling the image prior to starting the workload - IMAGE_PULL_POLICY_DEFAULT: Default Default will always pul... (`String`).
+`pull_policy` - (Optional) Image Pull Policy Type. Image pull policy type enumerates the policy choices to use for pulling the image prior to starting the workload - IMAGE_PULL_POLICY_DEFAULT: Default Default will always pull image if :latest tag is specified in image name. If :latest tag is not specified in image name, it will pull image only if it does not already exist on the node - IMAGE_PULL_POLICY_IF_NOT_PRESENT: IfNotPresent Only pull the image if it does not already exist on the node - IMAGE_PULL_POLICY_ALWAYS:... Possible values are `IMAGE_PULL_POLICY_DEFAULT`, `IMAGE_PULL_POLICY_IF_NOT_PRESENT`, `IMAGE_PULL_POLICY_ALWAYS`, `IMAGE_PULL_POLICY_NEVER`. Defaults to `IMAGE_PULL_POLICY_DEFAULT` (`String`).
 
 <a id="nestedblock--simple_service--container--image--container_registry"></a>
 
@@ -811,17 +811,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `exec_health_check` - (Optional) Exec Health Check. ExecHealthCheckType describes a health check based on 'run in container' action. Exit status of 0 is treated as live/healthy and non-zero is unhealthy. See [Exec Health Check](#nestedblock--simple_service--container--liveness_check--exec_health_check) below.
 
-`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy (`Number`).
+`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy. Note that during startup and liveliness, only a single successful health check is required to mark a container healthy (`Number`).
 
-`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [Http Health Check](#nestedblock--simple_service--container--liveness_check--http_health_check) below.
+`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [HTTP Health Check](#nestedblock--simple_service--container--liveness_check--http_health_check) below.
 
 `initial_delay` - (Optional) Initial Delay. Number of seconds after the container has started before health checks are initiated (`Number`).
 
 `interval` - (Optional) Interval. Time interval in seconds between two health check requests (`Number`).
 
-`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [Tcp Health Check](#nestedblock--simple_service--container--liveness_check--tcp_health_check) below.
+`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [TCP Health Check](#nestedblock--simple_service--container--liveness_check--tcp_health_check) below.
 
-`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response (`Number`).
+`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response. If the timeout is reached the health check attempt will be considered a failure (`Number`).
 
 `unhealthy_threshold` - (Optional) Unhealthy Threshold. Number of consecutive failed responses before declaring unhealthy. In other words, this is the number of unhealthy health checks required before a container is marked unhealthy (`Number`).
 
@@ -831,11 +831,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--simple_service--container--liveness_check--http_health_check"></a>
 
-### Simple Service Container Liveness Check Http Health Check
+### Simple Service Container Liveness Check HTTP Health Check
 
 <a id="nestedblock--simple_service--container--liveness_check--tcp_health_check"></a>
 
-### Simple Service Container Liveness Check Tcp Health Check
+### Simple Service Container Liveness Check TCP Health Check
 
 <a id="nestedblock--simple_service--container--readiness_check"></a>
 
@@ -843,17 +843,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `exec_health_check` - (Optional) Exec Health Check. ExecHealthCheckType describes a health check based on 'run in container' action. Exit status of 0 is treated as live/healthy and non-zero is unhealthy. See [Exec Health Check](#nestedblock--simple_service--container--readiness_check--exec_health_check) below.
 
-`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy (`Number`).
+`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy. Note that during startup and liveliness, only a single successful health check is required to mark a container healthy (`Number`).
 
-`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [Http Health Check](#nestedblock--simple_service--container--readiness_check--http_health_check) below.
+`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [HTTP Health Check](#nestedblock--simple_service--container--readiness_check--http_health_check) below.
 
 `initial_delay` - (Optional) Initial Delay. Number of seconds after the container has started before health checks are initiated (`Number`).
 
 `interval` - (Optional) Interval. Time interval in seconds between two health check requests (`Number`).
 
-`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [Tcp Health Check](#nestedblock--simple_service--container--readiness_check--tcp_health_check) below.
+`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [TCP Health Check](#nestedblock--simple_service--container--readiness_check--tcp_health_check) below.
 
-`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response (`Number`).
+`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response. If the timeout is reached the health check attempt will be considered a failure (`Number`).
 
 `unhealthy_threshold` - (Optional) Unhealthy Threshold. Number of consecutive failed responses before declaring unhealthy. In other words, this is the number of unhealthy health checks required before a container is marked unhealthy (`Number`).
 
@@ -863,11 +863,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--simple_service--container--readiness_check--http_health_check"></a>
 
-### Simple Service Container Readiness Check Http Health Check
+### Simple Service Container Readiness Check HTTP Health Check
 
 <a id="nestedblock--simple_service--container--readiness_check--tcp_health_check"></a>
 
-### Simple Service Container Readiness Check Tcp Health Check
+### Simple Service Container Readiness Check TCP Health Check
 
 <a id="nestedblock--simple_service--disabled"></a>
 
@@ -905,7 +905,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Simple Service Simple Advertise
 
-`domains` - (Optional) Domains. A list of Domains (host/authority header) that will be matched to Load Balancer. Wildcard hosts are supported in the suffix or prefix form Supported Domains and search order: 1 (`List`).
+`domains` - (Optional) Domains. A list of Domains (host/authority header) that will be matched to Load Balancer. Wildcard hosts are supported in the suffix or prefix form Supported Domains and search order: 1. Exact Domain names: `www.foo.com.` 2. Domains starting with a Wildcard: *.foo.com. Not supported Domains: - Just a Wildcard: * - A Wildcard and TLD with no root Domain: *.com. - A Wildcard not matching a whole DNS label. e.g. *.foo.com and *.bar.foo.com are valid Wildcards however *bar.foo.com, *-bar.foo.com, a.. (`List`).
 
 `service_port` - (Optional) Service Port. Service port to advertise on Internet via HTTP loadbalancer using port 80 (`Number`).
 
@@ -1027,7 +1027,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `default_flavor` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Flavor](#nestedblock--stateful_service--containers--default_flavor) below.
 
-`flavor` - (Optional) Container Flavor Type. Container Flavor type - CONTAINER_FLAVOR_TYPE_TINY: Tiny Tiny containers have limit of 0 (`String`).
+`flavor` - (Optional) Container Flavor Type. Container Flavor type - CONTAINER_FLAVOR_TYPE_TINY: Tiny Tiny containers have limit of 0.1 vCPU and 256 MiB (mebibyte) memory - CONTAINER_FLAVOR_TYPE_MEDIUM: Medium Medium containers have limit of 0.25 vCPU and 512 MiB (mebibyte) memory - CONTAINER_FLAVOR_TYPE_LARGE: Large Large containers have limit of 1 vCPU and 2048 MiB (mebibyte) memory. Possible values are `CONTAINER_FLAVOR_TYPE_TINY`, `CONTAINER_FLAVOR_TYPE_MEDIUM`, `CONTAINER_FLAVOR_TYPE_LARGE`. Defaults to `CONTAINER_FLAVOR_TYPE_TINY` (`String`).
 
 `image` - (Optional) Image Configuration. ImageType configures the image to use, how to pull the image, and the associated secrets to use if any. See [Image](#nestedblock--stateful_service--containers--image) below.
 
@@ -1059,11 +1059,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `container_registry` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Container Registry](#nestedblock--stateful_service--containers--image--container_registry) below.
 
-`name` - (Optional) Image Name. Name is a container image which are usually given a name such as alpine, ubuntu, or quay.io/etcd:0.13. The format is registry/image:tag or registry/image@image-digest (`String`).
+`name` - (Optional) Image Name. Name is a container image which are usually given a name such as alpine, ubuntu, or quay.io/etcd:0.13. The format is registry/image:tag or registry/image@image-digest. If registry is not specified, the Docker public registry is assumed. If tag is not specified, latest is assumed (`String`).
 
 `public` - (Optional) Empty. This can be used for messages where no values are needed. See [Public](#nestedblock--stateful_service--containers--image--public) below.
 
-`pull_policy` - (Optional) Image Pull Policy Type. Image pull policy type enumerates the policy choices to use for pulling the image prior to starting the workload - IMAGE_PULL_POLICY_DEFAULT: Default Default will always pul... (`String`).
+`pull_policy` - (Optional) Image Pull Policy Type. Image pull policy type enumerates the policy choices to use for pulling the image prior to starting the workload - IMAGE_PULL_POLICY_DEFAULT: Default Default will always pull image if :latest tag is specified in image name. If :latest tag is not specified in image name, it will pull image only if it does not already exist on the node - IMAGE_PULL_POLICY_IF_NOT_PRESENT: IfNotPresent Only pull the image if it does not already exist on the node - IMAGE_PULL_POLICY_ALWAYS:... Possible values are `IMAGE_PULL_POLICY_DEFAULT`, `IMAGE_PULL_POLICY_IF_NOT_PRESENT`, `IMAGE_PULL_POLICY_ALWAYS`, `IMAGE_PULL_POLICY_NEVER`. Defaults to `IMAGE_PULL_POLICY_DEFAULT` (`String`).
 
 <a id="nestedblock--stateful_service--containers--image--container_registry"></a>
 
@@ -1079,17 +1079,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `exec_health_check` - (Optional) Exec Health Check. ExecHealthCheckType describes a health check based on 'run in container' action. Exit status of 0 is treated as live/healthy and non-zero is unhealthy. See [Exec Health Check](#nestedblock--stateful_service--containers--liveness_check--exec_health_check) below.
 
-`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy (`Number`).
+`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy. Note that during startup and liveliness, only a single successful health check is required to mark a container healthy (`Number`).
 
-`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [Http Health Check](#nestedblock--stateful_service--containers--liveness_check--http_health_check) below.
+`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [HTTP Health Check](#nestedblock--stateful_service--containers--liveness_check--http_health_check) below.
 
 `initial_delay` - (Optional) Initial Delay. Number of seconds after the container has started before health checks are initiated (`Number`).
 
 `interval` - (Optional) Interval. Time interval in seconds between two health check requests (`Number`).
 
-`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [Tcp Health Check](#nestedblock--stateful_service--containers--liveness_check--tcp_health_check) below.
+`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [TCP Health Check](#nestedblock--stateful_service--containers--liveness_check--tcp_health_check) below.
 
-`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response (`Number`).
+`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response. If the timeout is reached the health check attempt will be considered a failure (`Number`).
 
 `unhealthy_threshold` - (Optional) Unhealthy Threshold. Number of consecutive failed responses before declaring unhealthy. In other words, this is the number of unhealthy health checks required before a container is marked unhealthy (`Number`).
 
@@ -1099,11 +1099,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--stateful_service--containers--liveness_check--http_health_check"></a>
 
-### Stateful Service Containers Liveness Check Http Health Check
+### Stateful Service Containers Liveness Check HTTP Health Check
 
 <a id="nestedblock--stateful_service--containers--liveness_check--tcp_health_check"></a>
 
-### Stateful Service Containers Liveness Check Tcp Health Check
+### Stateful Service Containers Liveness Check TCP Health Check
 
 <a id="nestedblock--stateful_service--containers--readiness_check"></a>
 
@@ -1111,17 +1111,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `exec_health_check` - (Optional) Exec Health Check. ExecHealthCheckType describes a health check based on 'run in container' action. Exit status of 0 is treated as live/healthy and non-zero is unhealthy. See [Exec Health Check](#nestedblock--stateful_service--containers--readiness_check--exec_health_check) below.
 
-`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy (`Number`).
+`healthy_threshold` - (Optional) Healthy Threshold. Number of consecutive successful responses after having failed before declaring healthy. In other words, this is the number of healthy health checks required before marking healthy. Note that during startup and liveliness, only a single successful health check is required to mark a container healthy (`Number`).
 
-`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [Http Health Check](#nestedblock--stateful_service--containers--readiness_check--http_health_check) below.
+`http_health_check` - (Optional) HTTP Health Check. HTTPHealthCheckType describes a health check based on HTTP GET requests. See [HTTP Health Check](#nestedblock--stateful_service--containers--readiness_check--http_health_check) below.
 
 `initial_delay` - (Optional) Initial Delay. Number of seconds after the container has started before health checks are initiated (`Number`).
 
 `interval` - (Optional) Interval. Time interval in seconds between two health check requests (`Number`).
 
-`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [Tcp Health Check](#nestedblock--stateful_service--containers--readiness_check--tcp_health_check) below.
+`tcp_health_check` - (Optional) TCP Health Check. TCPHealthCheckType describes a health check based on opening a TCP connection. See [TCP Health Check](#nestedblock--stateful_service--containers--readiness_check--tcp_health_check) below.
 
-`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response (`Number`).
+`timeout` - (Optional) Timeout. Timeout in seconds to wait for successful response. In other words, it is the time to wait for a health check response. If the timeout is reached the health check attempt will be considered a failure (`Number`).
 
 `unhealthy_threshold` - (Optional) Unhealthy Threshold. Number of consecutive failed responses before declaring unhealthy. In other words, this is the number of unhealthy health checks required before a container is marked unhealthy (`Number`).
 
@@ -1131,11 +1131,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--stateful_service--containers--readiness_check--http_health_check"></a>
 
-### Stateful Service Containers Readiness Check Http Health Check
+### Stateful Service Containers Readiness Check HTTP Health Check
 
 <a id="nestedblock--stateful_service--containers--readiness_check--tcp_health_check"></a>
 
-### Stateful Service Containers Readiness Check Tcp Health Check
+### Stateful Service Containers Readiness Check TCP Health Check
 
 <a id="nestedblock--stateful_service--deploy_options"></a>
 
@@ -1145,13 +1145,13 @@ In addition to all arguments above, the following attributes are exported:
 
 `default_virtual_sites` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Virtual Sites](#nestedblock--stateful_service--deploy_options--default_virtual_sites) below.
 
-`deploy_ce_sites` - (Optional) Customer Sites. This defines a way to deploy a workload on specific Customer sites. See [Deploy Ce Sites](#nestedblock--stateful_service--deploy_options--deploy_ce_sites) below.
+`deploy_ce_sites` - (Optional) Customer Sites. This defines a way to deploy a workload on specific Customer sites. See [Deploy CE Sites](#nestedblock--stateful_service--deploy_options--deploy_ce_sites) below.
 
-`deploy_ce_virtual_sites` - (Optional) Customer Virtual Sites. This defines a way to deploy a workload on specific Customer virtual sites. See [Deploy Ce Virtual Sites](#nestedblock--stateful_service--deploy_options--deploy_ce_virtual_sites) below.
+`deploy_ce_virtual_sites` - (Optional) Customer Virtual Sites. This defines a way to deploy a workload on specific Customer virtual sites. See [Deploy CE Virtual Sites](#nestedblock--stateful_service--deploy_options--deploy_ce_virtual_sites) below.
 
-`deploy_re_sites` - (Optional) Regional Edge Sites. This defines a way to deploy a workload on specific Regional Edge sites. See [Deploy Re Sites](#nestedblock--stateful_service--deploy_options--deploy_re_sites) below.
+`deploy_re_sites` - (Optional) Regional Edge Sites. This defines a way to deploy a workload on specific Regional Edge sites. See [Deploy RE Sites](#nestedblock--stateful_service--deploy_options--deploy_re_sites) below.
 
-`deploy_re_virtual_sites` - (Optional) Regional Edge Virtual Sites. This defines a way to deploy a workload on specific Regional Edge virtual sites. See [Deploy Re Virtual Sites](#nestedblock--stateful_service--deploy_options--deploy_re_virtual_sites) below.
+`deploy_re_virtual_sites` - (Optional) Regional Edge Virtual Sites. This defines a way to deploy a workload on specific Regional Edge virtual sites. See [Deploy RE Virtual Sites](#nestedblock--stateful_service--deploy_options--deploy_re_virtual_sites) below.
 
 <a id="nestedblock--stateful_service--deploy_options--all_res"></a>
 
@@ -1163,43 +1163,43 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--stateful_service--deploy_options--deploy_ce_sites"></a>
 
-### Stateful Service Deploy Options Deploy Ce Sites
+### Stateful Service Deploy Options Deploy CE Sites
 
 `site` - (Optional) List of Customer Sites to Deploy. Which customer sites should this workload be deployed. See [Site](#nestedblock--stateful_service--deploy_options--deploy_ce_sites--site) below.
 
 <a id="nestedblock--stateful_service--deploy_options--deploy_ce_sites--site"></a>
 
-### Stateful Service Deploy Options Deploy Ce Sites Site
+### Stateful Service Deploy Options Deploy CE Sites Site
 
 <a id="nestedblock--stateful_service--deploy_options--deploy_ce_virtual_sites"></a>
 
-### Stateful Service Deploy Options Deploy Ce Virtual Sites
+### Stateful Service Deploy Options Deploy CE Virtual Sites
 
 `virtual_site` - (Optional) List of Customer Virtual Sites to Deploy. Which customer virtual sites should this workload be deployed. See [Virtual Site](#nestedblock--stateful_service--deploy_options--deploy_ce_virtual_sites--virtual_site) below.
 
 <a id="nestedblock--stateful_service--deploy_options--deploy_ce_virtual_sites--virtual_site"></a>
 
-### Stateful Service Deploy Options Deploy Ce Virtual Sites Virtual Site
+### Stateful Service Deploy Options Deploy CE Virtual Sites Virtual Site
 
 <a id="nestedblock--stateful_service--deploy_options--deploy_re_sites"></a>
 
-### Stateful Service Deploy Options Deploy Re Sites
+### Stateful Service Deploy Options Deploy RE Sites
 
 `site` - (Optional) List of Regional Edge Sites to Deploy. Which regional edge sites should this workload be deployed. See [Site](#nestedblock--stateful_service--deploy_options--deploy_re_sites--site) below.
 
 <a id="nestedblock--stateful_service--deploy_options--deploy_re_sites--site"></a>
 
-### Stateful Service Deploy Options Deploy Re Sites Site
+### Stateful Service Deploy Options Deploy RE Sites Site
 
 <a id="nestedblock--stateful_service--deploy_options--deploy_re_virtual_sites"></a>
 
-### Stateful Service Deploy Options Deploy Re Virtual Sites
+### Stateful Service Deploy Options Deploy RE Virtual Sites
 
 `virtual_site` - (Optional) List of Regional Edge Virtual Sites to Deploy. Which regional edge virtual sites should this workload be deployed. See [Virtual Site](#nestedblock--stateful_service--deploy_options--deploy_re_virtual_sites--virtual_site) below.
 
 <a id="nestedblock--stateful_service--deploy_options--deploy_re_virtual_sites--virtual_site"></a>
 
-### Stateful Service Deploy Options Deploy Re Virtual Sites Virtual Site
+### Stateful Service Deploy Options Deploy RE Virtual Sites Virtual Site
 
 <a id="nestedblock--stateful_service--persistent_volumes"></a>
 
@@ -1267,13 +1267,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 

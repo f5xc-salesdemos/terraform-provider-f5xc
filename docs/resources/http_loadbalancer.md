@@ -77,7 +77,7 @@ The following arguments are optional:
 
 `active_service_policies` - (Optional) Service Policy List. List of service policies. See [Active Service Policies](#active-service-policies) below for details.
 
-`add_location` - (Optional) Add Location. x-example: true Appends header x-volterra-location = <re-site-name> in responses. This configuration is ignored on CE sites (`Bool`).
+`add_location` - (Optional) Add Location. x-example: true Appends header x-volterra-location = <RE-site-name> in responses. This configuration is ignored on CE sites (`Bool`).
 
 > **Note:** One of the arguments from this list "advertise_custom, advertise_on_public, advertise_on_public_default_vip, do_not_advertise" must be set.
 
@@ -85,23 +85,23 @@ The following arguments are optional:
 
 `advertise_on_public` - (Optional) Advertise Public. This defines a way to advertise a load balancer on public. If optional public_ip is provided, it will only be advertised on RE sites where that public_ip is available. See [Advertise On Public](#advertise-on-public) below for details.
 
-`advertise_on_public_default_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Advertise On Public Default Vip](#advertise-on-public-default-vip) below for details.
+`advertise_on_public_default_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Advertise On Public Default VIP](#advertise-on-public-default-vip) below for details.
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
-`api_protection_rules` - (Optional) API Protection Rules. API Protection Rules. See [Api Protection Rules](#api-protection-rules) below for details.
+`api_protection_rules` - (Optional) API Protection Rules. API Protection Rules. See [API Protection Rules](#api-protection-rules) below for details.
 
 > **Note:** One of the arguments from this list "api_rate_limit, disable_rate_limit, rate_limit" must be set.
 
-`api_rate_limit` - (Optional) APIRateLimit. See [Api Rate Limit](#api-rate-limit) below for details.
+`api_rate_limit` - (Optional) APIRateLimit. See [API Rate Limit](#api-rate-limit) below for details.
 
 > **Note:** One of the arguments from this list "api_specification, disable_api_definition" must be set.
 
-`api_specification` - (Optional) API Specification and Validation. Settings for api specification (api definition, OpenAPI validation, etc.). See [Api Specification](#api-specification) below for details.
+`api_specification` - (Optional) API Specification and Validation. Settings for API specification (API definition, OpenAPI validation, etc.). See [API Specification](#api-specification) below for details.
 
 > **Note:** One of the arguments from this list "api_testing, disable_api_testing" must be set.
 
-`api_testing` - (Optional) API Testing. See [Api Testing](#api-testing) below for details.
+`api_testing` - (Optional) API Testing. See [API Testing](#api-testing) below for details.
 
 > **Note:** One of the arguments from this list "app_firewall, disable_waf" must be set.
 
@@ -121,7 +121,7 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "captcha_challenge, enable_challenge, js_challenge, no_challenge, policy_based_challenge" must be set.
 
-`captcha_challenge` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. See [Captcha Challenge](#captcha-challenge) below for details.
+`captcha_challenge` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. With this feature enabled, only clients that pass the captcha challenge will be allowed to complete the HTTP request. When loadbalancer is configured to do Captcha Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have captcha challenge embedded in it. Client will be allowed to make the request only if the cap... See [Captcha Challenge](#captcha-challenge) below for details.
 
 > **Note:** One of the arguments from this list "client_side_defense, disable_client_side_defense" must be set.
 
@@ -129,15 +129,15 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "cookie_stickiness, least_active, random, ring_hash, round_robin, source_ip_stickiness" must be set.
 
-`cookie_stickiness` - (Optional) Hashing using Cookie. Two types of cookie affinity: 1. Passive. Takes a cookie that's present in the cookies header and hashes on its value. 2. Generated. See [Cookie Stickiness](#cookie-stickiness) below for details.
+`cookie_stickiness` - (Optional) Hashing using Cookie. Two types of cookie affinity: 1. Passive. Takes a cookie that's present in the cookies header and hashes on its value. 2. Generated. Generates and sets a cookie with an expiration (TTL) on the first request from the client in its response to the client, based on the endpoint the request gets sent to. The client then presents this on the next and all subsequent requests. The hash of this is sufficient to ensure these requests get sent to the same endpoint. The cookie is g... See [Cookie Stickiness](#cookie-stickiness) below for details.
 
-`cors_policy` - (Optional) CORS Policy. Cross-Origin Resource Sharing requests configuration specified at Virtual-host or Route level. Route level configuration takes precedence. See [Cors Policy](#cors-policy) below for details.
+`cors_policy` - (Optional) CORS Policy. Cross-Origin Resource Sharing requests configuration specified at Virtual-host or Route level. Route level configuration takes precedence. An example of an Cross origin HTTP request GET /resources/public-data/ HTTP/1.1 Host: bar.other User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3pre) Gecko/20081130 Minefield/3.1b3pre Accept: text/HTML,application/xhtml+XML,application/XML;q=0.9,*/*;q=0.8 Accept-Language: en-us,en;q=0.5 Accept-Encoding: gzip,deflate... See [CORS Policy](#cors-policy) below for details.
 
-`csrf_policy` - (Optional) CSRF Policy. To mitigate CSRF attack , the policy checks where a request is coming from to determine if the request's origin is the same as its detination. See [Csrf Policy](#csrf-policy) below for details.
+`csrf_policy` - (Optional) CSRF Policy. To mitigate CSRF attack , the policy checks where a request is coming from to determine if the request's origin is the same as its detination.The policy relies on two pieces of information used in determining if a request originated from the same host. 1. The origin that caused the user agent to issue the request (source origin). 2. The origin that the request is going to (target origin). When the policy evaluating a request, it ensures both pieces of information are present and ... See [CSRF Policy](#csrf-policy) below for details.
 
-`data_guard_rules` - (Optional) Data Guard Rules. Data Guard prevents responses from exposing sensitive information by masking the data. See [Data Guard Rules](#data-guard-rules) below for details.
+`data_guard_rules` - (Optional) Data Guard Rules. Data Guard prevents responses from exposing sensitive information by masking the data. The system masks credit card numbers and social security numbers leaked from the application from within the HTTP response with a string of asterisks (*). Note: App Firewall should be enabled, to use Data Guard feature. See [Data Guard Rules](#data-guard-rules) below for details.
 
-`ddos_mitigation_rules` - (Optional) DDoS Mitigation Rules. Define manual mitigation rules to block L7 DDoS attacks. See [Ddos Mitigation Rules](#ddos-mitigation-rules) below for details.
+`ddos_mitigation_rules` - (Optional) DDOS Mitigation Rules. Define manual mitigation rules to block L7 DDOS attacks. See [DDOS Mitigation Rules](#ddos-mitigation-rules) below for details.
 
 > **Note:** One of the arguments from this list "default_pool, default_pool_list" must be set.
 
@@ -151,13 +151,13 @@ The following arguments are optional:
 
 `default_sensitive_data_policy` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Sensitive Data Policy](#default-sensitive-data-policy) below for details.
 
-`disable_api_definition` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Api Definition](#disable-api-definition) below for details.
+`disable_api_definition` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable API Definition](#disable-api-definition) below for details.
 
 > **Note:** One of the arguments from this list "disable_api_discovery, enable_api_discovery" must be set.
 
-`disable_api_discovery` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Api Discovery](#disable-api-discovery) below for details.
+`disable_api_discovery` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable API Discovery](#disable-api-discovery) below for details.
 
-`disable_api_testing` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Api Testing](#disable-api-testing) below for details.
+`disable_api_testing` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable API Testing](#disable-api-testing) below for details.
 
 `disable_bot_defense` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Bot Defense](#disable-bot-defense) below for details.
 
@@ -167,7 +167,7 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "disable_ip_reputation, enable_ip_reputation" must be set.
 
-`disable_ip_reputation` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Ip Reputation](#disable-ip-reputation) below for details.
+`disable_ip_reputation` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable IP Reputation](#disable-ip-reputation) below for details.
 
 > **Note:** One of the arguments from this list "disable_malicious_user_detection, enable_malicious_user_detection" must be set.
 
@@ -185,49 +185,49 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "disable_trust_client_ip_headers, enable_trust_client_ip_headers" must be set.
 
-`disable_trust_client_ip_headers` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Trust Client Ip Headers](#disable-trust-client-ip-headers) below for details.
+`disable_trust_client_ip_headers` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Trust Client IP Headers](#disable-trust-client-ip-headers) below for details.
 
-`disable_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Waf](#disable-waf) below for details.
+`disable_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable WAF](#disable-waf) below for details.
 
 `do_not_advertise` - (Optional) Empty. This can be used for messages where no values are needed. See [Do Not Advertise](#do-not-advertise) below for details.
 
-`domains` - (Optional) Domains. A list of Domains (host/authority header) that will be matched to load balancer. Supported Domains and search order: 1. Exact Domain names: `www.foo.com.` 2 (`List`).
+`domains` - (Optional) Domains. A list of Domains (host/authority header) that will be matched to load balancer. Supported Domains and search order: 1. Exact Domain names: `www.foo.com.` 2. Domains starting with a Wildcard: *.foo.com. Not supported Domains: - Just a Wildcard: * - A Wildcard and TLD with no root Domain: *.com. - A Wildcard not matching a whole DNS label. e.g. *.foo.com and *.bar.foo.com are valid Wildcards however *bar.foo.com, *-bar.foo.com, and bar*.foo.com are all invalid. Additional notes: A Wildc.. (`List`).
 
-`enable_api_discovery` - (Optional) API Discovery Setting. Specifies the settings used for API discovery. See [Enable Api Discovery](#enable-api-discovery) below for details.
+`enable_api_discovery` - (Optional) API Discovery Setting. Specifies the settings used for API discovery. See [Enable API Discovery](#enable-api-discovery) below for details.
 
 `enable_challenge` - (Optional) Enable Malicious User Challenge. Configure auto mitigation i.e risk based challenges for malicious users. See [Enable Challenge](#enable-challenge) below for details.
 
-`enable_ip_reputation` - (Optional) IP Threat Category List. List of ip threat categories. See [Enable Ip Reputation](#enable-ip-reputation) below for details.
+`enable_ip_reputation` - (Optional) IP Threat Category List. List of IP threat categories. See [Enable IP Reputation](#enable-ip-reputation) below for details.
 
 `enable_malicious_user_detection` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Malicious User Detection](#enable-malicious-user-detection) below for details.
 
 `enable_threat_mesh` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Threat Mesh](#enable-threat-mesh) below for details.
 
-`enable_trust_client_ip_headers` - (Optional) Trust Client IP Headers List. List of Client IP Headers. See [Enable Trust Client Ip Headers](#enable-trust-client-ip-headers) below for details.
+`enable_trust_client_ip_headers` - (Optional) Trust Client IP Headers List. List of Client IP Headers. See [Enable Trust Client IP Headers](#enable-trust-client-ip-headers) below for details.
 
-`graphql_rules` - (Optional) GraphQL Inspection. GraphQL is a query language and server-side runtime for APIs which provides a complete and understandable description of the data in API. See [Graphql Rules](#graphql-rules) below for details.
+`graphql_rules` - (Optional) GraphQL Inspection. GraphQL is a query language and server-side runtime for APIs which provides a complete and understandable description of the data in API. GraphQL gives clients the power to ask for exactly what they need, makes it easier to evolve APIs over time, and enables powerful developer tools. Policy configuration to analyze GraphQL queries and prevent GraphQL tailored attacks. See [GraphQL Rules](#graphql-rules) below for details.
 
 > **Note:** One of the arguments from this list "http, https, https_auto_cert" must be set.
 
-`http` - (Optional) HTTP Choice. Choice for selecting HTTP proxy. See [Http](#http) below for details.
+`http` - (Optional) HTTP Choice. Choice for selecting HTTP proxy. See [HTTP](#http) below for details.
 
-`https` - (Optional) BYOC HTTPS Choice. Choice for selecting HTTP proxy with bring your own certificates. See [Https](#https) below for details.
+`https` - (Optional) BYOC HTTPS Choice. Choice for selecting HTTP proxy with bring your own certificates. See [HTTPS](#https) below for details.
 
-`https_auto_cert` - (Optional) HTTPS with Auto Certs Choice. Choice for selecting HTTP proxy with bring your own certificates. See [Https Auto Cert](#https-auto-cert) below for details.
+`https_auto_cert` - (Optional) HTTPS with Auto Certs Choice. Choice for selecting HTTP proxy with bring your own certificates. See [HTTPS Auto Cert](#https-auto-cert) below for details.
 
-`js_challenge` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. See [Js Challenge](#js-challenge) below for details.
+`js_challenge` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. With this feature enabled, only clients that are capable of executing Javascript(mostly browsers) will be allowed to complete the HTTP request. When loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have Javascript embedded in it. Loadbalancer chooses a set o... See [Js Challenge](#js-challenge) below for details.
 
-`jwt_validation` - (Optional) JWT Validation. JWT Validation stops JWT replay attacks and JWT tampering by cryptographically verifying incoming JWTs before they are passed to your API origin. See [Jwt Validation](#jwt-validation) below for details.
+`jwt_validation` - (Optional) JWT Validation. JWT Validation stops JWT replay attacks and JWT tampering by cryptographically verifying incoming JWTs before they are passed to your API origin. JWT Validation will also stop requests with expired tokens or tokens that are not yet valid. See [JWT Validation](#jwt-validation) below for details.
 
 > **Note:** One of the arguments from this list "l7_ddos_action_block, l7_ddos_action_default, l7_ddos_action_js_challenge" must be set.
 
-`l7_ddos_action_block` - (Optional) Empty. This can be used for messages where no values are needed. See [L7 Ddos Action Block](#l7-ddos-action-block) below for details.
+`l7_ddos_action_block` - (Optional) Empty. This can be used for messages where no values are needed. See [L7 DDOS Action Block](#l7-ddos-action-block) below for details.
 
-`l7_ddos_action_default` - (Optional) Empty. This can be used for messages where no values are needed. See [L7 Ddos Action Default](#l7-ddos-action-default) below for details.
+`l7_ddos_action_default` - (Optional) Empty. This can be used for messages where no values are needed. See [L7 DDOS Action Default](#l7-ddos-action-default) below for details.
 
-`l7_ddos_action_js_challenge` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. See [L7 Ddos Action Js Challenge](#l7-ddos-action-js-challenge) below for details.
+`l7_ddos_action_js_challenge` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. With this feature enabled, only clients that are capable of executing Javascript(mostly browsers) will be allowed to complete the HTTP request. When loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have Javascript embedded in it. Loadbalancer chooses a set o... See [L7 DDOS Action Js Challenge](#l7-ddos-action-js-challenge) below for details.
 
-`l7_ddos_protection` - (Optional) L7 DDoS Protection Settings. L7 DDoS protection is critical for safeguarding web applications, APIs, and services that are exposed to the internet from sophisticated, volumetric, application-level .... See [L7 Ddos Protection](#l7-ddos-protection) below for details.
+`l7_ddos_protection` - (Optional) L7 DDOS Protection Settings. L7 DDOS protection is critical for safeguarding web applications, APIs, and services that are exposed to the internet from sophisticated, volumetric, application-level threats. Configure actions, thresholds and policies to apply during L7 DDOS attack. See [L7 DDOS Protection](#l7-ddos-protection) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
@@ -239,7 +239,7 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "multi_lb_app, single_lb_app" must be set.
 
-`multi_lb_app` - (Optional) Empty. This can be used for messages where no values are needed. See [Multi Lb App](#multi-lb-app) below for details.
+`multi_lb_app` - (Optional) Empty. This can be used for messages where no values are needed. See [Multi LB App](#multi-lb-app) below for details.
 
 `no_challenge` - (Optional) Empty. This can be used for messages where no values are needed. See [No Challenge](#no-challenge) below for details.
 
@@ -249,7 +249,7 @@ The following arguments are optional:
 
 `policy_based_challenge` - (Optional) Policy Based Challenge. Specifies the settings for policy rule based challenge. See [Policy Based Challenge](#policy-based-challenge) below for details.
 
-`protected_cookies` - (Optional) Cookie Protection. Allows setting attributes (SameSite, Secure, and HttpOnly) on cookies in responses. Cookie Tampering Protection prevents attackers from modifying the value of session cookies. See [Protected Cookies](#protected-cookies) below for details.
+`protected_cookies` - (Optional) Cookie Protection. Allows setting attributes (SameSite, Secure, and HttpOnly) on cookies in responses. Cookie Tampering Protection prevents attackers from modifying the value of session cookies. For Cookie Tampering Protection, enabling a web app firewall (WAF) is a prerequisite. The configured mode of WAF (monitoring or blocking) will be enforced on the request when cookie tampering is identified. Note: We recommend enabling Secure and HttpOnly attributes along with cookie tampering protection. See [Protected Cookies](#protected-cookies) below for details.
 
 `random` - (Optional) Empty. This can be used for messages where no values are needed. See [Random](#random) below for details.
 
@@ -259,7 +259,7 @@ The following arguments are optional:
 
 `round_robin` - (Optional) Empty. This can be used for messages where no values are needed. See [Round Robin](#round-robin) below for details.
 
-`routes` - (Optional) Routes. Routes allow users to define match condition on a path and/or HTTP method to either forward matching traffic to origin pool or redirect matching traffic to a different URL or respond direct.... See [Routes](#routes) below for details.
+`routes` - (Optional) Routes. Routes allow users to define match condition on a path and/or HTTP method to either forward matching traffic to origin pool or redirect matching traffic to a different URL or respond directly to matching traffic. See [Routes](#routes) below for details.
 
 `sensitive_data_disclosure_rules` - (Optional) Sensitive Data Exposure Rules. Sensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses. See [Sensitive Data Disclosure Rules](#sensitive-data-disclosure-rules) below for details.
 
@@ -267,13 +267,13 @@ The following arguments are optional:
 
 `service_policies_from_namespace` - (Optional) Empty. This can be used for messages where no values are needed. See [Service Policies From Namespace](#service-policies-from-namespace) below for details.
 
-`single_lb_app` - (Optional) Single Load Balancer App Setting. Specific settings for Machine learning analysis on this HTTP LB, independently from other LBs. See [Single Lb App](#single-lb-app) below for details.
+`single_lb_app` - (Optional) Single Load Balancer App Setting. Specific settings for Machine learning analysis on this HTTP LB, independently from other LBs. See [Single LB App](#single-lb-app) below for details.
 
 > **Note:** One of the arguments from this list "slow_ddos_mitigation, system_default_timeouts" must be set.
 
-`slow_ddos_mitigation` - (Optional) Slow DDoS Mitigation. 'Slow and low' attacks tie up server resources, leaving none available for servicing requests from actual users. See [Slow Ddos Mitigation](#slow-ddos-mitigation) below for details.
+`slow_ddos_mitigation` - (Optional) Slow DDOS Mitigation. 'Slow and low' attacks tie up server resources, leaving none available for servicing requests from actual users. See [Slow DDOS Mitigation](#slow-ddos-mitigation) below for details.
 
-`source_ip_stickiness` - (Optional) Empty. This can be used for messages where no values are needed. See [Source Ip Stickiness](#source-ip-stickiness) below for details.
+`source_ip_stickiness` - (Optional) Empty. This can be used for messages where no values are needed. See [Source IP Stickiness](#source-ip-stickiness) below for details.
 
 `system_default_timeouts` - (Optional) Empty. This can be used for messages where no values are needed. See [System Default Timeouts](#system-default-timeouts) below for details.
 
@@ -283,11 +283,11 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "user_id_client_ip, user_identification" must be set.
 
-`user_id_client_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [User Id Client Ip](#user-id-client-ip) below for details.
+`user_id_client_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [User Id Client IP](#user-id-client-ip) below for details.
 
 `user_identification` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [User Identification](#user-identification) below for details.
 
-`waf_exclusion` - (Optional) WAF Exclusion. See [Waf Exclusion](#waf-exclusion) below for details.
+`waf_exclusion` - (Optional) WAF Exclusion. See [WAF Exclusion](#waf-exclusion) below for details.
 
 ### Attributes Reference
 
@@ -301,7 +301,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Active Service Policies
 
-`policies` - (Optional) Policies. Service Policies is a sequential engine where policies (and rules within the policy) are evaluated one after the other. See [Policies](#nestedblock--active_service_policies--policies) below.
+`policies` - (Optional) Policies. Service Policies is a sequential engine where policies (and rules within the policy) are evaluated one after the other. It's important to define the correct order (policies evaluated from top to bottom in the list) for service policies, to get the intended result. For each request, its characteristics are evaluated based on the match criteria in each service policy starting at the top. If there is a match in the current policy, then the policy takes effect, and no more policies are ... See [Policies](#nestedblock--active_service_policies--policies) below.
 
 <a id="nestedblock--active_service_policies--policies"></a>
 
@@ -329,7 +329,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `port_ranges` - (Optional) Listen Port Ranges. A string containing a comma separated list of port ranges. Each port range consists of a single port or two ports separated by '-' (`String`).
 
-`site` - (Optional) Site. This defines a reference to a CE site along with network type and an optional ip address where a load balancer could be advertised. See [Site](#nestedblock--advertise_custom--advertise_where--site) below.
+`site` - (Optional) Site. This defines a reference to a CE site along with network type and an optional IP address where a load balancer could be advertised. See [Site](#nestedblock--advertise_custom--advertise_where--site) below.
 
 `use_default_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Default Port](#nestedblock--advertise_custom--advertise_where--use_default_port) below.
 
@@ -337,7 +337,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `virtual_site` - (Optional) Virtual Site. This defines a reference to a customer site virtual site along with network type where a load balancer could be advertised. See [Virtual Site](#nestedblock--advertise_custom--advertise_where--virtual_site) below.
 
-`virtual_site_with_vip` - (Optional) Virtual Site with Specified VIP. This defines a reference to a customer site virtual site along with network type and IP where a load balancer could be advertised. See [Virtual Site With Vip](#nestedblock--advertise_custom--advertise_where--virtual_site_with_vip) below.
+`virtual_site_with_vip` - (Optional) Virtual Site with Specified VIP. This defines a reference to a customer site virtual site along with network type and IP where a load balancer could be advertised. See [Virtual Site With VIP](#nestedblock--advertise_custom--advertise_where--virtual_site_with_vip) below.
 
 `vk8s_service` - (Optional) vK8s Services on RE. This defines a reference to a RE site or virtual site where a load balancer could be advertised in the vK8s service network. See [Vk8s Service](#nestedblock--advertise_custom--advertise_where--vk8s_service) below.
 
@@ -345,11 +345,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Advertise Custom Advertise Where Advertise On Public
 
-`public_ip` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Public Ip](#nestedblock--advertise_custom--advertise_where--advertise_on_public--public_ip) below.
+`public_ip` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Public IP](#nestedblock--advertise_custom--advertise_where--advertise_on_public--public_ip) below.
 
 <a id="nestedblock--advertise_custom--advertise_where--advertise_on_public--public_ip"></a>
 
-### Advertise Custom Advertise Where Advertise On Public Public Ip
+### Advertise Custom Advertise Where Advertise On Public Public IP
 
 <a id="nestedblock--advertise_custom--advertise_where--site"></a>
 
@@ -357,7 +357,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `ip` - (Optional) IP Address. Use given IP address as VIP on the site (`String`).
 
-`network` - (Optional) Site Network. This defines network types to be used on site All inside and outside networks. All inside and outside networks with internet VIP support. All inside networks. All outside networks (`String`).
+`network` - (Optional) Site Network. This defines network types to be used on site All inside and outside networks. All inside and outside networks with internet VIP support. All inside networks. All outside networks. All outside networks with internet VIP support. vK8s service network. - SITE_NETWORK_IP_FABRIC: VER IP Fabric network for the site This Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or for endpoint in IP Fabric network. Possible values are `SITE_NETWORK_INSIDE_AND_OUTSIDE`, `SITE_NETWORK_INSIDE`, `SITE_NETWORK_OUTSIDE`, `SITE_NETWORK_SERVICE`, `SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_IP_FABRIC`. Defaults to `SITE_NETWORK_INSIDE_AND_OUTSIDE` (`String`).
 
 `site` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Site](#nestedblock--advertise_custom--advertise_where--site--site) below.
 
@@ -373,23 +373,23 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Advertise Custom Advertise Where Virtual Network
 
-`default_v6_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Default V6 Vip](#nestedblock--advertise_custom--advertise_where--virtual_network--default_v6_vip) below.
+`default_v6_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Default V6 VIP](#nestedblock--advertise_custom--advertise_where--virtual_network--default_v6_vip) below.
 
-`default_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Vip](#nestedblock--advertise_custom--advertise_where--virtual_network--default_vip) below.
+`default_vip` - (Optional) Empty. This can be used for messages where no values are needed. See [Default VIP](#nestedblock--advertise_custom--advertise_where--virtual_network--default_vip) below.
 
-`specific_v6_vip` - (Optional) Specific V6 VIP. Use given IPV6 address as VIP on virtual Network (`String`).
+`specific_v6_vip` - (Optional) Specific V6 VIP. Use given IPv6 address as VIP on virtual Network (`String`).
 
-`specific_vip` - (Optional) Specific V4 VIP. Use given IPV4 address as VIP on virtual Network (`String`).
+`specific_vip` - (Optional) Specific V4 VIP. Use given IPv4 address as VIP on virtual Network (`String`).
 
 `virtual_network` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Virtual Network](#nestedblock--advertise_custom--advertise_where--virtual_network--virtual_network) below.
 
 <a id="nestedblock--advertise_custom--advertise_where--virtual_network--default_v6_vip"></a>
 
-### Advertise Custom Advertise Where Virtual Network Default V6 Vip
+### Advertise Custom Advertise Where Virtual Network Default V6 VIP
 
 <a id="nestedblock--advertise_custom--advertise_where--virtual_network--default_vip"></a>
 
-### Advertise Custom Advertise Where Virtual Network Default Vip
+### Advertise Custom Advertise Where Virtual Network Default VIP
 
 <a id="nestedblock--advertise_custom--advertise_where--virtual_network--virtual_network"></a>
 
@@ -399,7 +399,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Advertise Custom Advertise Where Virtual Site
 
-`network` - (Optional) Site Network. This defines network types to be used on site All inside and outside networks. All inside and outside networks with internet VIP support. All inside networks. All outside networks (`String`).
+`network` - (Optional) Site Network. This defines network types to be used on site All inside and outside networks. All inside and outside networks with internet VIP support. All inside networks. All outside networks. All outside networks with internet VIP support. vK8s service network. - SITE_NETWORK_IP_FABRIC: VER IP Fabric network for the site This Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or for endpoint in IP Fabric network. Possible values are `SITE_NETWORK_INSIDE_AND_OUTSIDE`, `SITE_NETWORK_INSIDE`, `SITE_NETWORK_OUTSIDE`, `SITE_NETWORK_SERVICE`, `SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP`, `SITE_NETWORK_IP_FABRIC`. Defaults to `SITE_NETWORK_INSIDE_AND_OUTSIDE` (`String`).
 
 `virtual_site` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Virtual Site](#nestedblock--advertise_custom--advertise_where--virtual_site--virtual_site) below.
 
@@ -409,17 +409,17 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--advertise_custom--advertise_where--virtual_site_with_vip"></a>
 
-### Advertise Custom Advertise Where Virtual Site With Vip
+### Advertise Custom Advertise Where Virtual Site With VIP
 
 `ip` - (Optional) IP Address. Use given IP address as VIP on the site (`String`).
 
-`network` - (Optional) Site Network. This defines network types to be used on virtual-site with specified VIP All outside networks. All inside networks (`String`).
+`network` - (Optional) Site Network. This defines network types to be used on virtual-site with specified VIP All outside networks. All inside networks. Possible values are `SITE_NETWORK_SPECIFIED_VIP_OUTSIDE`, `SITE_NETWORK_SPECIFIED_VIP_INSIDE`. Defaults to `SITE_NETWORK_SPECIFIED_VIP_OUTSIDE` (`String`).
 
 `virtual_site` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Virtual Site](#nestedblock--advertise_custom--advertise_where--virtual_site_with_vip--virtual_site) below.
 
 <a id="nestedblock--advertise_custom--advertise_where--virtual_site_with_vip--virtual_site"></a>
 
-### Advertise Custom Advertise Where Virtual Site With Vip Virtual Site
+### Advertise Custom Advertise Where Virtual Site With VIP Virtual Site
 
 <a id="nestedblock--advertise_custom--advertise_where--vk8s_service"></a>
 
@@ -441,11 +441,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Advertise On Public
 
-`public_ip` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Public Ip](#nestedblock--advertise_on_public--public_ip) below.
+`public_ip` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Public IP](#nestedblock--advertise_on_public--public_ip) below.
 
 <a id="nestedblock--advertise_on_public--public_ip"></a>
 
-### Advertise On Public Public Ip
+### Advertise On Public Public IP
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -455,39 +455,39 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--advertise_on_public_default_vip"></a>
 
-### Advertise On Public Default Vip
+### Advertise On Public Default VIP
 
 <a id="nestedblock--api_protection_rules"></a>
 
-### Api Protection Rules
+### API Protection Rules
 
-`api_endpoint_rules` - (Optional) API Endpoints. This category defines specific rules per API endpoints. If request matches any of these rules, skipping second category rules. See [Api Endpoint Rules](#nestedblock--api_protection_rules--api_endpoint_rules) below.
+`api_endpoint_rules` - (Optional) API Endpoints. This category defines specific rules per API endpoints. If request matches any of these rules, skipping second category rules. See [API Endpoint Rules](#nestedblock--api_protection_rules--api_endpoint_rules) below.
 
-`api_groups_rules` - (Optional) Server URLs and API Groups. This category includes rules per API group or Server URL. For API groups, refer to API Definition which includes API groups derived from uploaded swaggers. See [Api Groups Rules](#nestedblock--api_protection_rules--api_groups_rules) below.
+`api_groups_rules` - (Optional) Server URLs and API Groups. This category includes rules per API group or Server URL. For API groups, refer to API Definition which includes API groups derived from uploaded swaggers. See [API Groups Rules](#nestedblock--api_protection_rules--api_groups_rules) below.
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules"></a>
 
-### Api Protection Rules Api Endpoint Rules
+### API Protection Rules API Endpoint Rules
 
 `action` - (Optional) API Protection Rule Action. The action to take if the input request matches the rule. See [Action](#nestedblock--api_protection_rules--api_endpoint_rules--action) below.
 
 `any_domain` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Domain](#nestedblock--api_protection_rules--api_endpoint_rules--any_domain) below.
 
-`api_endpoint_method` - (Optional) HTTP Method Matcher. A http method matcher specifies a list of methods to match an input HTTP method. The match is considered successful if the input method is a member of the list. See [Api Endpoint Method](#nestedblock--api_protection_rules--api_endpoint_rules--api_endpoint_method) below.
+`api_endpoint_method` - (Optional) HTTP Method Matcher. A HTTP method matcher specifies a list of methods to match an input HTTP method. The match is considered successful if the input method is a member of the list. The result of the match based on the method list is inverted if invert_matcher is true. See [API Endpoint Method](#nestedblock--api_protection_rules--api_endpoint_rules--api_endpoint_method) below.
 
 `api_endpoint_path` - (Optional) API Endpoint. The endpoint (path) of the request (`String`).
 
 `client_matcher` - (Optional) Client Matcher. Client conditions for matching a rule. See [Client Matcher](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher) below.
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--api_protection_rules--api_endpoint_rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--api_protection_rules--api_endpoint_rules--metadata) below.
 
 `request_matcher` - (Optional) Request Matcher. Request conditions for matching a rule. See [Request Matcher](#nestedblock--api_protection_rules--api_endpoint_rules--request_matcher) below.
 
-`specific_domain` - (Optional) Specific Domain. The rule will apply for a specific domain. For example: api.example.com (`String`).
+`specific_domain` - (Optional) Specific Domain. The rule will apply for a specific domain. For example: API.example.com (`String`).
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--action"></a>
 
-### Api Protection Rules Api Endpoint Rules Action
+### API Protection Rules API Endpoint Rules Action
 
 `allow` - (Optional) Empty. This can be used for messages where no values are needed. See [Allow](#nestedblock--api_protection_rules--api_endpoint_rules--action--allow) below.
 
@@ -495,19 +495,19 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--action--allow"></a>
 
-### Api Protection Rules Api Endpoint Rules Action Allow
+### API Protection Rules API Endpoint Rules Action Allow
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--action--deny"></a>
 
-### Api Protection Rules Api Endpoint Rules Action Deny
+### API Protection Rules API Endpoint Rules Action Deny
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--any_domain"></a>
 
-### Api Protection Rules Api Endpoint Rules Any Domain
+### API Protection Rules API Endpoint Rules Any Domain
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--api_endpoint_method"></a>
 
-### Api Protection Rules Api Endpoint Rules Api Endpoint Method
+### API Protection Rules API Endpoint Rules API Endpoint Method
 
 `invert_matcher` - (Optional) Invert Method Matcher. Invert the match result (`Bool`).
 
@@ -515,65 +515,65 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--client_matcher"></a>
 
-### Api Protection Rules Api Endpoint Rules Client Matcher
+### API Protection Rules API Endpoint Rules Client Matcher
 
 `any_client` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Client](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--any_client) below.
 
-`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Ip](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--any_ip) below.
+`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any IP](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--any_ip) below.
 
-`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. See [Asn List](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--asn_list) below.
+`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. See [Asn List](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--asn_list) below.
 
 `asn_matcher` - (Optional) ASN Matcher. Match any AS number contained in the list of bgp_asn_sets. See [Asn Matcher](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--asn_matcher) below.
 
-`client_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Client Selector](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--client_selector) below.
+`client_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Client Selector](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--client_selector) below.
 
-`ip_matcher` - (Optional) IP Prefix Matcher. Match any ip prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [Ip Matcher](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--ip_matcher) below.
+`ip_matcher` - (Optional) IP Prefix Matcher. Match any IP prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [IP Matcher](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--ip_matcher) below.
 
-`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [Ip Prefix List](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--ip_prefix_list) below.
+`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [IP Prefix List](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--ip_prefix_list) below.
 
-`ip_threat_category_list` - (Optional) IP Threat Category List Type. List of ip threat categories. See [Ip Threat Category List](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--ip_threat_category_list) below.
+`ip_threat_category_list` - (Optional) IP Threat Category List Type. List of IP threat categories. See [IP Threat Category List](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--ip_threat_category_list) below.
 
-`tls_fingerprint_matcher` - (Optional) TLS Fingerprint Matcher. A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. See [Tls Fingerprint Matcher](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--tls_fingerprint_matcher) below.
+`tls_fingerprint_matcher` - (Optional) TLS Fingerprint Matcher. A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. The set of supported positve match criteria includes a list of known classes of TLS fingerprints and a list of exact values. The match is considered successful if either of these positive criteria are satisfied and the input fingerprint is not one of the excluded values. See [TLS Fingerprint Matcher](#nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--tls_fingerprint_matcher) below.
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--any_client"></a>
 
-### Api Protection Rules Api Endpoint Rules Client Matcher Any Client
+### API Protection Rules API Endpoint Rules Client Matcher Any Client
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--any_ip"></a>
 
-### Api Protection Rules Api Endpoint Rules Client Matcher Any Ip
+### API Protection Rules API Endpoint Rules Client Matcher Any IP
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--asn_list"></a>
 
-### Api Protection Rules Api Endpoint Rules Client Matcher Asn List
+### API Protection Rules API Endpoint Rules Client Matcher Asn List
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--asn_matcher"></a>
 
-### Api Protection Rules Api Endpoint Rules Client Matcher Asn Matcher
+### API Protection Rules API Endpoint Rules Client Matcher Asn Matcher
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--client_selector"></a>
 
-### Api Protection Rules Api Endpoint Rules Client Matcher Client Selector
+### API Protection Rules API Endpoint Rules Client Matcher Client Selector
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--ip_matcher"></a>
 
-### Api Protection Rules Api Endpoint Rules Client Matcher Ip Matcher
+### API Protection Rules API Endpoint Rules Client Matcher IP Matcher
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--ip_prefix_list"></a>
 
-### Api Protection Rules Api Endpoint Rules Client Matcher Ip Prefix List
+### API Protection Rules API Endpoint Rules Client Matcher IP Prefix List
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--ip_threat_category_list"></a>
 
-### Api Protection Rules Api Endpoint Rules Client Matcher Ip Threat Category List
+### API Protection Rules API Endpoint Rules Client Matcher IP Threat Category List
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--client_matcher--tls_fingerprint_matcher"></a>
 
-### Api Protection Rules Api Endpoint Rules Client Matcher Tls Fingerprint Matcher
+### API Protection Rules API Endpoint Rules Client Matcher TLS Fingerprint Matcher
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--metadata"></a>
 
-### Api Protection Rules Api Endpoint Rules Metadata
+### API Protection Rules API Endpoint Rules Metadata
 
 `description` - (Optional) Description. Human readable description (`String`).
 
@@ -581,55 +581,55 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--request_matcher"></a>
 
-### Api Protection Rules Api Endpoint Rules Request Matcher
+### API Protection Rules API Endpoint Rules Request Matcher
 
-`cookie_matchers` - (Optional) Cookie Matchers. A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances of CookieMatcherType. See [Cookie Matchers](#nestedblock--api_protection_rules--api_endpoint_rules--request_matcher--cookie_matchers) below.
+`cookie_matchers` - (Optional) Cookie Matchers. A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances of CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name. Note that all specified cookie matcher predicates must evaluate to true. See [Cookie Matchers](#nestedblock--api_protection_rules--api_endpoint_rules--request_matcher--cookie_matchers) below.
 
-`headers` - (Optional) HTTP Headers. A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. See [Headers](#nestedblock--api_protection_rules--api_endpoint_rules--request_matcher--headers) below.
+`headers` - (Optional) HTTP Headers. A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type. Note that all specified header predicates must evaluate to true. See [Headers](#nestedblock--api_protection_rules--api_endpoint_rules--request_matcher--headers) below.
 
-`jwt_claims` - (Optional) JWT Claims. A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType instances. See [Jwt Claims](#nestedblock--api_protection_rules--api_endpoint_rules--request_matcher--jwt_claims) below.
+`jwt_claims` - (Optional) JWT Claims. A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType instances. The actual JWT claims values are extracted from the JWT payload as a list of strings. Note that all specified JWT claim predicates must evaluate to true. Note that this feature only works on LBs with JWT Validation feature enabled. See [JWT Claims](#nestedblock--api_protection_rules--api_endpoint_rules--request_matcher--jwt_claims) below.
 
-`query_params` - (Optional) HTTP Query Parameters. A list of predicates for all query parameters that need to be matched. See [Query Params](#nestedblock--api_protection_rules--api_endpoint_rules--request_matcher--query_params) below.
+`query_params` - (Optional) HTTP Query Parameters. A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name. Note that all specified query parameter predicates must evaluate to true. See [Query Params](#nestedblock--api_protection_rules--api_endpoint_rules--request_matcher--query_params) below.
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--request_matcher--cookie_matchers"></a>
 
-### Api Protection Rules Api Endpoint Rules Request Matcher Cookie Matchers
+### API Protection Rules API Endpoint Rules Request Matcher Cookie Matchers
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--request_matcher--headers"></a>
 
-### Api Protection Rules Api Endpoint Rules Request Matcher Headers
+### API Protection Rules API Endpoint Rules Request Matcher Headers
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--request_matcher--jwt_claims"></a>
 
-### Api Protection Rules Api Endpoint Rules Request Matcher Jwt Claims
+### API Protection Rules API Endpoint Rules Request Matcher JWT Claims
 
 <a id="nestedblock--api_protection_rules--api_endpoint_rules--request_matcher--query_params"></a>
 
-### Api Protection Rules Api Endpoint Rules Request Matcher Query Params
+### API Protection Rules API Endpoint Rules Request Matcher Query Params
 
 <a id="nestedblock--api_protection_rules--api_groups_rules"></a>
 
-### Api Protection Rules Api Groups Rules
+### API Protection Rules API Groups Rules
 
 `action` - (Optional) API Protection Rule Action. The action to take if the input request matches the rule. See [Action](#nestedblock--api_protection_rules--api_groups_rules--action) below.
 
 `any_domain` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Domain](#nestedblock--api_protection_rules--api_groups_rules--any_domain) below.
 
-`api_group` - (Optional) API Group. API groups derived from API Definition swaggers (`String`).
+`api_group` - (Optional) API Group. API groups derived from API Definition swaggers. For example oas-all-operations including all paths and methods from the swaggers, oas-base-urls covering all requests under base-paths from the swaggers. Custom groups can be created if user tags paths or operations with 'x-volterra-API-group' extensions inside swaggers (`String`).
 
 `base_path` - (Optional) Base Path. Prefix of the request path. For example: /v1 (`String`).
 
 `client_matcher` - (Optional) Client Matcher. Client conditions for matching a rule. See [Client Matcher](#nestedblock--api_protection_rules--api_groups_rules--client_matcher) below.
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--api_protection_rules--api_groups_rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--api_protection_rules--api_groups_rules--metadata) below.
 
 `request_matcher` - (Optional) Request Matcher. Request conditions for matching a rule. See [Request Matcher](#nestedblock--api_protection_rules--api_groups_rules--request_matcher) below.
 
-`specific_domain` - (Optional) Specific Domain. The rule will apply for a specific domain. For example: api.example.com (`String`).
+`specific_domain` - (Optional) Specific Domain. The rule will apply for a specific domain. For example: API.example.com (`String`).
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--action"></a>
 
-### Api Protection Rules Api Groups Rules Action
+### API Protection Rules API Groups Rules Action
 
 `allow` - (Optional) Empty. This can be used for messages where no values are needed. See [Allow](#nestedblock--api_protection_rules--api_groups_rules--action--allow) below.
 
@@ -637,77 +637,77 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--action--allow"></a>
 
-### Api Protection Rules Api Groups Rules Action Allow
+### API Protection Rules API Groups Rules Action Allow
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--action--deny"></a>
 
-### Api Protection Rules Api Groups Rules Action Deny
+### API Protection Rules API Groups Rules Action Deny
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--any_domain"></a>
 
-### Api Protection Rules Api Groups Rules Any Domain
+### API Protection Rules API Groups Rules Any Domain
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--client_matcher"></a>
 
-### Api Protection Rules Api Groups Rules Client Matcher
+### API Protection Rules API Groups Rules Client Matcher
 
 `any_client` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Client](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--any_client) below.
 
-`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Ip](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--any_ip) below.
+`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any IP](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--any_ip) below.
 
-`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. See [Asn List](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--asn_list) below.
+`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. See [Asn List](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--asn_list) below.
 
 `asn_matcher` - (Optional) ASN Matcher. Match any AS number contained in the list of bgp_asn_sets. See [Asn Matcher](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--asn_matcher) below.
 
-`client_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Client Selector](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--client_selector) below.
+`client_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Client Selector](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--client_selector) below.
 
-`ip_matcher` - (Optional) IP Prefix Matcher. Match any ip prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [Ip Matcher](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--ip_matcher) below.
+`ip_matcher` - (Optional) IP Prefix Matcher. Match any IP prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [IP Matcher](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--ip_matcher) below.
 
-`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [Ip Prefix List](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--ip_prefix_list) below.
+`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [IP Prefix List](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--ip_prefix_list) below.
 
-`ip_threat_category_list` - (Optional) IP Threat Category List Type. List of ip threat categories. See [Ip Threat Category List](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--ip_threat_category_list) below.
+`ip_threat_category_list` - (Optional) IP Threat Category List Type. List of IP threat categories. See [IP Threat Category List](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--ip_threat_category_list) below.
 
-`tls_fingerprint_matcher` - (Optional) TLS Fingerprint Matcher. A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. See [Tls Fingerprint Matcher](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--tls_fingerprint_matcher) below.
+`tls_fingerprint_matcher` - (Optional) TLS Fingerprint Matcher. A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. The set of supported positve match criteria includes a list of known classes of TLS fingerprints and a list of exact values. The match is considered successful if either of these positive criteria are satisfied and the input fingerprint is not one of the excluded values. See [TLS Fingerprint Matcher](#nestedblock--api_protection_rules--api_groups_rules--client_matcher--tls_fingerprint_matcher) below.
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--client_matcher--any_client"></a>
 
-### Api Protection Rules Api Groups Rules Client Matcher Any Client
+### API Protection Rules API Groups Rules Client Matcher Any Client
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--client_matcher--any_ip"></a>
 
-### Api Protection Rules Api Groups Rules Client Matcher Any Ip
+### API Protection Rules API Groups Rules Client Matcher Any IP
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--client_matcher--asn_list"></a>
 
-### Api Protection Rules Api Groups Rules Client Matcher Asn List
+### API Protection Rules API Groups Rules Client Matcher Asn List
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--client_matcher--asn_matcher"></a>
 
-### Api Protection Rules Api Groups Rules Client Matcher Asn Matcher
+### API Protection Rules API Groups Rules Client Matcher Asn Matcher
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--client_matcher--client_selector"></a>
 
-### Api Protection Rules Api Groups Rules Client Matcher Client Selector
+### API Protection Rules API Groups Rules Client Matcher Client Selector
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--client_matcher--ip_matcher"></a>
 
-### Api Protection Rules Api Groups Rules Client Matcher Ip Matcher
+### API Protection Rules API Groups Rules Client Matcher IP Matcher
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--client_matcher--ip_prefix_list"></a>
 
-### Api Protection Rules Api Groups Rules Client Matcher Ip Prefix List
+### API Protection Rules API Groups Rules Client Matcher IP Prefix List
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--client_matcher--ip_threat_category_list"></a>
 
-### Api Protection Rules Api Groups Rules Client Matcher Ip Threat Category List
+### API Protection Rules API Groups Rules Client Matcher IP Threat Category List
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--client_matcher--tls_fingerprint_matcher"></a>
 
-### Api Protection Rules Api Groups Rules Client Matcher Tls Fingerprint Matcher
+### API Protection Rules API Groups Rules Client Matcher TLS Fingerprint Matcher
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--metadata"></a>
 
-### Api Protection Rules Api Groups Rules Metadata
+### API Protection Rules API Groups Rules Metadata
 
 `description` - (Optional) Description. Human readable description (`String`).
 
@@ -715,55 +715,55 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--request_matcher"></a>
 
-### Api Protection Rules Api Groups Rules Request Matcher
+### API Protection Rules API Groups Rules Request Matcher
 
-`cookie_matchers` - (Optional) Cookie Matchers. A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances of CookieMatcherType. See [Cookie Matchers](#nestedblock--api_protection_rules--api_groups_rules--request_matcher--cookie_matchers) below.
+`cookie_matchers` - (Optional) Cookie Matchers. A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances of CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name. Note that all specified cookie matcher predicates must evaluate to true. See [Cookie Matchers](#nestedblock--api_protection_rules--api_groups_rules--request_matcher--cookie_matchers) below.
 
-`headers` - (Optional) HTTP Headers. A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. See [Headers](#nestedblock--api_protection_rules--api_groups_rules--request_matcher--headers) below.
+`headers` - (Optional) HTTP Headers. A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type. Note that all specified header predicates must evaluate to true. See [Headers](#nestedblock--api_protection_rules--api_groups_rules--request_matcher--headers) below.
 
-`jwt_claims` - (Optional) JWT Claims. A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType instances. See [Jwt Claims](#nestedblock--api_protection_rules--api_groups_rules--request_matcher--jwt_claims) below.
+`jwt_claims` - (Optional) JWT Claims. A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType instances. The actual JWT claims values are extracted from the JWT payload as a list of strings. Note that all specified JWT claim predicates must evaluate to true. Note that this feature only works on LBs with JWT Validation feature enabled. See [JWT Claims](#nestedblock--api_protection_rules--api_groups_rules--request_matcher--jwt_claims) below.
 
-`query_params` - (Optional) HTTP Query Parameters. A list of predicates for all query parameters that need to be matched. See [Query Params](#nestedblock--api_protection_rules--api_groups_rules--request_matcher--query_params) below.
+`query_params` - (Optional) HTTP Query Parameters. A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name. Note that all specified query parameter predicates must evaluate to true. See [Query Params](#nestedblock--api_protection_rules--api_groups_rules--request_matcher--query_params) below.
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--request_matcher--cookie_matchers"></a>
 
-### Api Protection Rules Api Groups Rules Request Matcher Cookie Matchers
+### API Protection Rules API Groups Rules Request Matcher Cookie Matchers
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--request_matcher--headers"></a>
 
-### Api Protection Rules Api Groups Rules Request Matcher Headers
+### API Protection Rules API Groups Rules Request Matcher Headers
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--request_matcher--jwt_claims"></a>
 
-### Api Protection Rules Api Groups Rules Request Matcher Jwt Claims
+### API Protection Rules API Groups Rules Request Matcher JWT Claims
 
 <a id="nestedblock--api_protection_rules--api_groups_rules--request_matcher--query_params"></a>
 
-### Api Protection Rules Api Groups Rules Request Matcher Query Params
+### API Protection Rules API Groups Rules Request Matcher Query Params
 
 <a id="nestedblock--api_rate_limit"></a>
 
-### Api Rate Limit
+### API Rate Limit
 
-`api_endpoint_rules` - (Optional) API Endpoints. Sets of rules for a specific endpoints. Order is matter as it uses first match policy. See [Api Endpoint Rules](#nestedblock--api_rate_limit--api_endpoint_rules) below.
+`api_endpoint_rules` - (Optional) API Endpoints. Sets of rules for a specific endpoints. Order is matter as it uses first match policy. For creating rule that contain a whole domain or group of endpoints, please use the server URL rules above. See [API Endpoint Rules](#nestedblock--api_rate_limit--api_endpoint_rules) below.
 
 `bypass_rate_limiting_rules` - (Optional) Bypass Rate Limiting. This category defines rules per URL or API group. If request matches any of these rules, skip Rate Limiting. See [Bypass Rate Limiting Rules](#nestedblock--api_rate_limit--bypass_rate_limiting_rules) below.
 
-`custom_ip_allowed_list` - (Optional) Custom IP Allowed List. IP Allowed list using existing ip_prefix_set objects. See [Custom Ip Allowed List](#nestedblock--api_rate_limit--custom_ip_allowed_list) below.
+`custom_ip_allowed_list` - (Optional) Custom IP Allowed List. IP Allowed list using existing ip_prefix_set objects. See [Custom IP Allowed List](#nestedblock--api_rate_limit--custom_ip_allowed_list) below.
 
-`ip_allowed_list` - (Optional) IPv4 Prefix List. x-example: '192.168.20.0/24' List of IPv4 prefixes that represent an endpoint. See [Ip Allowed List](#nestedblock--api_rate_limit--ip_allowed_list) below.
+`ip_allowed_list` - (Optional) IPv4 Prefix List. x-example: '192.168.20.0/24' List of IPv4 prefixes that represent an endpoint. See [IP Allowed List](#nestedblock--api_rate_limit--ip_allowed_list) below.
 
-`no_ip_allowed_list` - (Optional) Empty. This can be used for messages where no values are needed. See [No Ip Allowed List](#nestedblock--api_rate_limit--no_ip_allowed_list) below.
+`no_ip_allowed_list` - (Optional) Empty. This can be used for messages where no values are needed. See [No IP Allowed List](#nestedblock--api_rate_limit--no_ip_allowed_list) below.
 
-`server_url_rules` - (Optional) Server URLs. Set of rules for entire domain or base path that contain multiple endpoints. Order is matter as it uses first match policy. See [Server Url Rules](#nestedblock--api_rate_limit--server_url_rules) below.
+`server_url_rules` - (Optional) Server URLs. Set of rules for entire domain or base path that contain multiple endpoints. Order is matter as it uses first match policy. For matching also specific endpoints you can use the API endpoint rules set bellow. See [Server URL Rules](#nestedblock--api_rate_limit--server_url_rules) below.
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules"></a>
 
-### Api Rate Limit Api Endpoint Rules
+### API Rate Limit API Endpoint Rules
 
 `any_domain` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Domain](#nestedblock--api_rate_limit--api_endpoint_rules--any_domain) below.
 
-`api_endpoint_method` - (Optional) HTTP Method Matcher. A http method matcher specifies a list of methods to match an input HTTP method. The match is considered successful if the input method is a member of the list. See [Api Endpoint Method](#nestedblock--api_rate_limit--api_endpoint_rules--api_endpoint_method) below.
+`api_endpoint_method` - (Optional) HTTP Method Matcher. A HTTP method matcher specifies a list of methods to match an input HTTP method. The match is considered successful if the input method is a member of the list. The result of the match based on the method list is inverted if invert_matcher is true. See [API Endpoint Method](#nestedblock--api_rate_limit--api_endpoint_rules--api_endpoint_method) below.
 
 `api_endpoint_path` - (Optional) API Endpoint. The endpoint (path) of the request (`String`).
 
@@ -779,11 +779,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--any_domain"></a>
 
-### Api Rate Limit Api Endpoint Rules Any Domain
+### API Rate Limit API Endpoint Rules Any Domain
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--api_endpoint_method"></a>
 
-### Api Rate Limit Api Endpoint Rules Api Endpoint Method
+### API Rate Limit API Endpoint Rules API Endpoint Method
 
 `invert_matcher` - (Optional) Invert Method Matcher. Invert the match result (`Bool`).
 
@@ -791,85 +791,85 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--client_matcher"></a>
 
-### Api Rate Limit Api Endpoint Rules Client Matcher
+### API Rate Limit API Endpoint Rules Client Matcher
 
 `any_client` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Client](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--any_client) below.
 
-`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Ip](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--any_ip) below.
+`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any IP](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--any_ip) below.
 
-`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. See [Asn List](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--asn_list) below.
+`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. See [Asn List](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--asn_list) below.
 
 `asn_matcher` - (Optional) ASN Matcher. Match any AS number contained in the list of bgp_asn_sets. See [Asn Matcher](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--asn_matcher) below.
 
-`client_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Client Selector](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--client_selector) below.
+`client_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Client Selector](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--client_selector) below.
 
-`ip_matcher` - (Optional) IP Prefix Matcher. Match any ip prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [Ip Matcher](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--ip_matcher) below.
+`ip_matcher` - (Optional) IP Prefix Matcher. Match any IP prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [IP Matcher](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--ip_matcher) below.
 
-`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [Ip Prefix List](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--ip_prefix_list) below.
+`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [IP Prefix List](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--ip_prefix_list) below.
 
-`ip_threat_category_list` - (Optional) IP Threat Category List Type. List of ip threat categories. See [Ip Threat Category List](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--ip_threat_category_list) below.
+`ip_threat_category_list` - (Optional) IP Threat Category List Type. List of IP threat categories. See [IP Threat Category List](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--ip_threat_category_list) below.
 
-`tls_fingerprint_matcher` - (Optional) TLS Fingerprint Matcher. A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. See [Tls Fingerprint Matcher](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--tls_fingerprint_matcher) below.
+`tls_fingerprint_matcher` - (Optional) TLS Fingerprint Matcher. A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. The set of supported positve match criteria includes a list of known classes of TLS fingerprints and a list of exact values. The match is considered successful if either of these positive criteria are satisfied and the input fingerprint is not one of the excluded values. See [TLS Fingerprint Matcher](#nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--tls_fingerprint_matcher) below.
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--any_client"></a>
 
-### Api Rate Limit Api Endpoint Rules Client Matcher Any Client
+### API Rate Limit API Endpoint Rules Client Matcher Any Client
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--any_ip"></a>
 
-### Api Rate Limit Api Endpoint Rules Client Matcher Any Ip
+### API Rate Limit API Endpoint Rules Client Matcher Any IP
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--asn_list"></a>
 
-### Api Rate Limit Api Endpoint Rules Client Matcher Asn List
+### API Rate Limit API Endpoint Rules Client Matcher Asn List
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--asn_matcher"></a>
 
-### Api Rate Limit Api Endpoint Rules Client Matcher Asn Matcher
+### API Rate Limit API Endpoint Rules Client Matcher Asn Matcher
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--client_selector"></a>
 
-### Api Rate Limit Api Endpoint Rules Client Matcher Client Selector
+### API Rate Limit API Endpoint Rules Client Matcher Client Selector
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--ip_matcher"></a>
 
-### Api Rate Limit Api Endpoint Rules Client Matcher Ip Matcher
+### API Rate Limit API Endpoint Rules Client Matcher IP Matcher
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--ip_prefix_list"></a>
 
-### Api Rate Limit Api Endpoint Rules Client Matcher Ip Prefix List
+### API Rate Limit API Endpoint Rules Client Matcher IP Prefix List
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--ip_threat_category_list"></a>
 
-### Api Rate Limit Api Endpoint Rules Client Matcher Ip Threat Category List
+### API Rate Limit API Endpoint Rules Client Matcher IP Threat Category List
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--client_matcher--tls_fingerprint_matcher"></a>
 
-### Api Rate Limit Api Endpoint Rules Client Matcher Tls Fingerprint Matcher
+### API Rate Limit API Endpoint Rules Client Matcher TLS Fingerprint Matcher
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--inline_rate_limiter"></a>
 
-### Api Rate Limit Api Endpoint Rules Inline Rate Limiter
+### API Rate Limit API Endpoint Rules Inline Rate Limiter
 
 `ref_user_id` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Ref User Id](#nestedblock--api_rate_limit--api_endpoint_rules--inline_rate_limiter--ref_user_id) below.
 
 `threshold` - (Optional) Threshold. The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period (`Number`).
 
-`unit` - (Optional) Rate Limit Period Unit. Unit for the period per which the rate limit is applied (`String`).
+`unit` - (Optional) Rate Limit Period Unit. Unit for the period per which the rate limit is applied. - SECOND: Second Rate limit period unit is seconds - MINUTE: Minute Rate limit period unit is minutes - HOUR: Hour Rate limit period unit is hours - DAY: Day Rate limit period unit is days. Possible values are `SECOND`, `MINUTE`, `HOUR`. Defaults to `SECOND` (`String`).
 
-`use_http_lb_user_id` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Http Lb User Id](#nestedblock--api_rate_limit--api_endpoint_rules--inline_rate_limiter--use_http_lb_user_id) below.
+`use_http_lb_user_id` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTP LB User Id](#nestedblock--api_rate_limit--api_endpoint_rules--inline_rate_limiter--use_http_lb_user_id) below.
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--inline_rate_limiter--ref_user_id"></a>
 
-### Api Rate Limit Api Endpoint Rules Inline Rate Limiter Ref User Id
+### API Rate Limit API Endpoint Rules Inline Rate Limiter Ref User Id
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--inline_rate_limiter--use_http_lb_user_id"></a>
 
-### Api Rate Limit Api Endpoint Rules Inline Rate Limiter Use Http Lb User Id
+### API Rate Limit API Endpoint Rules Inline Rate Limiter Use HTTP LB User Id
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--ref_rate_limiter"></a>
 
-### Api Rate Limit Api Endpoint Rules Ref Rate Limiter
+### API Rate Limit API Endpoint Rules Ref Rate Limiter
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -879,49 +879,49 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--request_matcher"></a>
 
-### Api Rate Limit Api Endpoint Rules Request Matcher
+### API Rate Limit API Endpoint Rules Request Matcher
 
-`cookie_matchers` - (Optional) Cookie Matchers. A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances of CookieMatcherType. See [Cookie Matchers](#nestedblock--api_rate_limit--api_endpoint_rules--request_matcher--cookie_matchers) below.
+`cookie_matchers` - (Optional) Cookie Matchers. A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances of CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name. Note that all specified cookie matcher predicates must evaluate to true. See [Cookie Matchers](#nestedblock--api_rate_limit--api_endpoint_rules--request_matcher--cookie_matchers) below.
 
-`headers` - (Optional) HTTP Headers. A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. See [Headers](#nestedblock--api_rate_limit--api_endpoint_rules--request_matcher--headers) below.
+`headers` - (Optional) HTTP Headers. A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type. Note that all specified header predicates must evaluate to true. See [Headers](#nestedblock--api_rate_limit--api_endpoint_rules--request_matcher--headers) below.
 
-`jwt_claims` - (Optional) JWT Claims. A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType instances. See [Jwt Claims](#nestedblock--api_rate_limit--api_endpoint_rules--request_matcher--jwt_claims) below.
+`jwt_claims` - (Optional) JWT Claims. A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType instances. The actual JWT claims values are extracted from the JWT payload as a list of strings. Note that all specified JWT claim predicates must evaluate to true. Note that this feature only works on LBs with JWT Validation feature enabled. See [JWT Claims](#nestedblock--api_rate_limit--api_endpoint_rules--request_matcher--jwt_claims) below.
 
-`query_params` - (Optional) HTTP Query Parameters. A list of predicates for all query parameters that need to be matched. See [Query Params](#nestedblock--api_rate_limit--api_endpoint_rules--request_matcher--query_params) below.
+`query_params` - (Optional) HTTP Query Parameters. A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name. Note that all specified query parameter predicates must evaluate to true. See [Query Params](#nestedblock--api_rate_limit--api_endpoint_rules--request_matcher--query_params) below.
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--request_matcher--cookie_matchers"></a>
 
-### Api Rate Limit Api Endpoint Rules Request Matcher Cookie Matchers
+### API Rate Limit API Endpoint Rules Request Matcher Cookie Matchers
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--request_matcher--headers"></a>
 
-### Api Rate Limit Api Endpoint Rules Request Matcher Headers
+### API Rate Limit API Endpoint Rules Request Matcher Headers
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--request_matcher--jwt_claims"></a>
 
-### Api Rate Limit Api Endpoint Rules Request Matcher Jwt Claims
+### API Rate Limit API Endpoint Rules Request Matcher JWT Claims
 
 <a id="nestedblock--api_rate_limit--api_endpoint_rules--request_matcher--query_params"></a>
 
-### Api Rate Limit Api Endpoint Rules Request Matcher Query Params
+### API Rate Limit API Endpoint Rules Request Matcher Query Params
 
 <a id="nestedblock--api_rate_limit--bypass_rate_limiting_rules"></a>
 
-### Api Rate Limit Bypass Rate Limiting Rules
+### API Rate Limit Bypass Rate Limiting Rules
 
 `bypass_rate_limiting_rules` - (Optional) Bypass Rate Limiting. This category defines rules per URL or API group. If request matches any of these rules, skip Rate Limiting. See [Bypass Rate Limiting Rules](#nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules) below.
 
 <a id="nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules"></a>
 
-### Api Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules
+### API Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules
 
 `any_domain` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Domain](#nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--any_domain) below.
 
-`any_url` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Url](#nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--any_url) below.
+`any_url` - (Optional) Empty. This can be used for messages where no values are needed. See [Any URL](#nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--any_url) below.
 
-`api_endpoint` - (Optional) API Endpoint. This defines api endpoint. See [Api Endpoint](#nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--api_endpoint) below.
+`api_endpoint` - (Optional) API Endpoint. This defines API endpoint. See [API Endpoint](#nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--api_endpoint) below.
 
-`api_groups` - (Optional) API Groups. See [Api Groups](#nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--api_groups) below.
+`api_groups` - (Optional) API Groups. See [API Groups](#nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--api_groups) below.
 
 `base_path` - (Optional) Base Path. The base path which this validation applies to (`String`).
 
@@ -929,41 +929,41 @@ In addition to all arguments above, the following attributes are exported:
 
 `request_matcher` - (Optional) Request Matcher. Request conditions for matching a rule. See [Request Matcher](#nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--request_matcher) below.
 
-`specific_domain` - (Optional) Specific Domain. The rule will apply for a specific domain. For example: api.example.com (`String`).
+`specific_domain` - (Optional) Specific Domain. The rule will apply for a specific domain. For example: API.example.com (`String`).
 
 <a id="nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--any_domain"></a>
 
-### Api Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules Any Domain
+### API Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules Any Domain
 
 <a id="nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--any_url"></a>
 
-### Api Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules Any Url
+### API Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules Any URL
 
 <a id="nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--api_endpoint"></a>
 
-### Api Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules Api Endpoint
+### API Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules API Endpoint
 
 <a id="nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--api_groups"></a>
 
-### Api Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules Api Groups
+### API Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules API Groups
 
 <a id="nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--client_matcher"></a>
 
-### Api Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules Client Matcher
+### API Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules Client Matcher
 
 <a id="nestedblock--api_rate_limit--bypass_rate_limiting_rules--bypass_rate_limiting_rules--request_matcher"></a>
 
-### Api Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules Request Matcher
+### API Rate Limit Bypass Rate Limiting Rules Bypass Rate Limiting Rules Request Matcher
 
 <a id="nestedblock--api_rate_limit--custom_ip_allowed_list"></a>
 
-### Api Rate Limit Custom Ip Allowed List
+### API Rate Limit Custom IP Allowed List
 
 `rate_limiter_allowed_prefixes` - (Optional) List of IP Prefix Sets. References to ip_prefix_set objects. Requests from source IP addresses that are covered by one of the allowed IP Prefixes are not subjected to rate limiting. See [Rate Limiter Allowed Prefixes](#nestedblock--api_rate_limit--custom_ip_allowed_list--rate_limiter_allowed_prefixes) below.
 
 <a id="nestedblock--api_rate_limit--custom_ip_allowed_list--rate_limiter_allowed_prefixes"></a>
 
-### Api Rate Limit Custom Ip Allowed List Rate Limiter Allowed Prefixes
+### API Rate Limit Custom IP Allowed List Rate Limiter Allowed Prefixes
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -973,21 +973,21 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_rate_limit--ip_allowed_list"></a>
 
-### Api Rate Limit Ip Allowed List
+### API Rate Limit IP Allowed List
 
 `prefixes` - (Optional) IPv4 Prefix List. List of IPv4 prefixes that represent an endpoint (`List`).
 
 <a id="nestedblock--api_rate_limit--no_ip_allowed_list"></a>
 
-### Api Rate Limit No Ip Allowed List
+### API Rate Limit No IP Allowed List
 
 <a id="nestedblock--api_rate_limit--server_url_rules"></a>
 
-### Api Rate Limit Server Url Rules
+### API Rate Limit Server URL Rules
 
 `any_domain` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Domain](#nestedblock--api_rate_limit--server_url_rules--any_domain) below.
 
-`api_group` - (Optional) API Group. API groups derived from API Definition swaggers (`String`).
+`api_group` - (Optional) API Group. API groups derived from API Definition swaggers. For example oas-all-operations including all paths and methods from the swaggers, oas-base-urls covering all requests under base-paths from the swaggers. Custom groups can be created if user tags paths or operations with 'x-volterra-API-group' extensions inside swaggers (`String`).
 
 `base_path` - (Optional) Base Path. Prefix of the request path (`String`).
 
@@ -1003,89 +1003,89 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_rate_limit--server_url_rules--any_domain"></a>
 
-### Api Rate Limit Server Url Rules Any Domain
+### API Rate Limit Server URL Rules Any Domain
 
 <a id="nestedblock--api_rate_limit--server_url_rules--client_matcher"></a>
 
-### Api Rate Limit Server Url Rules Client Matcher
+### API Rate Limit Server URL Rules Client Matcher
 
 `any_client` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Client](#nestedblock--api_rate_limit--server_url_rules--client_matcher--any_client) below.
 
-`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Ip](#nestedblock--api_rate_limit--server_url_rules--client_matcher--any_ip) below.
+`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any IP](#nestedblock--api_rate_limit--server_url_rules--client_matcher--any_ip) below.
 
-`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. See [Asn List](#nestedblock--api_rate_limit--server_url_rules--client_matcher--asn_list) below.
+`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. See [Asn List](#nestedblock--api_rate_limit--server_url_rules--client_matcher--asn_list) below.
 
 `asn_matcher` - (Optional) ASN Matcher. Match any AS number contained in the list of bgp_asn_sets. See [Asn Matcher](#nestedblock--api_rate_limit--server_url_rules--client_matcher--asn_matcher) below.
 
-`client_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Client Selector](#nestedblock--api_rate_limit--server_url_rules--client_matcher--client_selector) below.
+`client_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Client Selector](#nestedblock--api_rate_limit--server_url_rules--client_matcher--client_selector) below.
 
-`ip_matcher` - (Optional) IP Prefix Matcher. Match any ip prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [Ip Matcher](#nestedblock--api_rate_limit--server_url_rules--client_matcher--ip_matcher) below.
+`ip_matcher` - (Optional) IP Prefix Matcher. Match any IP prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [IP Matcher](#nestedblock--api_rate_limit--server_url_rules--client_matcher--ip_matcher) below.
 
-`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [Ip Prefix List](#nestedblock--api_rate_limit--server_url_rules--client_matcher--ip_prefix_list) below.
+`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [IP Prefix List](#nestedblock--api_rate_limit--server_url_rules--client_matcher--ip_prefix_list) below.
 
-`ip_threat_category_list` - (Optional) IP Threat Category List Type. List of ip threat categories. See [Ip Threat Category List](#nestedblock--api_rate_limit--server_url_rules--client_matcher--ip_threat_category_list) below.
+`ip_threat_category_list` - (Optional) IP Threat Category List Type. List of IP threat categories. See [IP Threat Category List](#nestedblock--api_rate_limit--server_url_rules--client_matcher--ip_threat_category_list) below.
 
-`tls_fingerprint_matcher` - (Optional) TLS Fingerprint Matcher. A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. See [Tls Fingerprint Matcher](#nestedblock--api_rate_limit--server_url_rules--client_matcher--tls_fingerprint_matcher) below.
+`tls_fingerprint_matcher` - (Optional) TLS Fingerprint Matcher. A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. The set of supported positve match criteria includes a list of known classes of TLS fingerprints and a list of exact values. The match is considered successful if either of these positive criteria are satisfied and the input fingerprint is not one of the excluded values. See [TLS Fingerprint Matcher](#nestedblock--api_rate_limit--server_url_rules--client_matcher--tls_fingerprint_matcher) below.
 
 <a id="nestedblock--api_rate_limit--server_url_rules--client_matcher--any_client"></a>
 
-### Api Rate Limit Server Url Rules Client Matcher Any Client
+### API Rate Limit Server URL Rules Client Matcher Any Client
 
 <a id="nestedblock--api_rate_limit--server_url_rules--client_matcher--any_ip"></a>
 
-### Api Rate Limit Server Url Rules Client Matcher Any Ip
+### API Rate Limit Server URL Rules Client Matcher Any IP
 
 <a id="nestedblock--api_rate_limit--server_url_rules--client_matcher--asn_list"></a>
 
-### Api Rate Limit Server Url Rules Client Matcher Asn List
+### API Rate Limit Server URL Rules Client Matcher Asn List
 
 <a id="nestedblock--api_rate_limit--server_url_rules--client_matcher--asn_matcher"></a>
 
-### Api Rate Limit Server Url Rules Client Matcher Asn Matcher
+### API Rate Limit Server URL Rules Client Matcher Asn Matcher
 
 <a id="nestedblock--api_rate_limit--server_url_rules--client_matcher--client_selector"></a>
 
-### Api Rate Limit Server Url Rules Client Matcher Client Selector
+### API Rate Limit Server URL Rules Client Matcher Client Selector
 
 <a id="nestedblock--api_rate_limit--server_url_rules--client_matcher--ip_matcher"></a>
 
-### Api Rate Limit Server Url Rules Client Matcher Ip Matcher
+### API Rate Limit Server URL Rules Client Matcher IP Matcher
 
 <a id="nestedblock--api_rate_limit--server_url_rules--client_matcher--ip_prefix_list"></a>
 
-### Api Rate Limit Server Url Rules Client Matcher Ip Prefix List
+### API Rate Limit Server URL Rules Client Matcher IP Prefix List
 
 <a id="nestedblock--api_rate_limit--server_url_rules--client_matcher--ip_threat_category_list"></a>
 
-### Api Rate Limit Server Url Rules Client Matcher Ip Threat Category List
+### API Rate Limit Server URL Rules Client Matcher IP Threat Category List
 
 <a id="nestedblock--api_rate_limit--server_url_rules--client_matcher--tls_fingerprint_matcher"></a>
 
-### Api Rate Limit Server Url Rules Client Matcher Tls Fingerprint Matcher
+### API Rate Limit Server URL Rules Client Matcher TLS Fingerprint Matcher
 
 <a id="nestedblock--api_rate_limit--server_url_rules--inline_rate_limiter"></a>
 
-### Api Rate Limit Server Url Rules Inline Rate Limiter
+### API Rate Limit Server URL Rules Inline Rate Limiter
 
 `ref_user_id` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Ref User Id](#nestedblock--api_rate_limit--server_url_rules--inline_rate_limiter--ref_user_id) below.
 
 `threshold` - (Optional) Threshold. The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period (`Number`).
 
-`unit` - (Optional) Rate Limit Period Unit. Unit for the period per which the rate limit is applied (`String`).
+`unit` - (Optional) Rate Limit Period Unit. Unit for the period per which the rate limit is applied. - SECOND: Second Rate limit period unit is seconds - MINUTE: Minute Rate limit period unit is minutes - HOUR: Hour Rate limit period unit is hours - DAY: Day Rate limit period unit is days. Possible values are `SECOND`, `MINUTE`, `HOUR`. Defaults to `SECOND` (`String`).
 
-`use_http_lb_user_id` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Http Lb User Id](#nestedblock--api_rate_limit--server_url_rules--inline_rate_limiter--use_http_lb_user_id) below.
+`use_http_lb_user_id` - (Optional) Empty. This can be used for messages where no values are needed. See [Use HTTP LB User Id](#nestedblock--api_rate_limit--server_url_rules--inline_rate_limiter--use_http_lb_user_id) below.
 
 <a id="nestedblock--api_rate_limit--server_url_rules--inline_rate_limiter--ref_user_id"></a>
 
-### Api Rate Limit Server Url Rules Inline Rate Limiter Ref User Id
+### API Rate Limit Server URL Rules Inline Rate Limiter Ref User Id
 
 <a id="nestedblock--api_rate_limit--server_url_rules--inline_rate_limiter--use_http_lb_user_id"></a>
 
-### Api Rate Limit Server Url Rules Inline Rate Limiter Use Http Lb User Id
+### API Rate Limit Server URL Rules Inline Rate Limiter Use HTTP LB User Id
 
 <a id="nestedblock--api_rate_limit--server_url_rules--ref_rate_limiter"></a>
 
-### Api Rate Limit Server Url Rules Ref Rate Limiter
+### API Rate Limit Server URL Rules Ref Rate Limiter
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -1095,47 +1095,47 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_rate_limit--server_url_rules--request_matcher"></a>
 
-### Api Rate Limit Server Url Rules Request Matcher
+### API Rate Limit Server URL Rules Request Matcher
 
-`cookie_matchers` - (Optional) Cookie Matchers. A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances of CookieMatcherType. See [Cookie Matchers](#nestedblock--api_rate_limit--server_url_rules--request_matcher--cookie_matchers) below.
+`cookie_matchers` - (Optional) Cookie Matchers. A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances of CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name. Note that all specified cookie matcher predicates must evaluate to true. See [Cookie Matchers](#nestedblock--api_rate_limit--server_url_rules--request_matcher--cookie_matchers) below.
 
-`headers` - (Optional) HTTP Headers. A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. See [Headers](#nestedblock--api_rate_limit--server_url_rules--request_matcher--headers) below.
+`headers` - (Optional) HTTP Headers. A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type. Note that all specified header predicates must evaluate to true. See [Headers](#nestedblock--api_rate_limit--server_url_rules--request_matcher--headers) below.
 
-`jwt_claims` - (Optional) JWT Claims. A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType instances. See [Jwt Claims](#nestedblock--api_rate_limit--server_url_rules--request_matcher--jwt_claims) below.
+`jwt_claims` - (Optional) JWT Claims. A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType instances. The actual JWT claims values are extracted from the JWT payload as a list of strings. Note that all specified JWT claim predicates must evaluate to true. Note that this feature only works on LBs with JWT Validation feature enabled. See [JWT Claims](#nestedblock--api_rate_limit--server_url_rules--request_matcher--jwt_claims) below.
 
-`query_params` - (Optional) HTTP Query Parameters. A list of predicates for all query parameters that need to be matched. See [Query Params](#nestedblock--api_rate_limit--server_url_rules--request_matcher--query_params) below.
+`query_params` - (Optional) HTTP Query Parameters. A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name. Note that all specified query parameter predicates must evaluate to true. See [Query Params](#nestedblock--api_rate_limit--server_url_rules--request_matcher--query_params) below.
 
 <a id="nestedblock--api_rate_limit--server_url_rules--request_matcher--cookie_matchers"></a>
 
-### Api Rate Limit Server Url Rules Request Matcher Cookie Matchers
+### API Rate Limit Server URL Rules Request Matcher Cookie Matchers
 
 <a id="nestedblock--api_rate_limit--server_url_rules--request_matcher--headers"></a>
 
-### Api Rate Limit Server Url Rules Request Matcher Headers
+### API Rate Limit Server URL Rules Request Matcher Headers
 
 <a id="nestedblock--api_rate_limit--server_url_rules--request_matcher--jwt_claims"></a>
 
-### Api Rate Limit Server Url Rules Request Matcher Jwt Claims
+### API Rate Limit Server URL Rules Request Matcher JWT Claims
 
 <a id="nestedblock--api_rate_limit--server_url_rules--request_matcher--query_params"></a>
 
-### Api Rate Limit Server Url Rules Request Matcher Query Params
+### API Rate Limit Server URL Rules Request Matcher Query Params
 
 <a id="nestedblock--api_specification"></a>
 
-### Api Specification
+### API Specification
 
-`api_definition` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Api Definition](#nestedblock--api_specification--api_definition) below.
+`api_definition` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [API Definition](#nestedblock--api_specification--api_definition) below.
 
 `validation_all_spec_endpoints` - (Optional) API Inventory. Settings for API Inventory validation. See [Validation All Spec Endpoints](#nestedblock--api_specification--validation_all_spec_endpoints) below.
 
-`validation_custom_list` - (Optional) Custom List. Define API groups, base paths, or API endpoints and their OpenAPI validation modes. Any other api-endpoint not listed will act according to 'Fall Through Mode'. See [Validation Custom List](#nestedblock--api_specification--validation_custom_list) below.
+`validation_custom_list` - (Optional) Custom List. Define API groups, base paths, or API endpoints and their OpenAPI validation modes. Any other API-endpoint not listed will act according to 'Fall Through Mode'. See [Validation Custom List](#nestedblock--api_specification--validation_custom_list) below.
 
 `validation_disabled` - (Optional) Empty. This can be used for messages where no values are needed. See [Validation Disabled](#nestedblock--api_specification--validation_disabled) below.
 
 <a id="nestedblock--api_specification--api_definition"></a>
 
-### Api Specification Api Definition
+### API Specification API Definition
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -1145,7 +1145,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints"></a>
 
-### Api Specification Validation All Spec Endpoints
+### API Specification Validation All Spec Endpoints
 
 `fall_through_mode` - (Optional) Fall Through Mode. x-required Determine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules). See [Fall Through Mode](#nestedblock--api_specification--validation_all_spec_endpoints--fall_through_mode) below.
 
@@ -1155,7 +1155,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints--fall_through_mode"></a>
 
-### Api Specification Validation All Spec Endpoints Fall Through Mode
+### API Specification Validation All Spec Endpoints Fall Through Mode
 
 `fall_through_mode_allow` - (Optional) Empty. This can be used for messages where no values are needed. See [Fall Through Mode Allow](#nestedblock--api_specification--validation_all_spec_endpoints--fall_through_mode--fall_through_mode_allow) below.
 
@@ -1163,15 +1163,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints--fall_through_mode--fall_through_mode_allow"></a>
 
-### Api Specification Validation All Spec Endpoints Fall Through Mode Fall Through Mode Allow
+### API Specification Validation All Spec Endpoints Fall Through Mode Fall Through Mode Allow
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints--fall_through_mode--fall_through_mode_custom"></a>
 
-### Api Specification Validation All Spec Endpoints Fall Through Mode Fall Through Mode Custom
+### API Specification Validation All Spec Endpoints Fall Through Mode Fall Through Mode Custom
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints--settings"></a>
 
-### Api Specification Validation All Spec Endpoints Settings
+### API Specification Validation All Spec Endpoints Settings
 
 `oversized_body_fail_validation` - (Optional) Empty. This can be used for messages where no values are needed. See [Oversized Body Fail Validation](#nestedblock--api_specification--validation_all_spec_endpoints--settings--oversized_body_fail_validation) below.
 
@@ -1183,23 +1183,23 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints--settings--oversized_body_fail_validation"></a>
 
-### Api Specification Validation All Spec Endpoints Settings Oversized Body Fail Validation
+### API Specification Validation All Spec Endpoints Settings Oversized Body Fail Validation
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints--settings--oversized_body_skip_validation"></a>
 
-### Api Specification Validation All Spec Endpoints Settings Oversized Body Skip Validation
+### API Specification Validation All Spec Endpoints Settings Oversized Body Skip Validation
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints--settings--property_validation_settings_custom"></a>
 
-### Api Specification Validation All Spec Endpoints Settings Property Validation Settings Custom
+### API Specification Validation All Spec Endpoints Settings Property Validation Settings Custom
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints--settings--property_validation_settings_default"></a>
 
-### Api Specification Validation All Spec Endpoints Settings Property Validation Settings Default
+### API Specification Validation All Spec Endpoints Settings Property Validation Settings Default
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints--validation_mode"></a>
 
-### Api Specification Validation All Spec Endpoints Validation Mode
+### API Specification Validation All Spec Endpoints Validation Mode
 
 `response_validation_mode_active` - (Optional) Open API Validation Mode Active. Validation mode properties of response. See [Response Validation Mode Active](#nestedblock--api_specification--validation_all_spec_endpoints--validation_mode--response_validation_mode_active) below.
 
@@ -1211,33 +1211,33 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints--validation_mode--response_validation_mode_active"></a>
 
-### Api Specification Validation All Spec Endpoints Validation Mode Response Validation Mode Active
+### API Specification Validation All Spec Endpoints Validation Mode Response Validation Mode Active
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints--validation_mode--skip_response_validation"></a>
 
-### Api Specification Validation All Spec Endpoints Validation Mode Skip Response Validation
+### API Specification Validation All Spec Endpoints Validation Mode Skip Response Validation
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints--validation_mode--skip_validation"></a>
 
-### Api Specification Validation All Spec Endpoints Validation Mode Skip Validation
+### API Specification Validation All Spec Endpoints Validation Mode Skip Validation
 
 <a id="nestedblock--api_specification--validation_all_spec_endpoints--validation_mode--validation_mode_active"></a>
 
-### Api Specification Validation All Spec Endpoints Validation Mode Validation Mode Active
+### API Specification Validation All Spec Endpoints Validation Mode Validation Mode Active
 
 <a id="nestedblock--api_specification--validation_custom_list"></a>
 
-### Api Specification Validation Custom List
+### API Specification Validation Custom List
 
 `fall_through_mode` - (Optional) Fall Through Mode. x-required Determine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules). See [Fall Through Mode](#nestedblock--api_specification--validation_custom_list--fall_through_mode) below.
 
-`open_api_validation_rules` - (Optional) Validation List. See [Open Api Validation Rules](#nestedblock--api_specification--validation_custom_list--open_api_validation_rules) below.
+`open_api_validation_rules` - (Optional) Validation List. See [Open API Validation Rules](#nestedblock--api_specification--validation_custom_list--open_api_validation_rules) below.
 
 `settings` - (Optional) Common Settings. OpenAPI specification validation settings relevant for 'API Inventory' enforcement and for 'Custom list' enforcement. See [Settings](#nestedblock--api_specification--validation_custom_list--settings) below.
 
 <a id="nestedblock--api_specification--validation_custom_list--fall_through_mode"></a>
 
-### Api Specification Validation Custom List Fall Through Mode
+### API Specification Validation Custom List Fall Through Mode
 
 `fall_through_mode_allow` - (Optional) Empty. This can be used for messages where no values are needed. See [Fall Through Mode Allow](#nestedblock--api_specification--validation_custom_list--fall_through_mode--fall_through_mode_allow) below.
 
@@ -1245,25 +1245,25 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_specification--validation_custom_list--fall_through_mode--fall_through_mode_allow"></a>
 
-### Api Specification Validation Custom List Fall Through Mode Fall Through Mode Allow
+### API Specification Validation Custom List Fall Through Mode Fall Through Mode Allow
 
 <a id="nestedblock--api_specification--validation_custom_list--fall_through_mode--fall_through_mode_custom"></a>
 
-### Api Specification Validation Custom List Fall Through Mode Fall Through Mode Custom
+### API Specification Validation Custom List Fall Through Mode Fall Through Mode Custom
 
 <a id="nestedblock--api_specification--validation_custom_list--open_api_validation_rules"></a>
 
-### Api Specification Validation Custom List Open Api Validation Rules
+### API Specification Validation Custom List Open API Validation Rules
 
 `any_domain` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Domain](#nestedblock--api_specification--validation_custom_list--open_api_validation_rules--any_domain) below.
 
-`api_endpoint` - (Optional) API Endpoint. This defines api endpoint. See [Api Endpoint](#nestedblock--api_specification--validation_custom_list--open_api_validation_rules--api_endpoint) below.
+`api_endpoint` - (Optional) API Endpoint. This defines API endpoint. See [API Endpoint](#nestedblock--api_specification--validation_custom_list--open_api_validation_rules--api_endpoint) below.
 
 `api_group` - (Optional) API Group. The API group which this validation applies to (`String`).
 
 `base_path` - (Optional) Base Path. The base path which this validation applies to (`String`).
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--api_specification--validation_custom_list--open_api_validation_rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--api_specification--validation_custom_list--open_api_validation_rules--metadata) below.
 
 `specific_domain` - (Optional) Specific Domain. The rule will apply for a specific domain (`String`).
 
@@ -1271,23 +1271,23 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_specification--validation_custom_list--open_api_validation_rules--any_domain"></a>
 
-### Api Specification Validation Custom List Open Api Validation Rules Any Domain
+### API Specification Validation Custom List Open API Validation Rules Any Domain
 
 <a id="nestedblock--api_specification--validation_custom_list--open_api_validation_rules--api_endpoint"></a>
 
-### Api Specification Validation Custom List Open Api Validation Rules Api Endpoint
+### API Specification Validation Custom List Open API Validation Rules API Endpoint
 
 <a id="nestedblock--api_specification--validation_custom_list--open_api_validation_rules--metadata"></a>
 
-### Api Specification Validation Custom List Open Api Validation Rules Metadata
+### API Specification Validation Custom List Open API Validation Rules Metadata
 
 <a id="nestedblock--api_specification--validation_custom_list--open_api_validation_rules--validation_mode"></a>
 
-### Api Specification Validation Custom List Open Api Validation Rules Validation Mode
+### API Specification Validation Custom List Open API Validation Rules Validation Mode
 
 <a id="nestedblock--api_specification--validation_custom_list--settings"></a>
 
-### Api Specification Validation Custom List Settings
+### API Specification Validation Custom List Settings
 
 `oversized_body_fail_validation` - (Optional) Empty. This can be used for messages where no values are needed. See [Oversized Body Fail Validation](#nestedblock--api_specification--validation_custom_list--settings--oversized_body_fail_validation) below.
 
@@ -1299,29 +1299,29 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_specification--validation_custom_list--settings--oversized_body_fail_validation"></a>
 
-### Api Specification Validation Custom List Settings Oversized Body Fail Validation
+### API Specification Validation Custom List Settings Oversized Body Fail Validation
 
 <a id="nestedblock--api_specification--validation_custom_list--settings--oversized_body_skip_validation"></a>
 
-### Api Specification Validation Custom List Settings Oversized Body Skip Validation
+### API Specification Validation Custom List Settings Oversized Body Skip Validation
 
 <a id="nestedblock--api_specification--validation_custom_list--settings--property_validation_settings_custom"></a>
 
-### Api Specification Validation Custom List Settings Property Validation Settings Custom
+### API Specification Validation Custom List Settings Property Validation Settings Custom
 
 <a id="nestedblock--api_specification--validation_custom_list--settings--property_validation_settings_default"></a>
 
-### Api Specification Validation Custom List Settings Property Validation Settings Default
+### API Specification Validation Custom List Settings Property Validation Settings Default
 
 <a id="nestedblock--api_specification--validation_disabled"></a>
 
-### Api Specification Validation Disabled
+### API Specification Validation Disabled
 
 <a id="nestedblock--api_testing"></a>
 
-### Api Testing
+### API Testing
 
-`custom_header_value` - (Optional) Custom Header. Add x-f5-api-testing-identifier header value to prevent security flags on API testing traffic (`String`).
+`custom_header_value` - (Optional) Custom Header. Add x-f5-API-testing-identifier header value to prevent security flags on API testing traffic (`String`).
 
 `domains` - (Optional) Testing Environments. Add and configure testing domains and credentials. See [Domains](#nestedblock--api_testing--domains) below.
 
@@ -1333,21 +1333,21 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_testing--domains"></a>
 
-### Api Testing Domains
+### API Testing Domains
 
 `allow_destructive_methods` - (Optional) Use Destructive Methods (e.g., DELETE, PUT). Enable to allow API test to execute destructive methods. Be cautious as these can alter or delete data (`Bool`).
 
 `credentials` - (Optional) Credentials. Add credentials for API testing to use in the selected environment. See [Credentials](#nestedblock--api_testing--domains--credentials) below.
 
-`domain` - (Optional) Domain. Add your testing environment domain. Be aware that running tests on a production domain can impact live applications, as API testing cannot distinguish between production and testing enviro... (`String`).
+`domain` - (Optional) Domain. Add your testing environment domain. Be aware that running tests on a production domain can impact live applications, as API testing cannot distinguish between production and testing environments (`String`).
 
 <a id="nestedblock--api_testing--domains--credentials"></a>
 
-### Api Testing Domains Credentials
+### API Testing Domains Credentials
 
 `admin` - (Optional) Empty. This can be used for messages where no values are needed. See [Admin](#nestedblock--api_testing--domains--credentials--admin) below.
 
-`api_key` - (Optional) Api Key. See [Api Key](#nestedblock--api_testing--domains--credentials--api_key) below.
+`api_key` - (Optional) API Key. See [API Key](#nestedblock--api_testing--domains--credentials--api_key) below.
 
 `basic_auth` - (Optional) Basic Authentication. See [Basic Auth](#nestedblock--api_testing--domains--credentials--basic_auth) below.
 
@@ -1361,39 +1361,39 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--api_testing--domains--credentials--admin"></a>
 
-### Api Testing Domains Credentials Admin
+### API Testing Domains Credentials Admin
 
 <a id="nestedblock--api_testing--domains--credentials--api_key"></a>
 
-### Api Testing Domains Credentials Api Key
+### API Testing Domains Credentials API Key
 
 <a id="nestedblock--api_testing--domains--credentials--basic_auth"></a>
 
-### Api Testing Domains Credentials Basic Auth
+### API Testing Domains Credentials Basic Auth
 
 <a id="nestedblock--api_testing--domains--credentials--bearer_token"></a>
 
-### Api Testing Domains Credentials Bearer Token
+### API Testing Domains Credentials Bearer Token
 
 <a id="nestedblock--api_testing--domains--credentials--login_endpoint"></a>
 
-### Api Testing Domains Credentials Login Endpoint
+### API Testing Domains Credentials Login Endpoint
 
 <a id="nestedblock--api_testing--domains--credentials--standard"></a>
 
-### Api Testing Domains Credentials Standard
+### API Testing Domains Credentials Standard
 
 <a id="nestedblock--api_testing--every_day"></a>
 
-### Api Testing Every Day
+### API Testing Every Day
 
 <a id="nestedblock--api_testing--every_month"></a>
 
-### Api Testing Every Month
+### API Testing Every Month
 
 <a id="nestedblock--api_testing--every_week"></a>
 
-### Api Testing Every Week
+### API Testing Every Week
 
 <a id="nestedblock--app_firewall"></a>
 
@@ -1415,21 +1415,21 @@ In addition to all arguments above, the following attributes are exported:
 
 `bot_skip_processing` - (Optional) Empty. This can be used for messages where no values are needed. See [Bot Skip Processing](#nestedblock--blocked_clients--bot_skip_processing) below.
 
-`expiration_timestamp` - (Optional) Expiration Timestamp. The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired (`String`).
+`expiration_timestamp` - (Optional) Expiration Timestamp. The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired. The rule continues to exist in the configuration but is not applied anymore (`String`).
 
-`http_header` - (Optional) HTTP Header. Request header name and value pairs. See [Http Header](#nestedblock--blocked_clients--http_header) below.
+`http_header` - (Optional) HTTP Header. Request header name and value pairs. See [HTTP Header](#nestedblock--blocked_clients--http_header) below.
 
 `ip_prefix` - (Optional) IPv4 Prefix. IPv4 prefix string (`String`).
 
 `ipv6_prefix` - (Optional) IPv6 Prefix. IPv6 prefix string (`String`).
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--blocked_clients--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--blocked_clients--metadata) below.
 
 `skip_processing` - (Optional) Empty. This can be used for messages where no values are needed. See [Skip Processing](#nestedblock--blocked_clients--skip_processing) below.
 
 `user_identifier` - (Optional) User Identifier. Identify user based on user identifier. User identifier value needs to be copied from security event (`String`).
 
-`waf_skip_processing` - (Optional) Empty. This can be used for messages where no values are needed. See [Waf Skip Processing](#nestedblock--blocked_clients--waf_skip_processing) below.
+`waf_skip_processing` - (Optional) Empty. This can be used for messages where no values are needed. See [WAF Skip Processing](#nestedblock--blocked_clients--waf_skip_processing) below.
 
 <a id="nestedblock--blocked_clients--bot_skip_processing"></a>
 
@@ -1437,13 +1437,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--blocked_clients--http_header"></a>
 
-### Blocked Clients Http Header
+### Blocked Clients HTTP Header
 
 `headers` - (Optional) HTTP Headers. List of HTTP header name and value pairs. See [Headers](#nestedblock--blocked_clients--http_header--headers) below.
 
 <a id="nestedblock--blocked_clients--http_header--headers"></a>
 
-### Blocked Clients Http Header Headers
+### Blocked Clients HTTP Header Headers
 
 `exact` - (Optional) Exact. Header value to match exactly (`String`).
 
@@ -1469,29 +1469,29 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--blocked_clients--waf_skip_processing"></a>
 
-### Blocked Clients Waf Skip Processing
+### Blocked Clients WAF Skip Processing
 
 <a id="nestedblock--bot_defense"></a>
 
 ### Bot Defense
 
-`disable_cors_support` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Cors Support](#nestedblock--bot_defense--disable_cors_support) below.
+`disable_cors_support` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable CORS Support](#nestedblock--bot_defense--disable_cors_support) below.
 
-`enable_cors_support` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Cors Support](#nestedblock--bot_defense--enable_cors_support) below.
+`enable_cors_support` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable CORS Support](#nestedblock--bot_defense--enable_cors_support) below.
 
 `policy` - (Optional) Bot Defense Policy. This defines various configuration options for Bot Defense policy. See [Policy](#nestedblock--bot_defense--policy) below.
 
-`regional_endpoint` - (Optional) Bot Defense Region. Defines a selection for Bot Defense region - AUTO: AUTO Automatic selection based on client IP address - US: US US region - EU: EU European Union region - ASIA: ASIA Asia region (`String`).
+`regional_endpoint` - (Optional) Bot Defense Region. Defines a selection for Bot Defense region - AUTO: AUTO Automatic selection based on client IP address - US: US US region - EU: EU European Union region - ASIA: ASIA Asia region. Possible values are `AUTO`, `US`, `EU`, `ASIA`. Defaults to `AUTO` (`String`).
 
 `timeout` - (Optional) Timeout. The timeout for the inference check, in milliseconds (`Number`).
 
 <a id="nestedblock--bot_defense--disable_cors_support"></a>
 
-### Bot Defense Disable Cors Support
+### Bot Defense Disable CORS Support
 
 <a id="nestedblock--bot_defense--enable_cors_support"></a>
 
-### Bot Defense Enable Cors Support
+### Bot Defense Enable CORS Support
 
 <a id="nestedblock--bot_defense--policy"></a>
 
@@ -1501,7 +1501,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `disable_mobile_sdk` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Mobile Sdk](#nestedblock--bot_defense--policy--disable_mobile_sdk) below.
 
-`javascript_mode` - (Optional) Web Client JavaScript Mode. Web Client JavaScript Mode (`String`).
+`javascript_mode` - (Optional) Web Client JavaScript Mode. Web Client JavaScript Mode. Bot Defense JavaScript for telemetry collection is requested asynchronously, and it is non-cacheable Bot Defense JavaScript for telemetry collection is requested asynchronously, and it is cacheable Bot Defense JavaScript for telemetry collection is requested synchronously, and it is non-cacheable Bot Defense JavaScript for telemetry collection is requested synchronously, and it is cacheable. Possible values are `ASYNC_JS_NO_CACHING`, `ASYNC_JS_CACHING`, `SYNC_JS_NO_CACHING`, `SYNC_JS_CACHING`. Defaults to `ASYNC_JS_NO_CACHING` (`String`).
 
 `js_download_path` - (Optional) JavaScript Download Path. Customize Bot Defense Client JavaScript path. If not specified, default `/common.js` (`String`).
 
@@ -1527,7 +1527,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Bot Defense Policy Js Insert All Pages
 
-`javascript_location` - (Optional) JavaScript Location. All inside networks. Insert JavaScript after <head> tag Insert JavaScript after </title> tag. Insert JavaScript before first <script> tag (`String`).
+`javascript_location` - (Optional) JavaScript Location. All inside networks. Insert JavaScript after <head> tag Insert JavaScript after </title> tag. Insert JavaScript before first <script> tag. Possible values are `AFTER_HEAD`, `AFTER_TITLE_END`, `BEFORE_SCRIPT`. Defaults to `AFTER_HEAD` (`String`).
 
 <a id="nestedblock--bot_defense--policy--js_insert_all_pages_except"></a>
 
@@ -1535,7 +1535,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `exclude_list` - (Optional) Exclude Pages. Optional JavaScript insertions exclude list of domain and path matchers. See [Exclude List](#nestedblock--bot_defense--policy--js_insert_all_pages_except--exclude_list) below.
 
-`javascript_location` - (Optional) JavaScript Location. All inside networks. Insert JavaScript after <head> tag Insert JavaScript after </title> tag. Insert JavaScript before first <script> tag (`String`).
+`javascript_location` - (Optional) JavaScript Location. All inside networks. Insert JavaScript after <head> tag Insert JavaScript after </title> tag. Insert JavaScript before first <script> tag. Possible values are `AFTER_HEAD`, `AFTER_TITLE_END`, `BEFORE_SCRIPT`. Defaults to `AFTER_HEAD` (`String`).
 
 <a id="nestedblock--bot_defense--policy--js_insert_all_pages_except--exclude_list"></a>
 
@@ -1579,11 +1579,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `flow_label` - (Optional) Bot Defense Flow Label Category. Bot Defense Flow Label Category allows to associate traffic with selected category. See [Flow Label](#nestedblock--bot_defense--policy--protected_app_endpoints--flow_label) below.
 
-`headers` - (Optional) HTTP Headers. A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. See [Headers](#nestedblock--bot_defense--policy--protected_app_endpoints--headers) below.
+`headers` - (Optional) HTTP Headers. A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type. Note that all specified header predicates must evaluate to true. See [Headers](#nestedblock--bot_defense--policy--protected_app_endpoints--headers) below.
 
 `http_methods` - (Optional) HTTP Methods. List of HTTP methods (`List`).
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--bot_defense--policy--protected_app_endpoints--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--bot_defense--policy--protected_app_endpoints--metadata) below.
 
 `mitigate_good_bots` - (Optional) Empty. This can be used for messages where no values are needed. See [Mitigate Good Bots](#nestedblock--bot_defense--policy--protected_app_endpoints--mitigate_good_bots) below.
 
@@ -1593,9 +1593,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `path` - (Optional) Path to Match. Path match of the URI can be either be, Prefix match or exact match or regular expression match. See [Path](#nestedblock--bot_defense--policy--protected_app_endpoints--path) below.
 
-`protocol` - (Optional) URL Scheme. SchemeType is used to indicate URL scheme. - BOTH: BOTH URL scheme for https:// or `http://.` - HTTP: HTTP URL scheme http:// only. - HTTPS: HTTPS URL scheme https:// only (`String`).
+`protocol` - (Optional) URL Scheme. SchemeType is used to indicate URL scheme. - BOTH: BOTH URL scheme for HTTPS:// or `HTTP://.` - HTTP: HTTP URL scheme HTTP:// only. - HTTPS: HTTPS URL scheme HTTPS:// only. Possible values are `BOTH`, `HTTP`, `HTTPS`. Defaults to `BOTH` (`String`).
 
-`query_params` - (Optional) HTTP Query Parameters. A list of predicates for all query parameters that need to be matched. See [Query Params](#nestedblock--bot_defense--policy--protected_app_endpoints--query_params) below.
+`query_params` - (Optional) HTTP Query Parameters. A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name. Note that all specified query parameter predicates must evaluate to true. See [Query Params](#nestedblock--bot_defense--policy--protected_app_endpoints--query_params) below.
 
 `undefined_flow_label` - (Optional) Empty. This can be used for messages where no values are needed. See [Undefined Flow Label](#nestedblock--bot_defense--policy--protected_app_endpoints--undefined_flow_label) below.
 
@@ -1691,7 +1691,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Bot Defense Advanced Js Insert All Pages
 
-`javascript_location` - (Optional) JavaScript Location. All inside networks. Insert JavaScript after <head> tag Insert JavaScript after </title> tag. Insert JavaScript before first <script> tag (`String`).
+`javascript_location` - (Optional) JavaScript Location. All inside networks. Insert JavaScript after <head> tag Insert JavaScript after </title> tag. Insert JavaScript before first <script> tag. Possible values are `AFTER_HEAD`, `AFTER_TITLE_END`, `BEFORE_SCRIPT`. Defaults to `AFTER_HEAD` (`String`).
 
 <a id="nestedblock--bot_defense_advanced--js_insert_all_pages_except"></a>
 
@@ -1699,7 +1699,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `exclude_list` - (Optional) Exclude Pages. Optional JavaScript insertions exclude list of domain and path matchers. See [Exclude List](#nestedblock--bot_defense_advanced--js_insert_all_pages_except--exclude_list) below.
 
-`javascript_location` - (Optional) JavaScript Location. All inside networks. Insert JavaScript after <head> tag Insert JavaScript after </title> tag. Insert JavaScript before first <script> tag (`String`).
+`javascript_location` - (Optional) JavaScript Location. All inside networks. Insert JavaScript after <head> tag Insert JavaScript after </title> tag. Insert JavaScript before first <script> tag. Possible values are `AFTER_HEAD`, `AFTER_TITLE_END`, `BEFORE_SCRIPT`. Defaults to `AFTER_HEAD` (`String`).
 
 <a id="nestedblock--bot_defense_advanced--js_insert_all_pages_except--exclude_list"></a>
 
@@ -1709,7 +1709,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `domain` - (Optional) Domains. Domains names. See [Domain](#nestedblock--bot_defense_advanced--js_insert_all_pages_except--exclude_list--domain) below.
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--bot_defense_advanced--js_insert_all_pages_except--exclude_list--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--bot_defense_advanced--js_insert_all_pages_except--exclude_list--metadata) below.
 
 `path` - (Optional) Path to Match. Path match of the URI can be either be, Prefix match or exact match or regular expression match. See [Path](#nestedblock--bot_defense_advanced--js_insert_all_pages_except--exclude_list--path) below.
 
@@ -1745,7 +1745,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `domain` - (Optional) Domains. Domains names. See [Domain](#nestedblock--bot_defense_advanced--js_insertion_rules--exclude_list--domain) below.
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--bot_defense_advanced--js_insertion_rules--exclude_list--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--bot_defense_advanced--js_insertion_rules--exclude_list--metadata) below.
 
 `path` - (Optional) Path to Match. Path match of the URI can be either be, Prefix match or exact match or regular expression match. See [Path](#nestedblock--bot_defense_advanced--js_insertion_rules--exclude_list--path) below.
 
@@ -1773,9 +1773,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `domain` - (Optional) Domains. Domains names. See [Domain](#nestedblock--bot_defense_advanced--js_insertion_rules--rules--domain) below.
 
-`javascript_location` - (Optional) JavaScript Location. All inside networks. Insert JavaScript after <head> tag Insert JavaScript after </title> tag. Insert JavaScript before first <script> tag (`String`).
+`javascript_location` - (Optional) JavaScript Location. All inside networks. Insert JavaScript after <head> tag Insert JavaScript after </title> tag. Insert JavaScript before first <script> tag. Possible values are `AFTER_HEAD`, `AFTER_TITLE_END`, `BEFORE_SCRIPT`. Defaults to `AFTER_HEAD` (`String`).
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--bot_defense_advanced--js_insertion_rules--rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--bot_defense_advanced--js_insertion_rules--rules--metadata) below.
 
 `path` - (Optional) Path to Match. Path match of the URI can be either be, Prefix match or exact match or regular expression match. See [Path](#nestedblock--bot_defense_advanced--js_insertion_rules--rules--path) below.
 
@@ -1843,11 +1843,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Caching Policy Custom Cache Rule
 
-`cdn_cache_rules` - (Optional) CDN Cache Rule. Reference to CDN Cache Rule configuration object. See [Cdn Cache Rules](#nestedblock--caching_policy--custom_cache_rule--cdn_cache_rules) below.
+`cdn_cache_rules` - (Optional) CDN Cache Rule. Reference to CDN Cache Rule configuration object. See [CDN Cache Rules](#nestedblock--caching_policy--custom_cache_rule--cdn_cache_rules) below.
 
 <a id="nestedblock--caching_policy--custom_cache_rule--cdn_cache_rules"></a>
 
-### Caching Policy Custom Cache Rule Cdn Cache Rules
+### Caching Policy Custom Cache Rule CDN Cache Rules
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -1875,7 +1875,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `cookie_expiry` - (Optional) Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge (`Number`).
 
-`custom_page` - (Optional) Custom message for Captcha Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom message for Captcha Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Please Wait.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Please Wait </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 <a id="nestedblock--client_side_defense"></a>
 
@@ -1989,7 +1989,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--cors_policy"></a>
 
-### Cors Policy
+### CORS Policy
 
 `allow_credentials` - (Optional) Allow Credentials. Specifies whether the resource allows credentials (`Bool`).
 
@@ -2001,15 +2001,15 @@ In addition to all arguments above, the following attributes are exported:
 
 `allow_origin_regex` - (Optional) Allow Origin Regex. Specifies regex patterns that match allowed origins. An origin is allowed if either allow_origin or allow_origin_regex match (`List`).
 
-`disabled` - (Optional) Disabled. Disable the CorsPolicy for a particular route. This is useful when virtual-host has CorsPolicy, but we need to disable it on a specific route (`Bool`).
+`disabled` - (Optional) Disabled. Disable the CorsPolicy for a particular route. This is useful when virtual-host has CorsPolicy, but we need to disable it on a specific route. The value of this field is ignored for virtual-host (`Bool`).
 
 `expose_headers` - (Optional) Expose Headers. Specifies the content for the access-control-expose-headers header (`String`).
 
-`maximum_age` - (Optional) Maximum Age. Specifies the content for the access-control-max-age header in seconds. This indicates the maximum number of seconds the results can be cached A value of -1 will disable caching (`Number`).
+`maximum_age` - (Optional) Maximum Age. Specifies the content for the access-control-max-age header in seconds. This indicates the maximum number of seconds the results can be cached A value of -1 will disable caching. Maximum permitted value is 86400 seconds (24 hours) (`Number`).
 
 <a id="nestedblock--csrf_policy"></a>
 
-### Csrf Policy
+### CSRF Policy
 
 `all_load_balancer_domains` - (Optional) Empty. This can be used for messages where no values are needed. See [All Load Balancer Domains](#nestedblock--csrf_policy--all_load_balancer_domains) below.
 
@@ -2019,17 +2019,17 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--csrf_policy--all_load_balancer_domains"></a>
 
-### Csrf Policy All Load Balancer Domains
+### CSRF Policy All Load Balancer Domains
 
 <a id="nestedblock--csrf_policy--custom_domain_list"></a>
 
-### Csrf Policy Custom Domain List
+### CSRF Policy Custom Domain List
 
 `domains` - (Optional) Domain names. A list of domain names that will be matched to loadbalancer. These domains are not used for SNI match. Wildcard names are supported in the suffix or prefix form (`List`).
 
 <a id="nestedblock--csrf_policy--disabled"></a>
 
-### Csrf Policy Disabled
+### CSRF Policy Disabled
 
 <a id="nestedblock--data_guard_rules"></a>
 
@@ -2041,7 +2041,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `exact_value` - (Optional) Exact Value. Exact domain name (`String`).
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--data_guard_rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--data_guard_rules--metadata) below.
 
 `path` - (Optional) Path to Match. Path match of the URI can be either be, Prefix match or exact match or regular expression match. See [Path](#nestedblock--data_guard_rules--path) below.
 
@@ -2081,59 +2081,59 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ddos_mitigation_rules"></a>
 
-### Ddos Mitigation Rules
+### DDOS Mitigation Rules
 
 `block` - (Optional) Empty. This can be used for messages where no values are needed. See [Block](#nestedblock--ddos_mitigation_rules--block) below.
 
-`ddos_client_source` - (Optional) DDoS Client Source Choice. DDoS Mitigation sources to be blocked. See [Ddos Client Source](#nestedblock--ddos_mitigation_rules--ddos_client_source) below.
+`ddos_client_source` - (Optional) DDOS Client Source Choice. DDOS Mitigation sources to be blocked. See [DDOS Client Source](#nestedblock--ddos_mitigation_rules--ddos_client_source) below.
 
-`expiration_timestamp` - (Optional) Expiration Timestamp. The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired (`String`).
+`expiration_timestamp` - (Optional) Expiration Timestamp. The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired. The rule continues to exist in the configuration but is not applied anymore (`String`).
 
-`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [Ip Prefix List](#nestedblock--ddos_mitigation_rules--ip_prefix_list) below.
+`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [IP Prefix List](#nestedblock--ddos_mitigation_rules--ip_prefix_list) below.
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--ddos_mitigation_rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--ddos_mitigation_rules--metadata) below.
 
 <a id="nestedblock--ddos_mitigation_rules--block"></a>
 
-### Ddos Mitigation Rules Block
+### DDOS Mitigation Rules Block
 
 <a id="nestedblock--ddos_mitigation_rules--ddos_client_source"></a>
 
-### Ddos Mitigation Rules Ddos Client Source
+### DDOS Mitigation Rules DDOS Client Source
 
-`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. See [Asn List](#nestedblock--ddos_mitigation_rules--ddos_client_source--asn_list) below.
+`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. See [Asn List](#nestedblock--ddos_mitigation_rules--ddos_client_source--asn_list) below.
 
 `country_list` - (Optional) Country List. Sources that are located in one of the countries in the given list (`List`).
 
-`ja4_tls_fingerprint_matcher` - (Optional) JA4 TLS Fingerprint Matcher. An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of SSL/TLS clients and potentially has a different structure and length. See [Ja4 Tls Fingerprint Matcher](#nestedblock--ddos_mitigation_rules--ddos_client_source--ja4_tls_fingerprint_matcher) below.
+`ja4_tls_fingerprint_matcher` - (Optional) JA4 TLS Fingerprint Matcher. An extended version of JA3 that includes additional fields for more comprehensive fingerprinting of SSL/TLS clients and potentially has a different structure and length. See [Ja4 TLS Fingerprint Matcher](#nestedblock--ddos_mitigation_rules--ddos_client_source--ja4_tls_fingerprint_matcher) below.
 
-`tls_fingerprint_matcher` - (Optional) TLS Fingerprint Matcher. A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. See [Tls Fingerprint Matcher](#nestedblock--ddos_mitigation_rules--ddos_client_source--tls_fingerprint_matcher) below.
+`tls_fingerprint_matcher` - (Optional) TLS Fingerprint Matcher. A TLS fingerprint matcher specifies multiple criteria for matching a TLS fingerprint. The set of supported positve match criteria includes a list of known classes of TLS fingerprints and a list of exact values. The match is considered successful if either of these positive criteria are satisfied and the input fingerprint is not one of the excluded values. See [TLS Fingerprint Matcher](#nestedblock--ddos_mitigation_rules--ddos_client_source--tls_fingerprint_matcher) below.
 
 <a id="nestedblock--ddos_mitigation_rules--ddos_client_source--asn_list"></a>
 
-### Ddos Mitigation Rules Ddos Client Source Asn List
+### DDOS Mitigation Rules DDOS Client Source Asn List
 
-`as_numbers` - (Optional) AS Numbers. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy (`List`).
+`as_numbers` - (Optional) AS Numbers. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer (`List`).
 
 <a id="nestedblock--ddos_mitigation_rules--ddos_client_source--ja4_tls_fingerprint_matcher"></a>
 
-### Ddos Mitigation Rules Ddos Client Source Ja4 Tls Fingerprint Matcher
+### DDOS Mitigation Rules DDOS Client Source Ja4 TLS Fingerprint Matcher
 
 `exact_values` - (Optional) Exact Values. A list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against (`List`).
 
 <a id="nestedblock--ddos_mitigation_rules--ddos_client_source--tls_fingerprint_matcher"></a>
 
-### Ddos Mitigation Rules Ddos Client Source Tls Fingerprint Matcher
+### DDOS Mitigation Rules DDOS Client Source TLS Fingerprint Matcher
 
 `classes` - (Optional) TLS fingerprint classes. A list of known classes of TLS fingerprints to match the input TLS JA3 fingerprint against (`List`).
 
 `exact_values` - (Optional) Exact Values. A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against (`List`).
 
-`excluded_values` - (Optional) Excluded Values. A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint (`List`).
+`excluded_values` - (Optional) Excluded Values. A list of TLS JA3 fingerprints to be excluded when matching the input TLS JA3 fingerprint. This can be used to skip known false positives when using one or more known TLS fingerprint classes in the enclosing matcher (`List`).
 
 <a id="nestedblock--ddos_mitigation_rules--ip_prefix_list"></a>
 
-### Ddos Mitigation Rules Ip Prefix List
+### DDOS Mitigation Rules IP Prefix List
 
 `invert_match` - (Optional) Invert Match Result. Invert the match result (`Bool`).
 
@@ -2141,7 +2141,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--ddos_mitigation_rules--metadata"></a>
 
-### Ddos Mitigation Rules Metadata
+### DDOS Mitigation Rules Metadata
 
 `description` - (Optional) Description. Human readable description (`String`).
 
@@ -2155,17 +2155,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `automatic_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Automatic Port](#nestedblock--default_pool--automatic_port) below.
 
-`endpoint_selection` - (Optional) Endpoint Selection Policy. Policy for selection of endpoints from local site/remote site/both Consider both remote and local endpoints for load balancing LOCAL_ONLY: Consider only local endpoints f... (`String`).
+`endpoint_selection` - (Optional) Endpoint Selection Policy. Policy for selection of endpoints from local site/remote site/both Consider both remote and local endpoints for load balancing LOCAL_ONLY: Consider only local endpoints for load balancing Enable this policy to load balance ONLY among locally discovered endpoints Prefer the local endpoints for load balancing. If local endpoints are not present remote endpoints will be considered. Possible values are `DISTRIBUTED`, `LOCAL_ONLY`, `LOCAL_PREFERRED`. Defaults to `DISTRIBUTED` (`String`).
 
 `health_check_port` - (Optional) Health check port. Port used for performing health check (`Number`).
 
 `healthcheck` - (Optional) Health Check object. Reference to healthcheck configuration objects. See [Healthcheck](#nestedblock--default_pool--healthcheck) below.
 
-`lb_port` - (Optional) Empty. This can be used for messages where no values are needed. See [Lb Port](#nestedblock--default_pool--lb_port) below.
+`lb_port` - (Optional) Empty. This can be used for messages where no values are needed. See [LB Port](#nestedblock--default_pool--lb_port) below.
 
-`loadbalancer_algorithm` - (Optional) Load Balancer Algorithm. Different load balancing algorithms supported When a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm to determine... (`String`).
+`loadbalancer_algorithm` - (Optional) Load Balancer Algorithm. Different load balancing algorithms supported When a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm to determine which host is selected. - ROUND_ROBIN: ROUND_ROBIN Policy in which each healthy/available upstream endpoint is selected in round robin order. - LEAST_REQUEST: LEAST_REQUEST Policy in which loadbalancer picks the upstream endpoint which has the fewest active requests - RING_HASH: RING_HASH Policy im... Possible values are `ROUND_ROBIN`, `LEAST_REQUEST`, `RING_HASH`, `RANDOM`, `LB_OVERRIDE`. Defaults to `ROUND_ROBIN` (`String`).
 
-`no_tls` - (Optional) Empty. This can be used for messages where no values are needed. See [No Tls](#nestedblock--default_pool--no_tls) below.
+`no_tls` - (Optional) Empty. This can be used for messages where no values are needed. See [No TLS](#nestedblock--default_pool--no_tls) below.
 
 `origin_servers` - (Optional) Origin Servers. List of origin servers in this pool. See [Origin Servers](#nestedblock--default_pool--origin_servers) below.
 
@@ -2175,7 +2175,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `upstream_conn_pool_reuse_type` - (Optional) Select upstream connection pool reuse state. Select upstream connection pool reuse state for every downstream connection. This configuration choice is for HTTP(S) LB only. See [Upstream Conn Pool Reuse Type](#nestedblock--default_pool--upstream_conn_pool_reuse_type) below.
 
-`use_tls` - (Optional) TLS Parameters for Origin Servers. Upstream TLS Parameters. See [Use Tls](#nestedblock--default_pool--use_tls) below.
+`use_tls` - (Optional) TLS Parameters for Origin Servers. Upstream TLS Parameters. See [Use TLS](#nestedblock--default_pool--use_tls) below.
 
 `view_internal` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [View Internal](#nestedblock--default_pool--view_internal) below.
 
@@ -2183,9 +2183,9 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Default Pool Advanced Options
 
-`auto_http_config` - (Optional) Empty. This can be used for messages where no values are needed. See [Auto Http Config](#nestedblock--default_pool--advanced_options--auto_http_config) below.
+`auto_http_config` - (Optional) Empty. This can be used for messages where no values are needed. See [Auto HTTP Config](#nestedblock--default_pool--advanced_options--auto_http_config) below.
 
-`circuit_breaker` - (Optional) Circuit Breaker. CircuitBreaker provides a mechanism for watching failures in upstream connections or requests and if the failures reach a certain threshold, automatically fail subsequent requests .... See [Circuit Breaker](#nestedblock--default_pool--advanced_options--circuit_breaker) below.
+`circuit_breaker` - (Optional) Circuit Breaker. CircuitBreaker provides a mechanism for watching failures in upstream connections or requests and if the failures reach a certain threshold, automatically fail subsequent requests which allows to apply back pressure on downstream quickly. See [Circuit Breaker](#nestedblock--default_pool--advanced_options--circuit_breaker) below.
 
 `connection_timeout` - (Optional) Connection Timeout. The timeout for new network connections to endpoints in the cluster. This is specified in milliseconds. The default value is 2 seconds (`Number`).
 
@@ -2193,7 +2193,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `disable_circuit_breaker` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Circuit Breaker](#nestedblock--default_pool--advanced_options--disable_circuit_breaker) below.
 
-`disable_lb_source_ip_persistance` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Lb Source Ip Persistance](#nestedblock--default_pool--advanced_options--disable_lb_source_ip_persistance) below.
+`disable_lb_source_ip_persistance` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable LB Source IP Persistance](#nestedblock--default_pool--advanced_options--disable_lb_source_ip_persistance) below.
 
 `disable_outlier_detection` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Outlier Detection](#nestedblock--default_pool--advanced_options--disable_outlier_detection) below.
 
@@ -2201,7 +2201,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `disable_subsets` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Subsets](#nestedblock--default_pool--advanced_options--disable_subsets) below.
 
-`enable_lb_source_ip_persistance` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Lb Source Ip Persistance](#nestedblock--default_pool--advanced_options--enable_lb_source_ip_persistance) below.
+`enable_lb_source_ip_persistance` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable LB Source IP Persistance](#nestedblock--default_pool--advanced_options--enable_lb_source_ip_persistance) below.
 
 `enable_subsets` - (Optional) Origin Pool Subset Options. Configure subset options for origin pool. See [Enable Subsets](#nestedblock--default_pool--advanced_options--enable_subsets) below.
 
@@ -2209,11 +2209,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `http2_options` - (Optional) Http2 Protocol Options. Http2 Protocol options for upstream connections. See [Http2 Options](#nestedblock--default_pool--advanced_options--http2_options) below.
 
-`http_idle_timeout` - (Optional) HTTP Idle Timeout. The idle timeout for upstream connection pool connections. The idle timeout is defined as the period in which there are no active requests (`Number`).
+`http_idle_timeout` - (Optional) HTTP Idle Timeout. The idle timeout for upstream connection pool connections. The idle timeout is defined as the period in which there are no active requests. When the idle timeout is reached the connection will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive. This is specified in milliseconds. The default value is 5 minutes (`Number`).
 
 `no_panic_threshold` - (Optional) Empty. This can be used for messages where no values are needed. See [No Panic Threshold](#nestedblock--default_pool--advanced_options--no_panic_threshold) below.
 
-`outlier_detection` - (Optional) Outlier Detection. Outlier detection and ejection is the process of dynamically determining whether some number of hosts in an upstream cluster are performing unlike the others and removing them fr.... See [Outlier Detection](#nestedblock--default_pool--advanced_options--outlier_detection) below.
+`outlier_detection` - (Optional) Outlier Detection. Outlier detection and ejection is the process of dynamically determining whether some number of hosts in an upstream cluster are performing unlike the others and removing them from the healthy load balancing set. Outlier detection is a form of passive health checking. Algorithm 1. A endpoint is determined to be an outlier (based on configured number of consecutive_5xx or consecutive_gateway_failures) . 2. If no endpoints have been ejected, loadbalancer will eject the host i... See [Outlier Detection](#nestedblock--default_pool--advanced_options--outlier_detection) below.
 
 `panic_threshold` - (Optional) Panic threshold. x-example:'25' Configure a threshold (percentage of unhealthy endpoints) below which all endpoints will be considered for load balancing ignoring its health status (`Number`).
 
@@ -2223,19 +2223,19 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--default_pool--advanced_options--auto_http_config"></a>
 
-### Default Pool Advanced Options Auto Http Config
+### Default Pool Advanced Options Auto HTTP Config
 
 <a id="nestedblock--default_pool--advanced_options--circuit_breaker"></a>
 
 ### Default Pool Advanced Options Circuit Breaker
 
-`connection_limit` - (Optional) Connection Limit. The maximum number of connections that loadbalancer will establish to all hosts in an upstream cluster. In practice this is only applicable to TCP and HTTP/1 (`Number`).
+`connection_limit` - (Optional) Connection Limit. The maximum number of connections that loadbalancer will establish to all hosts in an upstream cluster. In practice this is only applicable to TCP and HTTP/1.1 clusters since HTTP/2 uses a single connection to each host. Remove endpoint out of load balancing decision, if number of connections reach connection limit (`Number`).
 
-`max_requests` - (Optional) Maximum Request Count. The maximum number of requests that can be outstanding to all hosts in a cluster at any given time. In practice this is applicable to HTTP/2 clusters since HTTP/1 (`Number`).
+`max_requests` - (Optional) Maximum Request Count. The maximum number of requests that can be outstanding to all hosts in a cluster at any given time. In practice this is applicable to HTTP/2 clusters since HTTP/1.1 clusters are governed by the maximum connections (connection_limit). Remove endpoint out of load balancing decision, if requests exceed this count (`Number`).
 
-`pending_requests` - (Optional) Pending Requests. The maximum number of requests that will be queued while waiting for a ready connection pool connection (`Number`).
+`pending_requests` - (Optional) Pending Requests. The maximum number of requests that will be queued while waiting for a ready connection pool connection. Since HTTP/2 requests are sent over a single connection, this circuit breaker only comes into play as the initial connection is created, as requests will be multiplexed immediately afterwards. For HTTP/1.1, requests are added to the list of pending requests whenever there aren’t enough upstream connections available to immediately dispatch the request, so this circuit b.. (`Number`).
 
-`priority` - (Optional) Routing Priority. Priority routing for each request. Different connection pools are used based on the priority selected for the request (`String`).
+`priority` - (Optional) Routing Priority. Priority routing for each request. Different connection pools are used based on the priority selected for the request. Also, circuit-breaker configuration at destination cluster is chosen based on selected priority. Default routing mechanism High-Priority routing mechanism. Possible values are `DEFAULT`, `HIGH`. Defaults to `DEFAULT` (`String`).
 
 `retries` - (Optional) Retry Count. The maximum number of retries that can be outstanding to all hosts in a cluster at any given time. Remove endpoint out of load balancing decision, if retries for request exceed this count (`Number`).
 
@@ -2249,7 +2249,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--default_pool--advanced_options--disable_lb_source_ip_persistance"></a>
 
-### Default Pool Advanced Options Disable Lb Source Ip Persistance
+### Default Pool Advanced Options Disable LB Source IP Persistance
 
 <a id="nestedblock--default_pool--advanced_options--disable_outlier_detection"></a>
 
@@ -2265,7 +2265,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--default_pool--advanced_options--enable_lb_source_ip_persistance"></a>
 
-### Default Pool Advanced Options Enable Lb Source Ip Persistance
+### Default Pool Advanced Options Enable LB Source IP Persistance
 
 <a id="nestedblock--default_pool--advanced_options--enable_subsets"></a>
 
@@ -2319,13 +2319,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Default Pool Advanced Options Outlier Detection
 
-`base_ejection_time` - (Optional) Base Ejection Time. The base time that a host is ejected for. The real time is equal to the base time multiplied by the number of times the host has been ejected (`Number`).
+`base_ejection_time` - (Optional) Base Ejection Time. The base time that a host is ejected for. The real time is equal to the base time multiplied by the number of times the host has been ejected. This causes hosts to get ejected for longer periods if they continue to fail. Defaults to 30000ms or 30s. Specified in milliseconds (`Number`).
 
-`consecutive_5xx` - (Optional) Consecutive 5xx Count. If an upstream endpoint returns some number of consecutive 5xx, it will be ejected (`Number`).
+`consecutive_5xx` - (Optional) Consecutive 5xx Count. If an upstream endpoint returns some number of consecutive 5xx, it will be ejected. Note that in this case a 5xx means an actual 5xx respond code, or an event that would cause the HTTP router to return one on the upstream’s behalf(reset, connection failure, etc.) consecutive_5xx indicates the number of consecutive 5xx responses required before a consecutive 5xx ejection occurs. Defaults to 5 (`Number`).
 
-`consecutive_gateway_failure` - (Optional) Consecutive Gateway Failure. If an upstream endpoint returns some number of consecutive “gateway errors” (502, 503 or 504 status code), it will be ejected (`Number`).
+`consecutive_gateway_failure` - (Optional) Consecutive Gateway Failure. If an upstream endpoint returns some number of consecutive “gateway errors” (502, 503 or 504 status code), it will be ejected. Note that this includes events that would cause the HTTP router to return one of these status codes on the upstream’s behalf (reset, connection failure, etc.). consecutive_gateway_failure indicates the number of consecutive gateway failures before a consecutive gateway failure ejection occurs. Defaults to 5 (`Number`).
 
-`interval` - (Optional) Interval. The time interval between ejection analysis sweeps. This can result in both new ejections as well as endpoints being returned to service. Defaults to 10000ms or 10s (`Number`).
+`interval` - (Optional) Interval. The time interval between ejection analysis sweeps. This can result in both new ejections as well as endpoints being returned to service. Defaults to 10000ms or 10s. Specified in milliseconds (`Number`).
 
 `max_ejection_percent` - (Optional) Max Ejection Percentage. The maximum % of an upstream cluster that can be ejected due to outlier detection. Defaults to 10% but will eject at least one host regardless of the value (`Number`).
 
@@ -2353,11 +2353,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--default_pool--lb_port"></a>
 
-### Default Pool Lb Port
+### Default Pool LB Port
 
 <a id="nestedblock--default_pool--no_tls"></a>
 
-### Default Pool No Tls
+### Default Pool No TLS
 
 <a id="nestedblock--default_pool--origin_servers"></a>
 
@@ -2373,15 +2373,15 @@ In addition to all arguments above, the following attributes are exported:
 
 `labels` - (Optional) Origin Server Labels. Add Labels for this origin server, these labels can be used to form subset. See [Labels](#nestedblock--default_pool--origin_servers--labels) below.
 
-`private_ip` - (Optional) IP address on given Sites. Specify origin server with private or public IP address and site information. See [Private Ip](#nestedblock--default_pool--origin_servers--private_ip) below.
+`private_ip` - (Optional) IP address on given Sites. Specify origin server with private or public IP address and site information. See [Private IP](#nestedblock--default_pool--origin_servers--private_ip) below.
 
 `private_name` - (Optional) DNS Name on given Sites. Specify origin server with private or public DNS name and site information. See [Private Name](#nestedblock--default_pool--origin_servers--private_name) below.
 
-`public_ip` - (Optional) Public IP. Specify origin server with public IP address. See [Public Ip](#nestedblock--default_pool--origin_servers--public_ip) below.
+`public_ip` - (Optional) Public IP. Specify origin server with public IP address. See [Public IP](#nestedblock--default_pool--origin_servers--public_ip) below.
 
 `public_name` - (Optional) Public DNS Name. Specify origin server with public DNS name. See [Public Name](#nestedblock--default_pool--origin_servers--public_name) below.
 
-`vn_private_ip` - (Optional) IP address Virtual Network. Specify origin server with IP on Virtual Network. See [Vn Private Ip](#nestedblock--default_pool--origin_servers--vn_private_ip) below.
+`vn_private_ip` - (Optional) IP address Virtual Network. Specify origin server with IP on Virtual Network. See [Vn Private IP](#nestedblock--default_pool--origin_servers--vn_private_ip) below.
 
 `vn_private_name` - (Optional) DNS Name on Virtual Network. Specify origin server with DNS name on Virtual Network. See [Vn Private Name](#nestedblock--default_pool--origin_servers--vn_private_name) below.
 
@@ -2439,9 +2439,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `outside_network` - (Optional) Empty. This can be used for messages where no values are needed. See [Outside Network](#nestedblock--default_pool--origin_servers--k8s_service--outside_network) below.
 
-`protocol` - (Optional) Protocol Type. Type of protocol - PROTOCOL_TCP: TCP - PROTOCOL_UDP: UDP. Possible values are `PROTOCOL_TCP`, `PROTOCOL_UDP` (`String`).
+`protocol` - (Optional) Protocol Type. Type of protocol - PROTOCOL_TCP: TCP - PROTOCOL_UDP: UDP. Possible values are `PROTOCOL_TCP`, `PROTOCOL_UDP`. Defaults to `PROTOCOL_TCP` (`String`).
 
-`service_name` - (Optional) Service Name. K8s service name of the origin server will be listed, including the namespace and cluster-id. For vK8s services, you need to enter a string with the format servicename (`String`).
+`service_name` - (Optional) Service Name. K8s service name of the origin server will be listed, including the namespace and cluster-id. For vK8s services, you need to enter a string with the format servicename.namespace:cluster-id. If the servicename is 'frontend', namespace is 'speedtest' and cluster-id is 'prod', then you will enter 'frontend.speedtest:prod'. Both namespace and cluster-id are optional (`String`).
 
 `site_locator` - (Optional) Site or Virtual Site. This message defines a reference to a site or virtual site object. See [Site Locator](#nestedblock--default_pool--origin_servers--k8s_service--site_locator) below.
 
@@ -2475,11 +2475,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--default_pool--origin_servers--private_ip"></a>
 
-### Default Pool Origin Servers Private Ip
+### Default Pool Origin Servers Private IP
 
 `inside_network` - (Optional) Empty. This can be used for messages where no values are needed. See [Inside Network](#nestedblock--default_pool--origin_servers--private_ip--inside_network) below.
 
-`ip` - (Optional) IP. Private IPV4 address (`String`).
+`ip` - (Optional) IP. Private IPv4 address (`String`).
 
 `outside_network` - (Optional) Empty. This can be used for messages where no values are needed. See [Outside Network](#nestedblock--default_pool--origin_servers--private_ip--outside_network) below.
 
@@ -2491,23 +2491,23 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--default_pool--origin_servers--private_ip--inside_network"></a>
 
-### Default Pool Origin Servers Private Ip Inside Network
+### Default Pool Origin Servers Private IP Inside Network
 
 <a id="nestedblock--default_pool--origin_servers--private_ip--outside_network"></a>
 
-### Default Pool Origin Servers Private Ip Outside Network
+### Default Pool Origin Servers Private IP Outside Network
 
 <a id="nestedblock--default_pool--origin_servers--private_ip--segment"></a>
 
-### Default Pool Origin Servers Private Ip Segment
+### Default Pool Origin Servers Private IP Segment
 
 <a id="nestedblock--default_pool--origin_servers--private_ip--site_locator"></a>
 
-### Default Pool Origin Servers Private Ip Site Locator
+### Default Pool Origin Servers Private IP Site Locator
 
 <a id="nestedblock--default_pool--origin_servers--private_ip--snat_pool"></a>
 
-### Default Pool Origin Servers Private Ip Snat Pool
+### Default Pool Origin Servers Private IP Snat Pool
 
 <a id="nestedblock--default_pool--origin_servers--private_name"></a>
 
@@ -2519,7 +2519,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `outside_network` - (Optional) Empty. This can be used for messages where no values are needed. See [Outside Network](#nestedblock--default_pool--origin_servers--private_name--outside_network) below.
 
-`refresh_interval` - (Optional) DNS Refresh Interval. Interval for DNS refresh in seconds. Max value is 7 days as per `https://datatracker.ietf.org/doc/html/rfc8767` (`Number`).
+`refresh_interval` - (Optional) DNS Refresh Interval. Interval for DNS refresh in seconds. Max value is 7 days as per `HTTPS://datatracker.ietf.org/doc/HTML/rfc8767` (`Number`).
 
 `segment` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Segment](#nestedblock--default_pool--origin_servers--private_name--segment) below.
 
@@ -2549,9 +2549,9 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--default_pool--origin_servers--public_ip"></a>
 
-### Default Pool Origin Servers Public Ip
+### Default Pool Origin Servers Public IP
 
-`ip` - (Optional) Public IPV4. Public IPV4 address (`String`).
+`ip` - (Optional) Public IPv4. Public IPv4 address (`String`).
 
 <a id="nestedblock--default_pool--origin_servers--public_name"></a>
 
@@ -2559,19 +2559,19 @@ In addition to all arguments above, the following attributes are exported:
 
 `dns_name` - (Optional) DNS Name. DNS Name (`String`).
 
-`refresh_interval` - (Optional) DNS Refresh Interval. Interval for DNS refresh in seconds. Max value is 7 days as per `https://datatracker.ietf.org/doc/html/rfc8767` (`Number`).
+`refresh_interval` - (Optional) DNS Refresh Interval. Interval for DNS refresh in seconds. Max value is 7 days as per `HTTPS://datatracker.ietf.org/doc/HTML/rfc8767` (`Number`).
 
 <a id="nestedblock--default_pool--origin_servers--vn_private_ip"></a>
 
-### Default Pool Origin Servers Vn Private Ip
+### Default Pool Origin Servers Vn Private IP
 
-`ip` - (Optional) IPV4. IPV4 address (`String`).
+`ip` - (Optional) IPv4. IPv4 address (`String`).
 
 `virtual_network` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Virtual Network](#nestedblock--default_pool--origin_servers--vn_private_ip--virtual_network) below.
 
 <a id="nestedblock--default_pool--origin_servers--vn_private_ip--virtual_network"></a>
 
-### Default Pool Origin Servers Vn Private Ip Virtual Network
+### Default Pool Origin Servers Vn Private IP Virtual Network
 
 <a id="nestedblock--default_pool--origin_servers--vn_private_name"></a>
 
@@ -2607,7 +2607,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--default_pool--use_tls"></a>
 
-### Default Pool Use Tls
+### Default Pool Use TLS
 
 `default_session_key_caching` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Session Key Caching](#nestedblock--default_pool--use_tls--default_session_key_caching) below.
 
@@ -2617,47 +2617,47 @@ In addition to all arguments above, the following attributes are exported:
 
 `max_session_keys` - (Optional) Max Session Keys Cached. x-example:'25' Number of session keys that are cached (`Number`).
 
-`no_mtls` - (Optional) Empty. This can be used for messages where no values are needed. See [No Mtls](#nestedblock--default_pool--use_tls--no_mtls) below.
+`no_mtls` - (Optional) Empty. This can be used for messages where no values are needed. See [No mTLS](#nestedblock--default_pool--use_tls--no_mtls) below.
 
 `skip_server_verification` - (Optional) Empty. This can be used for messages where no values are needed. See [Skip Server Verification](#nestedblock--default_pool--use_tls--skip_server_verification) below.
 
 `sni` - (Optional) SNI Value. SNI value to be used (`String`).
 
-`tls_config` - (Optional) TLS Config. This defines various options to configure TLS configuration parameters. See [Tls Config](#nestedblock--default_pool--use_tls--tls_config) below.
+`tls_config` - (Optional) TLS Config. This defines various options to configure TLS configuration parameters. See [TLS Config](#nestedblock--default_pool--use_tls--tls_config) below.
 
 `use_host_header_as_sni` - (Optional) Empty. This can be used for messages where no values are needed. See [Use Host Header As Sni](#nestedblock--default_pool--use_tls--use_host_header_as_sni) below.
 
-`use_mtls` - (Optional) mTLS Certificate. mTLS Client Certificate. See [Use Mtls](#nestedblock--default_pool--use_tls--use_mtls) below.
+`use_mtls` - (Optional) mTLS Certificate. mTLS Client Certificate. See [Use mTLS](#nestedblock--default_pool--use_tls--use_mtls) below.
 
-`use_mtls_obj` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Use Mtls Obj](#nestedblock--default_pool--use_tls--use_mtls_obj) below.
+`use_mtls_obj` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Use mTLS Obj](#nestedblock--default_pool--use_tls--use_mtls_obj) below.
 
 `use_server_verification` - (Optional) TLS Validation Context for Origin Servers. Upstream TLS Validation Context. See [Use Server Verification](#nestedblock--default_pool--use_tls--use_server_verification) below.
 
-`volterra_trusted_ca` - (Optional) Empty. This can be used for messages where no values are needed. See [Volterra Trusted Ca](#nestedblock--default_pool--use_tls--volterra_trusted_ca) below.
+`volterra_trusted_ca` - (Optional) Empty. This can be used for messages where no values are needed. See [Volterra Trusted CA](#nestedblock--default_pool--use_tls--volterra_trusted_ca) below.
 
 <a id="nestedblock--default_pool--use_tls--default_session_key_caching"></a>
 
-### Default Pool Use Tls Default Session Key Caching
+### Default Pool Use TLS Default Session Key Caching
 
 <a id="nestedblock--default_pool--use_tls--disable_session_key_caching"></a>
 
-### Default Pool Use Tls Disable Session Key Caching
+### Default Pool Use TLS Disable Session Key Caching
 
 <a id="nestedblock--default_pool--use_tls--disable_sni"></a>
 
-### Default Pool Use Tls Disable Sni
+### Default Pool Use TLS Disable Sni
 
 <a id="nestedblock--default_pool--use_tls--no_mtls"></a>
 
-### Default Pool Use Tls No Mtls
+### Default Pool Use TLS No mTLS
 
 <a id="nestedblock--default_pool--use_tls--skip_server_verification"></a>
 
-### Default Pool Use Tls Skip Server Verification
+### Default Pool Use TLS Skip Server Verification
 
 <a id="nestedblock--default_pool--use_tls--tls_config"></a>
 
-### Default Pool Use Tls Tls Config
+### Default Pool Use TLS TLS Config
 
 `custom_security` - (Optional) Custom Ciphers. This defines TLS protocol config including min/max versions and allowed ciphers. See [Custom Security](#nestedblock--default_pool--use_tls--tls_config--custom_security) below.
 
@@ -2669,37 +2669,37 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--default_pool--use_tls--tls_config--custom_security"></a>
 
-### Default Pool Use Tls Tls Config Custom Security
+### Default Pool Use TLS TLS Config Custom Security
 
 <a id="nestedblock--default_pool--use_tls--tls_config--default_security"></a>
 
-### Default Pool Use Tls Tls Config Default Security
+### Default Pool Use TLS TLS Config Default Security
 
 <a id="nestedblock--default_pool--use_tls--tls_config--low_security"></a>
 
-### Default Pool Use Tls Tls Config Low Security
+### Default Pool Use TLS TLS Config Low Security
 
 <a id="nestedblock--default_pool--use_tls--tls_config--medium_security"></a>
 
-### Default Pool Use Tls Tls Config Medium Security
+### Default Pool Use TLS TLS Config Medium Security
 
 <a id="nestedblock--default_pool--use_tls--use_host_header_as_sni"></a>
 
-### Default Pool Use Tls Use Host Header As Sni
+### Default Pool Use TLS Use Host Header As Sni
 
 <a id="nestedblock--default_pool--use_tls--use_mtls"></a>
 
-### Default Pool Use Tls Use Mtls
+### Default Pool Use TLS Use mTLS
 
-`tls_certificates` - (Optional) mTLS Client Certificate. mTLS Client Certificate. See [Tls Certificates](#nestedblock--default_pool--use_tls--use_mtls--tls_certificates) below.
+`tls_certificates` - (Optional) mTLS Client Certificate. mTLS Client Certificate. See [TLS Certificates](#nestedblock--default_pool--use_tls--use_mtls--tls_certificates) below.
 
 <a id="nestedblock--default_pool--use_tls--use_mtls--tls_certificates"></a>
 
-### Default Pool Use Tls Use Mtls Tls Certificates
+### Default Pool Use TLS Use mTLS TLS Certificates
 
 <a id="nestedblock--default_pool--use_tls--use_mtls_obj"></a>
 
-### Default Pool Use Tls Use Mtls Obj
+### Default Pool Use TLS Use mTLS Obj
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -2709,19 +2709,19 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--default_pool--use_tls--use_server_verification"></a>
 
-### Default Pool Use Tls Use Server Verification
+### Default Pool Use TLS Use Server Verification
 
-`trusted_ca` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Trusted Ca](#nestedblock--default_pool--use_tls--use_server_verification--trusted_ca) below.
+`trusted_ca` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Trusted CA](#nestedblock--default_pool--use_tls--use_server_verification--trusted_ca) below.
 
 `trusted_ca_url` - (Optional) Inline Root CA Certificate (legacy). Upload a Root CA Certificate specifically for this Origin Pool for verification of server's certificate (`String`).
 
 <a id="nestedblock--default_pool--use_tls--use_server_verification--trusted_ca"></a>
 
-### Default Pool Use Tls Use Server Verification Trusted Ca
+### Default Pool Use TLS Use Server Verification Trusted CA
 
 <a id="nestedblock--default_pool--use_tls--volterra_trusted_ca"></a>
 
-### Default Pool Use Tls Volterra Trusted Ca
+### Default Pool Use TLS Volterra Trusted CA
 
 <a id="nestedblock--default_pool--view_internal"></a>
 
@@ -2745,11 +2745,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `cluster` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Cluster](#nestedblock--default_pool_list--pools--cluster) below.
 
-`endpoint_subsets` - (Optional) Origin Servers Subsets. Upstream origin pool may be configured to divide its origin servers into subsets based on metadata attached to the origin servers. See [Endpoint Subsets](#nestedblock--default_pool_list--pools--endpoint_subsets) below.
+`endpoint_subsets` - (Optional) Origin Servers Subsets. Upstream origin pool may be configured to divide its origin servers into subsets based on metadata attached to the origin servers. Routes may then specify the metadata that a endpoint must match in order to be selected by the load balancer For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with endpoint's labels. In case of Consul, the label is derived from the 'Tag' field. For labels that are common between configured ... See [Endpoint Subsets](#nestedblock--default_pool_list--pools--endpoint_subsets) below.
 
 `pool` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Pool](#nestedblock--default_pool_list--pools--pool) below.
 
-`priority` - (Optional) Priority. Priority of this origin pool, valid only with multiple origin pools (`Number`).
+`priority` - (Optional) Priority. Priority of this origin pool, valid only with multiple origin pools. Value of 0 will make the pool as lowest priority origin pool Priority of 1 means highest priority and is considered active. When active origin pool is not available, lower priority origin pools are made active as per the increasing priority (`Number`).
 
 `weight` - (Optional) Weight. Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Number`).
 
@@ -2783,11 +2783,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `cluster` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Cluster](#nestedblock--default_route_pools--cluster) below.
 
-`endpoint_subsets` - (Optional) Origin Servers Subsets. Upstream origin pool may be configured to divide its origin servers into subsets based on metadata attached to the origin servers. See [Endpoint Subsets](#nestedblock--default_route_pools--endpoint_subsets) below.
+`endpoint_subsets` - (Optional) Origin Servers Subsets. Upstream origin pool may be configured to divide its origin servers into subsets based on metadata attached to the origin servers. Routes may then specify the metadata that a endpoint must match in order to be selected by the load balancer For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with endpoint's labels. In case of Consul, the label is derived from the 'Tag' field. For labels that are common between configured ... See [Endpoint Subsets](#nestedblock--default_route_pools--endpoint_subsets) below.
 
 `pool` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Pool](#nestedblock--default_route_pools--pool) below.
 
-`priority` - (Optional) Priority. Priority of this origin pool, valid only with multiple origin pools (`Number`).
+`priority` - (Optional) Priority. Priority of this origin pool, valid only with multiple origin pools. Value of 0 will make the pool as lowest priority origin pool Priority of 1 means highest priority and is considered active. When active origin pool is not available, lower priority origin pools are made active as per the increasing priority (`Number`).
 
 `weight` - (Optional) Weight. Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Number`).
 
@@ -2821,15 +2821,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--disable_api_definition"></a>
 
-### Disable Api Definition
+### Disable API Definition
 
 <a id="nestedblock--disable_api_discovery"></a>
 
-### Disable Api Discovery
+### Disable API Discovery
 
 <a id="nestedblock--disable_api_testing"></a>
 
-### Disable Api Testing
+### Disable API Testing
 
 <a id="nestedblock--disable_bot_defense"></a>
 
@@ -2845,7 +2845,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--disable_ip_reputation"></a>
 
-### Disable Ip Reputation
+### Disable IP Reputation
 
 <a id="nestedblock--disable_malicious_user_detection"></a>
 
@@ -2865,11 +2865,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--disable_trust_client_ip_headers"></a>
 
-### Disable Trust Client Ip Headers
+### Disable Trust Client IP Headers
 
 <a id="nestedblock--disable_waf"></a>
 
-### Disable Waf
+### Disable WAF
 
 <a id="nestedblock--do_not_advertise"></a>
 
@@ -2877,53 +2877,53 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--enable_api_discovery"></a>
 
-### Enable Api Discovery
+### Enable API Discovery
 
-`api_crawler` - (Optional) API Crawling. Api Crawler message. See [Api Crawler](#nestedblock--enable_api_discovery--api_crawler) below.
+`api_crawler` - (Optional) API Crawling. API Crawler message. See [API Crawler](#nestedblock--enable_api_discovery--api_crawler) below.
 
-`api_discovery_from_code_scan` - (Optional) Select Code Base and Repositories. x-required. See [Api Discovery From Code Scan](#nestedblock--enable_api_discovery--api_discovery_from_code_scan) below.
+`api_discovery_from_code_scan` - (Optional) Select Code Base and Repositories. x-required. See [API Discovery From Code Scan](#nestedblock--enable_api_discovery--api_discovery_from_code_scan) below.
 
-`custom_api_auth_discovery` - (Optional) API Discovery Advanced Settings. API Discovery Advanced settings. See [Custom Api Auth Discovery](#nestedblock--enable_api_discovery--custom_api_auth_discovery) below.
+`custom_api_auth_discovery` - (Optional) API Discovery Advanced Settings. API Discovery Advanced settings. See [Custom API Auth Discovery](#nestedblock--enable_api_discovery--custom_api_auth_discovery) below.
 
-`default_api_auth_discovery` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Api Auth Discovery](#nestedblock--enable_api_discovery--default_api_auth_discovery) below.
+`default_api_auth_discovery` - (Optional) Empty. This can be used for messages where no values are needed. See [Default API Auth Discovery](#nestedblock--enable_api_discovery--default_api_auth_discovery) below.
 
 `disable_learn_from_redirect_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Learn From Redirect Traffic](#nestedblock--enable_api_discovery--disable_learn_from_redirect_traffic) below.
 
-`discovered_api_settings` - (Optional) Discovered API Settings. x-example: '2' Configure Discovered API Settings. See [Discovered Api Settings](#nestedblock--enable_api_discovery--discovered_api_settings) below.
+`discovered_api_settings` - (Optional) Discovered API Settings. x-example: '2' Configure Discovered API Settings. See [Discovered API Settings](#nestedblock--enable_api_discovery--discovered_api_settings) below.
 
 `enable_learn_from_redirect_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Learn From Redirect Traffic](#nestedblock--enable_api_discovery--enable_learn_from_redirect_traffic) below.
 
 <a id="nestedblock--enable_api_discovery--api_crawler"></a>
 
-### Enable Api Discovery Api Crawler
+### Enable API Discovery API Crawler
 
-`api_crawler_config` - (Optional) Crawler Configure. See [Api Crawler Config](#nestedblock--enable_api_discovery--api_crawler--api_crawler_config) below.
+`api_crawler_config` - (Optional) Crawler Configure. See [API Crawler Config](#nestedblock--enable_api_discovery--api_crawler--api_crawler_config) below.
 
-`disable_api_crawler` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Api Crawler](#nestedblock--enable_api_discovery--api_crawler--disable_api_crawler) below.
+`disable_api_crawler` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable API Crawler](#nestedblock--enable_api_discovery--api_crawler--disable_api_crawler) below.
 
 <a id="nestedblock--enable_api_discovery--api_crawler--api_crawler_config"></a>
 
-### Enable Api Discovery Api Crawler Api Crawler Config
+### Enable API Discovery API Crawler API Crawler Config
 
 `domains` - (Optional) Domains to Crawl. Enter domains and their credentials to allow authenticated API crawling. You can only include domains you own that are associated with this Load Balancer. See [Domains](#nestedblock--enable_api_discovery--api_crawler--api_crawler_config--domains) below.
 
 <a id="nestedblock--enable_api_discovery--api_crawler--api_crawler_config--domains"></a>
 
-### Enable Api Discovery Api Crawler Api Crawler Config Domains
+### Enable API Discovery API Crawler API Crawler Config Domains
 
 <a id="nestedblock--enable_api_discovery--api_crawler--disable_api_crawler"></a>
 
-### Enable Api Discovery Api Crawler Disable Api Crawler
+### Enable API Discovery API Crawler Disable API Crawler
 
 <a id="nestedblock--enable_api_discovery--api_discovery_from_code_scan"></a>
 
-### Enable Api Discovery Api Discovery From Code Scan
+### Enable API Discovery API Discovery From Code Scan
 
 `code_base_integrations` - (Optional) Select Code Base Integrations. See [Code Base Integrations](#nestedblock--enable_api_discovery--api_discovery_from_code_scan--code_base_integrations) below.
 
 <a id="nestedblock--enable_api_discovery--api_discovery_from_code_scan--code_base_integrations"></a>
 
-### Enable Api Discovery Api Discovery From Code Scan Code Base Integrations
+### Enable API Discovery API Discovery From Code Scan Code Base Integrations
 
 `all_repos` - (Optional) Empty. This can be used for messages where no values are needed. See [All Repos](#nestedblock--enable_api_discovery--api_discovery_from_code_scan--code_base_integrations--all_repos) below.
 
@@ -2933,25 +2933,25 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--enable_api_discovery--api_discovery_from_code_scan--code_base_integrations--all_repos"></a>
 
-### Enable Api Discovery Api Discovery From Code Scan Code Base Integrations All Repos
+### Enable API Discovery API Discovery From Code Scan Code Base Integrations All Repos
 
 <a id="nestedblock--enable_api_discovery--api_discovery_from_code_scan--code_base_integrations--code_base_integration"></a>
 
-### Enable Api Discovery Api Discovery From Code Scan Code Base Integrations Code Base Integration
+### Enable API Discovery API Discovery From Code Scan Code Base Integrations Code Base Integration
 
 <a id="nestedblock--enable_api_discovery--api_discovery_from_code_scan--code_base_integrations--selected_repos"></a>
 
-### Enable Api Discovery Api Discovery From Code Scan Code Base Integrations Selected Repos
+### Enable API Discovery API Discovery From Code Scan Code Base Integrations Selected Repos
 
 <a id="nestedblock--enable_api_discovery--custom_api_auth_discovery"></a>
 
-### Enable Api Discovery Custom Api Auth Discovery
+### Enable API Discovery Custom API Auth Discovery
 
-`api_discovery_ref` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Api Discovery Ref](#nestedblock--enable_api_discovery--custom_api_auth_discovery--api_discovery_ref) below.
+`api_discovery_ref` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [API Discovery Ref](#nestedblock--enable_api_discovery--custom_api_auth_discovery--api_discovery_ref) below.
 
 <a id="nestedblock--enable_api_discovery--custom_api_auth_discovery--api_discovery_ref"></a>
 
-### Enable Api Discovery Custom Api Auth Discovery Api Discovery Ref
+### Enable API Discovery Custom API Auth Discovery API Discovery Ref
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -2961,27 +2961,27 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--enable_api_discovery--default_api_auth_discovery"></a>
 
-### Enable Api Discovery Default Api Auth Discovery
+### Enable API Discovery Default API Auth Discovery
 
 <a id="nestedblock--enable_api_discovery--disable_learn_from_redirect_traffic"></a>
 
-### Enable Api Discovery Disable Learn From Redirect Traffic
+### Enable API Discovery Disable Learn From Redirect Traffic
 
 <a id="nestedblock--enable_api_discovery--discovered_api_settings"></a>
 
-### Enable Api Discovery Discovered Api Settings
+### Enable API Discovery Discovered API Settings
 
 `purge_duration_for_inactive_discovered_apis` - (Optional) Purge Duration for Inactive Discovered APIs from Traffic. Inactive discovered API will be deleted after configured duration (`Number`).
 
 <a id="nestedblock--enable_api_discovery--enable_learn_from_redirect_traffic"></a>
 
-### Enable Api Discovery Enable Learn From Redirect Traffic
+### Enable API Discovery Enable Learn From Redirect Traffic
 
 <a id="nestedblock--enable_challenge"></a>
 
 ### Enable Challenge
 
-`captcha_challenge_parameters` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. See [Captcha Challenge Parameters](#nestedblock--enable_challenge--captcha_challenge_parameters) below.
+`captcha_challenge_parameters` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. With this feature enabled, only clients that pass the captcha challenge will be allowed to complete the HTTP request. When loadbalancer is configured to do Captcha Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have captcha challenge embedded in it. Client will be allowed to make the request only if the cap... See [Captcha Challenge Parameters](#nestedblock--enable_challenge--captcha_challenge_parameters) below.
 
 `default_captcha_challenge_parameters` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Captcha Challenge Parameters](#nestedblock--enable_challenge--default_captcha_challenge_parameters) below.
 
@@ -2989,7 +2989,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `default_mitigation_settings` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Mitigation Settings](#nestedblock--enable_challenge--default_mitigation_settings) below.
 
-`js_challenge_parameters` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. See [Js Challenge Parameters](#nestedblock--enable_challenge--js_challenge_parameters) below.
+`js_challenge_parameters` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. With this feature enabled, only clients that are capable of executing Javascript(mostly browsers) will be allowed to complete the HTTP request. When loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have Javascript embedded in it. Loadbalancer chooses a set o... See [Js Challenge Parameters](#nestedblock--enable_challenge--js_challenge_parameters) below.
 
 `malicious_user_mitigation` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Malicious User Mitigation](#nestedblock--enable_challenge--malicious_user_mitigation) below.
 
@@ -2999,7 +2999,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `cookie_expiry` - (Optional) Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge (`Number`).
 
-`custom_page` - (Optional) Custom message for Captcha Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom message for Captcha Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Please Wait.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Please Wait </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 <a id="nestedblock--enable_challenge--default_captcha_challenge_parameters"></a>
 
@@ -3019,7 +3019,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `cookie_expiry` - (Optional) Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge (`Number`).
 
-`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Please Wait.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Please Wait </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 `js_script_delay` - (Optional) Javascript Delay. Delay introduced by Javascript, in milliseconds (`Number`).
 
@@ -3035,7 +3035,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--enable_ip_reputation"></a>
 
-### Enable Ip Reputation
+### Enable IP Reputation
 
 `ip_threat_categories` - (Optional) List of IP Threat Categories to choose. If the source IP matches on atleast one of the enabled IP threat categories, the request will be denied (`List`).
 
@@ -3049,23 +3049,23 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--enable_trust_client_ip_headers"></a>
 
-### Enable Trust Client Ip Headers
+### Enable Trust Client IP Headers
 
-`client_ip_headers` - (Optional) Client IP Headers. Define the list of one or more Client IP Headers (`List`).
+`client_ip_headers` - (Optional) Client IP Headers. Define the list of one or more Client IP Headers. Headers will be used in order from top to bottom, meaning if the first header is not present in the request, the system will proceed to check for the second header, and so on, until one of the listed headers is found. If none of the defined headers exist, or the value is not an IP address, then the system will use the source IP of the packet. If multiple defined headers with different names are present in the request, the va.. (`List`).
 
 <a id="nestedblock--graphql_rules"></a>
 
-### Graphql Rules
+### GraphQL Rules
 
 `any_domain` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Domain](#nestedblock--graphql_rules--any_domain) below.
 
-`exact_path` - (Optional) Path. Specifies the exact path to GraphQL endpoint. Default value is /graphql (`String`).
+`exact_path` - (Optional) Path. Specifies the exact path to GraphQL endpoint. Default value is /GraphQL (`String`).
 
 `exact_value` - (Optional) Exact Value. Exact domain name (`String`).
 
-`graphql_settings` - (Optional) GraphQL Settings. GraphQL configuration. See [Graphql Settings](#nestedblock--graphql_rules--graphql_settings) below.
+`graphql_settings` - (Optional) GraphQL Settings. GraphQL configuration. See [GraphQL Settings](#nestedblock--graphql_rules--graphql_settings) below.
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--graphql_rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--graphql_rules--metadata) below.
 
 `method_get` - (Optional) Empty. This can be used for messages where no values are needed. See [Method Get](#nestedblock--graphql_rules--method_get) below.
 
@@ -3075,11 +3075,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--graphql_rules--any_domain"></a>
 
-### Graphql Rules Any Domain
+### GraphQL Rules Any Domain
 
 <a id="nestedblock--graphql_rules--graphql_settings"></a>
 
-### Graphql Rules Graphql Settings
+### GraphQL Rules GraphQL Settings
 
 `disable_introspection` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Introspection](#nestedblock--graphql_rules--graphql_settings--disable_introspection) below.
 
@@ -3093,15 +3093,15 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--graphql_rules--graphql_settings--disable_introspection"></a>
 
-### Graphql Rules Graphql Settings Disable Introspection
+### GraphQL Rules GraphQL Settings Disable Introspection
 
 <a id="nestedblock--graphql_rules--graphql_settings--enable_introspection"></a>
 
-### Graphql Rules Graphql Settings Enable Introspection
+### GraphQL Rules GraphQL Settings Enable Introspection
 
 <a id="nestedblock--graphql_rules--metadata"></a>
 
-### Graphql Rules Metadata
+### GraphQL Rules Metadata
 
 `description` - (Optional) Description. Human readable description (`String`).
 
@@ -3109,17 +3109,17 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--graphql_rules--method_get"></a>
 
-### Graphql Rules Method Get
+### GraphQL Rules Method Get
 
 <a id="nestedblock--graphql_rules--method_post"></a>
 
-### Graphql Rules Method Post
+### GraphQL Rules Method Post
 
 <a id="nestedblock--http"></a>
 
-### Http
+### HTTP
 
-`dns_volterra_managed` - (Optional) Automatically Manage DNS Records. DNS records for domains will be managed automatically by F5 Distributed Cloud (`Bool`).
+`dns_volterra_managed` - (Optional) Automatically Manage DNS Records. DNS records for domains will be managed automatically by F5 Distributed Cloud. As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature or a DNS CNAME record should be created in your DNS provider's portal (`Bool`).
 
 `port` - (Optional) HTTP Listen Port. HTTP port to Listen (`Number`).
 
@@ -3127,7 +3127,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--https"></a>
 
-### Https
+### HTTPS
 
 `add_hsts` - (Optional) Add HSTS Header. Add HTTP Strict-Transport-Security response header (`Bool`).
 
@@ -3135,7 +3135,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `coalescing_options` - (Optional) TLS Coalescing Options. TLS connection coalescing configuration (not compatible with mTLS). See [Coalescing Options](#nestedblock--https--coalescing_options) below.
 
-`connection_idle_timeout` - (Optional) Connection Idle Timeout. The idle timeout for downstream connections. The idle timeout is defined as the period in which there are no active requests (`Number`).
+`connection_idle_timeout` - (Optional) Connection Idle Timeout. The idle timeout for downstream connections. The idle timeout is defined as the period in which there are no active requests. When the idle timeout is reached the connection will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive. This is specified in milliseconds. The default value is 2 minutes (`Number`).
 
 `default_header` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Header](#nestedblock--https--default_header) below.
 
@@ -3145,7 +3145,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `enable_path_normalize` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Path Normalize](#nestedblock--https--enable_path_normalize) below.
 
-`http_protocol_options` - (Optional) HTTP Protocol Configuration Options. HTTP protocol configuration options for downstream connections. See [Http Protocol Options](#nestedblock--https--http_protocol_options) below.
+`http_protocol_options` - (Optional) HTTP Protocol Configuration Options. HTTP protocol configuration options for downstream connections. See [HTTP Protocol Options](#nestedblock--https--http_protocol_options) below.
 
 `http_redirect` - (Optional) HTTP Redirect to HTTPS. Redirect HTTP traffic to HTTPS (`Bool`).
 
@@ -3159,13 +3159,13 @@ In addition to all arguments above, the following attributes are exported:
 
 `server_name` - (Optional) Modify header value. Define the header value for the header name “server”. This will overwrite existing values, if any, for the server header (`String`).
 
-`tls_cert_params` - (Optional) TLS Parameters. Select TLS Parameters and Certificates. See [Tls Cert Params](#nestedblock--https--tls_cert_params) below.
+`tls_cert_params` - (Optional) TLS Parameters. Select TLS Parameters and Certificates. See [TLS Cert Params](#nestedblock--https--tls_cert_params) below.
 
-`tls_parameters` - (Optional) Inline TLS Parameters. Inline TLS parameters. See [Tls Parameters](#nestedblock--https--tls_parameters) below.
+`tls_parameters` - (Optional) Inline TLS Parameters. Inline TLS parameters. See [TLS Parameters](#nestedblock--https--tls_parameters) below.
 
 <a id="nestedblock--https--coalescing_options"></a>
 
-### Https Coalescing Options
+### HTTPS Coalescing Options
 
 `default_coalescing` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Coalescing](#nestedblock--https--coalescing_options--default_coalescing) below.
 
@@ -3173,79 +3173,79 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--https--coalescing_options--default_coalescing"></a>
 
-### Https Coalescing Options Default Coalescing
+### HTTPS Coalescing Options Default Coalescing
 
 <a id="nestedblock--https--coalescing_options--strict_coalescing"></a>
 
-### Https Coalescing Options Strict Coalescing
+### HTTPS Coalescing Options Strict Coalescing
 
 <a id="nestedblock--https--default_header"></a>
 
-### Https Default Header
+### HTTPS Default Header
 
 <a id="nestedblock--https--default_loadbalancer"></a>
 
-### Https Default Loadbalancer
+### HTTPS Default Loadbalancer
 
 <a id="nestedblock--https--disable_path_normalize"></a>
 
-### Https Disable Path Normalize
+### HTTPS Disable Path Normalize
 
 <a id="nestedblock--https--enable_path_normalize"></a>
 
-### Https Enable Path Normalize
+### HTTPS Enable Path Normalize
 
 <a id="nestedblock--https--http_protocol_options"></a>
 
-### Https Http Protocol Options
+### HTTPS HTTP Protocol Options
 
-`http_protocol_enable_v1_only` - (Optional) HTTP/1.1 Protocol Options. HTTP/1.1 Protocol options for downstream connections. See [Http Protocol Enable V1 Only](#nestedblock--https--http_protocol_options--http_protocol_enable_v1_only) below.
+`http_protocol_enable_v1_only` - (Optional) HTTP/1.1 Protocol Options. HTTP/1.1 Protocol options for downstream connections. See [HTTP Protocol Enable V1 Only](#nestedblock--https--http_protocol_options--http_protocol_enable_v1_only) below.
 
-`http_protocol_enable_v1_v2` - (Optional) Empty. This can be used for messages where no values are needed. See [Http Protocol Enable V1 V2](#nestedblock--https--http_protocol_options--http_protocol_enable_v1_v2) below.
+`http_protocol_enable_v1_v2` - (Optional) Empty. This can be used for messages where no values are needed. See [HTTP Protocol Enable V1 V2](#nestedblock--https--http_protocol_options--http_protocol_enable_v1_v2) below.
 
-`http_protocol_enable_v2_only` - (Optional) Empty. This can be used for messages where no values are needed. See [Http Protocol Enable V2 Only](#nestedblock--https--http_protocol_options--http_protocol_enable_v2_only) below.
+`http_protocol_enable_v2_only` - (Optional) Empty. This can be used for messages where no values are needed. See [HTTP Protocol Enable V2 Only](#nestedblock--https--http_protocol_options--http_protocol_enable_v2_only) below.
 
 <a id="nestedblock--https--http_protocol_options--http_protocol_enable_v1_only"></a>
 
-### Https Http Protocol Options Http Protocol Enable V1 Only
+### HTTPS HTTP Protocol Options HTTP Protocol Enable V1 Only
 
 `header_transformation` - (Optional) Header Transformation. Header Transformation options for HTTP/1.1 request/response headers. See [Header Transformation](#nestedblock--https--http_protocol_options--http_protocol_enable_v1_only--header_transformation) below.
 
 <a id="nestedblock--https--http_protocol_options--http_protocol_enable_v1_only--header_transformation"></a>
 
-### Https Http Protocol Options Http Protocol Enable V1 Only Header Transformation
+### HTTPS HTTP Protocol Options HTTP Protocol Enable V1 Only Header Transformation
 
 <a id="nestedblock--https--http_protocol_options--http_protocol_enable_v1_v2"></a>
 
-### Https Http Protocol Options Http Protocol Enable V1 V2
+### HTTPS HTTP Protocol Options HTTP Protocol Enable V1 V2
 
 <a id="nestedblock--https--http_protocol_options--http_protocol_enable_v2_only"></a>
 
-### Https Http Protocol Options Http Protocol Enable V2 Only
+### HTTPS HTTP Protocol Options HTTP Protocol Enable V2 Only
 
 <a id="nestedblock--https--non_default_loadbalancer"></a>
 
-### Https Non Default Loadbalancer
+### HTTPS Non Default Loadbalancer
 
 <a id="nestedblock--https--pass_through"></a>
 
-### Https Pass Through
+### HTTPS Pass Through
 
 <a id="nestedblock--https--tls_cert_params"></a>
 
-### Https Tls Cert Params
+### HTTPS TLS Cert Params
 
 `certificates` - (Optional) Certificates. Select one or more certificates with any domain names. See [Certificates](#nestedblock--https--tls_cert_params--certificates) below.
 
-`no_mtls` - (Optional) Empty. This can be used for messages where no values are needed. See [No Mtls](#nestedblock--https--tls_cert_params--no_mtls) below.
+`no_mtls` - (Optional) Empty. This can be used for messages where no values are needed. See [No mTLS](#nestedblock--https--tls_cert_params--no_mtls) below.
 
-`tls_config` - (Optional) TLS Config. This defines various options to configure TLS configuration parameters. See [Tls Config](#nestedblock--https--tls_cert_params--tls_config) below.
+`tls_config` - (Optional) TLS Config. This defines various options to configure TLS configuration parameters. See [TLS Config](#nestedblock--https--tls_cert_params--tls_config) below.
 
-`use_mtls` - (Optional) Clients TLS validation context. Validation context for downstream client TLS connections. See [Use Mtls](#nestedblock--https--tls_cert_params--use_mtls) below.
+`use_mtls` - (Optional) Clients TLS validation context. Validation context for downstream client TLS connections. See [Use mTLS](#nestedblock--https--tls_cert_params--use_mtls) below.
 
 <a id="nestedblock--https--tls_cert_params--certificates"></a>
 
-### Https Tls Cert Params Certificates
+### HTTPS TLS Cert Params Certificates
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -3255,11 +3255,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--https--tls_cert_params--no_mtls"></a>
 
-### Https Tls Cert Params No Mtls
+### HTTPS TLS Cert Params No mTLS
 
 <a id="nestedblock--https--tls_cert_params--tls_config"></a>
 
-### Https Tls Cert Params Tls Config
+### HTTPS TLS Cert Params TLS Config
 
 `custom_security` - (Optional) Custom Ciphers. This defines TLS protocol config including min/max versions and allowed ciphers. See [Custom Security](#nestedblock--https--tls_cert_params--tls_config--custom_security) below.
 
@@ -3271,31 +3271,31 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--https--tls_cert_params--tls_config--custom_security"></a>
 
-### Https Tls Cert Params Tls Config Custom Security
+### HTTPS TLS Cert Params TLS Config Custom Security
 
 <a id="nestedblock--https--tls_cert_params--tls_config--default_security"></a>
 
-### Https Tls Cert Params Tls Config Default Security
+### HTTPS TLS Cert Params TLS Config Default Security
 
 <a id="nestedblock--https--tls_cert_params--tls_config--low_security"></a>
 
-### Https Tls Cert Params Tls Config Low Security
+### HTTPS TLS Cert Params TLS Config Low Security
 
 <a id="nestedblock--https--tls_cert_params--tls_config--medium_security"></a>
 
-### Https Tls Cert Params Tls Config Medium Security
+### HTTPS TLS Cert Params TLS Config Medium Security
 
 <a id="nestedblock--https--tls_cert_params--use_mtls"></a>
 
-### Https Tls Cert Params Use Mtls
+### HTTPS TLS Cert Params Use mTLS
 
-`client_certificate_optional` - (Optional) Client Certificate Optional. Client certificate is optional. If the client has provided a certificate, the load balancer will verify it (`Bool`).
+`client_certificate_optional` - (Optional) Client Certificate Optional. Client certificate is optional. If the client has provided a certificate, the load balancer will verify it. If certification verification fails, the connection will be terminated. If the client does not provide a certificate, the connection will be accepted (`Bool`).
 
-`crl` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Crl](#nestedblock--https--tls_cert_params--use_mtls--crl) below.
+`crl` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [CRL](#nestedblock--https--tls_cert_params--use_mtls--crl) below.
 
-`no_crl` - (Optional) Empty. This can be used for messages where no values are needed. See [No Crl](#nestedblock--https--tls_cert_params--use_mtls--no_crl) below.
+`no_crl` - (Optional) Empty. This can be used for messages where no values are needed. See [No CRL](#nestedblock--https--tls_cert_params--use_mtls--no_crl) below.
 
-`trusted_ca` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Trusted Ca](#nestedblock--https--tls_cert_params--use_mtls--trusted_ca) below.
+`trusted_ca` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Trusted CA](#nestedblock--https--tls_cert_params--use_mtls--trusted_ca) below.
 
 `trusted_ca_url` - (Optional) Inline Root CA Certificate (legacy). Upload a Root CA Certificate specifically for this Load Balancer (`String`).
 
@@ -3305,43 +3305,43 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--https--tls_cert_params--use_mtls--crl"></a>
 
-### Https Tls Cert Params Use Mtls Crl
+### HTTPS TLS Cert Params Use mTLS CRL
 
 <a id="nestedblock--https--tls_cert_params--use_mtls--no_crl"></a>
 
-### Https Tls Cert Params Use Mtls No Crl
+### HTTPS TLS Cert Params Use mTLS No CRL
 
 <a id="nestedblock--https--tls_cert_params--use_mtls--trusted_ca"></a>
 
-### Https Tls Cert Params Use Mtls Trusted Ca
+### HTTPS TLS Cert Params Use mTLS Trusted CA
 
 <a id="nestedblock--https--tls_cert_params--use_mtls--xfcc_disabled"></a>
 
-### Https Tls Cert Params Use Mtls Xfcc Disabled
+### HTTPS TLS Cert Params Use mTLS Xfcc Disabled
 
 <a id="nestedblock--https--tls_cert_params--use_mtls--xfcc_options"></a>
 
-### Https Tls Cert Params Use Mtls Xfcc Options
+### HTTPS TLS Cert Params Use mTLS Xfcc Options
 
 <a id="nestedblock--https--tls_parameters"></a>
 
-### Https Tls Parameters
+### HTTPS TLS Parameters
 
-`no_mtls` - (Optional) Empty. This can be used for messages where no values are needed. See [No Mtls](#nestedblock--https--tls_parameters--no_mtls) below.
+`no_mtls` - (Optional) Empty. This can be used for messages where no values are needed. See [No mTLS](#nestedblock--https--tls_parameters--no_mtls) below.
 
-`tls_certificates` - (Optional) TLS Certificates. Users can add one or more certificates that share the same set of domains. for example, domain.com and *.domain.com - but use different signature algorithms. See [Tls Certificates](#nestedblock--https--tls_parameters--tls_certificates) below.
+`tls_certificates` - (Optional) TLS Certificates. Users can add one or more certificates that share the same set of domains. for example, domain.com and *.domain.com - but use different signature algorithms. See [TLS Certificates](#nestedblock--https--tls_parameters--tls_certificates) below.
 
-`tls_config` - (Optional) TLS Config. This defines various options to configure TLS configuration parameters. See [Tls Config](#nestedblock--https--tls_parameters--tls_config) below.
+`tls_config` - (Optional) TLS Config. This defines various options to configure TLS configuration parameters. See [TLS Config](#nestedblock--https--tls_parameters--tls_config) below.
 
-`use_mtls` - (Optional) Clients TLS validation context. Validation context for downstream client TLS connections. See [Use Mtls](#nestedblock--https--tls_parameters--use_mtls) below.
+`use_mtls` - (Optional) Clients TLS validation context. Validation context for downstream client TLS connections. See [Use mTLS](#nestedblock--https--tls_parameters--use_mtls) below.
 
 <a id="nestedblock--https--tls_parameters--no_mtls"></a>
 
-### Https Tls Parameters No Mtls
+### HTTPS TLS Parameters No mTLS
 
 <a id="nestedblock--https--tls_parameters--tls_certificates"></a>
 
-### Https Tls Parameters Tls Certificates
+### HTTPS TLS Parameters TLS Certificates
 
 `certificate_url` - (Optional) Certificate. TLS certificate. Certificate or certificate chain in PEM format including the PEM headers (`String`).
 
@@ -3349,7 +3349,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `description` - (Optional) Description. Description for the certificate (`String`).
 
-`disable_ocsp_stapling` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Ocsp Stapling](#nestedblock--https--tls_parameters--tls_certificates--disable_ocsp_stapling) below.
+`disable_ocsp_stapling` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable OCSP Stapling](#nestedblock--https--tls_parameters--tls_certificates--disable_ocsp_stapling) below.
 
 `private_key` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Private Key](#nestedblock--https--tls_parameters--tls_certificates--private_key) below.
 
@@ -3357,23 +3357,23 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--https--tls_parameters--tls_certificates--custom_hash_algorithms"></a>
 
-### Https Tls Parameters Tls Certificates Custom Hash Algorithms
+### HTTPS TLS Parameters TLS Certificates Custom Hash Algorithms
 
 <a id="nestedblock--https--tls_parameters--tls_certificates--disable_ocsp_stapling"></a>
 
-### Https Tls Parameters Tls Certificates Disable Ocsp Stapling
+### HTTPS TLS Parameters TLS Certificates Disable OCSP Stapling
 
 <a id="nestedblock--https--tls_parameters--tls_certificates--private_key"></a>
 
-### Https Tls Parameters Tls Certificates Private Key
+### HTTPS TLS Parameters TLS Certificates Private Key
 
 <a id="nestedblock--https--tls_parameters--tls_certificates--use_system_defaults"></a>
 
-### Https Tls Parameters Tls Certificates Use System Defaults
+### HTTPS TLS Parameters TLS Certificates Use System Defaults
 
 <a id="nestedblock--https--tls_parameters--tls_config"></a>
 
-### Https Tls Parameters Tls Config
+### HTTPS TLS Parameters TLS Config
 
 `custom_security` - (Optional) Custom Ciphers. This defines TLS protocol config including min/max versions and allowed ciphers. See [Custom Security](#nestedblock--https--tls_parameters--tls_config--custom_security) below.
 
@@ -3385,31 +3385,31 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--https--tls_parameters--tls_config--custom_security"></a>
 
-### Https Tls Parameters Tls Config Custom Security
+### HTTPS TLS Parameters TLS Config Custom Security
 
 <a id="nestedblock--https--tls_parameters--tls_config--default_security"></a>
 
-### Https Tls Parameters Tls Config Default Security
+### HTTPS TLS Parameters TLS Config Default Security
 
 <a id="nestedblock--https--tls_parameters--tls_config--low_security"></a>
 
-### Https Tls Parameters Tls Config Low Security
+### HTTPS TLS Parameters TLS Config Low Security
 
 <a id="nestedblock--https--tls_parameters--tls_config--medium_security"></a>
 
-### Https Tls Parameters Tls Config Medium Security
+### HTTPS TLS Parameters TLS Config Medium Security
 
 <a id="nestedblock--https--tls_parameters--use_mtls"></a>
 
-### Https Tls Parameters Use Mtls
+### HTTPS TLS Parameters Use mTLS
 
-`client_certificate_optional` - (Optional) Client Certificate Optional. Client certificate is optional. If the client has provided a certificate, the load balancer will verify it (`Bool`).
+`client_certificate_optional` - (Optional) Client Certificate Optional. Client certificate is optional. If the client has provided a certificate, the load balancer will verify it. If certification verification fails, the connection will be terminated. If the client does not provide a certificate, the connection will be accepted (`Bool`).
 
-`crl` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Crl](#nestedblock--https--tls_parameters--use_mtls--crl) below.
+`crl` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [CRL](#nestedblock--https--tls_parameters--use_mtls--crl) below.
 
-`no_crl` - (Optional) Empty. This can be used for messages where no values are needed. See [No Crl](#nestedblock--https--tls_parameters--use_mtls--no_crl) below.
+`no_crl` - (Optional) Empty. This can be used for messages where no values are needed. See [No CRL](#nestedblock--https--tls_parameters--use_mtls--no_crl) below.
 
-`trusted_ca` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Trusted Ca](#nestedblock--https--tls_parameters--use_mtls--trusted_ca) below.
+`trusted_ca` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Trusted CA](#nestedblock--https--tls_parameters--use_mtls--trusted_ca) below.
 
 `trusted_ca_url` - (Optional) Inline Root CA Certificate (legacy). Upload a Root CA Certificate specifically for this Load Balancer (`String`).
 
@@ -3419,27 +3419,27 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--https--tls_parameters--use_mtls--crl"></a>
 
-### Https Tls Parameters Use Mtls Crl
+### HTTPS TLS Parameters Use mTLS CRL
 
 <a id="nestedblock--https--tls_parameters--use_mtls--no_crl"></a>
 
-### Https Tls Parameters Use Mtls No Crl
+### HTTPS TLS Parameters Use mTLS No CRL
 
 <a id="nestedblock--https--tls_parameters--use_mtls--trusted_ca"></a>
 
-### Https Tls Parameters Use Mtls Trusted Ca
+### HTTPS TLS Parameters Use mTLS Trusted CA
 
 <a id="nestedblock--https--tls_parameters--use_mtls--xfcc_disabled"></a>
 
-### Https Tls Parameters Use Mtls Xfcc Disabled
+### HTTPS TLS Parameters Use mTLS Xfcc Disabled
 
 <a id="nestedblock--https--tls_parameters--use_mtls--xfcc_options"></a>
 
-### Https Tls Parameters Use Mtls Xfcc Options
+### HTTPS TLS Parameters Use mTLS Xfcc Options
 
 <a id="nestedblock--https_auto_cert"></a>
 
-### Https Auto Cert
+### HTTPS Auto Cert
 
 `add_hsts` - (Optional) Add HSTS Header. Add HTTP Strict-Transport-Security response header (`Bool`).
 
@@ -3447,7 +3447,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `coalescing_options` - (Optional) TLS Coalescing Options. TLS connection coalescing configuration (not compatible with mTLS). See [Coalescing Options](#nestedblock--https_auto_cert--coalescing_options) below.
 
-`connection_idle_timeout` - (Optional) Connection Idle Timeout. The idle timeout for downstream connections. The idle timeout is defined as the period in which there are no active requests (`Number`).
+`connection_idle_timeout` - (Optional) Connection Idle Timeout. The idle timeout for downstream connections. The idle timeout is defined as the period in which there are no active requests. When the idle timeout is reached the connection will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive. This is specified in milliseconds. The default value is 2 minutes (`Number`).
 
 `default_header` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Header](#nestedblock--https_auto_cert--default_header) below.
 
@@ -3457,11 +3457,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `enable_path_normalize` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Path Normalize](#nestedblock--https_auto_cert--enable_path_normalize) below.
 
-`http_protocol_options` - (Optional) HTTP Protocol Configuration Options. HTTP protocol configuration options for downstream connections. See [Http Protocol Options](#nestedblock--https_auto_cert--http_protocol_options) below.
+`http_protocol_options` - (Optional) HTTP Protocol Configuration Options. HTTP protocol configuration options for downstream connections. See [HTTP Protocol Options](#nestedblock--https_auto_cert--http_protocol_options) below.
 
 `http_redirect` - (Optional) HTTP Redirect to HTTPS. Redirect HTTP traffic to HTTPS (`Bool`).
 
-`no_mtls` - (Optional) Empty. This can be used for messages where no values are needed. See [No Mtls](#nestedblock--https_auto_cert--no_mtls) below.
+`no_mtls` - (Optional) Empty. This can be used for messages where no values are needed. See [No mTLS](#nestedblock--https_auto_cert--no_mtls) below.
 
 `non_default_loadbalancer` - (Optional) Empty. This can be used for messages where no values are needed. See [Non Default Loadbalancer](#nestedblock--https_auto_cert--non_default_loadbalancer) below.
 
@@ -3473,13 +3473,13 @@ In addition to all arguments above, the following attributes are exported:
 
 `server_name` - (Optional) Modify header value. Define the header value for the header name “server”. This will overwrite existing values, if any, for the server header (`String`).
 
-`tls_config` - (Optional) TLS Config. This defines various options to configure TLS configuration parameters. See [Tls Config](#nestedblock--https_auto_cert--tls_config) below.
+`tls_config` - (Optional) TLS Config. This defines various options to configure TLS configuration parameters. See [TLS Config](#nestedblock--https_auto_cert--tls_config) below.
 
-`use_mtls` - (Optional) Clients TLS validation context. Validation context for downstream client TLS connections. See [Use Mtls](#nestedblock--https_auto_cert--use_mtls) below.
+`use_mtls` - (Optional) Clients TLS validation context. Validation context for downstream client TLS connections. See [Use mTLS](#nestedblock--https_auto_cert--use_mtls) below.
 
 <a id="nestedblock--https_auto_cert--coalescing_options"></a>
 
-### Https Auto Cert Coalescing Options
+### HTTPS Auto Cert Coalescing Options
 
 `default_coalescing` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Coalescing](#nestedblock--https_auto_cert--coalescing_options--default_coalescing) below.
 
@@ -3487,71 +3487,71 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--https_auto_cert--coalescing_options--default_coalescing"></a>
 
-### Https Auto Cert Coalescing Options Default Coalescing
+### HTTPS Auto Cert Coalescing Options Default Coalescing
 
 <a id="nestedblock--https_auto_cert--coalescing_options--strict_coalescing"></a>
 
-### Https Auto Cert Coalescing Options Strict Coalescing
+### HTTPS Auto Cert Coalescing Options Strict Coalescing
 
 <a id="nestedblock--https_auto_cert--default_header"></a>
 
-### Https Auto Cert Default Header
+### HTTPS Auto Cert Default Header
 
 <a id="nestedblock--https_auto_cert--default_loadbalancer"></a>
 
-### Https Auto Cert Default Loadbalancer
+### HTTPS Auto Cert Default Loadbalancer
 
 <a id="nestedblock--https_auto_cert--disable_path_normalize"></a>
 
-### Https Auto Cert Disable Path Normalize
+### HTTPS Auto Cert Disable Path Normalize
 
 <a id="nestedblock--https_auto_cert--enable_path_normalize"></a>
 
-### Https Auto Cert Enable Path Normalize
+### HTTPS Auto Cert Enable Path Normalize
 
 <a id="nestedblock--https_auto_cert--http_protocol_options"></a>
 
-### Https Auto Cert Http Protocol Options
+### HTTPS Auto Cert HTTP Protocol Options
 
-`http_protocol_enable_v1_only` - (Optional) HTTP/1.1 Protocol Options. HTTP/1.1 Protocol options for downstream connections. See [Http Protocol Enable V1 Only](#nestedblock--https_auto_cert--http_protocol_options--http_protocol_enable_v1_only) below.
+`http_protocol_enable_v1_only` - (Optional) HTTP/1.1 Protocol Options. HTTP/1.1 Protocol options for downstream connections. See [HTTP Protocol Enable V1 Only](#nestedblock--https_auto_cert--http_protocol_options--http_protocol_enable_v1_only) below.
 
-`http_protocol_enable_v1_v2` - (Optional) Empty. This can be used for messages where no values are needed. See [Http Protocol Enable V1 V2](#nestedblock--https_auto_cert--http_protocol_options--http_protocol_enable_v1_v2) below.
+`http_protocol_enable_v1_v2` - (Optional) Empty. This can be used for messages where no values are needed. See [HTTP Protocol Enable V1 V2](#nestedblock--https_auto_cert--http_protocol_options--http_protocol_enable_v1_v2) below.
 
-`http_protocol_enable_v2_only` - (Optional) Empty. This can be used for messages where no values are needed. See [Http Protocol Enable V2 Only](#nestedblock--https_auto_cert--http_protocol_options--http_protocol_enable_v2_only) below.
+`http_protocol_enable_v2_only` - (Optional) Empty. This can be used for messages where no values are needed. See [HTTP Protocol Enable V2 Only](#nestedblock--https_auto_cert--http_protocol_options--http_protocol_enable_v2_only) below.
 
 <a id="nestedblock--https_auto_cert--http_protocol_options--http_protocol_enable_v1_only"></a>
 
-### Https Auto Cert Http Protocol Options Http Protocol Enable V1 Only
+### HTTPS Auto Cert HTTP Protocol Options HTTP Protocol Enable V1 Only
 
 `header_transformation` - (Optional) Header Transformation. Header Transformation options for HTTP/1.1 request/response headers. See [Header Transformation](#nestedblock--https_auto_cert--http_protocol_options--http_protocol_enable_v1_only--header_transformation) below.
 
 <a id="nestedblock--https_auto_cert--http_protocol_options--http_protocol_enable_v1_only--header_transformation"></a>
 
-### Https Auto Cert Http Protocol Options Http Protocol Enable V1 Only Header Transformation
+### HTTPS Auto Cert HTTP Protocol Options HTTP Protocol Enable V1 Only Header Transformation
 
 <a id="nestedblock--https_auto_cert--http_protocol_options--http_protocol_enable_v1_v2"></a>
 
-### Https Auto Cert Http Protocol Options Http Protocol Enable V1 V2
+### HTTPS Auto Cert HTTP Protocol Options HTTP Protocol Enable V1 V2
 
 <a id="nestedblock--https_auto_cert--http_protocol_options--http_protocol_enable_v2_only"></a>
 
-### Https Auto Cert Http Protocol Options Http Protocol Enable V2 Only
+### HTTPS Auto Cert HTTP Protocol Options HTTP Protocol Enable V2 Only
 
 <a id="nestedblock--https_auto_cert--no_mtls"></a>
 
-### Https Auto Cert No Mtls
+### HTTPS Auto Cert No mTLS
 
 <a id="nestedblock--https_auto_cert--non_default_loadbalancer"></a>
 
-### Https Auto Cert Non Default Loadbalancer
+### HTTPS Auto Cert Non Default Loadbalancer
 
 <a id="nestedblock--https_auto_cert--pass_through"></a>
 
-### Https Auto Cert Pass Through
+### HTTPS Auto Cert Pass Through
 
 <a id="nestedblock--https_auto_cert--tls_config"></a>
 
-### Https Auto Cert Tls Config
+### HTTPS Auto Cert TLS Config
 
 `custom_security` - (Optional) Custom Ciphers. This defines TLS protocol config including min/max versions and allowed ciphers. See [Custom Security](#nestedblock--https_auto_cert--tls_config--custom_security) below.
 
@@ -3563,37 +3563,37 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--https_auto_cert--tls_config--custom_security"></a>
 
-### Https Auto Cert Tls Config Custom Security
+### HTTPS Auto Cert TLS Config Custom Security
 
 `cipher_suites` - (Optional) Cipher Suites. The TLS listener will only support the specified cipher list (`List`).
 
-`max_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3` (`String`).
+`max_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3`. Defaults to `TLS_AUTO` (`String`).
 
-`min_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3` (`String`).
+`min_version` - (Optional) TLS Protocol. TlsProtocol is enumeration of supported TLS versions F5 Distributed Cloud will choose the optimal TLS version. Possible values are `TLS_AUTO`, `TLSv1_0`, `TLSv1_1`, `TLSv1_2`, `TLSv1_3`. Defaults to `TLS_AUTO` (`String`).
 
 <a id="nestedblock--https_auto_cert--tls_config--default_security"></a>
 
-### Https Auto Cert Tls Config Default Security
+### HTTPS Auto Cert TLS Config Default Security
 
 <a id="nestedblock--https_auto_cert--tls_config--low_security"></a>
 
-### Https Auto Cert Tls Config Low Security
+### HTTPS Auto Cert TLS Config Low Security
 
 <a id="nestedblock--https_auto_cert--tls_config--medium_security"></a>
 
-### Https Auto Cert Tls Config Medium Security
+### HTTPS Auto Cert TLS Config Medium Security
 
 <a id="nestedblock--https_auto_cert--use_mtls"></a>
 
-### Https Auto Cert Use Mtls
+### HTTPS Auto Cert Use mTLS
 
-`client_certificate_optional` - (Optional) Client Certificate Optional. Client certificate is optional. If the client has provided a certificate, the load balancer will verify it (`Bool`).
+`client_certificate_optional` - (Optional) Client Certificate Optional. Client certificate is optional. If the client has provided a certificate, the load balancer will verify it. If certification verification fails, the connection will be terminated. If the client does not provide a certificate, the connection will be accepted (`Bool`).
 
-`crl` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Crl](#nestedblock--https_auto_cert--use_mtls--crl) below.
+`crl` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [CRL](#nestedblock--https_auto_cert--use_mtls--crl) below.
 
-`no_crl` - (Optional) Empty. This can be used for messages where no values are needed. See [No Crl](#nestedblock--https_auto_cert--use_mtls--no_crl) below.
+`no_crl` - (Optional) Empty. This can be used for messages where no values are needed. See [No CRL](#nestedblock--https_auto_cert--use_mtls--no_crl) below.
 
-`trusted_ca` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Trusted Ca](#nestedblock--https_auto_cert--use_mtls--trusted_ca) below.
+`trusted_ca` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Trusted CA](#nestedblock--https_auto_cert--use_mtls--trusted_ca) below.
 
 `trusted_ca_url` - (Optional) Inline Root CA Certificate (legacy). Upload a Root CA Certificate specifically for this Load Balancer (`String`).
 
@@ -3603,7 +3603,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--https_auto_cert--use_mtls--crl"></a>
 
-### Https Auto Cert Use Mtls Crl
+### HTTPS Auto Cert Use mTLS CRL
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -3613,11 +3613,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--https_auto_cert--use_mtls--no_crl"></a>
 
-### Https Auto Cert Use Mtls No Crl
+### HTTPS Auto Cert Use mTLS No CRL
 
 <a id="nestedblock--https_auto_cert--use_mtls--trusted_ca"></a>
 
-### Https Auto Cert Use Mtls Trusted Ca
+### HTTPS Auto Cert Use mTLS Trusted CA
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -3627,11 +3627,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--https_auto_cert--use_mtls--xfcc_disabled"></a>
 
-### Https Auto Cert Use Mtls Xfcc Disabled
+### HTTPS Auto Cert Use mTLS Xfcc Disabled
 
 <a id="nestedblock--https_auto_cert--use_mtls--xfcc_options"></a>
 
-### Https Auto Cert Use Mtls Xfcc Options
+### HTTPS Auto Cert Use mTLS Xfcc Options
 
 `xfcc_header_elements` - (Optional) XFCC Header Elements. X-Forwarded-Client-Cert header elements to be added to requests (`List`).
 
@@ -3641,13 +3641,13 @@ In addition to all arguments above, the following attributes are exported:
 
 `cookie_expiry` - (Optional) Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge (`Number`).
 
-`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Please Wait.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Please Wait </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 `js_script_delay` - (Optional) Javascript Delay. Delay introduced by Javascript, in milliseconds (`Number`).
 
 <a id="nestedblock--jwt_validation"></a>
 
-### Jwt Validation
+### JWT Validation
 
 `action` - (Optional) Action. See [Action](#nestedblock--jwt_validation--action) below.
 
@@ -3659,11 +3659,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `target` - (Optional) Target. Define endpoints for which JWT token validation will be performed. See [Target](#nestedblock--jwt_validation--target) below.
 
-`token_location` - (Optional) Token Location. Location of JWT in Http request. See [Token Location](#nestedblock--jwt_validation--token_location) below.
+`token_location` - (Optional) Token Location. Location of JWT in HTTP request. See [Token Location](#nestedblock--jwt_validation--token_location) below.
 
 <a id="nestedblock--jwt_validation--action"></a>
 
-### Jwt Validation Action
+### JWT Validation Action
 
 `block` - (Optional) Empty. This can be used for messages where no values are needed. See [Block](#nestedblock--jwt_validation--action--block) below.
 
@@ -3671,27 +3671,27 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--jwt_validation--action--block"></a>
 
-### Jwt Validation Action Block
+### JWT Validation Action Block
 
 <a id="nestedblock--jwt_validation--action--report"></a>
 
-### Jwt Validation Action Report
+### JWT Validation Action Report
 
 <a id="nestedblock--jwt_validation--jwks_config"></a>
 
-### Jwt Validation Jwks Config
+### JWT Validation Jwks Config
 
 `cleartext` - (Optional) JSON Web Key Set (JWKS). The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details (`String`).
 
 <a id="nestedblock--jwt_validation--mandatory_claims"></a>
 
-### Jwt Validation Mandatory Claims
+### JWT Validation Mandatory Claims
 
 `claim_names` - (Optional) Claim Names (`List`).
 
 <a id="nestedblock--jwt_validation--reserved_claims"></a>
 
-### Jwt Validation Reserved Claims
+### JWT Validation Reserved Claims
 
 `audience` - (Optional) Audiences. See [Audience](#nestedblock--jwt_validation--reserved_claims--audience) below.
 
@@ -3707,129 +3707,129 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--jwt_validation--reserved_claims--audience"></a>
 
-### Jwt Validation Reserved Claims Audience
+### JWT Validation Reserved Claims Audience
 
 `audiences` - (Optional) Values (`List`).
 
 <a id="nestedblock--jwt_validation--reserved_claims--audience_disable"></a>
 
-### Jwt Validation Reserved Claims Audience Disable
+### JWT Validation Reserved Claims Audience Disable
 
 <a id="nestedblock--jwt_validation--reserved_claims--issuer_disable"></a>
 
-### Jwt Validation Reserved Claims Issuer Disable
+### JWT Validation Reserved Claims Issuer Disable
 
 <a id="nestedblock--jwt_validation--reserved_claims--validate_period_disable"></a>
 
-### Jwt Validation Reserved Claims Validate Period Disable
+### JWT Validation Reserved Claims Validate Period Disable
 
 <a id="nestedblock--jwt_validation--reserved_claims--validate_period_enable"></a>
 
-### Jwt Validation Reserved Claims Validate Period Enable
+### JWT Validation Reserved Claims Validate Period Enable
 
 <a id="nestedblock--jwt_validation--target"></a>
 
-### Jwt Validation Target
+### JWT Validation Target
 
 `all_endpoint` - (Optional) Empty. This can be used for messages where no values are needed. See [All Endpoint](#nestedblock--jwt_validation--target--all_endpoint) below.
 
-`api_groups` - (Optional) API Groups. See [Api Groups](#nestedblock--jwt_validation--target--api_groups) below.
+`api_groups` - (Optional) API Groups. See [API Groups](#nestedblock--jwt_validation--target--api_groups) below.
 
 `base_paths` - (Optional) Base Paths. See [Base Paths](#nestedblock--jwt_validation--target--base_paths) below.
 
 <a id="nestedblock--jwt_validation--target--all_endpoint"></a>
 
-### Jwt Validation Target All Endpoint
+### JWT Validation Target All Endpoint
 
 <a id="nestedblock--jwt_validation--target--api_groups"></a>
 
-### Jwt Validation Target Api Groups
+### JWT Validation Target API Groups
 
 `api_groups` - (Optional) API Groups (`List`).
 
 <a id="nestedblock--jwt_validation--target--base_paths"></a>
 
-### Jwt Validation Target Base Paths
+### JWT Validation Target Base Paths
 
 `base_paths` - (Optional) Prefix Values (`List`).
 
 <a id="nestedblock--jwt_validation--token_location"></a>
 
-### Jwt Validation Token Location
+### JWT Validation Token Location
 
 `bearer_token` - (Optional) Empty. This can be used for messages where no values are needed. See [Bearer Token](#nestedblock--jwt_validation--token_location--bearer_token) below.
 
 <a id="nestedblock--jwt_validation--token_location--bearer_token"></a>
 
-### Jwt Validation Token Location Bearer Token
+### JWT Validation Token Location Bearer Token
 
 <a id="nestedblock--l7_ddos_action_block"></a>
 
-### L7 Ddos Action Block
+### L7 DDOS Action Block
 
 <a id="nestedblock--l7_ddos_action_default"></a>
 
-### L7 Ddos Action Default
+### L7 DDOS Action Default
 
 <a id="nestedblock--l7_ddos_action_js_challenge"></a>
 
-### L7 Ddos Action Js Challenge
+### L7 DDOS Action Js Challenge
 
 `cookie_expiry` - (Optional) Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge (`Number`).
 
-`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Please Wait.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Please Wait </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 `js_script_delay` - (Optional) Javascript Delay. Delay introduced by Javascript, in milliseconds (`Number`).
 
 <a id="nestedblock--l7_ddos_protection"></a>
 
-### L7 Ddos Protection
+### L7 DDOS Protection
 
-`clientside_action_captcha_challenge` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. See [Clientside Action Captcha Challenge](#nestedblock--l7_ddos_protection--clientside_action_captcha_challenge) below.
+`clientside_action_captcha_challenge` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. With this feature enabled, only clients that pass the captcha challenge will be allowed to complete the HTTP request. When loadbalancer is configured to do Captcha Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have captcha challenge embedded in it. Client will be allowed to make the request only if the cap... See [Clientside Action Captcha Challenge](#nestedblock--l7_ddos_protection--clientside_action_captcha_challenge) below.
 
-`clientside_action_js_challenge` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. See [Clientside Action Js Challenge](#nestedblock--l7_ddos_protection--clientside_action_js_challenge) below.
+`clientside_action_js_challenge` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. With this feature enabled, only clients that are capable of executing Javascript(mostly browsers) will be allowed to complete the HTTP request. When loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have Javascript embedded in it. Loadbalancer chooses a set o... See [Clientside Action Js Challenge](#nestedblock--l7_ddos_protection--clientside_action_js_challenge) below.
 
 `clientside_action_none` - (Optional) Empty. This can be used for messages where no values are needed. See [Clientside Action None](#nestedblock--l7_ddos_protection--clientside_action_none) below.
 
-`ddos_policy_custom` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Ddos Policy Custom](#nestedblock--l7_ddos_protection--ddos_policy_custom) below.
+`ddos_policy_custom` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [DDOS Policy Custom](#nestedblock--l7_ddos_protection--ddos_policy_custom) below.
 
-`ddos_policy_none` - (Optional) Empty. This can be used for messages where no values are needed. See [Ddos Policy None](#nestedblock--l7_ddos_protection--ddos_policy_none) below.
+`ddos_policy_none` - (Optional) Empty. This can be used for messages where no values are needed. See [DDOS Policy None](#nestedblock--l7_ddos_protection--ddos_policy_none) below.
 
 `default_rps_threshold` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Rps Threshold](#nestedblock--l7_ddos_protection--default_rps_threshold) below.
 
 `mitigation_block` - (Optional) Empty. This can be used for messages where no values are needed. See [Mitigation Block](#nestedblock--l7_ddos_protection--mitigation_block) below.
 
-`mitigation_captcha_challenge` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. See [Mitigation Captcha Challenge](#nestedblock--l7_ddos_protection--mitigation_captcha_challenge) below.
+`mitigation_captcha_challenge` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. With this feature enabled, only clients that pass the captcha challenge will be allowed to complete the HTTP request. When loadbalancer is configured to do Captcha Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have captcha challenge embedded in it. Client will be allowed to make the request only if the cap... See [Mitigation Captcha Challenge](#nestedblock--l7_ddos_protection--mitigation_captcha_challenge) below.
 
-`mitigation_js_challenge` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. See [Mitigation Js Challenge](#nestedblock--l7_ddos_protection--mitigation_js_challenge) below.
+`mitigation_js_challenge` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. With this feature enabled, only clients that are capable of executing Javascript(mostly browsers) will be allowed to complete the HTTP request. When loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have Javascript embedded in it. Loadbalancer chooses a set o... See [Mitigation Js Challenge](#nestedblock--l7_ddos_protection--mitigation_js_challenge) below.
 
 `rps_threshold` - (Optional) Custom. Configure custom RPS threshold (`Number`).
 
 <a id="nestedblock--l7_ddos_protection--clientside_action_captcha_challenge"></a>
 
-### L7 Ddos Protection Clientside Action Captcha Challenge
+### L7 DDOS Protection Clientside Action Captcha Challenge
 
 `cookie_expiry` - (Optional) Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge (`Number`).
 
-`custom_page` - (Optional) Custom message for Captcha Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom message for Captcha Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Please Wait.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Please Wait </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 <a id="nestedblock--l7_ddos_protection--clientside_action_js_challenge"></a>
 
-### L7 Ddos Protection Clientside Action Js Challenge
+### L7 DDOS Protection Clientside Action Js Challenge
 
 `cookie_expiry` - (Optional) Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge (`Number`).
 
-`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Please Wait.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Please Wait </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 `js_script_delay` - (Optional) Javascript Delay. Delay introduced by Javascript, in milliseconds (`Number`).
 
 <a id="nestedblock--l7_ddos_protection--clientside_action_none"></a>
 
-### L7 Ddos Protection Clientside Action None
+### L7 DDOS Protection Clientside Action None
 
 <a id="nestedblock--l7_ddos_protection--ddos_policy_custom"></a>
 
-### L7 Ddos Protection Ddos Policy Custom
+### L7 DDOS Protection DDOS Policy Custom
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -3839,31 +3839,31 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--l7_ddos_protection--ddos_policy_none"></a>
 
-### L7 Ddos Protection Ddos Policy None
+### L7 DDOS Protection DDOS Policy None
 
 <a id="nestedblock--l7_ddos_protection--default_rps_threshold"></a>
 
-### L7 Ddos Protection Default Rps Threshold
+### L7 DDOS Protection Default Rps Threshold
 
 <a id="nestedblock--l7_ddos_protection--mitigation_block"></a>
 
-### L7 Ddos Protection Mitigation Block
+### L7 DDOS Protection Mitigation Block
 
 <a id="nestedblock--l7_ddos_protection--mitigation_captcha_challenge"></a>
 
-### L7 Ddos Protection Mitigation Captcha Challenge
+### L7 DDOS Protection Mitigation Captcha Challenge
 
 `cookie_expiry` - (Optional) Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge (`Number`).
 
-`custom_page` - (Optional) Custom message for Captcha Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom message for Captcha Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Please Wait.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Please Wait </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 <a id="nestedblock--l7_ddos_protection--mitigation_js_challenge"></a>
 
-### L7 Ddos Protection Mitigation Js Challenge
+### L7 DDOS Protection Mitigation Js Challenge
 
 `cookie_expiry` - (Optional) Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge (`Number`).
 
-`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Please Wait.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Please Wait </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 `js_script_delay` - (Optional) Javascript Delay. Delay introduced by Javascript, in milliseconds (`Number`).
 
@@ -3887,7 +3887,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `http_methods` - (Optional) HTTP Methods. Methods to be matched (`List`).
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--malware_protection_settings--malware_protection_rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--malware_protection_settings--malware_protection_rules--metadata) below.
 
 `path` - (Optional) Path to Match. Path match of the URI can be either be, Prefix match or exact match or regular expression match. See [Path](#nestedblock--malware_protection_settings--malware_protection_rules--path) below.
 
@@ -3945,11 +3945,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### More Option
 
-`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. See [Buffer Policy](#nestedblock--more_option--buffer_policy) below.
+`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. We can specify the maximum buffer size and buffer interval with this config. Buffering can be enabled and disabled at VirtualHost and Route levels Route level buffer configuration takes precedence. See [Buffer Policy](#nestedblock--more_option--buffer_policy) below.
 
-`compression_params` - (Optional) Compression Parameters. Enables loadbalancer to compress dispatched data from an upstream service upon client request. See [Compression Params](#nestedblock--more_option--compression_params) below.
+`compression_params` - (Optional) Compression Parameters. Enables loadbalancer to compress dispatched data from an upstream service upon client request. The content is compressed and then sent to the client with the appropriate headers if either response and request allow. Only GZIP compression is supported. By default compression will be skipped when: A request does NOT contain accept-encoding header. A request includes accept-encoding header, but it does not contain “gzip” or “*”. A request includes accept-encoding ... See [Compression Params](#nestedblock--more_option--compression_params) below.
 
-`custom_errors` - (Optional) Custom Error Responses. Map of integer error codes as keys and string values that can be used to provide custom http pages for each error code. See [Custom Errors](#nestedblock--more_option--custom_errors) below.
+`custom_errors` - (Optional) Custom Error Responses. Map of integer error codes as keys and string values that can be used to provide custom HTTP pages for each error code. Key of the map can be either response code class or HTTP Error code. Response code classes for key is configured as follows 3 -- for 3xx response code class 4 -- for 4xx response code class 5 -- for 5xx response code class Value of the map is string which represents custom HTTP responses. Specific response code takes preference when both response code... See [Custom Errors](#nestedblock--more_option--custom_errors) below.
 
 `disable_default_error_pages` - (Optional) Disable Default Error Pages. Disable the use of default F5XC error pages (`Bool`).
 
@@ -3957,11 +3957,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `enable_path_normalize` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Path Normalize](#nestedblock--more_option--enable_path_normalize) below.
 
-`idle_timeout` - (Optional) Idle Timeout. The amount of time that a stream can exist without upstream or downstream activity, in milliseconds (`Number`).
+`idle_timeout` - (Optional) Idle Timeout. The amount of time that a stream can exist without upstream or downstream activity, in milliseconds. The stream is terminated with a HTTP 504 (Gateway Timeout) error code if no upstream response header has been received, otherwise the stream is reset (`Number`).
 
-`max_request_header_size` - (Optional) Maximum Request Header Size. The maximum request header size for downstream connections, in KiB. A HTTP 431 (Request Header Fields Too Large) error code is sent for requests that exceed this size (`Number`).
+`max_request_header_size` - (Optional) Maximum Request Header Size. The maximum request header size for downstream connections, in KiB. A HTTP 431 (Request Header Fields Too Large) error code is sent for requests that exceed this size. If multiple load balancers share the same advertise_policy, the highest value configured across all such load balancers is used for all the load balancers in question (`Number`).
 
-`request_cookies_to_add` - (Optional) Add Cookies in Cookie Header. Cookies are key-value pairs to be added to HTTP request being routed towards upstream. See [Request Cookies To Add](#nestedblock--more_option--request_cookies_to_add) below.
+`request_cookies_to_add` - (Optional) Add Cookies in Cookie Header. Cookies are key-value pairs to be added to HTTP request being routed towards upstream. Cookies specified at this level are applied after cookies from matched Route are applied. See [Request Cookies To Add](#nestedblock--more_option--request_cookies_to_add) below.
 
 `request_cookies_to_remove` - (Optional) Remove Cookies from Cookie Header. List of keys of Cookies to be removed from the HTTP request being sent towards upstream (`List`).
 
@@ -3969,7 +3969,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `request_headers_to_remove` - (Optional) Remove Request Headers. List of keys of Headers to be removed from the HTTP request being sent towards upstream (`List`).
 
-`response_cookies_to_add` - (Optional) Add Set-Cookie Headers. Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream. See [Response Cookies To Add](#nestedblock--more_option--response_cookies_to_add) below.
+`response_cookies_to_add` - (Optional) Add Set-Cookie Headers. Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream. Cookies specified at this level are applied after cookies from matched Route are applied. See [Response Cookies To Add](#nestedblock--more_option--response_cookies_to_add) below.
 
 `response_cookies_to_remove` - (Optional) Remove Cookies from Set-Cookie Headers. List of name of Cookies to be removed from the HTTP response being sent towards downstream. Entire set-cookie header will be removed (`List`).
 
@@ -3991,9 +3991,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `content_length` - (Optional) Content Length. Minimum response length, in bytes, which will trigger compression. The default value is 30 (`Number`).
 
-`content_type` - (Optional) Content Type. Set of strings that allows specifying which mime-types yield compression When this field is not defined, compression will be applied to the following mime-types: 'application/javascri... (`List`).
+`content_type` - (Optional) Content Type. Set of strings that allows specifying which mime-types yield compression When this field is not defined, compression will be applied to the following mime-types: 'application/javascript' 'application/JSON', 'application/xhtml+XML' 'image/svg+XML' 'text/CSS' 'text/HTML' 'text/plain' 'text/XML' (`List`).
 
-`disable_on_etag_header` - (Optional) Disable On Etag Header. If true, disables compression when the response contains an etag header (`Bool`).
+`disable_on_etag_header` - (Optional) Disable On Etag Header. If true, disables compression when the response contains an etag header. When it is false, weak etags will be preserved and the ones that require strong validation will be removed (`Bool`).
 
 `remove_accept_encoding_header` - (Optional) Remove Accept-Encoding Header. If true, removes accept-encoding from the request headers before dispatching it to the upstream so that responses do not get compressed before reaching the filter (`Bool`).
 
@@ -4221,7 +4221,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--multi_lb_app"></a>
 
-### Multi Lb App
+### Multi LB App
 
 <a id="nestedblock--no_challenge"></a>
 
@@ -4235,7 +4235,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Origin Server Subset Rule List
 
-`origin_server_subset_rules` - (Optional) Origin Server Subset Rules. Origin Server Subset Rules allow users to define match condition on Client (IP address, ASN, Country), IP Reputation, Regional Edge names, Request for subset selection o.... See [Origin Server Subset Rules](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules) below.
+`origin_server_subset_rules` - (Optional) Origin Server Subset Rules. Origin Server Subset Rules allow users to define match condition on Client (IP address, ASN, Country), IP Reputation, Regional Edge names, Request for subset selection of origin servers. Origin Server Subset is a sequential engine where rules are evaluated one after the other. It's important to define the correct order for Origin Server Subset to get the intended result, rules are evaluated from top to bottom in the list. When an Origin server subset rule is matche... See [Origin Server Subset Rules](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules) below.
 
 <a id="nestedblock--origin_server_subset_rule_list--origin_server_subset_rules"></a>
 
@@ -4243,25 +4243,25 @@ In addition to all arguments above, the following attributes are exported:
 
 `any_asn` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Asn](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--any_asn) below.
 
-`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Ip](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--any_ip) below.
+`any_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Any IP](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--any_ip) below.
 
-`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. See [Asn List](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--asn_list) below.
+`asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. See [Asn List](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--asn_list) below.
 
 `asn_matcher` - (Optional) ASN Matcher. Match any AS number contained in the list of bgp_asn_sets. See [Asn Matcher](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--asn_matcher) below.
 
-`client_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Client Selector](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--client_selector) below.
+`client_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Client Selector](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--client_selector) below.
 
 `country_codes` - (Optional) Country Codes List. List of Country Codes (`List`).
 
-`ip_matcher` - (Optional) IP Prefix Matcher. Match any ip prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [Ip Matcher](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--ip_matcher) below.
+`ip_matcher` - (Optional) IP Prefix Matcher. Match any IP prefix contained in the list of ip_prefix_sets. The result of the match is inverted if invert_matcher is true. See [IP Matcher](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--ip_matcher) below.
 
-`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [Ip Prefix List](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--ip_prefix_list) below.
+`ip_prefix_list` - (Optional) IP Prefix Match List. List of IP Prefix strings to match against. See [IP Prefix List](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--ip_prefix_list) below.
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--metadata) below.
 
 `none` - (Optional) Empty. This can be used for messages where no values are needed. See [None](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--none) below.
 
-`origin_server_subsets_action` - (Optional) Action. Add labels to select one or more origin servers. Note: The pre-requisite settings to be configured in the origin pool are: 1. Add labels to origin servers 2. See [Origin Server Subsets Action](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--origin_server_subsets_action) below.
+`origin_server_subsets_action` - (Optional) Action. Add labels to select one or more origin servers. Note: The pre-requisite settings to be configured in the origin pool are: 1. Add labels to origin servers 2. Enable subset load balancing in the Origin Server Subsets section and configure keys in origin server subsets classes. See [Origin Server Subsets Action](#nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--origin_server_subsets_action) below.
 
 `re_name_list` - (Optional) RE Names. List of RE names for match (`List`).
 
@@ -4271,13 +4271,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--any_ip"></a>
 
-### Origin Server Subset Rule List Origin Server Subset Rules Any Ip
+### Origin Server Subset Rule List Origin Server Subset Rules Any IP
 
 <a id="nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--asn_list"></a>
 
 ### Origin Server Subset Rule List Origin Server Subset Rules Asn List
 
-`as_numbers` - (Optional) AS Numbers. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy (`List`).
+`as_numbers` - (Optional) AS Numbers. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer (`List`).
 
 <a id="nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--asn_matcher"></a>
 
@@ -4297,7 +4297,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--ip_matcher"></a>
 
-### Origin Server Subset Rule List Origin Server Subset Rules Ip Matcher
+### Origin Server Subset Rule List Origin Server Subset Rules IP Matcher
 
 `invert_matcher` - (Optional) Invert IP Matcher. Invert the match result (`Bool`).
 
@@ -4305,11 +4305,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--ip_matcher--prefix_sets"></a>
 
-### Origin Server Subset Rule List Origin Server Subset Rules Ip Matcher Prefix Sets
+### Origin Server Subset Rule List Origin Server Subset Rules IP Matcher Prefix Sets
 
 <a id="nestedblock--origin_server_subset_rule_list--origin_server_subset_rules--ip_prefix_list"></a>
 
-### Origin Server Subset Rule List Origin Server Subset Rules Ip Prefix List
+### Origin Server Subset Rule List Origin Server Subset Rules IP Prefix List
 
 `invert_match` - (Optional) Invert Match Result. Invert the match result (`Bool`).
 
@@ -4339,7 +4339,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `always_enable_js_challenge` - (Optional) Empty. This can be used for messages where no values are needed. See [Always Enable Js Challenge](#nestedblock--policy_based_challenge--always_enable_js_challenge) below.
 
-`captcha_challenge_parameters` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. See [Captcha Challenge Parameters](#nestedblock--policy_based_challenge--captcha_challenge_parameters) below.
+`captcha_challenge_parameters` - (Optional) Captcha Challenge Parameters. Enables loadbalancer to perform captcha challenge Captcha challenge will be based on Google Recaptcha. With this feature enabled, only clients that pass the captcha challenge will be allowed to complete the HTTP request. When loadbalancer is configured to do Captcha Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have captcha challenge embedded in it. Client will be allowed to make the request only if the cap... See [Captcha Challenge Parameters](#nestedblock--policy_based_challenge--captcha_challenge_parameters) below.
 
 `default_captcha_challenge_parameters` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Captcha Challenge Parameters](#nestedblock--policy_based_challenge--default_captcha_challenge_parameters) below.
 
@@ -4349,7 +4349,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `default_temporary_blocking_parameters` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Temporary Blocking Parameters](#nestedblock--policy_based_challenge--default_temporary_blocking_parameters) below.
 
-`js_challenge_parameters` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. See [Js Challenge Parameters](#nestedblock--policy_based_challenge--js_challenge_parameters) below.
+`js_challenge_parameters` - (Optional) Javascript Challenge Parameters. Enables loadbalancer to perform client browser compatibility test by redirecting to a page with Javascript. With this feature enabled, only clients that are capable of executing Javascript(mostly browsers) will be allowed to complete the HTTP request. When loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an HTML page on every new HTTP request. This HTML page will have Javascript embedded in it. Loadbalancer chooses a set o... See [Js Challenge Parameters](#nestedblock--policy_based_challenge--js_challenge_parameters) below.
 
 `malicious_user_mitigation` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Malicious User Mitigation](#nestedblock--policy_based_challenge--malicious_user_mitigation) below.
 
@@ -4357,7 +4357,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `rule_list` - (Optional) Challenge Rule List. List of challenge rules to be used in policy based challenge. See [Rule List](#nestedblock--policy_based_challenge--rule_list) below.
 
-`temporary_user_blocking` - (Optional) Temporary User Blocking. Specifies configuration for temporary user blocking resulting from user behavior analysis. See [Temporary User Blocking](#nestedblock--policy_based_challenge--temporary_user_blocking) below.
+`temporary_user_blocking` - (Optional) Temporary User Blocking. Specifies configuration for temporary user blocking resulting from user behavior analysis. When Malicious User Mitigation is enabled from service policy rules, users' accessing the application will be analyzed for malicious activity and the configured mitigation actions will be taken on identified malicious users. These mitigation actions include setting up temporary blocking on that user. This configuration specifies settings on how that blocking should be done by th... See [Temporary User Blocking](#nestedblock--policy_based_challenge--temporary_user_blocking) below.
 
 <a id="nestedblock--policy_based_challenge--always_enable_captcha_challenge"></a>
 
@@ -4373,7 +4373,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `cookie_expiry` - (Optional) Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge (`Number`).
 
-`custom_page` - (Optional) Custom message for Captcha Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom message for Captcha Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Please Wait.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Please Wait </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 <a id="nestedblock--policy_based_challenge--default_captcha_challenge_parameters"></a>
 
@@ -4397,7 +4397,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `cookie_expiry` - (Optional) Cookie Expiration Period. Cookie expiration period, in seconds. An expired cookie causes the loadbalancer to issue a new challenge (`Number`).
 
-`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom Message for Javascript Challenge. Custom message is of type uri_ref. Currently supported URL schemes is string:///. For string:/// scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Please Wait.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Please Wait </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 `js_script_delay` - (Optional) Javascript Delay. Delay introduced by Javascript, in milliseconds (`Number`).
 
@@ -4419,15 +4419,15 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Policy Based Challenge Rule List
 
-`rules` - (Optional) Rules. Rules that specify the match conditions and challenge type to be launched. See [Rules](#nestedblock--policy_based_challenge--rule_list--rules) below.
+`rules` - (Optional) Rules. Rules that specify the match conditions and challenge type to be launched. When a challenge type is selected to be always enabled, these rules can be used to disable challenge or launch a different challenge for requests that match the specified conditions. See [Rules](#nestedblock--policy_based_challenge--rule_list--rules) below.
 
 <a id="nestedblock--policy_based_challenge--rule_list--rules"></a>
 
 ### Policy Based Challenge Rule List Rules
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--policy_based_challenge--rule_list--rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--policy_based_challenge--rule_list--rules--metadata) below.
 
-`spec` - (Optional) Challenge Rule Specification. A Challenge Rule consists of an unordered list of predicates and an action. See [Spec](#nestedblock--policy_based_challenge--rule_list--rules--spec) below.
+`spec` - (Optional) Challenge Rule Specification. A Challenge Rule consists of an unordered list of predicates and an action. The predicates are evaluated against a set of input fields that are extracted from or derived from an L7 request API. A request API is considered to match the rule if all predicates in the rule evaluate to true for that request. Any predicates that are not specified in a rule are implicitly considered to be true. If a request API matches a challenge rule, the configured challenge is enfor... See [Spec](#nestedblock--policy_based_challenge--rule_list--rules--spec) below.
 
 <a id="nestedblock--policy_based_challenge--rule_list--rules--metadata"></a>
 
@@ -4441,7 +4441,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Policy Based Challenge Temporary User Blocking
 
-`custom_page` - (Optional) Custom Message for Temporary Blocking. Custom message is of type `uri_ref`. Currently supported URL schemes is `string:///`. For `string:///` scheme, message needs to be encoded in Base64 format (`String`).
+`custom_page` - (Optional) Custom Message for Temporary Blocking. Custom message is of type `uri_ref`. Currently supported URL schemes is `string:///`. For `string:///` scheme, message needs to be encoded in Base64 format. You can specify this message as base64 encoded plain text message e.g. 'Blocked.' or it can be HTML paragraph or a body string encoded as base64 string E.g. '<p> Blocked </p>'. Base64 encoded string for this HTML is 'PHA+IFBsZWFzZSBXYWl0IDwvcD4=' (`String`).
 
 <a id="nestedblock--protected_cookies"></a>
 
@@ -4525,11 +4525,11 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Rate Limit
 
-`custom_ip_allowed_list` - (Optional) Custom IP Allowed List. IP Allowed list using existing ip_prefix_set objects. See [Custom Ip Allowed List](#nestedblock--rate_limit--custom_ip_allowed_list) below.
+`custom_ip_allowed_list` - (Optional) Custom IP Allowed List. IP Allowed list using existing ip_prefix_set objects. See [Custom IP Allowed List](#nestedblock--rate_limit--custom_ip_allowed_list) below.
 
-`ip_allowed_list` - (Optional) IPv4 Prefix List. x-example: '192.168.20.0/24' List of IPv4 prefixes that represent an endpoint. See [Ip Allowed List](#nestedblock--rate_limit--ip_allowed_list) below.
+`ip_allowed_list` - (Optional) IPv4 Prefix List. x-example: '192.168.20.0/24' List of IPv4 prefixes that represent an endpoint. See [IP Allowed List](#nestedblock--rate_limit--ip_allowed_list) below.
 
-`no_ip_allowed_list` - (Optional) Empty. This can be used for messages where no values are needed. See [No Ip Allowed List](#nestedblock--rate_limit--no_ip_allowed_list) below.
+`no_ip_allowed_list` - (Optional) Empty. This can be used for messages where no values are needed. See [No IP Allowed List](#nestedblock--rate_limit--no_ip_allowed_list) below.
 
 `no_policies` - (Optional) Empty. This can be used for messages where no values are needed. See [No Policies](#nestedblock--rate_limit--no_policies) below.
 
@@ -4539,13 +4539,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rate_limit--custom_ip_allowed_list"></a>
 
-### Rate Limit Custom Ip Allowed List
+### Rate Limit Custom IP Allowed List
 
 `rate_limiter_allowed_prefixes` - (Optional) List of IP Prefix Sets. References to ip_prefix_set objects. Requests from source IP addresses that are covered by one of the allowed IP Prefixes are not subjected to rate limiting. See [Rate Limiter Allowed Prefixes](#nestedblock--rate_limit--custom_ip_allowed_list--rate_limiter_allowed_prefixes) below.
 
 <a id="nestedblock--rate_limit--custom_ip_allowed_list--rate_limiter_allowed_prefixes"></a>
 
-### Rate Limit Custom Ip Allowed List Rate Limiter Allowed Prefixes
+### Rate Limit Custom IP Allowed List Rate Limiter Allowed Prefixes
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -4555,13 +4555,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rate_limit--ip_allowed_list"></a>
 
-### Rate Limit Ip Allowed List
+### Rate Limit IP Allowed List
 
 `prefixes` - (Optional) IPv4 Prefix List. List of IPv4 prefixes that represent an endpoint (`List`).
 
 <a id="nestedblock--rate_limit--no_ip_allowed_list"></a>
 
-### Rate Limit No Ip Allowed List
+### Rate Limit No IP Allowed List
 
 <a id="nestedblock--rate_limit--no_policies"></a>
 
@@ -4601,7 +4601,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `total_number` - (Optional) Number Of Requests. The total number of allowed requests per rate-limiting period (`Number`).
 
-`unit` - (Optional) Rate Limit Period Unit. Unit for the period per which the rate limit is applied (`String`).
+`unit` - (Optional) Rate Limit Period Unit. Unit for the period per which the rate limit is applied. - SECOND: Second Rate limit period unit is seconds - MINUTE: Minute Rate limit period unit is minutes - HOUR: Hour Rate limit period unit is hours - DAY: Day Rate limit period unit is days. Possible values are `SECOND`, `MINUTE`, `HOUR`. Defaults to `SECOND` (`String`).
 
 <a id="nestedblock--rate_limit--rate_limiter--action_block"></a>
 
@@ -4647,7 +4647,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Ring Hash Hash Policy
 
-`cookie` - (Optional) Hashing using Cookie. Two types of cookie affinity: 1. Passive. Takes a cookie that's present in the cookies header and hashes on its value. 2. Generated. See [Cookie](#nestedblock--ring_hash--hash_policy--cookie) below.
+`cookie` - (Optional) Hashing using Cookie. Two types of cookie affinity: 1. Passive. Takes a cookie that's present in the cookies header and hashes on its value. 2. Generated. Generates and sets a cookie with an expiration (TTL) on the first request from the client in its response to the client, based on the endpoint the request gets sent to. The client then presents this on the next and all subsequent requests. The hash of this is sufficient to ensure these requests get sent to the same endpoint. The cookie is g... See [Cookie](#nestedblock--ring_hash--hash_policy--cookie) below.
 
 `header_name` - (Optional) Header Name. The name or key of the request header that will be used to obtain the hash key (`String`).
 
@@ -4751,7 +4751,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `headers` - (Optional) Headers. List of (key, value) headers. See [Headers](#nestedblock--routes--direct_response_route--headers) below.
 
-`http_method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method (`String`).
+`http_method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method. Possible values include `ANY`, `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`, and others. Defaults to `ANY` (`String`).
 
 `incoming_port` - (Optional) Port to Match. Port match of the request can be a range or a specific port. See [Incoming Port](#nestedblock--routes--direct_response_route--incoming_port) below.
 
@@ -4801,7 +4801,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Routes Direct Response Route Route Direct Response
 
-`response_body_encoded` - (Optional) Response Body. Response body to send. Currently supported URL schemes is string:/// for which message should be encoded in Base64 format. The message can be either plain text or html. E.g (`String`).
+`response_body_encoded` - (Optional) Response Body. Response body to send. Currently supported URL schemes is string:/// for which message should be encoded in Base64 format. The message can be either plain text or HTML. E.g. '<p> Access Denied </p>'. Base64 encoded string URL for this is string:///PHA+IEFjY2VzcyBEZW5pZWQgPC9wPg== (`String`).
 
 `response_code` - (Optional) Response Code. response code to send (`Number`).
 
@@ -4811,7 +4811,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `headers` - (Optional) Headers. List of (key, value) headers. See [Headers](#nestedblock--routes--redirect_route--headers) below.
 
-`http_method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method (`String`).
+`http_method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method. Possible values include `ANY`, `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`, and others. Defaults to `ANY` (`String`).
 
 `incoming_port` - (Optional) Port to Match. Port match of the request can be a range or a specific port. See [Incoming Port](#nestedblock--routes--redirect_route--incoming_port) below.
 
@@ -4867,7 +4867,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `prefix_rewrite` - (Optional) Prefix Rewrite. In Redirect response, the matched prefix (or path) should be swapped with this value. This option allows redirect URLs be dynamically created based on the request (`String`).
 
-`proto_redirect` - (Optional) Protocol. swap protocol part of incoming URL in redirect URL The protocol can be swapped with either http or https When incoming-proto option is specified, swapping of protocol is not done (`String`).
+`proto_redirect` - (Optional) Protocol. swap protocol part of incoming URL in redirect URL The protocol can be swapped with either HTTP or HTTPS When incoming-proto option is specified, swapping of protocol is not done (`String`).
 
 `remove_all_params` - (Optional) Empty. This can be used for messages where no values are needed. See [Remove All Params](#nestedblock--routes--redirect_route--route_redirect--remove_all_params) below.
 
@@ -4899,7 +4899,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `host_rewrite` - (Optional) Host Rewrite Value. Host header will be swapped with this value (`String`).
 
-`http_method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method (`String`).
+`http_method` - (Optional) HTTP Method. Specifies the HTTP method used to access a resource. Any HTTP Method. Possible values include `ANY`, `GET`, `HEAD`, `POST`, `PUT`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`, `PATCH`, and others. Defaults to `ANY` (`String`).
 
 `incoming_port` - (Optional) Port to Match. Port match of the request can be a range or a specific port. See [Incoming Port](#nestedblock--routes--simple_route--incoming_port) below.
 
@@ -4917,19 +4917,19 @@ In addition to all arguments above, the following attributes are exported:
 
 `bot_defense_javascript_injection` - (Optional) Bot Defense Javascript Injection Configuration for inline deployments. Bot Defense Javascript Injection Configuration for inline bot defense deployments. See [Bot Defense Javascript Injection](#nestedblock--routes--simple_route--advanced_options--bot_defense_javascript_injection) below.
 
-`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. See [Buffer Policy](#nestedblock--routes--simple_route--advanced_options--buffer_policy) below.
+`buffer_policy` - (Optional) Buffer Configuration. Some upstream applications are not capable of handling streamed data. This config enables buffering the entire request before sending to upstream application. We can specify the maximum buffer size and buffer interval with this config. Buffering can be enabled and disabled at VirtualHost and Route levels Route level buffer configuration takes precedence. See [Buffer Policy](#nestedblock--routes--simple_route--advanced_options--buffer_policy) below.
 
 `common_buffering` - (Optional) Empty. This can be used for messages where no values are needed. See [Common Buffering](#nestedblock--routes--simple_route--advanced_options--common_buffering) below.
 
 `common_hash_policy` - (Optional) Empty. This can be used for messages where no values are needed. See [Common Hash Policy](#nestedblock--routes--simple_route--advanced_options--common_hash_policy) below.
 
-`cors_policy` - (Optional) CORS Policy. Cross-Origin Resource Sharing requests configuration specified at Virtual-host or Route level. Route level configuration takes precedence. See [Cors Policy](#nestedblock--routes--simple_route--advanced_options--cors_policy) below.
+`cors_policy` - (Optional) CORS Policy. Cross-Origin Resource Sharing requests configuration specified at Virtual-host or Route level. Route level configuration takes precedence. An example of an Cross origin HTTP request GET /resources/public-data/ HTTP/1.1 Host: bar.other User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3pre) Gecko/20081130 Minefield/3.1b3pre Accept: text/HTML,application/xhtml+XML,application/XML;q=0.9,*/*;q=0.8 Accept-Language: en-us,en;q=0.5 Accept-Encoding: gzip,deflate... See [CORS Policy](#nestedblock--routes--simple_route--advanced_options--cors_policy) below.
 
-`csrf_policy` - (Optional) CSRF Policy. To mitigate CSRF attack , the policy checks where a request is coming from to determine if the request's origin is the same as its detination. See [Csrf Policy](#nestedblock--routes--simple_route--advanced_options--csrf_policy) below.
+`csrf_policy` - (Optional) CSRF Policy. To mitigate CSRF attack , the policy checks where a request is coming from to determine if the request's origin is the same as its detination.The policy relies on two pieces of information used in determining if a request originated from the same host. 1. The origin that caused the user agent to issue the request (source origin). 2. The origin that the request is going to (target origin). When the policy evaluating a request, it ensures both pieces of information are present and ... See [CSRF Policy](#nestedblock--routes--simple_route--advanced_options--csrf_policy) below.
 
 `default_retry_policy` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Retry Policy](#nestedblock--routes--simple_route--advanced_options--default_retry_policy) below.
 
-`disable_location_add` - (Optional) Disable Location Addition. disables append of x-volterra-location = <re-site-name> at route level, if it is configured at virtual-host level. This configuration is ignored on CE sites (`Bool`).
+`disable_location_add` - (Optional) Disable Location Addition. disables append of x-volterra-location = <RE-site-name> at route level, if it is configured at virtual-host level. This configuration is ignored on CE sites (`Bool`).
 
 `disable_mirroring` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Mirroring](#nestedblock--routes--simple_route--advanced_options--disable_mirroring) below.
 
@@ -4937,7 +4937,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `disable_spdy` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Spdy](#nestedblock--routes--simple_route--advanced_options--disable_spdy) below.
 
-`disable_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Waf](#nestedblock--routes--simple_route--advanced_options--disable_waf) below.
+`disable_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable WAF](#nestedblock--routes--simple_route--advanced_options--disable_waf) below.
 
 `disable_web_socket_config` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Web Socket Config](#nestedblock--routes--simple_route--advanced_options--disable_web_socket_config) below.
 
@@ -4945,25 +4945,25 @@ In addition to all arguments above, the following attributes are exported:
 
 `enable_spdy` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Spdy](#nestedblock--routes--simple_route--advanced_options--enable_spdy) below.
 
-`endpoint_subsets` - (Optional) Origin Servers Subsets. Upstream origin pool may be configured to divide its origin servers into subsets based on metadata attached to the origin servers. See [Endpoint Subsets](#nestedblock--routes--simple_route--advanced_options--endpoint_subsets) below.
+`endpoint_subsets` - (Optional) Origin Servers Subsets. Upstream origin pool may be configured to divide its origin servers into subsets based on metadata attached to the origin servers. Routes may then specify the metadata that a endpoint must match in order to be selected by the load balancer For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with endpoint's labels. In case of Consul, the label is derived from the 'Tag' field. For labels that are common between configured ... See [Endpoint Subsets](#nestedblock--routes--simple_route--advanced_options--endpoint_subsets) below.
 
 `inherited_bot_defense_javascript_injection` - (Optional) Empty. This can be used for messages where no values are needed. See [Inherited Bot Defense Javascript Injection](#nestedblock--routes--simple_route--advanced_options--inherited_bot_defense_javascript_injection) below.
 
-`inherited_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Inherited Waf](#nestedblock--routes--simple_route--advanced_options--inherited_waf) below.
+`inherited_waf` - (Optional) Empty. This can be used for messages where no values are needed. See [Inherited WAF](#nestedblock--routes--simple_route--advanced_options--inherited_waf) below.
 
-`inherited_waf_exclusion` - (Optional) Empty. This can be used for messages where no values are needed. See [Inherited Waf Exclusion](#nestedblock--routes--simple_route--advanced_options--inherited_waf_exclusion) below.
+`inherited_waf_exclusion` - (Optional) Empty. This can be used for messages where no values are needed. See [Inherited WAF Exclusion](#nestedblock--routes--simple_route--advanced_options--inherited_waf_exclusion) below.
 
-`mirror_policy` - (Optional) Mirror Policy. MirrorPolicy is used for shadowing traffic from one origin pool to another. See [Mirror Policy](#nestedblock--routes--simple_route--advanced_options--mirror_policy) below.
+`mirror_policy` - (Optional) Mirror Policy. MirrorPolicy is used for shadowing traffic from one origin pool to another. The approach used is 'fire and forget', meaning it will not wait for the shadow origin pool to respond before returning the response from the primary origin pool. All normal statistics are collected for the shadow origin pool making this feature useful for testing and troubleshooting. See [Mirror Policy](#nestedblock--routes--simple_route--advanced_options--mirror_policy) below.
 
 `no_retry_policy` - (Optional) Empty. This can be used for messages where no values are needed. See [No Retry Policy](#nestedblock--routes--simple_route--advanced_options--no_retry_policy) below.
 
-`prefix_rewrite` - (Optional) Enable Prefix Rewrite. prefix_rewrite indicates that during forwarding, the matched prefix (or path) should be swapped with its value (`String`).
+`prefix_rewrite` - (Optional) Enable Prefix Rewrite. prefix_rewrite indicates that during forwarding, the matched prefix (or path) should be swapped with its value. When using regex path matching, the entire path (not including the query string) will be swapped with this value (`String`).
 
-`priority` - (Optional) Routing Priority. Priority routing for each request. Different connection pools are used based on the priority selected for the request (`String`).
+`priority` - (Optional) Routing Priority. Priority routing for each request. Different connection pools are used based on the priority selected for the request. Also, circuit-breaker configuration at destination cluster is chosen based on selected priority. Default routing mechanism High-Priority routing mechanism. Possible values are `DEFAULT`, `HIGH`. Defaults to `DEFAULT` (`String`).
 
 `regex_rewrite` - (Optional) Regex Match Rewrite. RegexMatchRewrite describes how to match a string and then produce a new string using a regular expression and a substitution string. See [Regex Rewrite](#nestedblock--routes--simple_route--advanced_options--regex_rewrite) below.
 
-`request_cookies_to_add` - (Optional) Add Cookies in Cookie Header. Cookies are key-value pairs to be added to HTTP request being routed towards upstream. See [Request Cookies To Add](#nestedblock--routes--simple_route--advanced_options--request_cookies_to_add) below.
+`request_cookies_to_add` - (Optional) Add Cookies in Cookie Header. Cookies are key-value pairs to be added to HTTP request being routed towards upstream. Cookies specified at this level are applied after cookies from matched Route are applied. See [Request Cookies To Add](#nestedblock--routes--simple_route--advanced_options--request_cookies_to_add) below.
 
 `request_cookies_to_remove` - (Optional) Remove Cookies from Cookie Header. List of keys of Cookies to be removed from the HTTP request being sent towards upstream (`List`).
 
@@ -4971,7 +4971,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `request_headers_to_remove` - (Optional) Remove Request Headers. List of keys of Headers to be removed from the HTTP request being sent towards upstream (`List`).
 
-`response_cookies_to_add` - (Optional) Add Set-Cookie Headers. Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream. See [Response Cookies To Add](#nestedblock--routes--simple_route--advanced_options--response_cookies_to_add) below.
+`response_cookies_to_add` - (Optional) Add Set-Cookie Headers. Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream. Cookies specified at this level are applied after cookies from matched Route are applied. See [Response Cookies To Add](#nestedblock--routes--simple_route--advanced_options--response_cookies_to_add) below.
 
 `response_cookies_to_remove` - (Optional) Remove Cookies from Set-Cookie Headers. List of name of Cookies to be removed from the HTTP response being sent towards downstream. Entire set-cookie header will be removed (`List`).
 
@@ -4987,9 +4987,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `timeout` - (Optional) Timeout. The timeout for the route including all retries, in milliseconds. Should be set to a high value or 0 (infinite timeout) for server-side streaming (`Number`).
 
-`waf_exclusion_policy` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Waf Exclusion Policy](#nestedblock--routes--simple_route--advanced_options--waf_exclusion_policy) below.
+`waf_exclusion_policy` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [WAF Exclusion Policy](#nestedblock--routes--simple_route--advanced_options--waf_exclusion_policy) below.
 
-`web_socket_config` - (Optional) Websocket Configuration. Configuration to allow Websocket Request headers of such upgrade looks like below 'connection', 'Upgrade' 'upgrade', 'websocket' With configuration to allow websocket upgra.... See [Web Socket Config](#nestedblock--routes--simple_route--advanced_options--web_socket_config) below.
+`web_socket_config` - (Optional) WebSocket Configuration. Configuration to allow WebSocket Request headers of such upgrade looks like below 'connection', 'Upgrade' 'upgrade', 'WebSocket' With configuration to allow WebSocket upgrade, ADC will produce following response 'HTTP/1.1 101 Switching Protocols 'Upgrade': 'WebSocket' 'Connection': 'Upgrade'. See [Web Socket Config](#nestedblock--routes--simple_route--advanced_options--web_socket_config) below.
 
 <a id="nestedblock--routes--simple_route--advanced_options--app_firewall"></a>
 
@@ -5013,11 +5013,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--routes--simple_route--advanced_options--cors_policy"></a>
 
-### Routes Simple Route Advanced Options Cors Policy
+### Routes Simple Route Advanced Options CORS Policy
 
 <a id="nestedblock--routes--simple_route--advanced_options--csrf_policy"></a>
 
-### Routes Simple Route Advanced Options Csrf Policy
+### Routes Simple Route Advanced Options CSRF Policy
 
 <a id="nestedblock--routes--simple_route--advanced_options--default_retry_policy"></a>
 
@@ -5037,7 +5037,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--routes--simple_route--advanced_options--disable_waf"></a>
 
-### Routes Simple Route Advanced Options Disable Waf
+### Routes Simple Route Advanced Options Disable WAF
 
 <a id="nestedblock--routes--simple_route--advanced_options--disable_web_socket_config"></a>
 
@@ -5061,11 +5061,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--routes--simple_route--advanced_options--inherited_waf"></a>
 
-### Routes Simple Route Advanced Options Inherited Waf
+### Routes Simple Route Advanced Options Inherited WAF
 
 <a id="nestedblock--routes--simple_route--advanced_options--inherited_waf_exclusion"></a>
 
-### Routes Simple Route Advanced Options Inherited Waf Exclusion
+### Routes Simple Route Advanced Options Inherited WAF Exclusion
 
 <a id="nestedblock--routes--simple_route--advanced_options--mirror_policy"></a>
 
@@ -5109,7 +5109,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--routes--simple_route--advanced_options--waf_exclusion_policy"></a>
 
-### Routes Simple Route Advanced Options Waf Exclusion Policy
+### Routes Simple Route Advanced Options WAF Exclusion Policy
 
 <a id="nestedblock--routes--simple_route--advanced_options--web_socket_config"></a>
 
@@ -5157,11 +5157,11 @@ In addition to all arguments above, the following attributes are exported:
 
 `cluster` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Cluster](#nestedblock--routes--simple_route--origin_pools--cluster) below.
 
-`endpoint_subsets` - (Optional) Origin Servers Subsets. Upstream origin pool may be configured to divide its origin servers into subsets based on metadata attached to the origin servers. See [Endpoint Subsets](#nestedblock--routes--simple_route--origin_pools--endpoint_subsets) below.
+`endpoint_subsets` - (Optional) Origin Servers Subsets. Upstream origin pool may be configured to divide its origin servers into subsets based on metadata attached to the origin servers. Routes may then specify the metadata that a endpoint must match in order to be selected by the load balancer For origin servers which are discovered in K8S or Consul cluster, the label of the service is merged with endpoint's labels. In case of Consul, the label is derived from the 'Tag' field. For labels that are common between configured ... See [Endpoint Subsets](#nestedblock--routes--simple_route--origin_pools--endpoint_subsets) below.
 
 `pool` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Pool](#nestedblock--routes--simple_route--origin_pools--pool) below.
 
-`priority` - (Optional) Priority. Priority of this origin pool, valid only with multiple origin pools (`Number`).
+`priority` - (Optional) Priority. Priority of this origin pool, valid only with multiple origin pools. Value of 0 will make the pool as lowest priority origin pool Priority of 1 means highest priority and is considered active. When active origin pool is not available, lower priority origin pools are made active as per the increasing priority (`Number`).
 
 `weight` - (Optional) Weight. Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Number`).
 
@@ -5215,7 +5215,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Sensitive Data Disclosure Rules Sensitive Data Types In Response
 
-`api_endpoint` - (Optional) API Endpoint. This defines api endpoint. See [Api Endpoint](#nestedblock--sensitive_data_disclosure_rules--sensitive_data_types_in_response--api_endpoint) below.
+`api_endpoint` - (Optional) API Endpoint. This defines API endpoint. See [API Endpoint](#nestedblock--sensitive_data_disclosure_rules--sensitive_data_types_in_response--api_endpoint) below.
 
 `body` - (Optional) Body Section Masking Options. Options for HTTP Body Masking. See [Body](#nestedblock--sensitive_data_disclosure_rules--sensitive_data_types_in_response--body) below.
 
@@ -5225,7 +5225,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--sensitive_data_disclosure_rules--sensitive_data_types_in_response--api_endpoint"></a>
 
-### Sensitive Data Disclosure Rules Sensitive Data Types In Response Api Endpoint
+### Sensitive Data Disclosure Rules Sensitive Data Types In Response API Endpoint
 
 `methods` - (Optional) Methods. Methods to be matched (`List`).
 
@@ -5235,7 +5235,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Sensitive Data Disclosure Rules Sensitive Data Types In Response Body
 
-`fields` - (Optional) Values. List of JSON Path field values. Use square brackets with an underscore [_] to indicate array elements (e.g., person.emails[_]) (`List`).
+`fields` - (Optional) Values. List of JSON Path field values. Use square brackets with an underscore [_] to indicate array elements (e.g., person.emails[_]). To reference JSON keys that contain spaces, enclose the entire path in double quotes. For example: 'person.first name' (`List`).
 
 <a id="nestedblock--sensitive_data_disclosure_rules--sensitive_data_types_in_response--mask"></a>
 
@@ -5267,7 +5267,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--single_lb_app"></a>
 
-### Single Lb App
+### Single LB App
 
 `disable_discovery` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Discovery](#nestedblock--single_lb_app--disable_discovery) below.
 
@@ -5279,105 +5279,105 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--single_lb_app--disable_discovery"></a>
 
-### Single Lb App Disable Discovery
+### Single LB App Disable Discovery
 
 <a id="nestedblock--single_lb_app--disable_malicious_user_detection"></a>
 
-### Single Lb App Disable Malicious User Detection
+### Single LB App Disable Malicious User Detection
 
 <a id="nestedblock--single_lb_app--enable_discovery"></a>
 
-### Single Lb App Enable Discovery
+### Single LB App Enable Discovery
 
-`api_crawler` - (Optional) API Crawling. Api Crawler message. See [Api Crawler](#nestedblock--single_lb_app--enable_discovery--api_crawler) below.
+`api_crawler` - (Optional) API Crawling. API Crawler message. See [API Crawler](#nestedblock--single_lb_app--enable_discovery--api_crawler) below.
 
-`api_discovery_from_code_scan` - (Optional) Select Code Base and Repositories. x-required. See [Api Discovery From Code Scan](#nestedblock--single_lb_app--enable_discovery--api_discovery_from_code_scan) below.
+`api_discovery_from_code_scan` - (Optional) Select Code Base and Repositories. x-required. See [API Discovery From Code Scan](#nestedblock--single_lb_app--enable_discovery--api_discovery_from_code_scan) below.
 
-`custom_api_auth_discovery` - (Optional) API Discovery Advanced Settings. API Discovery Advanced settings. See [Custom Api Auth Discovery](#nestedblock--single_lb_app--enable_discovery--custom_api_auth_discovery) below.
+`custom_api_auth_discovery` - (Optional) API Discovery Advanced Settings. API Discovery Advanced settings. See [Custom API Auth Discovery](#nestedblock--single_lb_app--enable_discovery--custom_api_auth_discovery) below.
 
-`default_api_auth_discovery` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Api Auth Discovery](#nestedblock--single_lb_app--enable_discovery--default_api_auth_discovery) below.
+`default_api_auth_discovery` - (Optional) Empty. This can be used for messages where no values are needed. See [Default API Auth Discovery](#nestedblock--single_lb_app--enable_discovery--default_api_auth_discovery) below.
 
 `disable_learn_from_redirect_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Learn From Redirect Traffic](#nestedblock--single_lb_app--enable_discovery--disable_learn_from_redirect_traffic) below.
 
-`discovered_api_settings` - (Optional) Discovered API Settings. x-example: '2' Configure Discovered API Settings. See [Discovered Api Settings](#nestedblock--single_lb_app--enable_discovery--discovered_api_settings) below.
+`discovered_api_settings` - (Optional) Discovered API Settings. x-example: '2' Configure Discovered API Settings. See [Discovered API Settings](#nestedblock--single_lb_app--enable_discovery--discovered_api_settings) below.
 
 `enable_learn_from_redirect_traffic` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Learn From Redirect Traffic](#nestedblock--single_lb_app--enable_discovery--enable_learn_from_redirect_traffic) below.
 
 <a id="nestedblock--single_lb_app--enable_discovery--api_crawler"></a>
 
-### Single Lb App Enable Discovery Api Crawler
+### Single LB App Enable Discovery API Crawler
 
-`api_crawler_config` - (Optional) Crawler Configure. See [Api Crawler Config](#nestedblock--single_lb_app--enable_discovery--api_crawler--api_crawler_config) below.
+`api_crawler_config` - (Optional) Crawler Configure. See [API Crawler Config](#nestedblock--single_lb_app--enable_discovery--api_crawler--api_crawler_config) below.
 
-`disable_api_crawler` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Api Crawler](#nestedblock--single_lb_app--enable_discovery--api_crawler--disable_api_crawler) below.
+`disable_api_crawler` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable API Crawler](#nestedblock--single_lb_app--enable_discovery--api_crawler--disable_api_crawler) below.
 
 <a id="nestedblock--single_lb_app--enable_discovery--api_crawler--api_crawler_config"></a>
 
-### Single Lb App Enable Discovery Api Crawler Api Crawler Config
+### Single LB App Enable Discovery API Crawler API Crawler Config
 
 <a id="nestedblock--single_lb_app--enable_discovery--api_crawler--disable_api_crawler"></a>
 
-### Single Lb App Enable Discovery Api Crawler Disable Api Crawler
+### Single LB App Enable Discovery API Crawler Disable API Crawler
 
 <a id="nestedblock--single_lb_app--enable_discovery--api_discovery_from_code_scan"></a>
 
-### Single Lb App Enable Discovery Api Discovery From Code Scan
+### Single LB App Enable Discovery API Discovery From Code Scan
 
 `code_base_integrations` - (Optional) Select Code Base Integrations. See [Code Base Integrations](#nestedblock--single_lb_app--enable_discovery--api_discovery_from_code_scan--code_base_integrations) below.
 
 <a id="nestedblock--single_lb_app--enable_discovery--api_discovery_from_code_scan--code_base_integrations"></a>
 
-### Single Lb App Enable Discovery Api Discovery From Code Scan Code Base Integrations
+### Single LB App Enable Discovery API Discovery From Code Scan Code Base Integrations
 
 <a id="nestedblock--single_lb_app--enable_discovery--custom_api_auth_discovery"></a>
 
-### Single Lb App Enable Discovery Custom Api Auth Discovery
+### Single LB App Enable Discovery Custom API Auth Discovery
 
-`api_discovery_ref` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Api Discovery Ref](#nestedblock--single_lb_app--enable_discovery--custom_api_auth_discovery--api_discovery_ref) below.
+`api_discovery_ref` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [API Discovery Ref](#nestedblock--single_lb_app--enable_discovery--custom_api_auth_discovery--api_discovery_ref) below.
 
 <a id="nestedblock--single_lb_app--enable_discovery--custom_api_auth_discovery--api_discovery_ref"></a>
 
-### Single Lb App Enable Discovery Custom Api Auth Discovery Api Discovery Ref
+### Single LB App Enable Discovery Custom API Auth Discovery API Discovery Ref
 
 <a id="nestedblock--single_lb_app--enable_discovery--default_api_auth_discovery"></a>
 
-### Single Lb App Enable Discovery Default Api Auth Discovery
+### Single LB App Enable Discovery Default API Auth Discovery
 
 <a id="nestedblock--single_lb_app--enable_discovery--disable_learn_from_redirect_traffic"></a>
 
-### Single Lb App Enable Discovery Disable Learn From Redirect Traffic
+### Single LB App Enable Discovery Disable Learn From Redirect Traffic
 
 <a id="nestedblock--single_lb_app--enable_discovery--discovered_api_settings"></a>
 
-### Single Lb App Enable Discovery Discovered Api Settings
+### Single LB App Enable Discovery Discovered API Settings
 
 `purge_duration_for_inactive_discovered_apis` - (Optional) Purge Duration for Inactive Discovered APIs from Traffic. Inactive discovered API will be deleted after configured duration (`Number`).
 
 <a id="nestedblock--single_lb_app--enable_discovery--enable_learn_from_redirect_traffic"></a>
 
-### Single Lb App Enable Discovery Enable Learn From Redirect Traffic
+### Single LB App Enable Discovery Enable Learn From Redirect Traffic
 
 <a id="nestedblock--single_lb_app--enable_malicious_user_detection"></a>
 
-### Single Lb App Enable Malicious User Detection
+### Single LB App Enable Malicious User Detection
 
 <a id="nestedblock--slow_ddos_mitigation"></a>
 
-### Slow Ddos Mitigation
+### Slow DDOS Mitigation
 
 `disable_request_timeout` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Request Timeout](#nestedblock--slow_ddos_mitigation--disable_request_timeout) below.
 
-`request_headers_timeout` - (Optional) Request Headers Timeout. The amount of time the client has to send only the headers on the request stream before the stream is cancelled. The default value is 10000 milliseconds (`Number`).
+`request_headers_timeout` - (Optional) Request Headers Timeout. The amount of time the client has to send only the headers on the request stream before the stream is cancelled. The default value is 10000 milliseconds. This setting provides protection against Slowloris attacks (`Number`).
 
 `request_timeout` - (Optional) Custom Timeout (`Number`).
 
 <a id="nestedblock--slow_ddos_mitigation--disable_request_timeout"></a>
 
-### Slow Ddos Mitigation Disable Request Timeout
+### Slow DDOS Mitigation Disable Request Timeout
 
 <a id="nestedblock--source_ip_stickiness"></a>
 
-### Source Ip Stickiness
+### Source IP Stickiness
 
 <a id="nestedblock--system_default_timeouts"></a>
 
@@ -5387,13 +5387,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--trusted_clients"></a>
 
@@ -5405,21 +5405,21 @@ In addition to all arguments above, the following attributes are exported:
 
 `bot_skip_processing` - (Optional) Empty. This can be used for messages where no values are needed. See [Bot Skip Processing](#nestedblock--trusted_clients--bot_skip_processing) below.
 
-`expiration_timestamp` - (Optional) Expiration Timestamp. The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired (`String`).
+`expiration_timestamp` - (Optional) Expiration Timestamp. The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired. The rule continues to exist in the configuration but is not applied anymore (`String`).
 
-`http_header` - (Optional) HTTP Header. Request header name and value pairs. See [Http Header](#nestedblock--trusted_clients--http_header) below.
+`http_header` - (Optional) HTTP Header. Request header name and value pairs. See [HTTP Header](#nestedblock--trusted_clients--http_header) below.
 
 `ip_prefix` - (Optional) IPv4 Prefix. IPv4 prefix string (`String`).
 
 `ipv6_prefix` - (Optional) IPv6 Prefix. IPv6 prefix string (`String`).
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--trusted_clients--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--trusted_clients--metadata) below.
 
 `skip_processing` - (Optional) Empty. This can be used for messages where no values are needed. See [Skip Processing](#nestedblock--trusted_clients--skip_processing) below.
 
 `user_identifier` - (Optional) User Identifier. Identify user based on user identifier. User identifier value needs to be copied from security event (`String`).
 
-`waf_skip_processing` - (Optional) Empty. This can be used for messages where no values are needed. See [Waf Skip Processing](#nestedblock--trusted_clients--waf_skip_processing) below.
+`waf_skip_processing` - (Optional) Empty. This can be used for messages where no values are needed. See [WAF Skip Processing](#nestedblock--trusted_clients--waf_skip_processing) below.
 
 <a id="nestedblock--trusted_clients--bot_skip_processing"></a>
 
@@ -5427,13 +5427,13 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--trusted_clients--http_header"></a>
 
-### Trusted Clients Http Header
+### Trusted Clients HTTP Header
 
 `headers` - (Optional) HTTP Headers. List of HTTP header name and value pairs. See [Headers](#nestedblock--trusted_clients--http_header--headers) below.
 
 <a id="nestedblock--trusted_clients--http_header--headers"></a>
 
-### Trusted Clients Http Header Headers
+### Trusted Clients HTTP Header Headers
 
 `exact` - (Optional) Exact. Header value to match exactly (`String`).
 
@@ -5459,11 +5459,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--trusted_clients--waf_skip_processing"></a>
 
-### Trusted Clients Waf Skip Processing
+### Trusted Clients WAF Skip Processing
 
 <a id="nestedblock--user_id_client_ip"></a>
 
-### User Id Client Ip
+### User Id Client IP
 
 <a id="nestedblock--user_identification"></a>
 
@@ -5477,21 +5477,21 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--waf_exclusion"></a>
 
-### Waf Exclusion
+### WAF Exclusion
 
-`waf_exclusion_inline_rules` - (Optional) WAF Exclusion Inline Rules. A list of WAF exclusion rules that will be applied inline. See [Waf Exclusion Inline Rules](#nestedblock--waf_exclusion--waf_exclusion_inline_rules) below.
+`waf_exclusion_inline_rules` - (Optional) WAF Exclusion Inline Rules. A list of WAF exclusion rules that will be applied inline. See [WAF Exclusion Inline Rules](#nestedblock--waf_exclusion--waf_exclusion_inline_rules) below.
 
-`waf_exclusion_policy` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Waf Exclusion Policy](#nestedblock--waf_exclusion--waf_exclusion_policy) below.
+`waf_exclusion_policy` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [WAF Exclusion Policy](#nestedblock--waf_exclusion--waf_exclusion_policy) below.
 
 <a id="nestedblock--waf_exclusion--waf_exclusion_inline_rules"></a>
 
-### Waf Exclusion Waf Exclusion Inline Rules
+### WAF Exclusion WAF Exclusion Inline Rules
 
 `rules` - (Optional) WAF Exclusion Rules. An ordered list of WAF Exclusions specific to this Load Balancer. See [Rules](#nestedblock--waf_exclusion--waf_exclusion_inline_rules--rules) below.
 
 <a id="nestedblock--waf_exclusion--waf_exclusion_inline_rules--rules"></a>
 
-### Waf Exclusion Waf Exclusion Inline Rules Rules
+### WAF Exclusion WAF Exclusion Inline Rules Rules
 
 `any_domain` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Domain](#nestedblock--waf_exclusion--waf_exclusion_inline_rules--rules--any_domain) below.
 
@@ -5501,9 +5501,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `exact_value` - (Optional) Exact Value. Exact domain name (`String`).
 
-`expiration_timestamp` - (Optional) Expiration Timestamp. The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired (`String`).
+`expiration_timestamp` - (Optional) Expiration Timestamp. The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired. The rule continues to exist in the configuration but is not applied anymore (`String`).
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--waf_exclusion--waf_exclusion_inline_rules--rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--waf_exclusion--waf_exclusion_inline_rules--rules--metadata) below.
 
 `methods` - (Optional) Methods. methods to be matched (`List`).
 
@@ -5513,31 +5513,31 @@ In addition to all arguments above, the following attributes are exported:
 
 `suffix_value` - (Optional) Suffix Value. Suffix of domain name e.g 'xyz.com' will match '*.xyz.com' and 'xyz.com' (`String`).
 
-`waf_skip_processing` - (Optional) Empty. This can be used for messages where no values are needed. See [Waf Skip Processing](#nestedblock--waf_exclusion--waf_exclusion_inline_rules--rules--waf_skip_processing) below.
+`waf_skip_processing` - (Optional) Empty. This can be used for messages where no values are needed. See [WAF Skip Processing](#nestedblock--waf_exclusion--waf_exclusion_inline_rules--rules--waf_skip_processing) below.
 
 <a id="nestedblock--waf_exclusion--waf_exclusion_inline_rules--rules--any_domain"></a>
 
-### Waf Exclusion Waf Exclusion Inline Rules Rules Any Domain
+### WAF Exclusion WAF Exclusion Inline Rules Rules Any Domain
 
 <a id="nestedblock--waf_exclusion--waf_exclusion_inline_rules--rules--any_path"></a>
 
-### Waf Exclusion Waf Exclusion Inline Rules Rules Any Path
+### WAF Exclusion WAF Exclusion Inline Rules Rules Any Path
 
 <a id="nestedblock--waf_exclusion--waf_exclusion_inline_rules--rules--app_firewall_detection_control"></a>
 
-### Waf Exclusion Waf Exclusion Inline Rules Rules App Firewall Detection Control
+### WAF Exclusion WAF Exclusion Inline Rules Rules App Firewall Detection Control
 
 <a id="nestedblock--waf_exclusion--waf_exclusion_inline_rules--rules--metadata"></a>
 
-### Waf Exclusion Waf Exclusion Inline Rules Rules Metadata
+### WAF Exclusion WAF Exclusion Inline Rules Rules Metadata
 
 <a id="nestedblock--waf_exclusion--waf_exclusion_inline_rules--rules--waf_skip_processing"></a>
 
-### Waf Exclusion Waf Exclusion Inline Rules Rules Waf Skip Processing
+### WAF Exclusion WAF Exclusion Inline Rules Rules WAF Skip Processing
 
 <a id="nestedblock--waf_exclusion--waf_exclusion_policy"></a>
 
-### Waf Exclusion Waf Exclusion Policy
+### WAF Exclusion WAF Exclusion Policy
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 

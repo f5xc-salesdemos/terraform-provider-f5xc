@@ -60,19 +60,19 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "active_enhanced_firewall_policies, no_network_policy" must be set.
 
-`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option .... See [Active Enhanced Firewall Policies](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) Active Enhanced Network Policies Type. List of Enhanced Firewall Policies These policies use session-based rules and provide all options available under firewall policies with an additional option for service insertion. See [Active Enhanced Firewall Policies](#active-enhanced-firewall-policies) below for details.
 
 > **Note:** One of the arguments from this list "active_forward_proxy_policies, no_forward_proxy" must be set.
 
 `active_forward_proxy_policies` - (Optional) Active Forward Proxy Policies Type. Ordered List of Forward Proxy Policies active. See [Active Forward Proxy Policies](#active-forward-proxy-policies) below for details.
 
-`admin_user_credentials` - (Optional) Admin User Credentials. Setup user credentials to manage access to nodes belonging to the site. See [Admin User Credentials](#admin-user-credentials) below for details.
+`admin_user_credentials` - (Optional) Admin User Credentials. Setup user credentials to manage access to nodes belonging to the site. When configured, 'admin' user will be setup and customers can access these nodes via either the node local WebUI or via SSH to access shell/CLI Ensure 'Node Local Services' are enabled to allow for required access. See [Admin User Credentials](#admin-user-credentials) below for details.
 
 `annotations` - (Optional) Annotations to apply to this resource (`Map`).
 
 > **Note:** One of the arguments from this list "aws, azure, baremetal, equinix, gcp, kvm, nutanix, oci, openstack, vmware" must be set.
 
-`aws` - (Optional) AWS Provider Type. AWS Provider Type. See [Aws](#aws) below for details.
+`aws` - (Optional) AWS Provider Type. AWS Provider Type. See [AWS](#aws) below for details.
 
 `azure` - (Optional) Azure Provider Type. Azure Provider Type. See [Azure](#azure) below for details.
 
@@ -102,23 +102,23 @@ The following arguments are optional:
 
 > **Note:** One of the arguments from this list "disable_ha, enable_ha" must be set.
 
-`disable_ha` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Ha](#disable-ha) below for details.
+`disable_ha` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable HA](#disable-ha) below for details.
 
 > **Note:** One of the arguments from this list "disable_url_categorization, enable_url_categorization" must be set.
 
-`disable_url_categorization` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Url Categorization](#disable-url-categorization) below for details.
+`disable_url_categorization` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable URL Categorization](#disable-url-categorization) below for details.
 
-`dns_ntp_config` - (Optional) DNS & NTP Servers Settings. Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site. See [Dns Ntp Config](#dns-ntp-config) below for details.
+`dns_ntp_config` - (Optional) DNS & NTP Servers Settings. Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site. See [DNS NTP Config](#dns-ntp-config) below for details.
 
-`enable_ha` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Ha](#enable-ha) below for details.
+`enable_ha` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable HA](#enable-ha) below for details.
 
-`enable_url_categorization` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Url Categorization](#enable-url-categorization) below for details.
+`enable_url_categorization` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable URL Categorization](#enable-url-categorization) below for details.
 
 `equinix` - (Optional) Equinix Provider Type. Equinix Provider Type. See [Equinix](#equinix) below for details.
 
 `f5_proxy` - (Optional) Empty. This can be used for messages where no values are needed. See [F5 Proxy](#f5-proxy) below for details.
 
-`gcp` - (Optional) GCP Provider Type. GCP Provider Type. See [Gcp](#gcp) below for details.
+`gcp` - (Optional) GCP Provider Type. GCP Provider Type. See [GCP](#gcp) below for details.
 
 `kvm` - (Optional) KVM Provider Type. KVM Provider Type. See [Kvm](#kvm) below for details.
 
@@ -126,7 +126,7 @@ The following arguments are optional:
 
 `load_balancing` - (Optional) Load Balancing Settings. This section contains settings on the site that relate to Load Balancing functionality. See [Load Balancing](#load-balancing) below for details.
 
-`local_vrf` - (Optional) Local VRF Settings. There can be two local VRFs on each site. See [Local Vrf](#local-vrf) below for details.
+`local_vrf` - (Optional) Local VRF Settings. There can be two local VRFs on each site. The Site Local Outside (SLO) local VRF is used to connect WAN side workloads to this site and to connect the site to F5 Distributed Cloud for management. All sites are required to have an SLO local VRF. The Site Local Inside (SLI) local VRF is used to connect LAN side workloads to this site. SLI local VRF is optional. See [Local Vrf](#local-vrf) below for details.
 
 > **Note:** One of the arguments from this list "log_receiver, logs_streaming_disabled" must be set.
 
@@ -148,13 +148,13 @@ The following arguments are optional:
 
 `oci` - (Optional) OCI Provider Type. OCI Provider Type. See [Oci](#oci) below for details.
 
-`offline_survivability_mode` - (Optional) Offline Survivability Mode. Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global C.... See [Offline Survivability Mode](#offline-survivability-mode) below for details.
+`offline_survivability_mode` - (Optional) Offline Survivability Mode. Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC). When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline. The certificates needed to keep the services running on this site are signed using a local CA. Secrets would also be cached locally to handl... See [Offline Survivability Mode](#offline-survivability-mode) below for details.
 
 `openstack` - (Optional) Openstack Provider Type. Openstack Provider Type. See [Openstack](#openstack) below for details.
 
 `performance_enhancement_mode` - (Optional) Performance Enhancement Mode. x-required Optimize the site for L3 or L7 traffic processing. L7 optimized is the default. See [Performance Enhancement Mode](#performance-enhancement-mode) below for details.
 
-`re_select` - (Optional) Regional Edge Selection. Selection criteria to connect the site with F5 Distributed Cloud Regional Edge(s). See [Re Select](#re-select) below for details.
+`re_select` - (Optional) Regional Edge Selection. Selection criteria to connect the site with F5 Distributed Cloud Regional Edge(s). See [RE Select](#re-select) below for details.
 
 `site_mesh_group_on_slo` - (Optional) Site Mesh Group Type. Select how the site mesh group will be connected. By default, public IPs of the control nodes of the site will be used. See [Site Mesh Group On Slo](#site-mesh-group-on-slo) below for details.
 
@@ -162,9 +162,9 @@ The following arguments are optional:
 
 `timeouts` - (Optional) See [Timeouts](#timeouts) below for details.
 
-`tunnel_dead_timeout` - (Optional) Tunnel Dead Timeout (msec). Time interval, in millisec, within which any ipsec / ssl connection from the site going down is detected. When not set (== 0), a default value of 10000 msec will be used (`Number`).
+`tunnel_dead_timeout` - (Optional) Tunnel Dead Timeout (msec). Time interval, in millisec, within which any ipsec / SSL connection from the site going down is detected. When not set (== 0), a default value of 10000 msec will be used (`Number`).
 
-`tunnel_type` - (Optional) Tunnel type. Tunnel encapsulation to be used between sites Tunnel can operate in both IPsec and SSL, with IPsec being prefered over SSL. Tunnel is of type IPsec Tunnel is of type SSL (`String`).
+`tunnel_type` - (Optional) Tunnel type. Tunnel encapsulation to be used between sites Tunnel can operate in both IPsec and SSL, with IPsec being prefered over SSL. Tunnel is of type IPsec Tunnel is of type SSL. Possible values are `SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL`, `SITE_TO_SITE_TUNNEL_IPSEC`, `SITE_TO_SITE_TUNNEL_SSL`. Defaults to `SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL` (`String`).
 
 `upgrade_settings` - (Optional) Upgrade Settings. Specify how a site will be upgraded. See [Upgrade Settings](#upgrade-settings) below for details.
 
@@ -216,7 +216,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `admin_password` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Admin Password](#nestedblock--admin_user_credentials--admin_password) below.
 
-`ssh_key` - (Optional) Public SSH key. Provided Public SSH key can be used for accessing nodes of the site. When provided, customers can ssh to the nodes of this Customer Edge site using admin as the user (`String`).
+`ssh_key` - (Optional) Public SSH key. Provided Public SSH key can be used for accessing nodes of the site. When provided, customers can SSH to the nodes of this Customer Edge site using admin as the user (`String`).
 
 <a id="nestedblock--admin_user_credentials--admin_password"></a>
 
@@ -232,33 +232,33 @@ In addition to all arguments above, the following attributes are exported:
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--admin_user_credentials--admin_password--clear_secret_info"></a>
 
 ### Admin User Credentials Admin Password Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--aws"></a>
 
-### Aws
+### AWS
 
-`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Not Managed](#nestedblock--aws--not_managed) below.
+`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Not Managed](#nestedblock--aws--not_managed) below.
 
 <a id="nestedblock--aws--not_managed"></a>
 
-### Aws Not Managed
+### AWS Not Managed
 
-`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Node List](#nestedblock--aws--not_managed--node_list) below.
+`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Node List](#nestedblock--aws--not_managed--node_list) below.
 
 <a id="nestedblock--aws--not_managed--node_list"></a>
 
-### Aws Not Managed Node List
+### AWS Not Managed Node List
 
 `hostname` - (Optional) Hostname. Hostname for this Node (`String`).
 
@@ -270,19 +270,19 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--aws--not_managed--node_list--interface_list"></a>
 
-### Aws Not Managed Node List Interface List
+### AWS Not Managed Node List Interface List
 
 <a id="nestedblock--azure"></a>
 
 ### Azure
 
-`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Not Managed](#nestedblock--azure--not_managed) below.
+`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Not Managed](#nestedblock--azure--not_managed) below.
 
 <a id="nestedblock--azure--not_managed"></a>
 
 ### Azure Not Managed
 
-`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Node List](#nestedblock--azure--not_managed--node_list) below.
+`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Node List](#nestedblock--azure--not_managed--node_list) below.
 
 <a id="nestedblock--azure--not_managed--node_list"></a>
 
@@ -304,13 +304,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Baremetal
 
-`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Not Managed](#nestedblock--baremetal--not_managed) below.
+`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Not Managed](#nestedblock--baremetal--not_managed) below.
 
 <a id="nestedblock--baremetal--not_managed"></a>
 
 ### Baremetal Not Managed
 
-`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Node List](#nestedblock--baremetal--not_managed--node_list) below.
+`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Node List](#nestedblock--baremetal--not_managed--node_list) below.
 
 <a id="nestedblock--baremetal--not_managed--node_list"></a>
 
@@ -342,21 +342,21 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Blocked Services Blocked Sevice
 
-`dns` - (Optional) Empty. This can be used for messages where no values are needed. See [Dns](#nestedblock--blocked_services--blocked_sevice--dns) below.
+`dns` - (Optional) Empty. This can be used for messages where no values are needed. See [DNS](#nestedblock--blocked_services--blocked_sevice--dns) below.
 
-`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network (`String`).
+`network_type` - (Optional) Virtual Network Type. Different types of virtual networks understood by the system Virtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network. This is an insecure network and is connected to public internet via NAT Gateways/firwalls Virtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected. Constraints: There can be atmost one virtual network of this type in a given site... Possible values include `VIRTUAL_NETWORK_SITE_LOCAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE`, `VIRTUAL_NETWORK_PER_SITE`, `VIRTUAL_NETWORK_PUBLIC`, `VIRTUAL_NETWORK_GLOBAL`, `VIRTUAL_NETWORK_SITE_SERVICE`, `VIRTUAL_NETWORK_VER_INTERNAL`, `VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE`, `VIRTUAL_NETWORK_IP_AUTO`, `VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK`, and others. Defaults to `VIRTUAL_NETWORK_SITE_LOCAL` (`String`).
 
-`ssh` - (Optional) Empty. This can be used for messages where no values are needed. See [Ssh](#nestedblock--blocked_services--blocked_sevice--ssh) below.
+`ssh` - (Optional) Empty. This can be used for messages where no values are needed. See [SSH](#nestedblock--blocked_services--blocked_sevice--ssh) below.
 
 `web_user_interface` - (Optional) Empty. This can be used for messages where no values are needed. See [Web User Interface](#nestedblock--blocked_services--blocked_sevice--web_user_interface) below.
 
 <a id="nestedblock--blocked_services--blocked_sevice--dns"></a>
 
-### Blocked Services Blocked Sevice Dns
+### Blocked Services Blocked Sevice DNS
 
 <a id="nestedblock--blocked_services--blocked_sevice--ssh"></a>
 
-### Blocked Services Blocked Sevice Ssh
+### Blocked Services Blocked Sevice SSH
 
 <a id="nestedblock--blocked_services--blocked_sevice--web_user_interface"></a>
 
@@ -366,9 +366,9 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Custom Proxy
 
-`disable_re_tunnel` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable Re Tunnel](#nestedblock--custom_proxy--disable_re_tunnel) below.
+`disable_re_tunnel` - (Optional) Empty. This can be used for messages where no values are needed. See [Disable RE Tunnel](#nestedblock--custom_proxy--disable_re_tunnel) below.
 
-`enable_re_tunnel` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Re Tunnel](#nestedblock--custom_proxy--enable_re_tunnel) below.
+`enable_re_tunnel` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable RE Tunnel](#nestedblock--custom_proxy--enable_re_tunnel) below.
 
 `password` - (Optional) Secret. SecretType is used in an object to indicate a sensitive/confidential field. See [Password](#nestedblock--custom_proxy--password) below.
 
@@ -380,11 +380,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--custom_proxy--disable_re_tunnel"></a>
 
-### Custom Proxy Disable Re Tunnel
+### Custom Proxy Disable RE Tunnel
 
 <a id="nestedblock--custom_proxy--enable_re_tunnel"></a>
 
-### Custom Proxy Enable Re Tunnel
+### Custom Proxy Enable RE Tunnel
 
 <a id="nestedblock--custom_proxy--password"></a>
 
@@ -400,17 +400,17 @@ In addition to all arguments above, the following attributes are exported:
 
 `decryption_provider` - (Optional) Decryption Provider. Name of the Secret Management Access object that contains information about the backend Secret Management service (`String`).
 
-`location` - (Optional) Location. Location is the uri_ref. It could be in url format for string:/// Or it could be a path if the store provider is an http/https location (`String`).
+`location` - (Optional) Location. Location is the uri_ref. It could be in URL format for string:/// Or it could be a path if the store provider is an HTTP/HTTPS location (`String`).
 
-`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`store_provider` - (Optional) Store Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
 <a id="nestedblock--custom_proxy--password--clear_secret_info"></a>
 
 ### Custom Proxy Password Clear Secret Info
 
-`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the url scheme is not string:/// (`String`).
+`provider_ref` - (Optional) Provider. Name of the Secret Management Access object that contains information about the store to get encrypted bytes This field needs to be provided only if the URL scheme is not string:/// (`String`).
 
-`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format (`String`).
+`url` - (Optional) URL. URL of the secret. Currently supported URL schemes is string:///. For string:/// scheme, Secret needs to be encoded Base64 format. When asked for this secret, caller will get Secret bytes after Base64 decoding (`String`).
 
 <a id="nestedblock--custom_proxy_bypass"></a>
 
@@ -440,63 +440,63 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--disable_ha"></a>
 
-### Disable Ha
+### Disable HA
 
 <a id="nestedblock--disable_url_categorization"></a>
 
-### Disable Url Categorization
+### Disable URL Categorization
 
 <a id="nestedblock--dns_ntp_config"></a>
 
-### Dns Ntp Config
+### DNS NTP Config
 
-`custom_dns` - (Optional) DNS Servers. DNS Servers. See [Custom Dns](#nestedblock--dns_ntp_config--custom_dns) below.
+`custom_dns` - (Optional) DNS Servers. DNS Servers. See [Custom DNS](#nestedblock--dns_ntp_config--custom_dns) below.
 
-`custom_ntp` - (Optional) NTP Servers. NTP Servers. See [Custom Ntp](#nestedblock--dns_ntp_config--custom_ntp) below.
+`custom_ntp` - (Optional) NTP Servers. NTP Servers. See [Custom NTP](#nestedblock--dns_ntp_config--custom_ntp) below.
 
-`f5_dns_default` - (Optional) Empty. This can be used for messages where no values are needed. See [F5 Dns Default](#nestedblock--dns_ntp_config--f5_dns_default) below.
+`f5_dns_default` - (Optional) Empty. This can be used for messages where no values are needed. See [F5 DNS Default](#nestedblock--dns_ntp_config--f5_dns_default) below.
 
-`f5_ntp_default` - (Optional) Empty. This can be used for messages where no values are needed. See [F5 Ntp Default](#nestedblock--dns_ntp_config--f5_ntp_default) below.
+`f5_ntp_default` - (Optional) Empty. This can be used for messages where no values are needed. See [F5 NTP Default](#nestedblock--dns_ntp_config--f5_ntp_default) below.
 
 <a id="nestedblock--dns_ntp_config--custom_dns"></a>
 
-### Dns Ntp Config Custom Dns
+### DNS NTP Config Custom DNS
 
 `dns_servers` - (Optional) DNS Servers. DNS Servers (`List`).
 
 <a id="nestedblock--dns_ntp_config--custom_ntp"></a>
 
-### Dns Ntp Config Custom Ntp
+### DNS NTP Config Custom NTP
 
 `ntp_servers` - (Optional) NTP Servers. NTP Servers (`List`).
 
 <a id="nestedblock--dns_ntp_config--f5_dns_default"></a>
 
-### Dns Ntp Config F5 Dns Default
+### DNS NTP Config F5 DNS Default
 
 <a id="nestedblock--dns_ntp_config--f5_ntp_default"></a>
 
-### Dns Ntp Config F5 Ntp Default
+### DNS NTP Config F5 NTP Default
 
 <a id="nestedblock--enable_ha"></a>
 
-### Enable Ha
+### Enable HA
 
 <a id="nestedblock--enable_url_categorization"></a>
 
-### Enable Url Categorization
+### Enable URL Categorization
 
 <a id="nestedblock--equinix"></a>
 
 ### Equinix
 
-`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Not Managed](#nestedblock--equinix--not_managed) below.
+`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Not Managed](#nestedblock--equinix--not_managed) below.
 
 <a id="nestedblock--equinix--not_managed"></a>
 
 ### Equinix Not Managed
 
-`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Node List](#nestedblock--equinix--not_managed--node_list) below.
+`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Node List](#nestedblock--equinix--not_managed--node_list) below.
 
 <a id="nestedblock--equinix--not_managed--node_list"></a>
 
@@ -520,19 +520,19 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--gcp"></a>
 
-### Gcp
+### GCP
 
-`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Not Managed](#nestedblock--gcp--not_managed) below.
+`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Not Managed](#nestedblock--gcp--not_managed) below.
 
 <a id="nestedblock--gcp--not_managed"></a>
 
-### Gcp Not Managed
+### GCP Not Managed
 
-`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Node List](#nestedblock--gcp--not_managed--node_list) below.
+`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Node List](#nestedblock--gcp--not_managed--node_list) below.
 
 <a id="nestedblock--gcp--not_managed--node_list"></a>
 
-### Gcp Not Managed Node List
+### GCP Not Managed Node List
 
 `hostname` - (Optional) Hostname. Hostname for this Node (`String`).
 
@@ -544,19 +544,19 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--gcp--not_managed--node_list--interface_list"></a>
 
-### Gcp Not Managed Node List Interface List
+### GCP Not Managed Node List Interface List
 
 <a id="nestedblock--kvm"></a>
 
 ### Kvm
 
-`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Not Managed](#nestedblock--kvm--not_managed) below.
+`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Not Managed](#nestedblock--kvm--not_managed) below.
 
 <a id="nestedblock--kvm--not_managed"></a>
 
 ### Kvm Not Managed
 
-`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Node List](#nestedblock--kvm--not_managed--node_list) below.
+`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Node List](#nestedblock--kvm--not_managed--node_list) below.
 
 <a id="nestedblock--kvm--not_managed--node_list"></a>
 
@@ -738,13 +738,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Nutanix
 
-`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Not Managed](#nestedblock--nutanix--not_managed) below.
+`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Not Managed](#nestedblock--nutanix--not_managed) below.
 
 <a id="nestedblock--nutanix--not_managed"></a>
 
 ### Nutanix Not Managed
 
-`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Node List](#nestedblock--nutanix--not_managed--node_list) below.
+`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Node List](#nestedblock--nutanix--not_managed--node_list) below.
 
 <a id="nestedblock--nutanix--not_managed--node_list"></a>
 
@@ -766,13 +766,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Oci
 
-`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Not Managed](#nestedblock--oci--not_managed) below.
+`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Not Managed](#nestedblock--oci--not_managed) below.
 
 <a id="nestedblock--oci--not_managed"></a>
 
 ### Oci Not Managed
 
-`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Node List](#nestedblock--oci--not_managed--node_list) below.
+`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Node List](#nestedblock--oci--not_managed--node_list) below.
 
 <a id="nestedblock--oci--not_managed--node_list"></a>
 
@@ -810,13 +810,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Openstack
 
-`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Not Managed](#nestedblock--openstack--not_managed) below.
+`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Not Managed](#nestedblock--openstack--not_managed) below.
 
 <a id="nestedblock--openstack--not_managed"></a>
 
 ### Openstack Not Managed
 
-`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Node List](#nestedblock--openstack--not_managed--node_list) below.
+`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Node List](#nestedblock--openstack--not_managed--node_list) below.
 
 <a id="nestedblock--openstack--not_managed--node_list"></a>
 
@@ -864,19 +864,19 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--re_select"></a>
 
-### Re Select
+### RE Select
 
 `geo_proximity` - (Optional) Empty. This can be used for messages where no values are needed. See [Geo Proximity](#nestedblock--re_select--geo_proximity) below.
 
-`specific_re` - (Optional) Specific RE. Select specific REs. This is useful when a site needs to deterministically connect to a set of REs. A site will always be connected to 2 REs. See [Specific Re](#nestedblock--re_select--specific_re) below.
+`specific_re` - (Optional) Specific RE. Select specific REs. This is useful when a site needs to deterministically connect to a set of REs. A site will always be connected to 2 REs. See [Specific RE](#nestedblock--re_select--specific_re) below.
 
 <a id="nestedblock--re_select--geo_proximity"></a>
 
-### Re Select Geo Proximity
+### RE Select Geo Proximity
 
 <a id="nestedblock--re_select--specific_re"></a>
 
-### Re Select Specific Re
+### RE Select Specific RE
 
 `primary_re` - (Optional) Primary RE Geography. Select primary RE for this site (`String`).
 
@@ -888,9 +888,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `site_mesh_group` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Site Mesh Group](#nestedblock--site_mesh_group_on_slo--site_mesh_group) below.
 
-`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public Ip](#nestedblock--site_mesh_group_on_slo--sm_connection_public_ip) below.
+`sm_connection_public_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Public IP](#nestedblock--site_mesh_group_on_slo--sm_connection_public_ip) below.
 
-`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt Ip](#nestedblock--site_mesh_group_on_slo--sm_connection_pvt_ip) below.
+`sm_connection_pvt_ip` - (Optional) Empty. This can be used for messages where no values are needed. See [Sm Connection Pvt IP](#nestedblock--site_mesh_group_on_slo--sm_connection_pvt_ip) below.
 
 <a id="nestedblock--site_mesh_group_on_slo--no_site_mesh_group"></a>
 
@@ -908,31 +908,31 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--site_mesh_group_on_slo--sm_connection_public_ip"></a>
 
-### Site Mesh Group On Slo Sm Connection Public Ip
+### Site Mesh Group On Slo Sm Connection Public IP
 
 <a id="nestedblock--site_mesh_group_on_slo--sm_connection_pvt_ip"></a>
 
-### Site Mesh Group On Slo Sm Connection Pvt Ip
+### Site Mesh Group On Slo Sm Connection Pvt IP
 
 <a id="nestedblock--software_settings"></a>
 
 ### Software Settings
 
-`os` - (Optional) Operating System Version. Select the F5XC Operating System Version for the site. By default, latest available OS Version will be used. Refer to release notes to find required released OS versions. See [Os](#nestedblock--software_settings--os) below.
+`os` - (Optional) Operating System Version. Select the F5XC Operating System Version for the site. By default, latest available OS Version will be used. Refer to release notes to find required released OS versions. See [OS](#nestedblock--software_settings--os) below.
 
 `sw` - (Optional) F5XC Software Version. Select the F5XC Software Version for the site. By default, latest available F5XC Software Version will be used. Refer to release notes to find required released SW versions. See [Sw](#nestedblock--software_settings--sw) below.
 
 <a id="nestedblock--software_settings--os"></a>
 
-### Software Settings Os
+### Software Settings OS
 
-`default_os_version` - (Optional) Empty. This can be used for messages where no values are needed. See [Default Os Version](#nestedblock--software_settings--os--default_os_version) below.
+`default_os_version` - (Optional) Empty. This can be used for messages where no values are needed. See [Default OS Version](#nestedblock--software_settings--os--default_os_version) below.
 
 `operating_system_version` - (Optional) Operating System Version. Specify a OS version to be used e.g. 9.2024.6 (`String`).
 
 <a id="nestedblock--software_settings--os--default_os_version"></a>
 
-### Software Settings Os Default Os Version
+### Software Settings OS Default OS Version
 
 <a id="nestedblock--software_settings--sw"></a>
 
@@ -950,13 +950,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 <a id="nestedblock--upgrade_settings"></a>
 
@@ -984,7 +984,7 @@ In addition to all arguments above, the following attributes are exported:
 
 `drain_max_unavailable_node_count` - (Optional) Node Batch Size Count (`Number`).
 
-`drain_node_timeout` - (Optional) Upgrade Wait Time. Seconds to wait before initiating upgrade on the next set of nodes (`Number`).
+`drain_node_timeout` - (Optional) Upgrade Wait Time. Seconds to wait before initiating upgrade on the next set of nodes. Setting it to 0 will wait indefinitely for all services on nodes to be upgraded gracefully before proceeding to the next set of nodes. (Warning: It may block upgrade if services on a node cannot be gracefully upgraded. It is recommended to use the default value) (`Number`).
 
 `enable_vega_upgrade_mode` - (Optional) Empty. This can be used for messages where no values are needed. See [Enable Vega Upgrade Mode](#nestedblock--upgrade_settings--kubernetes_upgrade_drain--enable_upgrade_drain--enable_vega_upgrade_mode) below.
 
@@ -1000,13 +1000,13 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Vmware
 
-`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Not Managed](#nestedblock--vmware--not_managed) below.
+`not_managed` - (Optional) List of Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Not Managed](#nestedblock--vmware--not_managed) below.
 
 <a id="nestedblock--vmware--not_managed"></a>
 
 ### Vmware Not Managed
 
-`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. See [Node List](#nestedblock--vmware--not_managed--node_list) below.
+`node_list` - (Optional) Nodes. This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider. Once a node is created and registers with the site, it will be shown in this section. See [Node List](#nestedblock--vmware--not_managed--node_list) below.
 
 <a id="nestedblock--vmware--not_managed--node_list"></a>
 

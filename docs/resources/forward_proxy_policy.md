@@ -80,13 +80,13 @@ The following arguments are optional:
 
 `deny_list` - (Optional) Forward Proxy Rule. URL(s) and domains policy for forward proxy for a connection type (TLS or HTTP). See [Deny List](#deny-list) below for details.
 
-`drp_http_connect` - (Optional) Empty. This can be used for messages where no values are needed. See [Drp Http Connect](#drp-http-connect) below for details.
+`drp_http_connect` - (Optional) Empty. This can be used for messages where no values are needed. See [Drp HTTP Connect](#drp-http-connect) below for details.
 
 `labels` - (Optional) Labels to apply to this resource (`Map`).
 
 `network_connector` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Network Connector](#network-connector) below for details.
 
-`proxy_label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Proxy Label Selector](#proxy-label-selector) below for details.
+`proxy_label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Proxy Label Selector](#proxy-label-selector) below for details.
 
 `rule_list` - (Optional) Custom Rule List. List of custom rules. See [Rule List](#rule-list) below for details.
 
@@ -116,9 +116,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `dest_list` - (Optional) L4 Destination List. L4 destinations for non-HTTP and non-TLS connections and TLS connections without SNI. See [Dest List](#nestedblock--allow_list--dest_list) below.
 
-`http_list` - (Optional) HTTP URLs. URLs for HTTP connections. See [Http List](#nestedblock--allow_list--http_list) below.
+`http_list` - (Optional) HTTP URLs. URLs for HTTP connections. See [HTTP List](#nestedblock--allow_list--http_list) below.
 
-`tls_list` - (Optional) TLS Domains. Domains in SNI for TLS connections. See [Tls List](#nestedblock--allow_list--tls_list) below.
+`tls_list` - (Optional) TLS Domains. Domains in SNI for TLS connections. See [TLS List](#nestedblock--allow_list--tls_list) below.
 
 <a id="nestedblock--allow_list--default_action_allow"></a>
 
@@ -144,7 +144,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--allow_list--http_list"></a>
 
-### Allow List Http List
+### Allow List HTTP List
 
 `any_path` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Path](#nestedblock--allow_list--http_list--any_path) below.
 
@@ -162,11 +162,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--allow_list--http_list--any_path"></a>
 
-### Allow List Http List Any Path
+### Allow List HTTP List Any Path
 
 <a id="nestedblock--allow_list--tls_list"></a>
 
-### Allow List Tls List
+### Allow List TLS List
 
 `exact_value` - (Optional) Exact Value. Exact domain name (`String`).
 
@@ -190,9 +190,9 @@ In addition to all arguments above, the following attributes are exported:
 
 `dest_list` - (Optional) L4 Destination List. L4 destinations for non-HTTP and non-TLS connections and TLS connections without SNI. See [Dest List](#nestedblock--deny_list--dest_list) below.
 
-`http_list` - (Optional) HTTP URLs. URLs for HTTP connections. See [Http List](#nestedblock--deny_list--http_list) below.
+`http_list` - (Optional) HTTP URLs. URLs for HTTP connections. See [HTTP List](#nestedblock--deny_list--http_list) below.
 
-`tls_list` - (Optional) TLS Domains. Domains in SNI for TLS connections. See [Tls List](#nestedblock--deny_list--tls_list) below.
+`tls_list` - (Optional) TLS Domains. Domains in SNI for TLS connections. See [TLS List](#nestedblock--deny_list--tls_list) below.
 
 <a id="nestedblock--deny_list--default_action_allow"></a>
 
@@ -218,7 +218,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--deny_list--http_list"></a>
 
-### Deny List Http List
+### Deny List HTTP List
 
 `any_path` - (Optional) Empty. This can be used for messages where no values are needed. See [Any Path](#nestedblock--deny_list--http_list--any_path) below.
 
@@ -236,11 +236,11 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--deny_list--http_list--any_path"></a>
 
-### Deny List Http List Any Path
+### Deny List HTTP List Any Path
 
 <a id="nestedblock--deny_list--tls_list"></a>
 
-### Deny List Tls List
+### Deny List TLS List
 
 `exact_value` - (Optional) Exact Value. Exact domain name (`String`).
 
@@ -250,7 +250,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--drp_http_connect"></a>
 
-### Drp Http Connect
+### Drp HTTP Connect
 
 <a id="nestedblock--network_connector"></a>
 
@@ -278,39 +278,39 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Rule List Rules
 
-`action` - (Optional) Rule Action. The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds forward (`String`).
+`action` - (Optional) Rule Action. The rule action determines the disposition of the input request API. If a policy matches a rule with an ALLOW action, the processing of the request proceeds forward. If it matches a rule with a DENY action, the processing of the request is terminated and an appropriate message/code returned to the originator. If it matches a rule with a NEXT_POLICY_SET action, evaluation of the current policy set terminates and evaluation of the next policy set in the chain begins. - DENY: DENY D... Possible values are `DENY`, `ALLOW`, `NEXT_POLICY`. Defaults to `DENY` (`String`).
 
 `all_destinations` - (Optional) Empty. This can be used for messages where no values are needed. See [All Destinations](#nestedblock--rule_list--rules--all_destinations) below.
 
 `all_sources` - (Optional) Empty. This can be used for messages where no values are needed. See [All Sources](#nestedblock--rule_list--rules--all_sources) below.
 
-`dst_asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. See [Dst Asn List](#nestedblock--rule_list--rules--dst_asn_list) below.
+`dst_asn_list` - (Optional) ASN Match List. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. See [Dst Asn List](#nestedblock--rule_list--rules--dst_asn_list) below.
 
 `dst_asn_set` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Dst Asn Set](#nestedblock--rule_list--rules--dst_asn_set) below.
 
-`dst_ip_prefix_set` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Dst Ip Prefix Set](#nestedblock--rule_list--rules--dst_ip_prefix_set) below.
+`dst_ip_prefix_set` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Dst IP Prefix Set](#nestedblock--rule_list--rules--dst_ip_prefix_set) below.
 
-`dst_label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Dst Label Selector](#nestedblock--rule_list--rules--dst_label_selector) below.
+`dst_label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Dst Label Selector](#nestedblock--rule_list--rules--dst_label_selector) below.
 
 `dst_prefix_list` - (Optional) IPv4 Prefix List. x-example: '192.168.20.0/24' List of IPv4 prefixes that represent an endpoint. See [Dst Prefix List](#nestedblock--rule_list--rules--dst_prefix_list) below.
 
-`http_list` - (Optional) URLListType. See [Http List](#nestedblock--rule_list--rules--http_list) below.
+`http_list` - (Optional) URLListType. See [HTTP List](#nestedblock--rule_list--rules--http_list) below.
 
-`ip_prefix_set` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [Ip Prefix Set](#nestedblock--rule_list--rules--ip_prefix_set) below.
+`ip_prefix_set` - (Optional) Object reference. This type establishes a direct reference from one object(the referrer) to another(the referred). Such a reference is in form of tenant/namespace/name. See [IP Prefix Set](#nestedblock--rule_list--rules--ip_prefix_set) below.
 
-`label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. See [Label Selector](#nestedblock--rule_list--rules--label_selector) below.
+`label_selector` - (Optional) Label Selector. This type can be used to establish a 'selector reference' from one object(called selector) to a set of other objects(called selectees) based on the value of expresssions. A label selector is a label query over a set of resources. An empty label selector matches all objects. A null label selector matches no objects. Label selector is immutable. expressions is a list of strings of label selection expression. Each string has ',' separated values which are 'AND' and all strings ar... See [Label Selector](#nestedblock--rule_list--rules--label_selector) below.
 
-`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. See [Metadata](#nestedblock--rule_list--rules--metadata) below.
+`metadata` - (Optional) Message Metadata. MessageMetaType is metadata (common attributes) of a message that only certain messages have. This information is propagated to the metadata of a child object that gets created from the containing message during view processing. The information in this type can be specified by user during create and replace APIs. See [Metadata](#nestedblock--rule_list--rules--metadata) below.
 
-`no_http_connect_port` - (Optional) Empty. This can be used for messages where no values are needed. See [No Http Connect Port](#nestedblock--rule_list--rules--no_http_connect_port) below.
+`no_http_connect_port` - (Optional) Empty. This can be used for messages where no values are needed. See [No HTTP Connect Port](#nestedblock--rule_list--rules--no_http_connect_port) below.
 
-`port_matcher` - (Optional) Port Matcher. A port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges. See [Port Matcher](#nestedblock--rule_list--rules--port_matcher) below.
+`port_matcher` - (Optional) Port Matcher. A port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges. The result of the match is inverted if invert_matcher is true. See [Port Matcher](#nestedblock--rule_list--rules--port_matcher) below.
 
 `prefix_list` - (Optional) IPv4 Prefix List. x-example: '192.168.20.0/24' List of IPv4 prefixes that represent an endpoint. See [Prefix List](#nestedblock--rule_list--rules--prefix_list) below.
 
-`tls_list` - (Optional) DomainListType. See [Tls List](#nestedblock--rule_list--rules--tls_list) below.
+`tls_list` - (Optional) DomainListType. See [TLS List](#nestedblock--rule_list--rules--tls_list) below.
 
-`url_category_list` - (Optional) URL Category List Type. List of url categories. See [Url Category List](#nestedblock--rule_list--rules--url_category_list) below.
+`url_category_list` - (Optional) URL Category List Type. List of URL categories. See [URL Category List](#nestedblock--rule_list--rules--url_category_list) below.
 
 <a id="nestedblock--rule_list--rules--all_destinations"></a>
 
@@ -324,7 +324,7 @@ In addition to all arguments above, the following attributes are exported:
 
 ### Rule List Rules Dst Asn List
 
-`as_numbers` - (Optional) AS Numbers. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy (`List`).
+`as_numbers` - (Optional) AS Numbers. An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer (`List`).
 
 <a id="nestedblock--rule_list--rules--dst_asn_set"></a>
 
@@ -338,7 +338,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rule_list--rules--dst_ip_prefix_set"></a>
 
-### Rule List Rules Dst Ip Prefix Set
+### Rule List Rules Dst IP Prefix Set
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -360,17 +360,17 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rule_list--rules--http_list"></a>
 
-### Rule List Rules Http List
+### Rule List Rules HTTP List
 
-`http_list` - (Optional) HTTP URLs. URLs for HTTP connections. See [Http List](#nestedblock--rule_list--rules--http_list--http_list) below.
+`http_list` - (Optional) HTTP URLs. URLs for HTTP connections. See [HTTP List](#nestedblock--rule_list--rules--http_list--http_list) below.
 
 <a id="nestedblock--rule_list--rules--http_list--http_list"></a>
 
-### Rule List Rules Http List Http List
+### Rule List Rules HTTP List HTTP List
 
 <a id="nestedblock--rule_list--rules--ip_prefix_set"></a>
 
-### Rule List Rules Ip Prefix Set
+### Rule List Rules IP Prefix Set
 
 `name` - (Optional) Name. When a configuration object(e.g. virtual_host) refers to another(e.g route) then name will hold the referred object's(e.g. route's) name (`String`).
 
@@ -394,7 +394,7 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rule_list--rules--no_http_connect_port"></a>
 
-### Rule List Rules No Http Connect Port
+### Rule List Rules No HTTP Connect Port
 
 <a id="nestedblock--rule_list--rules--port_matcher"></a>
 
@@ -412,31 +412,31 @@ In addition to all arguments above, the following attributes are exported:
 
 <a id="nestedblock--rule_list--rules--tls_list"></a>
 
-### Rule List Rules Tls List
+### Rule List Rules TLS List
 
-`tls_list` - (Optional) TLS Domains. Domains in SNI for TLS connections. See [Tls List](#nestedblock--rule_list--rules--tls_list--tls_list) below.
+`tls_list` - (Optional) TLS Domains. Domains in SNI for TLS connections. See [TLS List](#nestedblock--rule_list--rules--tls_list--tls_list) below.
 
 <a id="nestedblock--rule_list--rules--tls_list--tls_list"></a>
 
-### Rule List Rules Tls List Tls List
+### Rule List Rules TLS List TLS List
 
 <a id="nestedblock--rule_list--rules--url_category_list"></a>
 
-### Rule List Rules Url Category List
+### Rule List Rules URL Category List
 
-`url_categories` - (Optional) URL Categories. List of url categories to be selected (`List`).
+`url_categories` - (Optional) URL Categories. List of URL categories to be selected (`List`).
 
 <a id="nestedblock--timeouts"></a>
 
 ### Timeouts
 
-`create` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`create` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
-`delete` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`delete` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Setting a timeout for a Delete operation is only applicable if changes are saved into state before the destroy operation occurs (`String`).
 
-`read` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`read` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours). Read operations occur during any refresh or planning operation when refresh is enabled (`String`).
 
-`update` - (Optional) A string that can be [parsed as a duration](`https://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m" (`String`).
+`update` - (Optional) A string that can be [parsed as a duration](`HTTPS://pkg.go.dev/time#ParseDuration`) consisting of numbers and unit suffixes, such as "30s" or "2h45m". Valid time units are "s" (seconds), "m" (minutes), "h" (hours) (`String`).
 
 ## Import
 
