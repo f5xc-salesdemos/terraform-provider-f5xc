@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 // terraform-provider-f5xc provides Terraform resources for managing F5 Distributed Cloud services.
-// For documentation, see https://registry.terraform.io/providers/f5xc/f5xc/latest/docs
+// For documentation, see https://registry.terraform.io/providers/robinmordasiewicz/f5xc/latest/docs
 
 package main
 
@@ -42,7 +42,7 @@ func main() {
 	flag.Parse()
 
 	opts := providerserver.ServeOpts{
-		Address: "registry.terraform.io/f5xc/f5xc",
+		Address: "registry.terraform.io/robinmordasiewicz/f5xc",
 		Debug:   debug,
 	}
 

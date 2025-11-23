@@ -22,8 +22,8 @@ TF_ACC=1 go test ./... -v -timeout 120m
 go generate ./...
 
 # Install locally for testing
-mkdir -p ~/.terraform.d/plugins/registry.terraform.io/f5xc/f5xc/0.1.0/darwin_arm64
-cp terraform-provider-f5xc ~/.terraform.d/plugins/registry.terraform.io/f5xc/f5xc/0.1.0/darwin_arm64/
+mkdir -p ~/.terraform.d/plugins/registry.terraform.io/robinmordasiewicz/f5xc/0.1.0/darwin_arm64
+cp terraform-provider-f5xc ~/.terraform.d/plugins/registry.terraform.io/robinmordasiewicz/f5xc/0.1.0/darwin_arm64/
 ```
 
 ## Architecture

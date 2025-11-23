@@ -14,7 +14,7 @@ This is an independent, community-driven Terraform provider for F5 Distributed C
 
 ## 📚 Documentation
 
-- **Provider Documentation**: [Terraform Registry](https://registry.terraform.io/providers/f5xc/f5xc/latest/docs)
+- **Provider Documentation**: [Terraform Registry](https://registry.terraform.io/providers/robinmordasiewicz/f5xc/latest/docs)
 - **API Reference**: [F5 Distributed Cloud API](https://docs.cloud.f5.com/)
 - **Examples**: [examples/](examples/)
 
@@ -28,7 +28,7 @@ Add the provider to your Terraform configuration:
 terraform {
   required_providers {
     f5xc = {
-      source  = "f5xc/f5xc"
+      source  = "robinmordasiewicz/f5xc"
       version = "~> 0.1"
     }
   }
@@ -124,8 +124,8 @@ go mod download
 go build -o terraform-provider-f5xc
 
 # Install locally for testing
-mkdir -p ~/.terraform.d/plugins/registry.terraform.io/f5xc/f5xc/0.1.0/darwin_arm64
-cp terraform-provider-f5xc ~/.terraform.d/plugins/registry.terraform.io/f5xc/f5xc/0.1.0/darwin_arm64/
+mkdir -p ~/.terraform.d/plugins/registry.terraform.io/robinmordasiewicz/f5xc/0.1.0/darwin_arm64
+cp terraform-provider-f5xc ~/.terraform.d/plugins/registry.terraform.io/robinmordasiewicz/f5xc/0.1.0/darwin_arm64/
 ```
 
 ### Running Tests
@@ -194,7 +194,7 @@ This project is licensed under the Mozilla Public License 2.0 - see the [LICENSE
 
 - **Issues**: [GitHub Issues](https://github.com/f5xc/terraform-provider-f5xc/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/f5xc/terraform-provider-f5xc/discussions)
-- **Documentation**: [Official Docs](https://registry.terraform.io/providers/f5xc/f5xc/latest/docs)
+- **Documentation**: [Official Docs](https://registry.terraform.io/providers/robinmordasiewicz/f5xc/latest/docs)
 
 ## ⚖️ Legal Notice
 

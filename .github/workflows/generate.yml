@@ -45,159 +45,50 @@ jobs:
       - name: Download F5 XC OpenAPI specs
         id: download
         run: |
-          echo "📥 Downloading F5 XC OpenAPI specifications..."
+          echo "📥 Discovering and downloading F5 XC OpenAPI specifications..."
 
-          # List of known API endpoints to download specs for
-          # These are the main F5 XC API categories
-          APIS=(
-            "addon_subscription"
-            "address_allocator"
-            "advertise_policy"
-            "alert_policy"
-            "alert_receiver"
-            "allowed_tenant"
-            "api_crawler"
-            "api_credential"
-            "api_definition"
-            "api_discovery"
-            "api_testing"
-            "apm"
-            "app_api_group"
-            "app_firewall"
-            "app_setting"
-            "app_type"
-            "authentication"
-            "aws_tgw_site"
-            "aws_vpc_site"
-            "azure_vnet_site"
-            "bgp"
-            "bgp_asn_set"
-            "bgp_routing_policy"
-            "bigip_irule"
-            "bot_defense_app_infrastructure"
-            "cdn_cache_rule"
-            "cdn_loadbalancer"
-            "certificate"
-            "certificate_chain"
-            "child_tenant"
-            "child_tenant_manager"
-            "cloud_connect"
-            "cloud_credentials"
-            "cloud_elastic_ip"
-            "cloud_link"
-            "cluster"
-            "cminstance"
-            "code_base_integration"
-            "contact"
-            "container_registry"
-            "crl"
-            "customer_support"
-            "data_group"
-            "data_type"
-            "dc_cluster_group"
-            "discovery"
-            "dns_compliance_checks"
-            "dns_domain"
-            "dns_lb_health_check"
-            "dns_lb_pool"
-            "dns_load_balancer"
-            "dns_zone"
-            "endpoint"
-            "enhanced_firewall_policy"
-            "external_connector"
-            "fast_acl"
-            "fast_acl_rule"
-            "filter_set"
-            "fleet"
-            "forwarding_class"
-            "forward_proxy_policy"
-            "gcp_vpc_site"
-            "geo_location_set"
-            "global_log_receiver"
-            "healthcheck"
-            "http_loadbalancer"
-            "ike1"
-            "ike2"
-            "ike_phase1_profile"
-            "ike_phase2_profile"
-            "infraprotect_asn"
-            "infraprotect_asn_prefix"
-            "infraprotect_deny_list_rule"
-            "infraprotect_firewall_rule"
-            "infraprotect_firewall_rule_group"
-            "infraprotect_internet_prefix_advertisement"
-            "infraprotect_tunnel"
-            "ip_prefix_set"
-            "irule"
-            "k8s_cluster"
-            "k8s_cluster_role"
-            "k8s_cluster_role_binding"
-            "k8s_pod_security_admission"
-            "k8s_pod_security_policy"
-            "log_receiver"
-            "malicious_user_mitigation"
-            "managed_tenant"
-            "namespace"
-            "nat_policy"
-            "network_connector"
-            "network_firewall"
-            "network_interface"
-            "network_policy"
-            "network_policy_rule"
-            "network_policy_view"
-            "nfv_service"
-            "oidc_provider"
-            "origin_pool"
-            "policer"
-            "policy_based_routing"
-            "protocol_inspection"
-            "protocol_policer"
-            "proxy"
-            "quota"
-            "rate_limiter"
-            "rate_limiter_policy"
-            "registration"
-            "report_config"
-            "role"
-            "route"
-            "secret_management_access"
-            "secret_policy"
-            "secret_policy_rule"
-            "securemesh_site"
-            "securemesh_site_v2"
-            "segment"
-            "sensitive_data_policy"
-            "service_policy"
-            "service_policy_rule"
-            "site_mesh_group"
-            "srv6_network_slice"
-            "subnet"
-            "tcp_loadbalancer"
-            "tenant_configuration"
-            "tenant_profile"
-            "ticket_tracking_system"
-            "token"
-            "tpm_api_key"
-            "tpm_category"
-            "tpm_manager"
-            "trusted_ca_list"
-            "tunnel"
-            "udp_loadbalancer"
-            "usb_policy"
-            "user_identification"
-            "virtual_host"
-            "virtual_k8s"
-            "virtual_network"
-            "virtual_site"
-            "voltshare_admin_policy"
-            "voltstack_site"
-            "waf_exclusion_policy"
-            "workload"
-            "workload_flavor"
+          # Dynamic API discovery: Extract API names from existing provider files
+          # This ensures we always have the current set of APIs
+          # New APIs will be discovered when F5 publishes new swagger files
+
+          # Method 1: Derive from existing generated resource files (idempotent baseline)
+          APIS=()
+          if [ -d "internal/provider" ]; then
+            for file in internal/provider/*_resource.go; do
+              if [ -f "$file" ]; then
+                # Extract API name from filename (e.g., http_loadbalancer_resource.go -> http_loadbalancer)
+                basename=$(basename "$file" _resource.go)
+                if [ "$basename" != "provider" ]; then
+                  APIS+=("$basename")
+                fi
+              fi
+            done
+          fi
+
+          # Method 2: Try to discover new APIs by probing common patterns
+          # This allows automatic discovery of new F5 APIs
+          DISCOVERY_PREFIXES=(
+            "addon" "address" "advertise" "alert" "allowed" "api" "apm" "app"
+            "authentication" "aws" "azure" "bgp" "bigip" "bot" "cdn" "certificate"
+            "child" "cloud" "cluster" "cminstance" "code" "contact" "container"
+            "crl" "customer" "data" "dc" "discovery" "dns" "endpoint" "enhanced"
+            "external" "fast" "filter" "fleet" "forwarding" "forward" "gcp" "geo"
+            "global" "healthcheck" "http" "ike" "infraprotect" "ip" "irule" "k8s"
+            "log" "malicious" "managed" "namespace" "nat" "network" "nfv" "oidc"
+            "origin" "policer" "policy" "protocol" "proxy" "quota" "rate"
+            "registration" "report" "role" "route" "secret" "securemesh" "segment"
+            "sensitive" "service" "site" "srv6" "subnet" "tcp" "tenant" "ticket"
+            "token" "tpm" "trusted" "tunnel" "udp" "usb" "user" "virtual"
+            "voltshare" "voltstack" "waf" "workload"
           )
+
+          echo "📋 Found ${#APIS[@]} APIs from existing provider files"
 
           # Download specs from docs.cloud.f5.com
           DOWNLOAD_COUNT=0
+          DISCOVERED_NEW=0
+
+          # First, download all known APIs
           for api in "${APIS[@]}"; do
             SPEC_URL="https://docs.cloud.f5.com/api/docs-cloud-f5-com.${api}.ves-swagger.json"
             SPEC_FILE="${{ env.SPEC_DIR }}/docs-cloud-f5-com.${api}.ves-swagger.json"
@@ -210,8 +101,41 @@ jobs:
             fi
           done
 
+          # Try to discover new APIs by probing the API index
+          # F5 publishes an index of available swagger files
+          INDEX_URL="https://docs.cloud.f5.com/api/"
+          echo ""
+          echo "🔍 Checking for new APIs..."
+
+          # Fetch the API index page and extract swagger file names
+          if curl -sf "${INDEX_URL}" 2>/dev/null | grep -oE 'docs-cloud-f5-com\.[a-z0-9_]+\.ves-swagger\.json' | sort -u > /tmp/api_index.txt; then
+            while read -r swagger_file; do
+              # Extract API name from swagger filename
+              api_name=$(echo "$swagger_file" | sed 's/docs-cloud-f5-com\.\(.*\)\.ves-swagger\.json/\1/')
+              SPEC_FILE="${{ env.SPEC_DIR }}/${swagger_file}"
+
+              # Skip if already downloaded
+              if [ -f "${SPEC_FILE}" ]; then
+                continue
+              fi
+
+              # Download newly discovered API
+              SPEC_URL="https://docs.cloud.f5.com/api/${swagger_file}"
+              if curl -sf -o "${SPEC_FILE}" "${SPEC_URL}" 2>/dev/null; then
+                DOWNLOAD_COUNT=$((DOWNLOAD_COUNT + 1))
+                DISCOVERED_NEW=$((DISCOVERED_NEW + 1))
+                echo "🆕 Discovered new API: ${api_name}"
+              fi
+            done < /tmp/api_index.txt
+          fi
+
+          echo ""
           echo "📊 Downloaded ${DOWNLOAD_COUNT} OpenAPI specifications"
+          if [ ${DISCOVERED_NEW} -gt 0 ]; then
+            echo "🎉 Discovered ${DISCOVERED_NEW} new APIs!"
+          fi
           echo "download_count=${DOWNLOAD_COUNT}" >> $GITHUB_OUTPUT
+          echo "new_apis=${DISCOVERED_NEW}" >> $GITHUB_OUTPUT
 
       - name: Check for spec changes
         id: check-changes
