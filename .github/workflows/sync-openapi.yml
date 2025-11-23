@@ -1,0 +1,239 @@
+name: Sync F5 Distributed Cloud OpenAPI Spec
+
+on:
+  schedule:
+    # 7am Atlantic Time (11:00 UTC during AST, 10:00 UTC during ADT)
+    - cron: '0 11 * * *'
+    # 7pm Mountain Time (01:00 UTC next day during MST, 02:00 UTC during MDT)
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: openapi-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+env:
+  ISSUE_TITLE: "OpenAPI Spec Update Available"
+  PR_TITLE: "Update F5 Distributed Cloud OpenAPI spec"
+
+jobs:
+  sync-openapi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Download and extract OpenAPI spec
+        run: |
+          mkdir -p docs/specifications/api
+          curl -sL -o openapi.zip "https://docs.cloud.f5.com/docs-v2/downloads/f5-distributed-cloud-open-api.zip"
+          unzip -o openapi.zip -d docs/specifications/api
+          rm openapi.zip
+
+      - name: Check for existing open PR
+        id: existing_pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prTitle = process.env.PR_TITLE;
+            const prs = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open'
+            });
+
+            const existingPR = prs.data.find(pr => pr.title === prTitle);
+            if (existingPR) {
+              console.log(`Found existing open PR #${existingPR.number} - skipping update`);
+              return 'true';
+            }
+            console.log('No existing open PR found');
+            return 'false';
+          result-encoding: string
+
+      - name: Check for changes
+        if: steps.existing_pr.outputs.result == 'false'
+        id: changes
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes detected"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in OpenAPI spec"
+            git reset HEAD
+          fi
+
+      - name: Get current date
+        if: steps.existing_pr.outputs.result == 'false' && steps.changes.outputs.changed == 'true'
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d-%H%M')" >> $GITHUB_OUTPUT
+
+      - name: Setup Node.js
+        if: steps.existing_pr.outputs.result == 'false' && steps.changes.outputs.changed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate OpenAPI spec
+        if: steps.existing_pr.outputs.result == 'false' && steps.changes.outputs.changed == 'true'
+        run: |
+          npm install -g @apidevtools/swagger-cli
+          echo "Validating OpenAPI specifications..."
+          for file in $(find docs/specifications/api -type f \( -name "*.yaml" -o -name "*.yml" -o -name "*.json" \)); do
+            if grep -q -E "(openapi|swagger).*['\"]?[0-9]+\.[0-9]+" "$file" 2>/dev/null; then
+              echo "Validating: $file"
+              swagger-cli validate "$file"
+              echo "✅ $file is valid"
+            fi
+          done
+          echo "✅ All OpenAPI specs validated successfully"
+
+      - name: Create branch and commit changes
+        if: steps.existing_pr.outputs.result == 'false' && steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b openapi-update
+          git add -A
+          git commit -m "Update F5 Distributed Cloud OpenAPI spec
+
+          Automated update from https://docs.cloud.f5.com/docs-v2/downloads/f5-distributed-cloud-open-api.zip
+
+          Updated: ${{ steps.date.outputs.date }}"
+          git push --force origin openapi-update
+
+      - name: Find or create issue
+        if: steps.existing_pr.outputs.result == 'false' && steps.changes.outputs.changed == 'true'
+        id: issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueTitle = process.env.ISSUE_TITLE;
+
+            // Search for existing open issue with exact title
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'openapi-update'
+            });
+
+            const existingIssue = issues.data.find(issue => issue.title === issueTitle);
+
+            if (existingIssue) {
+              console.log(`Found existing issue #${existingIssue.number}`);
+
+              // Add comment to existing issue
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `## Update Detected - ${{ steps.date.outputs.date }}
+
+            A new update to the OpenAPI specification has been detected.
+
+            **Branch:** \`openapi-update\`
+            **Detected:** ${{ steps.date.outputs.date }}
+
+            A new pull request has been created for this update.`
+              });
+
+              return existingIssue.number;
+            }
+
+            // Create new issue
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: issueTitle,
+              body: `## F5 Distributed Cloud OpenAPI Spec Update
+
+            This issue tracks updates to the F5 Distributed Cloud OpenAPI specification.
+
+            **Source:** https://docs.cloud.f5.com/docs-v2/downloads/f5-distributed-cloud-open-api.zip
+
+            ---
+
+            ### Latest Update - ${{ steps.date.outputs.date }}
+
+            **Branch:** \`openapi-update\`
+
+            Please review the changes in the associated pull request.
+
+            ---
+
+            *This issue will be updated automatically when new spec versions are detected. Close this issue once all updates have been reviewed and merged.*`,
+              labels: ['openapi-update', 'automated']
+            });
+
+            console.log(`Created issue #${issue.data.number}`);
+            return issue.data.number;
+
+      - name: Create Pull Request
+        if: steps.existing_pr.outputs.result == 'false' && steps.changes.outputs.changed == 'true'
+        id: create_pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prTitle = process.env.PR_TITLE;
+            const pr = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: prTitle,
+              head: 'openapi-update',
+              base: 'main',
+              body: `## Summary
+
+            This PR contains an automated update to the F5 Distributed Cloud OpenAPI specification.
+
+            **Source:** https://docs.cloud.f5.com/docs-v2/downloads/f5-distributed-cloud-open-api.zip
+            **Detected:** ${{ steps.date.outputs.date }}
+            **Tracking Issue:** #${{ steps.issue.outputs.result }}
+
+            ## Changes
+
+            The OpenAPI spec file has been updated to the latest version from F5.
+
+            ---
+            *Closes #${{ steps.issue.outputs.result }} when merged*`
+            });
+            console.log(`Created PR #${pr.data.number}`);
+            return pr.data.number;
+
+      - name: Merge Pull Request
+        if: steps.existing_pr.outputs.result == 'false' && steps.changes.outputs.changed == 'true'
+        id: merge_pr
+        run: |
+          if gh pr merge ${{ steps.create_pr.outputs.result }} --merge --admin; then
+            echo "merged=true" >> $GITHUB_OUTPUT
+            echo "✅ PR #${{ steps.create_pr.outputs.result }} merged successfully"
+          else
+            echo "merged=false" >> $GITHUB_OUTPUT
+            echo "⚠️ PR #${{ steps.create_pr.outputs.result }} could not be auto-merged (may need manual review)"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Close tracking issue
+        if: steps.existing_pr.outputs.result == 'false' && steps.changes.outputs.changed == 'true' && steps.merge_pr.outputs.merged == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = ${{ steps.issue.outputs.result }};
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              state: 'closed',
+              state_reason: 'completed'
+            });
+            console.log(`Closed issue #${issueNumber}`);
