@@ -214,6 +214,33 @@ func main() {
 			}
 		}
 	}
+
+	// Process index.md for markdown compliance
+	if err := transformIndexDoc("docs/index.md"); err != nil {
+		fmt.Fprintf(os.Stderr, "Error transforming docs/index.md: %v\n", err)
+	} else {
+		fmt.Printf("Transformed: docs/index.md\n")
+	}
+}
+
+// transformIndexDoc fixes markdown issues in the provider index documentation
+func transformIndexDoc(filePath string) error {
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		return err
+	}
+
+	text := string(content)
+
+	// Fix bare URLs by wrapping them in backticks (MD034 compliance)
+	// Match URLs that are not already in backticks, links, or angle brackets
+	bareURLRegex := regexp.MustCompile(`(\s)(https?://[^\s\)\]\x60<>]+)([.\s])`)
+	text = bareURLRegex.ReplaceAllString(text, "$1`$2`$3")
+
+	// Normalize multiple blank lines
+	text = normalizeBlankLines(text)
+
+	return os.WriteFile(filePath, []byte(text), 0644)
 }
 
 func transformDoc(filePath string) error {
