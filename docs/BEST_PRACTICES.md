@@ -35,6 +35,7 @@ defer cancel()
 ```
 
 **Default Timeouts:**
+
 - Standard resources: 10 minutes (create/update/delete), 5 minutes (read)
 - Long-running resources (sites, clusters): 30 minutes (create/delete)
 
@@ -45,6 +46,7 @@ defer cancel()
 Custom validators provide early feedback on configuration errors during `terraform validate` and `terraform plan`.
 
 **Available Validators:**
+
 - `NameValidator()` - F5 XC resource names (1-64 chars, lowercase, hyphens)
 - `NamespaceValidator()` - Namespace names (includes "system" special case)
 - `DomainValidator()` - Domain names with wildcard support
@@ -63,6 +65,7 @@ Validators: []validator.String{
 **Interface:** `resource.ResourceWithModifyPlan`
 
 Plan modification provides plan-time warnings for:
+
 - Unknown values that will be computed after apply
 - Resource destruction notifications (Terraform 1.3+)
 
@@ -147,6 +150,7 @@ Custom plan modifiers for attribute-level behavior:
 - `PreserveUnknownOnCreate()` - Preserves unknown during create, uses state during update
 
 **Built-in modifiers used:**
+
 - `stringplanmodifier.RequiresReplace()` - For immutable fields (name, namespace)
 - `stringplanmodifier.UseStateForUnknown()` - For computed fields (id)
 
@@ -169,7 +173,7 @@ func (r *Resource) ValidateConfig(ctx context.Context, req resource.ValidateConf
 
 ## File Structure
 
-```
+```text
 internal/
 ├── client/           # API client and type definitions
 ├── planmodifiers/    # Custom plan modifiers
@@ -206,21 +210,25 @@ var (
 ## Additional Recommendations
 
 ### Security
+
 - Never store credentials or sensitive information in state
 - Use `Sensitive: true` for confidential schema attributes
 - Validate inputs to prevent injection attacks
 
 ### Testing
+
 - Write acceptance tests for all resources
 - Test state upgrades between versions
 - Test import functionality
 
 ### Documentation
+
 - Document all attributes with clear descriptions
 - Provide examples in `examples/` directory
 - Use `MarkdownDescription` for rich formatting
 
 ### Error Handling
+
 - Return actionable error messages
 - Use structured diagnostics (AddError, AddWarning)
 - Include relevant context (resource name, API error details)

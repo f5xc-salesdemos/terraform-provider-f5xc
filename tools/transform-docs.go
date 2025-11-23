@@ -230,7 +230,8 @@ func transformDoc(filePath string) error {
 	firstNestedAnchor := -1
 
 	for i, line := range lines {
-		if strings.HasPrefix(line, "## Schema") {
+		// Handle both original tfplugindocs format (## Schema) and already-transformed format (## Argument Reference)
+		if strings.HasPrefix(line, "## Schema") || strings.HasPrefix(line, "## Argument Reference") {
 			schemaStart = i
 		}
 		if strings.HasPrefix(line, "## Import") {
@@ -275,25 +276,50 @@ func transformDoc(filePath string) error {
 	// Parse main schema attributes
 	inSection := ""
 	attrRegex := regexp.MustCompile(`^- \x60([^\x60]+)\x60 \(([^)]+)\)(.*)$`)
-	printedConstraints := make(map[string]bool) // Track already printed OneOf constraints
+	printedConstraints := make(map[string]bool)  // Track already printed OneOf constraints
+	printedSections := make(map[string]bool)     // Track already printed section headers
 
 	for i := schemaStart + 1; i < mainSchemaEnd; i++ {
 		line := lines[i]
 
-		// Track sections
-		if strings.HasPrefix(line, "### Required") {
-			output.WriteString("The following arguments are required:\n\n")
+		// Transform h6 OneOf headings to blockquotes (MD001 compliance)
+		if strings.HasPrefix(line, "###### One of") {
+			// Extract the constraint list from the h6 heading
+			oneOfH6Regex := regexp.MustCompile(`###### One of the arguments from this list "([^"]+)" must be set`)
+			if m := oneOfH6Regex.FindStringSubmatch(line); m != nil {
+				constraintKey := normalizeOneOfKey(m[1])
+				if !printedConstraints[constraintKey] {
+					output.WriteString(fmt.Sprintf("> **Note:** One of the arguments from this list \"%s\" must be set.\n\n", m[1]))
+					printedConstraints[constraintKey] = true
+				}
+			}
+			continue
+		}
+
+		// Track sections - handle both original tfplugindocs format and already-transformed format
+		// Only print section headers once to avoid duplicates on re-processing
+		if strings.HasPrefix(line, "### Required") || strings.HasPrefix(line, "The following arguments are required:") {
+			if !printedSections["required"] {
+				output.WriteString("The following arguments are required:\n\n")
+				printedSections["required"] = true
+			}
 			inSection = "required"
 			continue
 		}
-		if strings.HasPrefix(line, "### Optional") {
-			output.WriteString("\nThe following arguments are optional:\n\n")
+		if strings.HasPrefix(line, "### Optional") || strings.HasPrefix(line, "The following arguments are optional:") {
+			if !printedSections["optional"] {
+				output.WriteString("\nThe following arguments are optional:\n\n")
+				printedSections["optional"] = true
+			}
 			inSection = "optional"
 			continue
 		}
-		if strings.HasPrefix(line, "### Read-Only") {
-			output.WriteString("\n### Attributes Reference\n\n")
-			output.WriteString("In addition to all arguments above, the following attributes are exported:\n\n")
+		if strings.HasPrefix(line, "### Read-Only") || strings.HasPrefix(line, "### Attributes Reference") || strings.HasPrefix(line, "In addition to all arguments above") {
+			if !printedSections["readonly"] {
+				output.WriteString("\n### Attributes Reference\n\n")
+				output.WriteString("In addition to all arguments above, the following attributes are exported:\n\n")
+				printedSections["readonly"] = true
+			}
 			inSection = "readonly"
 			continue
 		}
@@ -326,7 +352,7 @@ func transformDoc(filePath string) error {
 			// Normalize the constraint key to handle different orderings of the same fields
 			constraintKey := normalizeOneOfKey(oneOfConstraint)
 			if oneOfConstraint != "" && !printedConstraints[constraintKey] {
-				output.WriteString(fmt.Sprintf("###### One of the arguments from this list \"%s\" must be set\n\n", oneOfConstraint))
+				output.WriteString(fmt.Sprintf("> **Note:** One of the arguments from this list \"%s\" must be set.\n\n", oneOfConstraint))
 				printedConstraints[constraintKey] = true
 			}
 
@@ -372,7 +398,8 @@ func transformDoc(filePath string) error {
 				if m := anchorRegex.FindStringSubmatch(line); m != nil {
 					anchorID := m[1]
 					currentBlockName = strings.ReplaceAll(strings.TrimPrefix(anchorID, "nestedblock--"), "--", ".")
-					output.WriteString(fmt.Sprintf("<a id=\"%s\"></a>\n", anchorID))
+					// Add blank line before anchor for proper markdown formatting
+					output.WriteString(fmt.Sprintf("\n<a id=\"%s\"></a>\n\n", anchorID))
 					inNestedBlock = true
 				}
 				continue
@@ -390,6 +417,15 @@ func transformDoc(filePath string) error {
 
 			// Skip "Optional:" and "Required:" labels
 			if line == "Optional:" || line == "Required:" {
+				continue
+			}
+
+			// Transform h6 OneOf headings to blockquotes (MD001 compliance) in nested blocks
+			if strings.HasPrefix(line, "###### One of") {
+				oneOfH6Regex := regexp.MustCompile(`###### One of the arguments from this list "([^"]+)" must be set`)
+				if m := oneOfH6Regex.FindStringSubmatch(line); m != nil {
+					output.WriteString(fmt.Sprintf("> **Note:** One of the arguments from this list \"%s\" must be set.\n\n", m[1]))
+				}
 				continue
 			}
 
@@ -450,7 +486,21 @@ func transformDoc(filePath string) error {
 		}
 	}
 
-	return os.WriteFile(filePath, []byte(output.String()), 0644)
+	// Normalize multiple consecutive blank lines to single blank lines
+	result := normalizeBlankLines(output.String())
+	return os.WriteFile(filePath, []byte(result), 0644)
+}
+
+// normalizeBlankLines removes multiple consecutive blank lines
+func normalizeBlankLines(content string) string {
+	// Replace 3+ consecutive newlines with 2 (single blank line)
+	multiBlankRegex := regexp.MustCompile(`\n{3,}`)
+	content = multiBlankRegex.ReplaceAllString(content, "\n\n")
+
+	// Ensure file ends with single newline
+	content = strings.TrimRight(content, "\n") + "\n"
+
+	return content
 }
 
 func cleanDescription(desc, attrPath string) string {

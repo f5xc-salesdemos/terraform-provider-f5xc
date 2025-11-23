@@ -90,6 +90,17 @@ repos:
         args: [--severity=warning]
 
   # =============================================================================
+  # Markdown linting - validation only (generated files fixed via generators)
+  # =============================================================================
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.19.0
+    hooks:
+      - id: markdownlint-cli2
+        args: []  # Check only, no --fix flag
+        # Only lint user-facing documentation, exclude internal planning documents
+        files: ^(docs/.*\.md|README\.md|CLAUDE\.md|CHANGELOG\.md|CONTRIBUTING\.md)$
+
+  # =============================================================================
   # Secrets detection - prevent accidental credential commits
   # =============================================================================
   - repo: https://github.com/Yelp/detect-secrets

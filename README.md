@@ -1,6 +1,6 @@
 # Terraform Provider for F5 Distributed Cloud (F5XC)
 
-**Open Source Community Provider**
+> Open Source Community Provider
 
 This is an independent, community-driven Terraform provider for F5 Distributed Cloud (F5XC), built entirely from public F5 API documentation using the official Terraform Plugin Framework.
 
@@ -164,17 +164,20 @@ This project adheres to the [Contributor Covenant Code of Conduct](CODE_OF_CONDU
 
 See [ROADMAP.md](docs/ROADMAP.md) for detailed development timeline and feature plans.
 
-**Short-term (v0.1-0.2)**:
+### Short-term (v0.1-0.2)
+
 - ✅ Provider scaffold and namespace resource
 - 🔄 HTTP load balancer, origin pools, health checks
 - 🔄 Certificate and credential management
 
-**Medium-term (v0.3-0.5)**:
+### Medium-term (v0.3-0.5)
+
 - Network connectivity and security resources
 - API security and bot defense
 - Comprehensive testing and documentation
 
-**Long-term (v1.0+)**:
+### Long-term (v1.0+)
+
 - Full feature parity with proprietary provider
 - Linux Foundation / CNCF governance
 - Production adoption and community growth
@@ -204,4 +207,4 @@ The provider implements the F5 Distributed Cloud API as documented in F5's publi
 
 ---
 
-**Made with ❤️ by the community, for the community**
+> Made with ❤️ by the community, for the community

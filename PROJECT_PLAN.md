@@ -33,6 +33,7 @@
 **Deliverables**: Working PoC
 
 #### Completed Tasks
+
 - [x] Create project structure
 - [x] Initialize Go module
 - [x] Implement F5 API client
@@ -56,7 +57,8 @@
 
 #### Week 1: Priority Resources (5 resources)
 
-**1.1 HTTP Load Balancer Resource** (Priority: CRITICAL)
+##### 1.1 HTTP Load Balancer Resource (Priority: CRITICAL)
+
 - [ ] Analyze OpenAPI spec `0073.http_loadbalancer.ves-swagger.json`
 - [ ] Define resource schema (domains, routes, pools, TLS, WAF)
 - [ ] Implement CRUD operations

@@ -1,0 +1,5 @@
+# Internal project planning documents
+PROJECT_PLAN.md
+
+# Terraform cache
+.terraform/
