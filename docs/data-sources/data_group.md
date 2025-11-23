@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_data_group Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "BIG-IP Integration"
 description: |-
   Create data group in a given namespace. If one already exists it will give an error.
 ---

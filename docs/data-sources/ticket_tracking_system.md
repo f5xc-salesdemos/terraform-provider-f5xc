@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_ticket_tracking_system Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Integrations"
 description: |-
   Create Ticket Tracking System
 ---

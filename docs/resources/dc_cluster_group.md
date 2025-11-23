@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_dc_cluster_group Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Networking"
 description: |-
   Create DC Cluster group in given namespace
 ---

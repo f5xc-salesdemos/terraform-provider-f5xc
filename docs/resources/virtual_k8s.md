@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_virtual_k8s Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Kubernetes"
 description: |-
   Create virtual_k8s will create the object in the storage backend for namespace metadata.namespace
 ---

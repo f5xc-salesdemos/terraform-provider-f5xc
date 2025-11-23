@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_k8s_cluster_role Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Kubernetes"
 description: |-
   Create k8s_cluster_role will create the object in the storage backend for namespace metadata.namespace
 ---

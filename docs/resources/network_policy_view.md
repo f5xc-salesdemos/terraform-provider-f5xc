@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_network_policy_view Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Security"
 description: |-
   Shape of the Network policy view specification
 ---

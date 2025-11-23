@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_quota Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Organization"
 description: |-
   Create quota creates a given object from storage backend for metadata.namespace.
 ---

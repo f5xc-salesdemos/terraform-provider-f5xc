@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_tenant_profile Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Organization"
 description: |-
   Creates a tenant_profile config instance. Name of the object is the name of the tenant profile to be created.
 ---

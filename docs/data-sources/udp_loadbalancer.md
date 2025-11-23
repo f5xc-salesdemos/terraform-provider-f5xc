@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_udp_loadbalancer Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Load Balancing"
 description: |-
   Shape of the UDP load balancer create specification
 ---

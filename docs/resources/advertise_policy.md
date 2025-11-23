@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_advertise_policy Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Load Balancing"
 description: |-
   advertise_policy object controls how and where a service represented by a given virtual_host object is advertised to consumers.
 ---

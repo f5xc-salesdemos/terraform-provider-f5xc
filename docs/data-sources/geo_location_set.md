@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_geo_location_set Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Cloud Resources"
 description: |-
   Creates a Geolocation Set
 ---

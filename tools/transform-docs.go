@@ -15,39 +15,59 @@ import (
 )
 
 // subcategoryMap assigns resources to logical categories for better organization
+// ALL resources must be categorized to avoid mixed layout in Terraform Registry sidebar
 var subcategoryMap = map[string]string{
 	// Sites and Infrastructure
 	"aws_vpc_site": "Sites", "azure_vnet_site": "Sites", "gcp_vpc_site": "Sites",
-	"aws_tgw_site": "Sites", "securemesh_site_v2": "Sites", "virtual_site": "Sites",
-	"fleet": "Sites", "k8s_cluster": "Sites",
+	"aws_tgw_site": "Sites", "securemesh_site_v2": "Sites", "securemesh_site": "Sites",
+	"virtual_site": "Sites", "voltstack_site": "Sites",
+	"fleet": "Sites", "k8s_cluster": "Sites", "site_mesh_group": "Sites",
+	"registration": "Sites",
 
 	// Load Balancing
 	"http_loadbalancer": "Load Balancing", "tcp_loadbalancer": "Load Balancing",
-	"cdn_loadbalancer": "Load Balancing", "dns_load_balancer": "Load Balancing",
-	"origin_pool": "Load Balancing", "healthcheck": "Load Balancing",
-	"endpoint": "Load Balancing", "cluster": "Load Balancing",
+	"udp_loadbalancer": "Load Balancing", "cdn_loadbalancer": "Load Balancing",
+	"dns_load_balancer": "Load Balancing", "origin_pool": "Load Balancing",
+	"healthcheck": "Load Balancing", "endpoint": "Load Balancing", "cluster": "Load Balancing",
+	"virtual_host": "Load Balancing", "route": "Load Balancing",
+	"advertise_policy": "Load Balancing", "cdn_cache_rule": "Load Balancing",
 
-	// Security
+	// Security - Firewall & WAF
 	"app_firewall": "Security", "enhanced_firewall_policy": "Security",
-	"network_policy": "Security", "network_firewall": "Security",
-	"forward_proxy_policy": "Security", "service_policy": "Security",
-	"fast_acl": "Security", "fast_acl_rule": "Security", "rate_limiter": "Security",
+	"network_policy": "Security", "network_policy_rule": "Security", "network_policy_view": "Security",
+	"network_firewall": "Security", "forward_proxy_policy": "Security",
+	"service_policy": "Security", "service_policy_rule": "Security",
+	"fast_acl": "Security", "fast_acl_rule": "Security",
+	"rate_limiter": "Security", "rate_limiter_policy": "Security",
 	"malicious_user_mitigation": "Security", "bot_defense_app_infrastructure": "Security",
+	"waf_exclusion_policy": "Security", "user_identification": "Security",
+	"protocol_inspection": "Security", "protocol_policer": "Security",
+	"sensitive_data_policy": "Security", "data_type": "Security",
 
 	// Networking
 	"network_connector": "Networking", "network_interface": "Networking",
 	"virtual_network": "Networking", "nat_policy": "Networking",
 	"bgp": "Networking", "bgp_asn_set": "Networking", "bgp_routing_policy": "Networking",
 	"ip_prefix_set": "Networking", "cloud_link": "Networking", "cloud_connect": "Networking",
+	"tunnel": "Networking", "external_connector": "Networking",
+	"dc_cluster_group": "Networking", "segment": "Networking",
+	"srv6_network_slice": "Networking", "subnet": "Networking",
+	"policy_based_routing": "Networking", "forwarding_class": "Networking",
+	"nfv_service": "Networking", "proxy": "Networking",
 
 	// DNS
 	"dns_zone": "DNS", "dns_domain": "DNS", "dns_lb_pool": "DNS",
-	"dns_lb_health_check": "DNS",
+	"dns_lb_health_check": "DNS", "dns_compliance_checks": "DNS",
 
 	// Authentication & Credentials
 	"api_credential": "Authentication", "cloud_credentials": "Authentication",
 	"authentication": "Authentication", "oidc_provider": "Authentication",
-	"certificate": "Certificates", "certificate_chain": "Certificates", "crl": "Certificates",
+	"token": "Authentication", "secret_policy": "Authentication",
+	"secret_policy_rule": "Authentication", "secret_management_access": "Authentication",
+
+	// Certificates
+	"certificate": "Certificates", "certificate_chain": "Certificates",
+	"crl": "Certificates", "trusted_ca_list": "Certificates",
 
 	// API Security
 	"api_definition": "API Security", "api_discovery": "API Security",
@@ -57,10 +77,54 @@ var subcategoryMap = map[string]string{
 	// Monitoring & Logging
 	"log_receiver": "Monitoring", "global_log_receiver": "Monitoring",
 	"alert_policy": "Monitoring", "alert_receiver": "Monitoring",
+	"apm": "Monitoring", "report_config": "Monitoring",
 
 	// Namespace & Organization
 	"namespace": "Organization", "managed_tenant": "Organization",
-	"child_tenant": "Organization",
+	"child_tenant": "Organization", "child_tenant_manager": "Organization",
+	"allowed_tenant": "Organization", "tenant_configuration": "Organization",
+	"tenant_profile": "Organization", "quota": "Organization",
+	"contact": "Organization", "customer_support": "Organization",
+	"voltshare_admin_policy": "Organization", "role": "Organization",
+
+	// Kubernetes
+	"k8s_cluster_role": "Kubernetes", "k8s_cluster_role_binding": "Kubernetes",
+	"k8s_pod_security_admission": "Kubernetes", "k8s_pod_security_policy": "Kubernetes",
+	"virtual_k8s": "Kubernetes", "workload": "Kubernetes", "workload_flavor": "Kubernetes",
+	"container_registry": "Kubernetes",
+
+	// VPN & IPSec
+	"ike1": "VPN", "ike2": "VPN",
+	"ike_phase1_profile": "VPN", "ike_phase2_profile": "VPN",
+
+	// Infrastructure Protection (DDoS)
+	"infraprotect_asn": "Infrastructure Protection", "infraprotect_asn_prefix": "Infrastructure Protection",
+	"infraprotect_deny_list_rule": "Infrastructure Protection", "infraprotect_firewall_rule": "Infrastructure Protection",
+	"infraprotect_firewall_rule_group": "Infrastructure Protection",
+	"infraprotect_internet_prefix_advertisement": "Infrastructure Protection",
+	"infraprotect_tunnel": "Infrastructure Protection",
+
+	// Application Settings
+	"app_setting": "Applications", "app_type": "Applications",
+	"discovery": "Applications", "filter_set": "Applications",
+
+	// BIG-IP Integration
+	"bigip_irule": "BIG-IP Integration", "irule": "BIG-IP Integration",
+	"data_group": "BIG-IP Integration",
+
+	// Cloud Resources
+	"cloud_elastic_ip": "Cloud Resources", "address_allocator": "Cloud Resources",
+	"geo_location_set": "Cloud Resources",
+
+	// Service Mesh
+	"policer": "Service Mesh", "usb_policy": "Service Mesh",
+
+	// Third-Party Integrations
+	"ticket_tracking_system": "Integrations", "code_base_integration": "Integrations",
+	"tpm_api_key": "Integrations", "tpm_category": "Integrations", "tpm_manager": "Integrations",
+
+	// Subscriptions & Licensing
+	"addon_subscription": "Subscriptions", "cminstance": "Subscriptions",
 }
 
 // getSubcategory returns the subcategory for a resource based on filename

@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_protocol_policer Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Security"
 description: |-
   Create a protocol_policer object, protocol_policer object contains list of L4 protocol match condition and corresponding traffic rate limits
 ---

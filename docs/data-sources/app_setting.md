@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_app_setting Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Applications"
 description: |-
   Create App setting configuration in namespace metadata.namespace
 ---

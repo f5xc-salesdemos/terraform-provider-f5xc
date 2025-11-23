@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_forwarding_class Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Networking"
 description: |-
   Forwarding Class is created by users in system namespace
 ---

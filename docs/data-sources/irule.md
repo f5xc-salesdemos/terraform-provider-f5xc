@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_irule Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "BIG-IP Integration"
 description: |-
   Create iRule in a given namespace. If one already exists it will give an error.
 ---

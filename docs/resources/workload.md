@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_workload Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Kubernetes"
 description: |-
   Shape of Workload
 ---

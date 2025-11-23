@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_tenant_configuration Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Organization"
 description: |-
   Shape of the tenant configuration specification
 ---

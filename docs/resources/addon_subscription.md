@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_addon_subscription Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Subscriptions"
 description: |-
   Create a new Addon Subscription with Addon Subscription State
 ---

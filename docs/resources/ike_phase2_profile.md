@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_ike_phase2_profile Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "VPN"
 description: |-
   Shape of the IKE Phase2 profile specification
 ---

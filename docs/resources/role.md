@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_role Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Organization"
 description: |-
   Creates a role
 ---

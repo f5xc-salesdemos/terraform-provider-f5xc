@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_subnet Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Networking"
 description: |-
   Subnet object contains configuration for an interface of a VM/pod. It is created in user or shared namespace.
 ---

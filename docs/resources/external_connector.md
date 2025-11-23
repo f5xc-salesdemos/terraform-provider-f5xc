@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_external_connector Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Networking"
 description: |-
   Shape of the external_connector configuration specification
 ---

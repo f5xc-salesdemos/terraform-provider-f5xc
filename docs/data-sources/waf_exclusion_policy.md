@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_waf_exclusion_policy Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Security"
 description: |-
   Create a WAF exclusion policy
 ---

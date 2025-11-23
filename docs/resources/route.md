@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_route Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Load Balancing"
 description: |-
   Create route object in a given namespace. Route object is list of route rules. Each rule has match condition to match incoming requests and actions to take on matching requests. Virtual host object has reference to route object
 ---

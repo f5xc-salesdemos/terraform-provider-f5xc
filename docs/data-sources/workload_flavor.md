@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_workload_flavor Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Kubernetes"
 description: |-
   Create a workload_flavor
 ---

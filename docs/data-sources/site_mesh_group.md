@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_site_mesh_group Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Sites"
 description: |-
   Create a Site Mesh Group in system namespace of user
 ---

@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_dns_compliance_checks Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "DNS"
 description: |-
   Create DNS Compliance Checks Specification in a given namespace. If one already exists it will give an error.
 ---

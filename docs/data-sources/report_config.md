@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_report_config Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Monitoring"
 description: |-
   Report configuration is used to schedule report generation at a later point in time.
 ---

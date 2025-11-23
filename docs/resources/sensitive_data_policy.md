@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_sensitive_data_policy Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Security"
 description: |-
   Create sensitive_data_policy creates a new object in the storage backend for metadata.namespace.
 ---

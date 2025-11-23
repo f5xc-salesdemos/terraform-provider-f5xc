@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_apm Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Monitoring"
 description: |-
   Creates a new APM as a service with configured parameters
 ---

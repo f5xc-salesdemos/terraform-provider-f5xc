@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_token Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Authentication"
 description: |-
   Creates new token. token object is used to manage site admission. User must generate token before provisioning and pass this token to site during it's registration.
 ---

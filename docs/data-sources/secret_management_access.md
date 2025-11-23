@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_secret_management_access Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Authentication"
 description: |-
   Create secret_management_access creates a new object in storage backend for metadata.namespace.
 ---

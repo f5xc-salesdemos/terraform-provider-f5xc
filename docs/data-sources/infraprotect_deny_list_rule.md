@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_infraprotect_deny_list_rule Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Infrastructure Protection"
 description: |-
   Creates a DDoS transit Deny List Rule
 ---

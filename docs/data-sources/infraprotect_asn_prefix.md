@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_infraprotect_asn_prefix Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Infrastructure Protection"
 description: |-
   Creates a DDoS transit Prefix
 ---

@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_infraprotect_tunnel Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Infrastructure Protection"
 description: |-
   Creates a DDoS transit tunnel
 ---

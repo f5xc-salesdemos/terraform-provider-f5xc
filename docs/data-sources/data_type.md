@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_data_type Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Security"
 description: |-
   Create data_type creates a new object in the storage backend for metadata.namespace.
 ---

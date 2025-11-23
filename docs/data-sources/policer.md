@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_policer Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Service Mesh"
 description: |-
   Create a new policer with traffic rate limits
 ---

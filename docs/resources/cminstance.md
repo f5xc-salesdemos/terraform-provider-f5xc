@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_cminstance Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Subscriptions"
 description: |-
   Create App type will create the configuration in namespace metadata.namespace
 ---

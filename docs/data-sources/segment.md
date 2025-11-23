@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_segment Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Networking"
 description: |-
   Shape of the segment specification
 ---

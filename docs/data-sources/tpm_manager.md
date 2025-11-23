@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_tpm_manager Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Integrations"
 description: |-
   Create a TPM Manager object
 ---

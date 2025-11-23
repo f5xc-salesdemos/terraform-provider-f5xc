@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_app_type Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Applications"
 description: |-
   Create App type will create the configuration in namespace metadata.namespace
 ---

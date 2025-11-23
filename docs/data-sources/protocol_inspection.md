@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_protocol_inspection Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Security"
 description: |-
   Create Protocol Inspection Specification in a given namespace. If one already exists it will give an error.
 ---

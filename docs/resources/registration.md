@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_registration Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Sites"
 description: |-
   VPM creates registration using this message, never used by users.
 ---

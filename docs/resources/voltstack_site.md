@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_voltstack_site Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Sites"
 description: |-
   Shape of the App Stack site specification
 ---

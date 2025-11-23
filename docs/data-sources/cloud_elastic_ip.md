@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_cloud_elastic_ip Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Cloud Resources"
 description: |-
   Create Cloud Elastic IP creates Cloud Elastic IP object Object is attached to a site
 ---

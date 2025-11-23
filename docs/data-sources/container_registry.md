@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_container_registry Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Kubernetes"
 description: |-
   Shape of Container Registry
 ---

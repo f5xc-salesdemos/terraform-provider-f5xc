@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_code_base_integration Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Integrations"
 description: |-
   CREATE integration details
 ---

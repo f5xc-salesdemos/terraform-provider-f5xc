@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_proxy Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Networking"
 description: |-
   Shape of the TCP loadbalancer create specification
 ---

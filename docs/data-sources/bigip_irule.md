@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_bigip_irule Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "BIG-IP Integration"
 description: |-
   Desired state for BIG-IP iRule Service
 ---

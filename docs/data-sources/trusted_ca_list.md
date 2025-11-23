@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_trusted_ca_list Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Certificates"
 description: |-
   Shape of the Root CA Certificate specification
 ---

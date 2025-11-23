@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_srv6_network_slice Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Networking"
 description: |-
   Create srv6_network_slice creates a new object in the storage backend for metadata.namespace.
 ---

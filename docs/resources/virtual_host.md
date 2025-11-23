@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_virtual_host Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Load Balancing"
 description: |-
   Creates virtual host in a given namespace.
 ---

@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_nfv_service Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Networking"
 description: |-
   Creates a new NFV service with configured parameters
 ---

@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_usb_policy Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Service Mesh"
 description: |-
   Creates a new USB policy object
 ---

@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_filter_set Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Applications"
 description: |-
   Create specification
 ---

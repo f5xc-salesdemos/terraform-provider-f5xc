@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_discovery Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Applications"
 description: |-
   API to create discovery object for a site or virtual site in system namespace
 ---

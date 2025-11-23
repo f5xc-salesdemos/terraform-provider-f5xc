@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_tpm_category Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Integrations"
 description: |-
   Create a Category object, which is a grouping of APIKeys used for TPM provisioning
 ---

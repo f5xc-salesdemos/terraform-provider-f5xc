@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_customer_support Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Organization"
 description: |-
   Creates a new customer support ticket in our customer support provider system.
 ---

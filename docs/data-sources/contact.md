@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_contact Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Organization"
 description: |-
   Creates a new customer's contact detail record with us, including address and phone number.
 ---

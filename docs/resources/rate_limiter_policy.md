@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_rate_limiter_policy Resource - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Security"
 description: |-
   Shape of the Rate Limiter Policy Create specification
 ---

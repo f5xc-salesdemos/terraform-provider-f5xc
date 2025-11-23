@@ -1,6 +1,6 @@
 ---
 page_title: "f5xc_policy_based_routing Data Source - terraform-provider-f5xc"
-subcategory: ""
+subcategory: "Networking"
 description: |-
   Shape of the Network Policy based routing create specification
 ---
