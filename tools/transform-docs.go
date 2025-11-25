@@ -242,8 +242,51 @@ func getSubcategory(filename string) string {
 	return "Other"
 }
 
+// Terraform Registry limits
+const (
+	// File size limit - documents exceeding this will be truncated
+	maxDocSizeBytes = 500 * 1024 // 500KB
+
+	// H3 heading threshold - Registry truncates rendering around 65 headings
+	// We use 60 as the safe threshold for generating anchor links
+	maxSafeH3Headings = 60
+
+	// Warning threshold - warn if document has many headings (likely truncated)
+	warnH3Headings = 50
+
+	// Splitting threshold - split to guides when document exceeds this many H3 headings
+	// Using 50 (same as warning threshold) to ensure all potentially truncated docs are split
+	splitH3Threshold = 50
+)
+
+// docWarning tracks documentation files that may have issues
+type docWarning struct {
+	path         string
+	sizeKB       float64
+	h3Count      int
+	isOversized  bool // exceeds 500KB
+	willTruncate bool // has too many H3 headings
+}
+
+// nestedBlockInfo holds information about a nested block section
+type nestedBlockInfo struct {
+	anchorName  string   // simplified anchor name (e.g., "active-service-policies")
+	displayName string   // human-readable name (e.g., "Active Service Policies")
+	content     []string // lines of content for this block
+	h3Count     int      // number of H3 headings in this block
+}
+
+// guidePageInfo holds information for generating a guide page
+type guidePageInfo struct {
+	resourceName string            // e.g., "http_loadbalancer"
+	subcategory  string            // e.g., "Load Balancing"
+	blocks       []nestedBlockInfo // nested blocks to include in the guide
+}
+
 func main() {
 	docsDir := "docs/resources"
+	var docWarnings []docWarning
+	var splitDocs []string // Track which docs were split to guides
 
 	files, err := filepath.Glob(filepath.Join(docsDir, "*.md"))
 	if err != nil {
@@ -257,6 +300,31 @@ func main() {
 		} else {
 			fmt.Printf("Transformed: %s\n", file)
 		}
+
+		// Check if document should be split (after initial transformation)
+		if shouldSplitToGuides(file) {
+			content, err := os.ReadFile(file)
+			if err == nil {
+				newContent, err := splitLargeDocument(file, string(content))
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "Error splitting %s: %v\n", file, err)
+				} else if newContent != string(content) {
+					if err := os.WriteFile(file, []byte(newContent), 0644); err != nil {
+						fmt.Fprintf(os.Stderr, "Error writing split doc %s: %v\n", file, err)
+					} else {
+						baseName := filepath.Base(file)
+						resourceName := strings.TrimSuffix(baseName, ".md")
+						splitDocs = append(splitDocs, resourceName)
+						fmt.Printf("Split to guide: %s\n", file)
+					}
+				}
+			}
+		}
+
+		// Check for potential Registry issues after transformation
+		if warn := checkDocLimits(file); warn != nil {
+			docWarnings = append(docWarnings, *warn)
+		}
 	}
 
 	// Also process data sources
@@ -268,6 +336,10 @@ func main() {
 			} else {
 				fmt.Printf("Transformed: %s\n", file)
 			}
+			// Check for potential Registry issues after transformation
+			if warn := checkDocLimits(file); warn != nil {
+				docWarnings = append(docWarnings, *warn)
+			}
 		}
 	}
 
@@ -276,6 +348,96 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error transforming docs/index.md: %v\n", err)
 	} else {
 		fmt.Printf("Transformed: docs/index.md\n")
+	}
+
+	// Report documents that were split to guides
+	if len(splitDocs) > 0 {
+		fmt.Fprintf(os.Stderr, "\n📚 INFO: %d document(s) were split into guide pages:\n", len(splitDocs))
+		for _, doc := range splitDocs {
+			fmt.Fprintf(os.Stderr, "   • docs/guides/%s_nested_blocks.md\n", doc)
+		}
+		fmt.Fprintf(os.Stderr, "\n")
+	}
+
+	// Report documents with potential issues
+	reportDocWarnings(docWarnings)
+}
+
+// checkDocLimits validates document against Terraform Registry limits
+// Returns docWarning if file exceeds size or heading limits, nil otherwise
+func checkDocLimits(filePath string) *docWarning {
+	info, err := os.Stat(filePath)
+	if err != nil {
+		return nil
+	}
+
+	// Read file to count headings
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil
+	}
+
+	h3Count := 0
+	for _, line := range strings.Split(string(content), "\n") {
+		if strings.HasPrefix(line, "### ") {
+			h3Count++
+		}
+	}
+
+	isOversized := info.Size() > maxDocSizeBytes
+	willTruncate := h3Count > warnH3Headings
+
+	// Only return warning if there's an issue
+	if isOversized || willTruncate {
+		return &docWarning{
+			path:         filePath,
+			sizeKB:       float64(info.Size()) / 1024,
+			h3Count:      h3Count,
+			isOversized:  isOversized,
+			willTruncate: willTruncate,
+		}
+	}
+
+	return nil
+}
+
+// reportDocWarnings outputs warnings about documents that may have Registry issues
+func reportDocWarnings(warnings []docWarning) {
+	if len(warnings) == 0 {
+		return
+	}
+
+	// Separate by issue type
+	var oversized, truncated []docWarning
+	for _, w := range warnings {
+		if w.isOversized {
+			oversized = append(oversized, w)
+		}
+		if w.willTruncate {
+			truncated = append(truncated, w)
+		}
+	}
+
+	fmt.Fprintf(os.Stderr, "\n")
+
+	// Report oversized files (500KB limit)
+	if len(oversized) > 0 {
+		fmt.Fprintf(os.Stderr, "⛔ ERROR: %d document(s) exceed Terraform Registry 500KB storage limit:\n", len(oversized))
+		for _, doc := range oversized {
+			fmt.Fprintf(os.Stderr, "   • %s: %.1fKB\n", doc.path, doc.sizeKB)
+		}
+		fmt.Fprintf(os.Stderr, "   Reference: https://developer.hashicorp.com/terraform/registry/providers/docs#storage-limits\n\n")
+	}
+
+	// Report files that will have rendering truncated
+	if len(truncated) > 0 {
+		fmt.Fprintf(os.Stderr, "⚠️  WARNING: %d document(s) exceed %d H3 headings (Registry truncates ~65 headings):\n", len(truncated), warnH3Headings)
+		fmt.Fprintf(os.Stderr, "   These documents will have content truncated when displayed in the Registry.\n")
+		fmt.Fprintf(os.Stderr, "   Dead anchor links for truncated sections have been automatically removed.\n\n")
+		for _, doc := range truncated {
+			fmt.Fprintf(os.Stderr, "   • %s: %d H3 headings (%.1fKB)\n", doc.path, doc.h3Count, doc.sizeKB)
+		}
+		fmt.Fprintf(os.Stderr, "\n")
 	}
 }
 
@@ -506,21 +668,36 @@ func convertNestedBlockAnchor(nestedPath string) string {
 // transformAnchorsOnly handles already-transformed files by:
 // 1. Converting any remaining nestedblock anchor IDs to simplified format
 // 2. Removing empty sections (anchor + header with no content)
-// 3. Removing "See...below" links that point to empty sections
+// 3. Removing "See...below" links that point to empty or out-of-range sections
 func transformAnchorsOnly(filePath string, content string) error {
 	lines := strings.Split(content, "\n")
 
-	// First pass: identify which anchors have content
+	// Maximum number of H3 headings that Terraform Registry reliably renders
+	// Registry truncates large pages around heading ~66, so we use 60 as safe threshold
+	const maxSafeHeadings = 60
+
+	// First pass: identify which anchors have content and which are within safe range
 	anchorsWithContent := make(map[string]bool)
+	safeAnchors := make(map[string]bool) // track anchors within safe rendering range
 	allAnchors := make(map[string]bool)
 	anchorRegex := regexp.MustCompile(`<a id="([^"]+)"></a>`)
 	attrLineRegex := regexp.MustCompile("^`[^`]+` - \\((Required|Optional)\\)")
 	var currentAnchor string
+	h3HeadingCount := 0
 
 	for _, line := range lines {
+		// Count H3 headings to track position for safe rendering threshold
+		if strings.HasPrefix(line, "### ") {
+			h3HeadingCount++
+		}
+
 		if m := anchorRegex.FindStringSubmatch(line); m != nil {
 			currentAnchor = m[1]
 			allAnchors[currentAnchor] = true
+			// Mark as safe if within rendering threshold
+			if h3HeadingCount < maxSafeHeadings {
+				safeAnchors[currentAnchor] = true
+			}
 		} else if currentAnchor != "" && attrLineRegex.MatchString(line) {
 			anchorsWithContent[currentAnchor] = true
 		}
@@ -569,11 +746,14 @@ func transformAnchorsOnly(filePath string, content string) error {
 			continue
 		}
 
-		// Process attribute lines to remove links to empty anchors
+		// Process attribute lines to remove links to anchors that either:
+		// 1. Have no content (empty blocks)
+		// 2. Are beyond the safe rendering threshold (Terraform Registry truncates large pages)
 		if attrLineRegex.MatchString(line) {
 			if m := seeRefRegex.FindStringSubmatch(line); m != nil {
 				anchorRef := m[2]
-				if !anchorsWithContent[anchorRef] {
+				// Only keep link if anchor has content AND is within safe range
+				if !anchorsWithContent[anchorRef] || !safeAnchors[anchorRef] {
 					// Remove the "See...below" reference
 					line = seeRefRegex.ReplaceAllString(line, "")
 					line = strings.TrimSpace(line)
@@ -610,12 +790,17 @@ func transformDoc(filePath string) error {
 
 	lines := strings.Split(contentStr, "\n")
 
+	// Maximum number of H3 headings that Terraform Registry reliably renders
+	// Registry truncates large pages around heading ~66, so we use 60 as safe threshold
+	const maxSafeHeadings = 60
+
 	// Find key sections and collect all anchor names, tracking which have content
 	schemaStart := -1
 	importStart := -1
 	firstNestedAnchor := -1
 	existingAnchors := make(map[string]bool)
-	anchorsWithContent := make(map[string]bool) // NEW: track anchors that have actual attributes
+	anchorsWithContent := make(map[string]bool) // track anchors that have actual attributes
+	safeAnchors := make(map[string]bool)        // track anchors within safe rendering range
 	// Match both original tfplugindocs format (nestedblock--xxx) and already-transformed format (xxx-yyy)
 	anchorRegexOriginal := regexp.MustCompile(`<a id="nestedblock--([^"]+)"></a>`)
 	anchorRegexSimplified := regexp.MustCompile(`<a id="([a-z0-9-]+)"></a>`)
@@ -624,7 +809,9 @@ func transformDoc(filePath string) error {
 	transformedAttrLineRegex := regexp.MustCompile("^`[^`]+` - \\((Required|Optional)\\)")
 
 	// First pass: identify all anchors and which ones have content
+	// Also count H3 headings to determine safe rendering range
 	var currentAnchorName string
+	h3HeadingCount := 0
 	for i, line := range lines {
 		// Handle both original tfplugindocs format (## Schema) and already-transformed format (## Argument Reference)
 		if strings.HasPrefix(line, "## Schema") || strings.HasPrefix(line, "## Argument Reference") {
@@ -633,6 +820,12 @@ func transformDoc(filePath string) error {
 		if strings.HasPrefix(line, "## Import") {
 			importStart = i
 		}
+
+		// Count H3 headings (### ) to track position for safe rendering threshold
+		if strings.HasPrefix(line, "### ") {
+			h3HeadingCount++
+		}
+
 		// Check for original tfplugindocs anchor format
 		if strings.HasPrefix(line, "<a id=\"nestedblock--") {
 			if firstNestedAnchor < 0 {
@@ -644,6 +837,10 @@ func transformDoc(filePath string) error {
 				anchorName := strings.ToLower(strings.ReplaceAll(strings.ReplaceAll(m[1], "_", "-"), "--", "-"))
 				existingAnchors[anchorName] = true
 				currentAnchorName = anchorName
+				// Mark as safe if within rendering threshold
+				if h3HeadingCount < maxSafeHeadings {
+					safeAnchors[anchorName] = true
+				}
 			}
 		} else if strings.HasPrefix(line, "<a id=\"") && !strings.Contains(line, "nestedblock") {
 			// Check for already-transformed simplified anchor format
@@ -653,6 +850,10 @@ func transformDoc(filePath string) error {
 				}
 				existingAnchors[m[1]] = true
 				currentAnchorName = m[1]
+				// Mark as safe if within rendering threshold
+				if h3HeadingCount < maxSafeHeadings {
+					safeAnchors[m[1]] = true
+				}
 			}
 		}
 		// Check if current line is an attribute line (indicates the current anchor has content)
@@ -832,15 +1033,16 @@ func transformDoc(filePath string) error {
 
 		// Clean any existing "See [X](#x) below" references from description to avoid duplication
 		desc := attr.desc
-		// Simple approach: remove any "See [...](...) below..." patterns
 		seeRefRegex := regexp.MustCompile(`See \[.+?\]\(#.+?\) below[^.]*\.?\s*`)
 		desc = seeRefRegex.ReplaceAllString(desc, "")
 		desc = strings.TrimSpace(desc)
 		desc = strings.TrimSuffix(desc, ".")
 
 		anchorName := toAnchorName(attr.name)
-		// Only generate "See ... below" links if the anchor has actual content (not empty blocks)
-		if attr.hasNested && anchorsWithContent[anchorName] {
+		// Only generate "See ... below" links if:
+		// 1. The anchor has actual content (not empty blocks)
+		// 2. The anchor is within safe rendering range (Terraform Registry truncates large pages)
+		if attr.hasNested && anchorsWithContent[anchorName] && safeAnchors[anchorName] {
 			if desc != "" {
 				output.WriteString(fmt.Sprintf("`%s` - %s %s. See [%s](#%s) below for details.\n\n",
 					attr.name, attr.reqStr, desc, toTitleCase(attr.name), anchorName))
@@ -1269,4 +1471,211 @@ func normalizeOneOfKey(constraint string) string {
 	fields := strings.Split(constraint, ", ")
 	sort.Strings(fields)
 	return strings.Join(fields, ", ")
+}
+
+// countH3Headings counts the number of H3 headings in content
+func countH3Headings(content string) int {
+	count := 0
+	for _, line := range strings.Split(content, "\n") {
+		if strings.HasPrefix(line, "### ") {
+			count++
+		}
+	}
+	return count
+}
+
+// shouldSplitToGuides determines if a document should be split into guides
+func shouldSplitToGuides(filePath string) bool {
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		return false
+	}
+	return countH3Headings(string(content)) > splitH3Threshold
+}
+
+// extractNestedBlocks parses a document and extracts nested block sections
+func extractNestedBlocks(content string) []nestedBlockInfo {
+	lines := strings.Split(content, "\n")
+	var blocks []nestedBlockInfo
+
+	anchorRegex := regexp.MustCompile(`<a id="([a-z0-9-]+)"></a>`)
+	headerRegex := regexp.MustCompile(`^### (.+)$`)
+
+	var currentBlock *nestedBlockInfo
+	inNestedSection := false
+
+	for i, line := range lines {
+		// Detect start of nested block by anchor
+		if m := anchorRegex.FindStringSubmatch(line); m != nil {
+			// Save previous block if exists
+			if currentBlock != nil && len(currentBlock.content) > 0 {
+				blocks = append(blocks, *currentBlock)
+			}
+
+			// Check if next line is a header
+			displayName := m[1]
+			if i+1 < len(lines) {
+				if hm := headerRegex.FindStringSubmatch(lines[i+1]); hm != nil {
+					displayName = hm[1]
+				}
+			}
+
+			currentBlock = &nestedBlockInfo{
+				anchorName:  m[1],
+				displayName: displayName,
+				content:     []string{line},
+				h3Count:     0,
+			}
+			inNestedSection = true
+			continue
+		}
+
+		// Track H3 headings within block
+		if inNestedSection && strings.HasPrefix(line, "### ") {
+			if currentBlock != nil {
+				currentBlock.h3Count++
+			}
+		}
+
+		// Accumulate content
+		if inNestedSection && currentBlock != nil {
+			currentBlock.content = append(currentBlock.content, line)
+		}
+	}
+
+	// Save last block
+	if currentBlock != nil && len(currentBlock.content) > 0 {
+		blocks = append(blocks, *currentBlock)
+	}
+
+	return blocks
+}
+
+// generateGuidePage creates a guide page for nested block documentation
+func generateGuidePage(resourceName, subcategory string, blocks []nestedBlockInfo) error {
+	if len(blocks) == 0 {
+		return nil
+	}
+
+	// Create guides directory if it doesn't exist
+	guidesDir := "docs/guides"
+	if err := os.MkdirAll(guidesDir, 0755); err != nil {
+		return fmt.Errorf("failed to create guides directory: %w", err)
+	}
+
+	// Generate guide filename
+	guideFile := filepath.Join(guidesDir, resourceName+"_nested_blocks.md")
+
+	// Build guide content
+	var content strings.Builder
+
+	// Write frontmatter
+	displayName := toTitleCase(resourceName)
+	content.WriteString("---\n")
+	content.WriteString(fmt.Sprintf("page_title: \"%s Nested Blocks - f5xc Provider\"\n", displayName))
+	content.WriteString(fmt.Sprintf("subcategory: \"%s\"\n", subcategory))
+	content.WriteString(fmt.Sprintf("description: |-\n  Nested block reference for the %s resource.\n", displayName))
+	content.WriteString("---\n\n")
+
+	// Write header
+	content.WriteString(fmt.Sprintf("# %s Nested Blocks\n\n", displayName))
+	content.WriteString(fmt.Sprintf("This page contains detailed documentation for nested blocks in the `f5xc_%s` resource.\n\n", resourceName))
+	content.WriteString(fmt.Sprintf("For the main resource documentation, see [f5xc_%s](/docs/resources/%s).\n\n", resourceName, resourceName))
+
+	// Write table of contents
+	content.WriteString("## Contents\n\n")
+	for _, block := range blocks {
+		content.WriteString(fmt.Sprintf("- [%s](#%s)\n", block.displayName, block.anchorName))
+	}
+	content.WriteString("\n---\n\n")
+
+	// Write each nested block
+	for _, block := range blocks {
+		for _, line := range block.content {
+			content.WriteString(line + "\n")
+		}
+		content.WriteString("\n")
+	}
+
+	// Normalize blank lines
+	result := normalizeBlankLines(content.String())
+
+	return os.WriteFile(guideFile, []byte(result), 0644)
+}
+
+// splitLargeDocument splits a large document into main page + guide pages
+// Returns the modified main content and generates guide pages
+func splitLargeDocument(filePath string, content string) (string, error) {
+	lines := strings.Split(content, "\n")
+
+	// Find where nested blocks start (look for --- separator followed by anchors)
+	nestedStart := -1
+	importStart := -1
+
+	for i, line := range lines {
+		if line == "---" && i > 0 {
+			// Check if followed by anchor
+			for j := i + 1; j < len(lines) && j < i+5; j++ {
+				if strings.HasPrefix(lines[j], "<a id=\"") {
+					nestedStart = i
+					break
+				}
+			}
+		}
+		if strings.HasPrefix(line, "## Import") {
+			importStart = i
+			break
+		}
+	}
+
+	if nestedStart < 0 {
+		// No nested blocks to split
+		return content, nil
+	}
+
+	// Extract nested block content
+	nestedEnd := importStart
+	if nestedEnd < 0 {
+		nestedEnd = len(lines)
+	}
+
+	nestedContent := strings.Join(lines[nestedStart:nestedEnd], "\n")
+	blocks := extractNestedBlocks(nestedContent)
+
+	if len(blocks) == 0 {
+		return content, nil
+	}
+
+	// Get resource name and subcategory
+	baseName := filepath.Base(filePath)
+	resourceName := strings.TrimSuffix(baseName, ".md")
+	subcategory := getSubcategory(filePath)
+
+	// Generate guide page
+	if err := generateGuidePage(resourceName, subcategory, blocks); err != nil {
+		return content, fmt.Errorf("failed to generate guide page: %w", err)
+	}
+
+	// Build modified main content with link to guide
+	var output strings.Builder
+
+	// Write content before nested blocks
+	for i := 0; i < nestedStart; i++ {
+		output.WriteString(lines[i] + "\n")
+	}
+
+	// Add link to guide page instead of inline nested blocks
+	output.WriteString("\n---\n\n")
+	output.WriteString("## Nested Block Reference\n\n")
+	output.WriteString(fmt.Sprintf("This resource has extensive nested block configuration. For detailed documentation of all nested blocks, see the [%s Nested Blocks Guide](/docs/guides/%s_nested_blocks).\n\n",
+		toTitleCase(resourceName), resourceName))
+
+	// Write import section if exists
+	if importStart > 0 {
+		for i := importStart; i < len(lines); i++ {
+			output.WriteString(lines[i] + "\n")
+		}
+	}
+
+	return normalizeBlankLines(output.String()), nil
 }
