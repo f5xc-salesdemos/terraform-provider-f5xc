@@ -1479,15 +1479,16 @@ func transformDoc(filePath string) error {
 				if m := headerRegex.FindStringSubmatch(line); m != nil {
 					fullPath := m[1] // e.g., "active_service_policies.policies"
 
-					// Extract only the last segment to avoid redundant naming
-					// "active_service_policies.policies" → "Policies"
-					// "active_service_policies" → "Active Service Policies"
+					// Use full path for H4 header title to generate unique anchor on Terraform Registry
+					// e.g., "routes.simple_route.cors_policy" → "#### Routes Simple Route CORS Policy"
+					// This generates anchor "#routes-simple-route-cors-policy" matching the link targets
 					pathParts := strings.Split(fullPath, ".")
 					lastSegment := pathParts[len(pathParts)-1]
-					displayName := toTitleCase(lastSegment)
 
-					// Use H4 header to create proper navigable anchor on Terraform Registry
-					output.WriteString(fmt.Sprintf("#### %s\n\n", displayName))
+					// Build full title from all path parts for unique H4 header
+					// This ensures each nested block has a unique anchor
+					fullTitle := toTitleCase(strings.ReplaceAll(fullPath, ".", " "))
+					output.WriteString(fmt.Sprintf("#### %s\n\n", fullTitle))
 
 					// Add AzureRM-style context line showing parent relationship with clickable links
 					// Example: "A [`policies`](#active-service-policies-policies) block (within [`active_service_policies`](#active-service-policies)) supports the following:"
