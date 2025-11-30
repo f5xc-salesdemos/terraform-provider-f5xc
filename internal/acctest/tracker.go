@@ -164,6 +164,9 @@ func CleanupTracked() error {
 	for _, resourceType := range deleteOrder {
 		resources := tracker.GetTrackedByType(resourceType)
 		for _, r := range resources {
+			// Apply rate limiting before each cleanup operation
+			WaitBeforeCleanup()
+
 			if err := deleteTrackedResource(ctx, c, r); err != nil {
 				log.Printf("[CLEANUP] Warning: failed to delete %s %s: %v", r.Type, r.Name, err)
 				errors = append(errors, err)
@@ -176,6 +179,9 @@ func CleanupTracked() error {
 	// Handle any resource types not in the explicit order
 	remaining := tracker.GetTracked()
 	for _, r := range remaining {
+		// Apply rate limiting before each cleanup operation
+		WaitBeforeCleanup()
+
 		if err := deleteTrackedResource(ctx, c, r); err != nil {
 			log.Printf("[CLEANUP] Warning: failed to delete %s %s: %v", r.Type, r.Name, err)
 			errors = append(errors, err)
@@ -201,7 +207,8 @@ func deleteTrackedResource(ctx context.Context, c *client.Client, r TrackedResou
 
 	switch r.Type {
 	case "f5xc_namespace":
-		return c.DeleteNamespace(deleteCtx, "", r.Name)
+		// Use cascade delete for namespaces (standard DELETE returns 501)
+		return c.CascadeDeleteNamespace(deleteCtx, r.Name)
 	case "f5xc_http_loadbalancer":
 		return c.DeleteHTTPLoadBalancer(deleteCtx, r.Namespace, r.Name)
 	case "f5xc_origin_pool":

@@ -408,15 +408,12 @@ func CheckNamespaceDisappears(resourceName string) resource.TestCheckFunc {
 		defer cancel()
 
 		name := rs.Primary.Attributes["name"]
-		namespace := rs.Primary.Attributes["namespace"]
-		if namespace == "" {
-			namespace = "system"
-		}
 
-		// Delete the namespace through the API (simulating external deletion)
-		err = c.DeleteNamespace(ctx, namespace, name)
+		// Delete the namespace through the API using cascade_delete
+		// (standard DELETE endpoint returns 501 Not Implemented)
+		err = c.CascadeDeleteNamespace(ctx, name)
 		if err != nil {
-			return fmt.Errorf("failed to delete namespace %s: %w", name, err)
+			return fmt.Errorf("failed to cascade delete namespace %s: %w", name, err)
 		}
 
 		return nil
