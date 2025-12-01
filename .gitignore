@@ -39,3 +39,7 @@ bin/
 
 # Playwright MCP artifacts
 .playwright-mcp/
+
+# Claude Code working files
+claudedocs/
+.serena/
