@@ -69,25 +69,26 @@ type SchemaDefinition struct {
 }
 
 type TerraformAttribute struct {
-	Name             string
-	GoName           string
-	TfsdkTag         string
-	Type             string
-	ElementType      string
-	Description      string
-	Required         bool
-	Optional         bool
-	Computed         bool
-	Sensitive        bool
-	NestedAttributes []TerraformAttribute
-	NestedBlockType  string
-	IsBlock          bool
-	OneOfGroup       string
-	PlanModifier     string
-	MaxDepth         int    // Track recursion depth to prevent infinite loops
-	IsSpecField      bool   // True if this is a spec field (not metadata)
-	JsonName         string // JSON field name from OpenAPI for API marshaling
-	GoType           string // Go type for client struct generation
+	Name               string
+	GoName             string
+	TfsdkTag           string
+	Type               string
+	ElementType        string
+	Description        string
+	Required           bool
+	Optional           bool
+	Computed           bool
+	Sensitive          bool
+	NestedAttributes   []TerraformAttribute
+	NestedBlockType    string
+	IsBlock            bool
+	OneOfGroup         string
+	PlanModifier       string
+	MaxDepth           int    // Track recursion depth to prevent infinite loops
+	IsSpecField        bool   // True if this is a spec field (not metadata)
+	JsonName           string // JSON field name from OpenAPI for API marshaling
+	GoType             string // Go type for client struct generation
+	UseDomainValidator bool   // True if name field should use DomainValidator (for DNS resources)
 }
 
 type ResourceTemplate struct {
@@ -478,10 +479,18 @@ func extractResourceSchema(spec *OpenAPI3Spec, resourceName string) (*ResourceTe
 	// 2. Other required args alphabetically
 	// 3. Optional args alphabetically (annotations, labels)
 	// 4. Computed attributes (id first)
+
+	// DNS zone and DNS domain resources use domain names (with dots), not standard names
+	useDomainValidator := resourceName == "dns_zone" || resourceName == "dns_domain"
+	nameDescription := fmt.Sprintf("Name of the %s. Must be unique within the namespace.", toTitleCase(resourceName))
+	if useDomainValidator {
+		nameDescription = fmt.Sprintf("Domain name for the %s (e.g., example.com). Must be a valid DNS domain name.", toTitleCase(resourceName))
+	}
+
 	idComponentAttrs := []TerraformAttribute{
 		{Name: "name", GoName: "Name", TfsdkTag: "name", Type: "string",
-			Description: fmt.Sprintf("Name of the %s. Must be unique within the namespace.", toTitleCase(resourceName)),
-			Required: true, PlanModifier: "RequiresReplace"},
+			Description: nameDescription,
+			Required: true, PlanModifier: "RequiresReplace", UseDomainValidator: useDomainValidator},
 	}
 
 	// For resources without namespace in API path (like namespace itself), namespace is optional
@@ -843,6 +852,17 @@ func extractNestedAttributes(schema SchemaDefinition, spec *OpenAPI3Spec, depth 
 	var attrs []TerraformAttribute
 	for propName, propSchema := range schema.Properties {
 		attr := convertToTerraformAttributeWithDepth(propName, propSchema, requiredSet[propName], "", spec, depth)
+
+		// Mark 'tenant', 'uid', and 'kind' fields as Computed in nested Object Reference blocks.
+		// The API always returns these values even when not specified in config,
+		// which causes state drift if not marked as Computed.
+		// Object Reference types have pattern: kind, name, namespace, tenant, uid
+		propNameLower := strings.ToLower(propName)
+		if (propNameLower == "tenant" || propNameLower == "uid" || propNameLower == "kind") && !attr.Required {
+			attr.Computed = true
+			attr.Optional = true
+		}
+
 		attrs = append(attrs, attr)
 	}
 
@@ -1502,8 +1522,18 @@ func getGoClientType(attr TerraformAttribute) string {
 	}
 }
 
-// renderSpecMarshalCode generates Go code to marshal spec fields from Terraform state to API struct
+// renderSpecMarshalCodeForCreate generates Go code for Create (uses "createReq" variable)
+func renderSpecMarshalCodeForCreate(attrs []TerraformAttribute, indent string) string {
+	return renderSpecMarshalCodeWithVar(attrs, indent, "createReq")
+}
+
+// renderSpecMarshalCode generates Go code to marshal spec fields from Terraform state to API struct (uses "apiResource" variable)
 func renderSpecMarshalCode(attrs []TerraformAttribute, indent string) string {
+	return renderSpecMarshalCodeWithVar(attrs, indent, "apiResource")
+}
+
+// renderSpecMarshalCodeWithVar generates Go code to marshal spec fields with configurable variable name
+func renderSpecMarshalCodeWithVar(attrs []TerraformAttribute, indent string, varName string) string {
 	specFields := filterSpecFields(attrs)
 	if len(specFields) == 0 {
 		return ""
@@ -1563,9 +1593,104 @@ func renderSpecMarshalCode(attrs []TerraformAttribute, indent string) string {
 							sb.WriteString(fmt.Sprintf("%s\t\t\t%sNestedMap := make(map[string]interface{})\n", indent, nestedTfsdkName))
 							for _, deepAttr := range nestedAttr.NestedAttributes {
 								deepFieldName := deepAttr.GoName
+								deepTfsdkName := deepAttr.TfsdkTag
 								deepJsonName := deepAttr.JsonName
 								if deepJsonName == "" {
 									deepJsonName = deepAttr.TfsdkTag
+								}
+								// Handle nested blocks within SingleNestedBlocks that are within ListNestedBlock items
+								// e.g., allow{}, deny{}, ip_prefixes{} within action{} or match{} within rules[]
+								if deepAttr.IsBlock && deepAttr.NestedBlockType == "single" {
+									sb.WriteString(fmt.Sprintf("%s\t\t\tif item.%s.%s != nil {\n", indent, nestedFieldName, deepFieldName))
+									if len(deepAttr.NestedAttributes) == 0 {
+										// Empty nested block
+										sb.WriteString(fmt.Sprintf("%s\t\t\t\t%sNestedMap[\"%s\"] = map[string]interface{}{}\n", indent, nestedTfsdkName, deepJsonName))
+									} else {
+										// Nested block with attributes - create a deep map
+										sb.WriteString(fmt.Sprintf("%s\t\t\t\t%sDeepMap := make(map[string]interface{})\n", indent, deepTfsdkName))
+										for _, leafAttr := range deepAttr.NestedAttributes {
+											leafFieldName := leafAttr.GoName
+											leafJsonName := leafAttr.JsonName
+											if leafJsonName == "" {
+												leafJsonName = leafAttr.TfsdkTag
+											}
+											// Handle empty blocks at leaf level
+											if leafAttr.IsBlock && leafAttr.NestedBlockType == "single" && len(leafAttr.NestedAttributes) == 0 {
+												sb.WriteString(fmt.Sprintf("%s\t\t\t\tif item.%s.%s.%s != nil {\n", indent, nestedFieldName, deepFieldName, leafFieldName))
+												sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t%sDeepMap[\"%s\"] = map[string]interface{}{}\n", indent, deepTfsdkName, leafJsonName))
+												sb.WriteString(fmt.Sprintf("%s\t\t\t\t}\n", indent))
+											} else {
+												switch leafAttr.Type {
+												case "string":
+													sb.WriteString(fmt.Sprintf("%s\t\t\t\tif !item.%s.%s.%s.IsNull() && !item.%s.%s.%s.IsUnknown() {\n", indent, nestedFieldName, deepFieldName, leafFieldName, nestedFieldName, deepFieldName, leafFieldName))
+													sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t%sDeepMap[\"%s\"] = item.%s.%s.%s.ValueString()\n", indent, deepTfsdkName, leafJsonName, nestedFieldName, deepFieldName, leafFieldName))
+													sb.WriteString(fmt.Sprintf("%s\t\t\t\t}\n", indent))
+												case "int64":
+													sb.WriteString(fmt.Sprintf("%s\t\t\t\tif !item.%s.%s.%s.IsNull() && !item.%s.%s.%s.IsUnknown() {\n", indent, nestedFieldName, deepFieldName, leafFieldName, nestedFieldName, deepFieldName, leafFieldName))
+													sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t%sDeepMap[\"%s\"] = item.%s.%s.%s.ValueInt64()\n", indent, deepTfsdkName, leafJsonName, nestedFieldName, deepFieldName, leafFieldName))
+													sb.WriteString(fmt.Sprintf("%s\t\t\t\t}\n", indent))
+												case "bool":
+													sb.WriteString(fmt.Sprintf("%s\t\t\t\tif !item.%s.%s.%s.IsNull() && !item.%s.%s.%s.IsUnknown() {\n", indent, nestedFieldName, deepFieldName, leafFieldName, nestedFieldName, deepFieldName, leafFieldName))
+													sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t%sDeepMap[\"%s\"] = item.%s.%s.%s.ValueBool()\n", indent, deepTfsdkName, leafJsonName, nestedFieldName, deepFieldName, leafFieldName))
+													sb.WriteString(fmt.Sprintf("%s\t\t\t\t}\n", indent))
+												case "list":
+													if leafAttr.ElementType == "string" {
+														sb.WriteString(fmt.Sprintf("%s\t\t\t\tif !item.%s.%s.%s.IsNull() && !item.%s.%s.%s.IsUnknown() {\n", indent, nestedFieldName, deepFieldName, leafFieldName, nestedFieldName, deepFieldName, leafFieldName))
+														sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tvar %sItems []string\n", indent, leafFieldName))
+														sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tdiags := item.%s.%s.%s.ElementsAs(ctx, &%sItems, false)\n", indent, nestedFieldName, deepFieldName, leafFieldName, leafFieldName))
+														sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tif !diags.HasError() {\n", indent))
+														sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t%sDeepMap[\"%s\"] = %sItems\n", indent, deepTfsdkName, leafJsonName, leafFieldName))
+														sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t}\n", indent))
+														sb.WriteString(fmt.Sprintf("%s\t\t\t\t}\n", indent))
+													}
+												}
+											}
+										}
+										sb.WriteString(fmt.Sprintf("%s\t\t\t\t%sNestedMap[\"%s\"] = %sDeepMap\n", indent, nestedTfsdkName, deepJsonName, deepTfsdkName))
+									}
+									sb.WriteString(fmt.Sprintf("%s\t\t\t}\n", indent))
+									continue
+								}
+								// Handle ListNestedBlocks within SingleNestedBlocks that are within ListNestedBlock items
+								// e.g., prefixes[] within ip_prefixes{} within match{} within rules[]
+								if deepAttr.IsBlock && deepAttr.NestedBlockType == "list" {
+									sb.WriteString(fmt.Sprintf("%s\t\t\tif len(item.%s.%s) > 0 {\n", indent, nestedFieldName, deepFieldName))
+									sb.WriteString(fmt.Sprintf("%s\t\t\t\tvar %sDeepList []map[string]interface{}\n", indent, deepTfsdkName))
+									sb.WriteString(fmt.Sprintf("%s\t\t\t\tfor _, deepListItem := range item.%s.%s {\n", indent, nestedFieldName, deepFieldName))
+									sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tdeepListItemMap := make(map[string]interface{})\n", indent))
+									for _, leafAttr := range deepAttr.NestedAttributes {
+										leafFieldName := leafAttr.GoName
+										leafJsonName := leafAttr.JsonName
+										if leafJsonName == "" {
+											leafJsonName = leafAttr.TfsdkTag
+										}
+										// Handle empty blocks at leaf level
+										if leafAttr.IsBlock && leafAttr.NestedBlockType == "single" && len(leafAttr.NestedAttributes) == 0 {
+											sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tif deepListItem.%s != nil {\n", indent, leafFieldName))
+											sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\tdeepListItemMap[\"%s\"] = map[string]interface{}{}\n", indent, leafJsonName))
+											sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t}\n", indent))
+										} else {
+											switch leafAttr.Type {
+											case "string":
+												sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tif !deepListItem.%s.IsNull() && !deepListItem.%s.IsUnknown() {\n", indent, leafFieldName, leafFieldName))
+												sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\tdeepListItemMap[\"%s\"] = deepListItem.%s.ValueString()\n", indent, leafJsonName, leafFieldName))
+												sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t}\n", indent))
+											case "int64":
+												sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tif !deepListItem.%s.IsNull() && !deepListItem.%s.IsUnknown() {\n", indent, leafFieldName, leafFieldName))
+												sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\tdeepListItemMap[\"%s\"] = deepListItem.%s.ValueInt64()\n", indent, leafJsonName, leafFieldName))
+												sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t}\n", indent))
+											case "bool":
+												sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tif !deepListItem.%s.IsNull() && !deepListItem.%s.IsUnknown() {\n", indent, leafFieldName, leafFieldName))
+												sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\tdeepListItemMap[\"%s\"] = deepListItem.%s.ValueBool()\n", indent, leafJsonName, leafFieldName))
+												sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t}\n", indent))
+											}
+										}
+									}
+									sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t%sDeepList = append(%sDeepList, deepListItemMap)\n", indent, deepTfsdkName, deepTfsdkName))
+									sb.WriteString(fmt.Sprintf("%s\t\t\t\t}\n", indent))
+									sb.WriteString(fmt.Sprintf("%s\t\t\t\t%sNestedMap[\"%s\"] = %sDeepList\n", indent, nestedTfsdkName, deepJsonName, deepTfsdkName))
+									sb.WriteString(fmt.Sprintf("%s\t\t\t}\n", indent))
+									continue
 								}
 								switch deepAttr.Type {
 								case "string":
@@ -1607,6 +1732,41 @@ func renderSpecMarshalCode(attrs []TerraformAttribute, indent string) string {
 						continue
 					}
 
+					// Handle list nested blocks within list items (e.g., app_type_ref within app_type_settings)
+					if nestedAttr.IsBlock && nestedAttr.NestedBlockType == "list" {
+						sb.WriteString(fmt.Sprintf("%s\t\tif len(item.%s) > 0 {\n", indent, nestedFieldName))
+						sb.WriteString(fmt.Sprintf("%s\t\t\tvar %sNestedList []map[string]interface{}\n", indent, nestedTfsdkName))
+						sb.WriteString(fmt.Sprintf("%s\t\t\tfor _, nestedItem := range item.%s {\n", indent, nestedFieldName))
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\tnestedItemMap := make(map[string]interface{})\n", indent))
+						// Marshal fields from the nested list block
+						for _, deepAttr := range nestedAttr.NestedAttributes {
+							deepFieldName := deepAttr.GoName
+							deepJsonName := deepAttr.JsonName
+							if deepJsonName == "" {
+								deepJsonName = deepAttr.TfsdkTag
+							}
+							switch deepAttr.Type {
+							case "string":
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\tif !nestedItem.%s.IsNull() && !nestedItem.%s.IsUnknown() {\n", indent, deepFieldName, deepFieldName))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tnestedItemMap[\"%s\"] = nestedItem.%s.ValueString()\n", indent, deepJsonName, deepFieldName))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t}\n", indent))
+							case "int64":
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\tif !nestedItem.%s.IsNull() && !nestedItem.%s.IsUnknown() {\n", indent, deepFieldName, deepFieldName))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tnestedItemMap[\"%s\"] = nestedItem.%s.ValueInt64()\n", indent, deepJsonName, deepFieldName))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t}\n", indent))
+							case "bool":
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\tif !nestedItem.%s.IsNull() && !nestedItem.%s.IsUnknown() {\n", indent, deepFieldName, deepFieldName))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tnestedItemMap[\"%s\"] = nestedItem.%s.ValueBool()\n", indent, deepJsonName, deepFieldName))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t}\n", indent))
+							}
+						}
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t%sNestedList = append(%sNestedList, nestedItemMap)\n", indent, nestedTfsdkName, nestedTfsdkName))
+						sb.WriteString(fmt.Sprintf("%s\t\t\t}\n", indent))
+						sb.WriteString(fmt.Sprintf("%s\t\t\titemMap[\"%s\"] = %sNestedList\n", indent, nestedJsonName, nestedTfsdkName))
+						sb.WriteString(fmt.Sprintf("%s\t\t}\n", indent))
+						continue
+					}
+
 					switch nestedAttr.Type {
 					case "string":
 						sb.WriteString(fmt.Sprintf("%s\t\tif !item.%s.IsNull() && !item.%s.IsUnknown() {\n", indent, nestedFieldName, nestedFieldName))
@@ -1624,7 +1784,7 @@ func renderSpecMarshalCode(attrs []TerraformAttribute, indent string) string {
 				}
 				sb.WriteString(fmt.Sprintf("%s\t\t%sList = append(%sList, itemMap)\n", indent, tfsdkName, tfsdkName))
 				sb.WriteString(fmt.Sprintf("%s\t}\n", indent))
-				sb.WriteString(fmt.Sprintf("%s\tapiResource.Spec[\"%s\"] = %sList\n", indent, jsonName, tfsdkName))
+				sb.WriteString(fmt.Sprintf("%s\t%s.Spec[\"%s\"] = %sList\n", indent, varName, jsonName, tfsdkName))
 				sb.WriteString(fmt.Sprintf("%s}\n", indent))
 				continue
 			}
@@ -1797,7 +1957,7 @@ func renderSpecMarshalCode(attrs []TerraformAttribute, indent string) string {
 					}
 				}
 			}
-			sb.WriteString(fmt.Sprintf("%s\tapiResource.Spec[\"%s\"] = %sMap\n", indent, jsonName, tfsdkName))
+			sb.WriteString(fmt.Sprintf("%s\t%s.Spec[\"%s\"] = %sMap\n", indent, varName, jsonName, tfsdkName))
 			sb.WriteString(fmt.Sprintf("%s}\n", indent))
 			continue
 		}
@@ -1805,15 +1965,15 @@ func renderSpecMarshalCode(attrs []TerraformAttribute, indent string) string {
 		switch attr.Type {
 		case "string":
 			sb.WriteString(fmt.Sprintf("%sif !data.%s.IsNull() && !data.%s.IsUnknown() {\n", indent, fieldName, fieldName))
-			sb.WriteString(fmt.Sprintf("%s\tapiResource.Spec[\"%s\"] = data.%s.ValueString()\n", indent, jsonName, fieldName))
+			sb.WriteString(fmt.Sprintf("%s\t%s.Spec[\"%s\"] = data.%s.ValueString()\n", indent, varName, jsonName, fieldName))
 			sb.WriteString(fmt.Sprintf("%s}\n", indent))
 		case "int64":
 			sb.WriteString(fmt.Sprintf("%sif !data.%s.IsNull() && !data.%s.IsUnknown() {\n", indent, fieldName, fieldName))
-			sb.WriteString(fmt.Sprintf("%s\tapiResource.Spec[\"%s\"] = data.%s.ValueInt64()\n", indent, jsonName, fieldName))
+			sb.WriteString(fmt.Sprintf("%s\t%s.Spec[\"%s\"] = data.%s.ValueInt64()\n", indent, varName, jsonName, fieldName))
 			sb.WriteString(fmt.Sprintf("%s}\n", indent))
 		case "bool":
 			sb.WriteString(fmt.Sprintf("%sif !data.%s.IsNull() && !data.%s.IsUnknown() {\n", indent, fieldName, fieldName))
-			sb.WriteString(fmt.Sprintf("%s\tapiResource.Spec[\"%s\"] = data.%s.ValueBool()\n", indent, jsonName, fieldName))
+			sb.WriteString(fmt.Sprintf("%s\t%s.Spec[\"%s\"] = data.%s.ValueBool()\n", indent, varName, jsonName, fieldName))
 			sb.WriteString(fmt.Sprintf("%s}\n", indent))
 		case "list":
 			if attr.ElementType == "string" {
@@ -1821,7 +1981,7 @@ func renderSpecMarshalCode(attrs []TerraformAttribute, indent string) string {
 				sb.WriteString(fmt.Sprintf("%s\tvar %sList []string\n", indent, tfsdkName))
 				sb.WriteString(fmt.Sprintf("%s\tresp.Diagnostics.Append(data.%s.ElementsAs(ctx, &%sList, false)...)\n", indent, fieldName, tfsdkName))
 				sb.WriteString(fmt.Sprintf("%s\tif !resp.Diagnostics.HasError() {\n", indent))
-				sb.WriteString(fmt.Sprintf("%s\t\tapiResource.Spec[\"%s\"] = %sList\n", indent, jsonName, tfsdkName))
+				sb.WriteString(fmt.Sprintf("%s\t\t%s.Spec[\"%s\"] = %sList\n", indent, varName, jsonName, tfsdkName))
 				sb.WriteString(fmt.Sprintf("%s\t}\n", indent))
 				sb.WriteString(fmt.Sprintf("%s}\n", indent))
 			} else if attr.ElementType == "int64" {
@@ -1829,7 +1989,7 @@ func renderSpecMarshalCode(attrs []TerraformAttribute, indent string) string {
 				sb.WriteString(fmt.Sprintf("%s\tvar %sList []int64\n", indent, tfsdkName))
 				sb.WriteString(fmt.Sprintf("%s\tresp.Diagnostics.Append(data.%s.ElementsAs(ctx, &%sList, false)...)\n", indent, fieldName, tfsdkName))
 				sb.WriteString(fmt.Sprintf("%s\tif !resp.Diagnostics.HasError() {\n", indent))
-				sb.WriteString(fmt.Sprintf("%s\t\tapiResource.Spec[\"%s\"] = %sList\n", indent, jsonName, tfsdkName))
+				sb.WriteString(fmt.Sprintf("%s\t\t%s.Spec[\"%s\"] = %sList\n", indent, varName, jsonName, tfsdkName))
 				sb.WriteString(fmt.Sprintf("%s\t}\n", indent))
 				sb.WriteString(fmt.Sprintf("%s}\n", indent))
 			}
@@ -1929,15 +2089,17 @@ func renderSpecUnmarshalCode(attrs []TerraformAttribute, indent string, resource
 				tfsdkName := attr.TfsdkTag
 
 				// Check if there are any attributes that need the itemMap variable
-				// (primitives, lists, or nested blocks)
+				// (primitives, lists, or nested blocks with attributes)
 				needsItemMap := false
 				for _, nestedAttr := range attr.NestedAttributes {
 					switch nestedAttr.Type {
 					case "string", "int64", "bool", "list":
 						needsItemMap = true
 					}
-					// Nested blocks also need access to itemMap
-					if nestedAttr.IsBlock {
+					// Nested blocks with attributes need access to itemMap
+					// Empty marker blocks (no nested attributes) don't need itemMap since
+					// they're skipped to prevent state drift
+					if nestedAttr.IsBlock && len(nestedAttr.NestedAttributes) > 0 {
 						needsItemMap = true
 					}
 				}
@@ -1945,10 +2107,12 @@ func renderSpecUnmarshalCode(attrs []TerraformAttribute, indent string, resource
 				sb.WriteString(fmt.Sprintf("%sif listData, ok := apiResource.Spec[\"%s\"].([]interface{}); ok && len(listData) > 0 {\n", indent, jsonName))
 				sb.WriteString(fmt.Sprintf("%s\tvar %sList []%s%sModel\n", indent, tfsdkName, resourceTitleCase, attr.GoName))
 				if needsItemMap {
-					sb.WriteString(fmt.Sprintf("%s\tfor _, item := range listData {\n", indent))
+					sb.WriteString(fmt.Sprintf("%s\tfor listIdx, item := range listData {\n", indent))
+					sb.WriteString(fmt.Sprintf("%s\t\t_ = listIdx // May be unused if no empty marker blocks in list item\n", indent))
 					sb.WriteString(fmt.Sprintf("%s\t\tif itemMap, ok := item.(map[string]interface{}); ok {\n", indent))
 				} else {
-					sb.WriteString(fmt.Sprintf("%s\tfor range listData {\n", indent))
+					sb.WriteString(fmt.Sprintf("%s\tfor listIdx := range listData {\n", indent))
+					sb.WriteString(fmt.Sprintf("%s\t\t_ = listIdx // May be unused if no empty marker blocks in list item\n", indent))
 					sb.WriteString(fmt.Sprintf("%s\t\t{\n", indent))
 				}
 				sb.WriteString(fmt.Sprintf("%s\t\t\t%sList = append(%sList, %s%sModel{\n", indent, tfsdkName, tfsdkName, resourceTitleCase, attr.GoName))
@@ -1963,10 +2127,12 @@ func renderSpecUnmarshalCode(attrs []TerraformAttribute, indent string, resource
 					// Handle single nested blocks within list items
 					if nestedAttr.IsBlock && nestedAttr.NestedBlockType == "single" {
 						if len(nestedAttr.NestedAttributes) == 0 {
-							// Empty block (marker block) - check if key exists in API response
-							// Always include if API returns it, even if empty - user may have explicitly configured it
+							// Empty block (marker block) - Preserve from existing state if user configured it
+							// These "marker" blocks (like labels, endpoint_subsets, sni, tcp, etc.) should only
+							// be in state if explicitly configured. We don't read from API as it doesn't return them.
+							// Instead, we check if the user configured this block in the original state and preserve it.
 							sb.WriteString(fmt.Sprintf("%s\t\t\t\t%s: func() *%sEmptyModel {\n", indent, nestedFieldName, resourceTitleCase))
-							sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tif _, ok := itemMap[\"%s\"].(map[string]interface{}); ok {\n", indent, nestedJsonName))
+							sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tif !isImport && len(data.%s) > listIdx && data.%s[listIdx].%s != nil {\n", indent, attr.GoName, attr.GoName, nestedFieldName))
 							sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\treturn &%sEmptyModel{}\n", indent, resourceTitleCase))
 							sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t}\n", indent))
 							sb.WriteString(fmt.Sprintf("%s\t\t\t\t\treturn nil\n", indent))
@@ -2002,6 +2168,17 @@ func renderSpecUnmarshalCode(attrs []TerraformAttribute, indent string, resource
 								deepJsonName := deepAttr.JsonName
 								if deepJsonName == "" {
 									deepJsonName = deepAttr.TfsdkTag
+								}
+								// Handle deeply nested empty blocks (e.g., allow{}, deny{} within action{} within rules[])
+								// These are marker blocks that don't come back from API, so preserve from existing state
+								if deepAttr.IsBlock && len(deepAttr.NestedAttributes) == 0 {
+									sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t%s: func() *%sEmptyModel {\n", indent, deepFieldName, resourceTitleCase))
+									sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\tif !isImport && len(data.%s) > listIdx && data.%s[listIdx].%s != nil && data.%s[listIdx].%s.%s != nil {\n", indent, attr.GoName, attr.GoName, nestedAttr.GoName, attr.GoName, nestedAttr.GoName, deepFieldName))
+									sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\treturn &%sEmptyModel{}\n", indent, resourceTitleCase))
+									sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t}\n", indent))
+									sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\treturn nil\n", indent))
+									sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t}(),\n", indent))
+									continue
 								}
 								switch deepAttr.Type {
 								case "string":
@@ -2065,6 +2242,58 @@ func renderSpecUnmarshalCode(attrs []TerraformAttribute, indent string, resource
 							sb.WriteString(fmt.Sprintf("%s\t\t\t\t\treturn nil\n", indent))
 							sb.WriteString(fmt.Sprintf("%s\t\t\t\t}(),\n", indent))
 						}
+						continue
+					}
+
+					// Handle list nested blocks within list items (e.g., app_type_ref within app_type_settings)
+					if nestedAttr.IsBlock && nestedAttr.NestedBlockType == "list" {
+						// Model type includes parent list block name: Resource + ListBlock + NestedListBlock + Model
+						nestedListModelType := resourceTitleCase + attr.GoName + nestedAttr.GoName + "Model"
+
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t%s: func() []%s {\n", indent, nestedFieldName, nestedListModelType))
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t\tif nestedListData, ok := itemMap[\"%s\"].([]interface{}); ok && len(nestedListData) > 0 {\n", indent, nestedJsonName))
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\tvar result []%s\n", indent, nestedListModelType))
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\tfor _, nestedItem := range nestedListData {\n", indent))
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\tif nestedItemMap, ok := nestedItem.(map[string]interface{}); ok {\n", indent))
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\tresult = append(result, %s{\n", indent, nestedListModelType))
+						// Generate field reading for each nested attribute
+						for _, deepAttr := range nestedAttr.NestedAttributes {
+							deepFieldName := deepAttr.GoName
+							deepJsonName := deepAttr.JsonName
+							if deepJsonName == "" {
+								deepJsonName = deepAttr.TfsdkTag
+							}
+							switch deepAttr.Type {
+							case "string":
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t%s: func() types.String {\n", indent, deepFieldName))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t\tif v, ok := nestedItemMap[\"%s\"].(string); ok && v != \"\" {\n", indent, deepJsonName))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t\t\treturn types.StringValue(v)\n", indent))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t\t}\n", indent))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t\treturn types.StringNull()\n", indent))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t}(),\n", indent))
+							case "int64":
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t%s: func() types.Int64 {\n", indent, deepFieldName))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t\tif v, ok := nestedItemMap[\"%s\"].(float64); ok && v != 0 {\n", indent, deepJsonName))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t\t\treturn types.Int64Value(int64(v))\n", indent))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t\t}\n", indent))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t\treturn types.Int64Null()\n", indent))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t}(),\n", indent))
+							case "bool":
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t%s: func() types.Bool {\n", indent, deepFieldName))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t\tif v, ok := nestedItemMap[\"%s\"].(bool); ok {\n", indent, deepJsonName))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t\t\treturn types.BoolValue(v)\n", indent))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t\t}\n", indent))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t\treturn types.BoolNull()\n", indent))
+								sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t\t}(),\n", indent))
+							}
+						}
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t\t})\n", indent))
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t\t}\n", indent))
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\t}\n", indent))
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t\treturn result\n", indent))
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t\t}\n", indent))
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t\treturn nil\n", indent))
+						sb.WriteString(fmt.Sprintf("%s\t\t\t\t}(),\n", indent))
 						continue
 					}
 
@@ -2535,10 +2764,10 @@ func renderSpecUnmarshalCode(attrs []TerraformAttribute, indent string, resource
 			// This prevents drift when API returns defaults or doesn't return the field
 			if attr.Optional {
 				sb.WriteString(fmt.Sprintf("%s// Top-level Optional bool: preserve prior state to avoid API default drift\n", indent))
-				sb.WriteString(fmt.Sprintf("%sif !isImport && !data.%s.IsNull() {\n", indent, fieldName))
+				sb.WriteString(fmt.Sprintf("%sif !isImport && !data.%s.IsNull() && !data.%s.IsUnknown() {\n", indent, fieldName, fieldName))
 				sb.WriteString(fmt.Sprintf("%s\t// Normal Read: preserve existing state value (do nothing)\n", indent))
 				sb.WriteString(fmt.Sprintf("%s} else {\n", indent))
-				sb.WriteString(fmt.Sprintf("%s\t// Import case or null state: read from API\n", indent))
+				sb.WriteString(fmt.Sprintf("%s\t// Import case, null state, or unknown (after Create): read from API\n", indent))
 				sb.WriteString(fmt.Sprintf("%s\tif v, ok := apiResource.Spec[\"%s\"].(bool); ok {\n", indent, jsonName))
 				sb.WriteString(fmt.Sprintf("%s\t\tdata.%s = types.BoolValue(v)\n", indent, fieldName))
 				sb.WriteString(fmt.Sprintf("%s\t} else {\n", indent))
@@ -2597,16 +2826,17 @@ func generateResourceFile(resource *ResourceTemplate) error {
 
 	// Create template with custom functions
 	funcMap := template.FuncMap{
-		"renderNestedAttrs":              renderNestedAttributes,
-		"renderNestedBlocks":             renderNestedBlocks,
-		"renderNestedModelTypes":         renderNestedModelTypes,
-		"renderBlockFields":              renderBlockFields,
-		"renderSpecStructFields":         renderSpecStructFields,
-		"renderSpecMarshalCode":          renderSpecMarshalCode,
-		"renderSpecUnmarshalCode":        renderSpecUnmarshalCode,
-		"renderCreateComputedFieldsCode": renderCreateComputedFieldsCode,
-		"renderUpdateComputedFieldsCode": renderUpdateComputedFieldsCode,
-		"filterSpecFields":               filterSpecFields,
+		"renderNestedAttrs":               renderNestedAttributes,
+		"renderNestedBlocks":              renderNestedBlocks,
+		"renderNestedModelTypes":          renderNestedModelTypes,
+		"renderBlockFields":               renderBlockFields,
+		"renderSpecStructFields":          renderSpecStructFields,
+		"renderSpecMarshalCode":           renderSpecMarshalCode,
+		"renderSpecMarshalCodeForCreate":  renderSpecMarshalCodeForCreate,
+		"renderSpecUnmarshalCode":         renderSpecUnmarshalCode,
+		"renderCreateComputedFieldsCode":  renderCreateComputedFieldsCode,
+		"renderUpdateComputedFieldsCode":  renderUpdateComputedFieldsCode,
+		"filterSpecFields":                filterSpecFields,
 	}
 
 	tmpl, err := template.New("resource").Funcs(funcMap).Parse(resourceTemplate)
@@ -2657,10 +2887,14 @@ func renderNestedAttributes(attrs []TerraformAttribute, indent string) string {
 
 		if attr.Required {
 			sb.WriteString(fmt.Sprintf("%s\t\tRequired: true,\n", indent))
-		} else if attr.Optional {
-			sb.WriteString(fmt.Sprintf("%s\t\tOptional: true,\n", indent))
-		} else if attr.Computed {
-			sb.WriteString(fmt.Sprintf("%s\t\tComputed: true,\n", indent))
+		} else {
+			// Handle Optional and Computed flags (can be both true for fields like 'tenant')
+			if attr.Optional {
+				sb.WriteString(fmt.Sprintf("%s\t\tOptional: true,\n", indent))
+			}
+			if attr.Computed {
+				sb.WriteString(fmt.Sprintf("%s\t\tComputed: true,\n", indent))
+			}
 		}
 
 		if attr.Type == "map" || attr.Type == "list" {
@@ -3341,7 +3575,11 @@ func (r *{{.TitleCase}}Resource) Schema(ctx context.Context, req resource.Schema
 {{- end}}
 {{- if eq .TfsdkTag "name"}}
 				Validators: []validator.String{
+{{- if .UseDomainValidator}}
+					validators.DomainValidator(),
+{{- else}}
 					validators.NameValidator(),
+{{- end}}
 				},
 {{- else if eq .TfsdkTag "namespace"}}
 				Validators: []validator.String{
@@ -3494,7 +3732,7 @@ func (r *{{.TitleCase}}Resource) Create(ctx context.Context, req resource.Create
 		"namespace": data.Namespace.ValueString(),
 	})
 
-	apiResource := &client.{{.TitleCase}}{
+	createReq := &client.{{.TitleCase}}{
 		Metadata: client.Metadata{
 			Name:      data.Name.ValueString(),
 			Namespace: data.Namespace.ValueString(),
@@ -3503,7 +3741,7 @@ func (r *{{.TitleCase}}Resource) Create(ctx context.Context, req resource.Create
 	}
 
 	if !data.Description.IsNull() {
-		apiResource.Metadata.Description = data.Description.ValueString()
+		createReq.Metadata.Description = data.Description.ValueString()
 	}
 
 	if !data.Labels.IsNull() {
@@ -3512,7 +3750,7 @@ func (r *{{.TitleCase}}Resource) Create(ctx context.Context, req resource.Create
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		apiResource.Metadata.Labels = labels
+		createReq.Metadata.Labels = labels
 	}
 
 	if !data.Annotations.IsNull() {
@@ -3521,29 +3759,34 @@ func (r *{{.TitleCase}}Resource) Create(ctx context.Context, req resource.Create
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		apiResource.Metadata.Annotations = annotations
+		createReq.Metadata.Annotations = annotations
 	}
 
 	// Marshal spec fields from Terraform state to API struct
-{{renderSpecMarshalCode .Attributes "\t"}}
+{{renderSpecMarshalCodeForCreate .Attributes "\t"}}
 
-	created, err := r.client.Create{{.TitleCase}}(ctx, apiResource)
+	apiResource, err := r.client.Create{{.TitleCase}}(ctx, createReq)
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create {{.TitleCase}}: %s", err))
 		return
 	}
 
-	data.ID = types.StringValue(created.Metadata.Name)
+	data.ID = types.StringValue(apiResource.Metadata.Name)
 {{- if not .HasNamespaceInPath}}
 	// For resources without namespace in API path, namespace is computed from API response
-	data.Namespace = types.StringValue(created.Metadata.Namespace)
+	data.Namespace = types.StringValue(apiResource.Metadata.Namespace)
 {{- end}}
 
-{{renderCreateComputedFieldsCode .Attributes "\t"}}
+	// Unmarshal spec fields from API response to Terraform state
+	// This ensures computed nested fields (like tenant in Object Reference blocks) have known values
+	isImport := false // Create is never an import
+	_ = isImport // May be unused if resource has no blocks needing import detection
+{{renderSpecUnmarshalCode .Attributes "\t" .TitleCase}}
+
 	psd := privatestate.NewPrivateStateData()
 	psd.SetCustom("managed", "true")
 	tflog.Debug(ctx, "Create: saving private state with managed marker", map[string]interface{}{
-		"name": created.Metadata.Name,
+		"name": apiResource.Metadata.Name,
 	})
 	resp.Diagnostics.Append(psd.SaveToPrivateState(ctx, resp)...)
 
