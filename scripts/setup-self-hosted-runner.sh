@@ -4,17 +4,15 @@
 # This script sets up a self-hosted GitHub Actions runner for running
 # acceptance tests against the F5 XC API.
 #
-# What it does:
-#   1. Validates prerequisites (gh CLI, Go, etc.)
-#   2. Configures F5 XC API credentials as GitHub secrets
-#   3. Downloads and installs the GitHub Actions runner
-#   4. Registers the runner with this repository
-#   5. Starts the runner
+# Two modes available:
+#   Native:    Installs runner directly on host (requires Go, etc.)
+#   Container: Runs runner in Docker (recommended - fully self-contained)
 #
 # Usage:
 #   ./scripts/setup-self-hosted-runner.sh [OPTIONS]
 #
 # Options:
+#   --container         Use Docker container mode (recommended)
 #   -y, --yes           Auto-confirm all prompts
 #   --skip-secrets      Skip configuring GitHub secrets (use if already set)
 #   --skip-start        Skip starting the runner after setup
@@ -23,8 +21,13 @@
 # Environment Variables:
 #   F5XC_API_URL    - F5 XC API URL (used in non-interactive mode)
 #   F5XC_API_TOKEN  - F5 XC API Token (used in non-interactive mode)
+#   GITHUB_TOKEN    - GitHub PAT for container mode (repo scope required)
 #
-# Requirements:
+# Container Mode Requirements:
+#   - Docker and docker-compose installed
+#   - GitHub Personal Access Token with 'repo' scope
+#
+# Native Mode Requirements:
 #   - GitHub CLI (gh) authenticated with repo admin access
 #   - Go 1.23+ installed
 #   - curl, jq installed
@@ -36,15 +39,20 @@ AUTO_YES=false
 SKIP_SECRETS=false
 SKIP_START=false
 RUNNER_NAME_ARG=""
+CONTAINER_MODE=false
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
+        --container)
+            CONTAINER_MODE=true
+            shift
+            ;;
         -y|--yes)
             AUTO_YES=true
             shift
             ;;
-        --skip-secrets)
+        --skip-secrets)  # pragma: allowlist secret
             SKIP_SECRETS=true
             shift
             ;;
@@ -402,9 +410,198 @@ print_summary() {
     echo ""
 }
 
-# Main
-main() {
+# ═══════════════════════════════════════════════════════════════════════════
+# Container Mode Functions
+# ═══════════════════════════════════════════════════════════════════════════
+
+check_container_prerequisites() {
+    log_step "Checking container prerequisites"
+
+    local missing=()
+
+    if command -v docker &> /dev/null; then
+        log_success "docker found"
+    else
+        missing+=("docker")
+    fi
+
+    if command -v docker-compose &> /dev/null || docker compose version &> /dev/null 2>&1; then
+        log_success "docker-compose found"
+    else
+        missing+=("docker-compose")
+    fi
+
+    check_command "gh" || missing+=("gh (GitHub CLI)")
+
+    # Check gh auth
+    if command -v gh &> /dev/null; then
+        if gh auth status &> /dev/null; then
+            log_success "GitHub CLI authenticated"
+        else
+            missing+=("gh auth (run 'gh auth login')")
+        fi
+    fi
+
+    if [[ ${#missing[@]} -gt 0 ]]; then
+        echo ""
+        log_error "Missing prerequisites:"
+        for item in "${missing[@]}"; do
+            echo "  - $item"
+        done
+        exit 1
+    fi
+}
+
+configure_container_env() {
+    log_step "Configuring container environment"
+
+    local env_file="${PROJECT_ROOT}/.github-runner-docker/.env"
+
+    # Get GitHub token for container auth
+    local github_token="${GITHUB_TOKEN:-}"
+    if [[ -z "$github_token" ]]; then
+        echo ""
+        echo "Container mode requires a GitHub Personal Access Token with 'repo' scope."
+        echo "Create one at: https://github.com/settings/tokens"
+        echo ""
+        prompt_input "GitHub Personal Access Token" "" "github_token" "true"
+    fi
+
+    if [[ -z "$github_token" ]]; then
+        log_error "GitHub token is required for container mode"
+        exit 1
+    fi
+
+    # Get F5XC credentials if not skipping secrets
+    local f5xc_url="${F5XC_API_URL:-}"
+    local f5xc_token="${F5XC_API_TOKEN:-}"
+
+    if [[ "$SKIP_SECRETS" != "true" ]]; then  # pragma: allowlist secret
+        if [[ -z "$f5xc_url" ]] || [[ -z "$f5xc_token" ]]; then
+            echo ""
+            echo "To get an API token from F5 XC Console:"
+            echo "  1. Administration → Personal Management → Credentials"
+            echo "  2. Add Credentials → API Token"
+            echo ""
+            [[ -z "$f5xc_url" ]] && prompt_input "F5 XC API URL" "https://console.ves.volterra.io" "f5xc_url" "false"
+            [[ -z "$f5xc_token" ]] && prompt_input "F5 XC API Token" "" "f5xc_token" "true"
+        fi
+
+        # Set GitHub secrets
+        log_info "Setting GitHub secrets..."
+        echo "$f5xc_url" | gh secret set F5XC_API_URL --repo "$REPO_FULL"
+        echo "$f5xc_token" | gh secret set F5XC_API_TOKEN --repo "$REPO_FULL"
+        log_success "GitHub secrets configured"
+    fi
+
+    # Create .env file
+    local runner_name="${RUNNER_NAME_ARG:-f5xc-container-runner}"
+
+    log_info "Creating container configuration..."
+    cat > "$env_file" << EOF
+# Auto-generated by setup-self-hosted-runner.sh
+GITHUB_REPOSITORY=${REPO_FULL}
+GITHUB_TOKEN=${github_token}
+RUNNER_NAME=${runner_name}
+RUNNER_LABELS=self-hosted,Linux,X64,container
+F5XC_API_URL=${f5xc_url:-}
+F5XC_API_TOKEN=${f5xc_token:-}
+EOF
+
+    chmod 600 "$env_file"
+    log_success "Container configuration saved to .env"
+}
+
+# Get the docker compose command (v2 or v1)
+get_compose_cmd() {
+    if docker compose version &> /dev/null 2>&1; then
+        echo "docker compose"
+    else
+        echo "docker-compose"
+    fi
+}
+
+start_container_runner() {
+    local compose_cmd
+    compose_cmd=$(get_compose_cmd)
+
+    if [[ "$SKIP_START" == "true" ]]; then
+        log_step "Skipping container start (--skip-start)"
+        log_info "To start manually:"
+        echo "  cd ${PROJECT_ROOT}/.github-runner-docker"
+        echo "  $compose_cmd up -d --build"
+        return 0
+    fi
+
+    log_step "Building and starting container runner"
+
+    cd "${PROJECT_ROOT}/.github-runner-docker"
+
+    log_info "Building container (this may take a few minutes)..."
+    $compose_cmd build
+
+    log_info "Starting runner container..."
+    $compose_cmd up -d
+
+    sleep 3
+
+    if $compose_cmd ps | grep -q "Up\|running"; then
+        log_success "Container runner started successfully"
+        log_info "View logs: $compose_cmd logs -f"
+        log_info "Stop runner: $compose_cmd down"
+    else
+        log_error "Container failed to start"
+        $compose_cmd logs
+        exit 1
+    fi
+}
+
+print_container_summary() {
+    echo ""
+    echo -e "${BOLD}════════════════════════════════════════════════════════════${NC}"
+    echo -e "${GREEN}${BOLD}   Container Runner Setup Complete${NC}"
+    echo -e "${BOLD}════════════════════════════════════════════════════════════${NC}"
+    echo ""
+    echo "  Repository:  $REPO_FULL"
+    echo "  Runner:      Docker container (f5xc-github-runner)"
+    [[ -n "${F5XC_API_URL:-}" ]] && echo "  API URL:     $F5XC_API_URL"
+    echo ""
+    echo "  Commands:"
+    echo "    View logs:    cd .github-runner-docker && docker-compose logs -f"
+    echo "    Stop runner:  cd .github-runner-docker && docker-compose down"
+    echo "    Restart:      cd .github-runner-docker && docker-compose restart"
+    echo ""
+    echo "  Trigger tests:"
+    echo "    gh workflow run acceptance-tests.yml -f mode=full"
+    echo ""
+}
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Main Entry Points
+# ═══════════════════════════════════════════════════════════════════════════
+
+main_container() {
     print_header
+    echo -e "${CYAN}Mode: Container (Docker)${NC}"
+    echo ""
+
+    check_container_prerequisites
+    get_repo_info
+
+    if ! confirm "Set up containerized runner for $REPO_FULL?"; then
+        exit 0
+    fi
+
+    configure_container_env
+    start_container_runner
+    print_container_summary
+}
+
+main_native() {
+    print_header
+    echo -e "${CYAN}Mode: Native${NC}"
+    echo ""
+
     check_prerequisites
     get_repo_info
 
@@ -417,6 +614,15 @@ main() {
     configure_runner
     start_runner
     print_summary
+}
+
+# Main dispatcher
+main() {
+    if [[ "$CONTAINER_MODE" == "true" ]]; then
+        main_container
+    else
+        main_native
+    fi
 }
 
 main "$@"
