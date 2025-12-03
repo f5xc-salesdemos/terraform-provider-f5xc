@@ -11,11 +11,12 @@
 
 FROM ubuntu:22.04
 
-# Versions
+# Versions - update these as needed
 ARG RUNNER_VERSION=2.321.0
 ARG GO_VERSION=1.23.3
 ARG TERRAFORM_VERSION=1.9.8
-ARG TARGETARCH=amd64
+# TARGETARCH is automatically set by Docker buildx (amd64, arm64)
+ARG TARGETARCH
 
 # Prevent interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
