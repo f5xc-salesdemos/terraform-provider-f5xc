@@ -18,7 +18,7 @@ GO=go
 GOFMT=gofmt
 GOLINT=golangci-lint
 
-.PHONY: all build test lint fmt clean clean-generated regenerate generate docs install help sweep sweep-dry-run testacc testacc-mock testacc-real testacc-all test-report
+.PHONY: all build test lint fmt clean clean-generated regenerate generate docs install help sweep sweep-dry-run testacc testacc-mock testacc-real testacc-all test-report test-comprehensive test-comprehensive-mock test-comprehensive-real test-pr-subset
 
 # Default target
 all: generate build lint test docs
@@ -44,6 +44,12 @@ help:
 	@echo "  make testacc-mock - Run MOCK API tests only (TestMock* prefix)"
 	@echo "  make testacc-all  - Run both real and mock tests with report"
 	@echo "  make test-report  - Generate test report from last test run"
+	@echo ""
+	@echo "Comprehensive Testing (CI/CD):"
+	@echo "  make test-comprehensive      - Full test suite with professional reports"
+	@echo "  make test-comprehensive-mock - Mock tests only (parallel, fast)"
+	@echo "  make test-comprehensive-real - Real API tests only (sequential, rate-limited)"
+	@echo "  make test-pr-subset          - PR validation (mock tests only)"
 	@echo ""
 	@echo "Test Categories:"
 	@echo "  REAL_API (TestAcc*) - Tests against real F5 XC API endpoints"
@@ -373,3 +379,44 @@ discover-all: discover-defaults generate-mock-fixtures test
 	@echo ""
 	@echo "Full discovery pipeline complete"
 	@echo "Review changes and commit if satisfactory"
+
+# =============================================================================
+# Comprehensive Testing (CI/CD Ready)
+# =============================================================================
+# These targets use the comprehensive test runner script that produces
+# professional reports in multiple formats (Text, JSON, Markdown, JUnit XML).
+#
+# Key differences from testacc-* targets:
+#   - Mock tests run in PARALLEL (no rate limiting - local tests)
+#   - Real API tests run SEQUENTIAL with rate limiting (API protection)
+#   - Generates JUnit XML for GitHub Actions test UI
+#   - Detects transient errors (rate limit, timeout, connection)
+#   - Categorizes skip reasons
+#   - Tracks slowest tests for optimization
+
+# Run full comprehensive test suite (mock + real)
+# Mock tests run parallel, real API tests run sequential with rate limiting
+test-comprehensive:
+	@echo "Running comprehensive test suite..."
+	./scripts/run-comprehensive-tests.sh --mode full
+
+# Run mock tests only - PARALLEL (fast, no rate limiting needed)
+test-comprehensive-mock:
+	@echo "Running comprehensive mock tests (parallel)..."
+	./scripts/run-comprehensive-tests.sh --mode mock-only
+
+# Run real API tests only - SEQUENTIAL with rate limiting
+# Requires: F5XC_API_URL, F5XC_API_P12_FILE, F5XC_P12_PASSWORD
+test-comprehensive-real:
+	@echo "Running comprehensive real API tests (sequential)..."
+	./scripts/run-comprehensive-tests.sh --mode real-only
+
+# Run PR subset tests - mock tests only for PR validation
+test-pr-subset:
+	@echo "Running PR subset tests (mock only)..."
+	./scripts/run-comprehensive-tests.sh --mode pr-subset
+
+# Clean comprehensive test reports
+clean-test-reports:
+	@echo "Cleaning test reports..."
+	rm -rf test-reports/
