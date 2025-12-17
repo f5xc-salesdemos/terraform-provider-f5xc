@@ -298,6 +298,7 @@ jobs:
     uses: ./.github/workflows/_build-mcp-server.yml
     with:
       publish: true
+      force-publish: true  # Sync version regardless of file changes in commit
     secrets:
       npm-token: ${{ secrets.NPM_TOKEN }}
 
