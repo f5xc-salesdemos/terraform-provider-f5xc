@@ -13,17 +13,19 @@ description: |-
 
 ## Example Usage
 
-{{- if .HasExamples }}
+{{ if .HasExamples }}
 {{ range .ExampleFiles }}
 {{ tffile . }}
 {{ end }}
-{{- else }}
+{{ else }}
+
 ```terraform
 data "{{ .Name }}" "example" {
   name      = "example-resource"
   namespace = "system"
 }
 ```
-{{- end }}
+
+{{ end }}
 
 {{ .SchemaMarkdown | trimspace }}
