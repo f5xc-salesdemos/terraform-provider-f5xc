@@ -10,6 +10,11 @@ on:
         required: false
         default: false
         type: boolean
+      force-publish:
+        description: 'Force publish even without detected changes (for version sync)'
+        required: false
+        default: false
+        type: boolean
     outputs:
       changed:
         description: 'Whether the MCP server had changes'
@@ -85,7 +90,7 @@ jobs:
           fi
 
       - name: Publish to npm
-        if: inputs.publish && steps.check.outputs.has_changes == 'true'
+        if: inputs.publish && (inputs.force-publish || steps.check.outputs.has_changes == 'true')
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm-token }}
         run: |
