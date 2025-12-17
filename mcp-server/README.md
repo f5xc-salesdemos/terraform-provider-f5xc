@@ -12,11 +12,46 @@ A Model Context Protocol (MCP) server that provides AI assistants with comprehen
 
 ## Installation
 
+Choose the installation method that best fits your environment:
+
+| Method | Best For | Requirements |
+|--------|----------|--------------|
+| [VSCode MCP Gallery](#vscode-mcp-gallery) | VSCode users with Node.js | VSCode 1.99+, Node.js |
+| [npx (Recommended)](#from-npm) | Developers with Node.js | Node.js 18+ |
+| [MCPB Bundle](#mcpb-bundle-no-nodejs-required) | Corporate laptops | None |
+| [From Source](#from-source) | Contributors | Node.js 18+, npm |
+
+### VSCode MCP Gallery
+
+The easiest way to install if you're using VSCode with GitHub Copilot:
+
+1. Open VSCode
+2. Press `Ctrl+Shift+P` / `Cmd+Shift+P` to open Command Palette
+3. Run `MCP: Add Server`
+4. Search for `f5xc` or `@robinmordasiewicz/f5xc-terraform-mcp`
+5. Click Install
+
 ### From npm
 
 ```bash
 npm install -g @robinmordasiewicz/f5xc-terraform-mcp
 ```
+
+Or run directly with npx (no installation required):
+
+```bash
+npx @robinmordasiewicz/f5xc-terraform-mcp
+```
+
+### MCPB Bundle (No Node.js Required)
+
+For corporate environments where Node.js cannot be installed:
+
+1. Download the latest `.mcpb` file from [GitHub Releases](https://github.com/robinmordasiewicz/terraform-provider-f5xc/releases)
+2. Double-click the file to install, or drag it into Claude Desktop / VSCode
+3. The bundle includes everything needed - no external dependencies
+
+**File**: `f5xc-terraform-mcp-X.Y.Z.mcpb`
 
 ### From Source
 
@@ -158,6 +193,21 @@ To make the MCP server available across all workspaces, add to your VS Code user
 | `f5xc_terraform_find_endpoints` | Find API endpoints by URL pattern |
 | `f5xc_terraform_get_schema_definition` | Get a schema definition from a spec |
 | `f5xc_terraform_list_definitions` | List all definitions in a spec |
+
+### Subscription Tier Tools
+
+| Tool | Description |
+|------|-------------|
+| `f5xc_terraform_get_subscription_info` | Get subscription tier requirements for resources |
+| `f5xc_terraform_get_property_subscription_info` | Get property-level subscription tier indicators |
+
+### Addon Service Tools
+
+| Tool | Description |
+|------|-------------|
+| `f5xc_terraform_addon_list_services` | List available addon services with activation requirements |
+| `f5xc_terraform_addon_check_activation` | Check if an addon service is activated for the tenant |
+| `f5xc_terraform_addon_activation_workflow` | Get activation workflow and Terraform code for addons |
 
 ### Utility Tools
 

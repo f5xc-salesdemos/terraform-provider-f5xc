@@ -43,6 +43,7 @@ repos:
       - id: check-merge-conflict
 
       - id: detect-private-key
+        exclude: ^internal/.*_test\.go$  # Exclude test files with test keys
 
       - id: check-executables-have-shebangs
 
@@ -90,14 +91,15 @@ repos:
 
   # =============================================================================
   # Markdown linting - validation only (generated files fixed via generators)
+  # NOTE: Generated docs/ files are checked by lint-generated-preview hook instead
   # =============================================================================
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.20.0
     hooks:
       - id: markdownlint-cli2
         args: []  # Check only, no --fix flag
-        # Only lint user-facing documentation, exclude internal planning documents
-        files: ^(docs/.*\.md|README\.md|CLAUDE\.md|CHANGELOG\.md|CONTRIBUTING\.md)$
+        # Lint source markdown files only; generated docs/ handled by lint-generated-preview
+        files: ^(templates/guides/.*\.md|README\.md|CLAUDE\.md|CHANGELOG\.md|CONTRIBUTING\.md)$
 
   # =============================================================================
   # Secrets detection - prevent accidental credential commits

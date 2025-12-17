@@ -46,36 +46,14 @@ func (d *AddonServiceActivationStatusDataSource) Schema(ctx context.Context, req
 Use this data source to determine if an addon service can be activated for your tenant
 and what the current subscription state is.
 
-## State Values
+**Possible state values:**
 
-| State | Description |
-|-------|-------------|
-| ` + "`AS_NONE`" + ` | Default state, service not subscribed |
-| ` + "`AS_PENDING`" + ` | Subscription request pending activation |
-| ` + "`AS_SUBSCRIBED`" + ` | Service is active and subscribed |
-| ` + "`AS_ERROR`" + ` | Subscription in error state |
-
-## Example Usage
-
-` + "```hcl" + `
-# Check if Bot Defense can be activated
-data "f5xc_addon_service_activation_status" "bot_defense" {
-  addon_service = "bot_defense"
-}
-
-# Conditionally create subscription based on status
-resource "f5xc_addon_subscription" "bot_defense" {
-  count = data.f5xc_addon_service_activation_status.bot_defense.can_activate ? 1 : 0
-
-  name      = "my-bot-defense"
-  namespace = "system"
-
-  addon_service {
-    name      = "bot_defense"
-    namespace = "shared"
-  }
-}
-` + "```" + ``,
+| State           | Description                              |
+| --------------- | ---------------------------------------- |
+| ` + "`AS_NONE`" + `       | Default state, service not subscribed    |
+| ` + "`AS_PENDING`" + `    | Subscription request pending activation  |
+| ` + "`AS_SUBSCRIBED`" + ` | Service is active and subscribed         |
+| ` + "`AS_ERROR`" + `      | Subscription in error state              |`,
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				MarkdownDescription: "Unique identifier for the data source.",
