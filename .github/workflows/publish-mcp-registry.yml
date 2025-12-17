@@ -1,0 +1,259 @@
+# Publish MCP Server to MCP Registry
+#
+# This workflow publishes the F5XC Terraform MCP server to the official
+# MCP Registry (https://registry.modelcontextprotocol.io) and creates
+# MCPB bundles for Node.js-free installation.
+#
+# Triggers:
+# - On release publish (after tag-release creates a new version)
+# - Manual workflow dispatch
+#
+# The workflow:
+# 1. Builds the MCPB bundle (self-contained ZIP)
+# 2. Uploads MCPB to GitHub release assets
+# 3. Publishes server.json to MCP Registry (npm-based install)
+#
+# Note: The npm package is published separately by _build-mcp-server.yml
+
+name: Publish MCP Registry
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (defaults to latest tag)'
+        required: false
+        type: string
+
+# Prevent concurrent runs
+concurrency:
+  group: publish-mcp-${{ github.ref }}
+  cancel-in-progress: false
+
+# Required for GitHub OIDC authentication with MCP Registry
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  build-mcpb:
+    name: Build MCPB Bundle
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      sha256: ${{ steps.hash.outputs.sha256 }}
+    defaults:
+      run:
+        working-directory: mcp-server
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: mcp-server/package-lock.json
+
+      - name: Determine Version
+        id: version
+        run: |
+          if [[ -n "${{ inputs.version }}" ]]; then
+            VERSION="${{ inputs.version }}"
+          else
+            VERSION=$(git describe --tags --abbrev=0 | sed 's/^v//')
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Using version: $VERSION"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Build MCPB Bundle
+        run: |
+          ./scripts/build-mcpb.sh --version ${{ steps.version.outputs.version }}
+
+      - name: Calculate SHA-256
+        id: hash
+        run: |
+          SHA256=$(cat build/f5xc-terraform-mcp-${{ steps.version.outputs.version }}.mcpb.sha256)
+          echo "sha256=$SHA256" >> $GITHUB_OUTPUT
+          echo "SHA-256: $SHA256"
+
+      - name: Upload MCPB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcpb-bundle
+          path: |
+            mcp-server/build/*.mcpb
+            mcp-server/build/*.sha256
+          retention-days: 5
+
+  upload-release-assets:
+    name: Upload to Release
+    needs: build-mcpb
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download MCPB artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: mcpb-bundle
+          path: ./mcpb
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ./mcpb/*.mcpb
+            ./mcpb/*.sha256
+          fail_on_unmatched_files: false
+
+  update-server-json:
+    name: Update server.json
+    needs: build-mcpb
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.AUTO_MERGE_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Update server.json version
+        run: |
+          cd mcp-server
+          VERSION="${{ needs.build-mcpb.outputs.version }}"
+
+          # Update version in server.json
+          node -e "
+          const fs = require('fs');
+          const serverJson = JSON.parse(fs.readFileSync('server.json', 'utf8'));
+          serverJson.version = '$VERSION';
+          if (serverJson.packages) {
+            serverJson.packages.forEach(p => p.version = '$VERSION');
+          }
+          fs.writeFileSync('server.json', JSON.stringify(serverJson, null, 2) + '\n');
+          "
+
+          # Update version in manifest.json
+          node -e "
+          const fs = require('fs');
+          const manifest = JSON.parse(fs.readFileSync('manifest.json', 'utf8'));
+          manifest.version = '$VERSION';
+          fs.writeFileSync('manifest.json', JSON.stringify(manifest, null, 2) + '\n');
+          "
+
+      - name: Check for changes
+        id: check
+        run: |
+          if git diff --quiet mcp-server/server.json mcp-server/manifest.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add mcp-server/server.json mcp-server/manifest.json
+          git commit -m "chore(mcp): update server.json and manifest.json to v${{ needs.build-mcpb.outputs.version }}"
+          git push
+
+  publish-registry:
+    name: Publish to MCP Registry
+    needs: [build-mcpb, update-server-json]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Install mcp-publisher CLI
+        run: |
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz
+          sudo mv mcp-publisher /usr/local/bin/
+          mcp-publisher --version
+
+      - name: Authenticate via GitHub OIDC
+        run: mcp-publisher login github-oidc
+
+      - name: Validate server.json (dry run)
+        working-directory: mcp-server
+        run: mcp-publisher publish --dry-run --file server.json
+
+      - name: Publish to MCP Registry
+        working-directory: mcp-server
+        run: mcp-publisher publish --file server.json
+
+      - name: Verify publication
+        run: |
+          SERVER_NAME=$(jq -r '.name' mcp-server/server.json)
+          echo "Verifying publication of: $SERVER_NAME"
+          sleep 3
+          curl -s "https://registry.modelcontextprotocol.io/v0/servers?search=${SERVER_NAME}" | jq '.'
+
+  summary:
+    name: Summary
+    needs: [build-mcpb, update-server-json, publish-registry]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Summary
+        run: |
+          echo "## MCP Server Publication Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version**: ${{ needs.build-mcpb.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**SHA-256**: \`${{ needs.build-mcpb.outputs.sha256 }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Distribution Channels" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Channel | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| npm | Published by _build-mcp-server.yml |" >> $GITHUB_STEP_SUMMARY
+          echo "| MCPB Bundle | ${{ needs.build-mcpb.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| server.json | ${{ needs.update-server-json.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| MCP Registry | ${{ needs.publish-registry.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Installation Methods" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**With Node.js:**" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "npx @robinmordasiewicz/f5xc-terraform-mcp" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Without Node.js (MCPB):**" >> $GITHUB_STEP_SUMMARY
+          echo "Download from GitHub Release: \`f5xc-terraform-mcp-${{ needs.build-mcpb.outputs.version }}.mcpb\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Via MCP Registry:**" >> $GITHUB_STEP_SUMMARY
+          echo "Search for \`f5xc\` in VSCode MCP Gallery or Claude Desktop" >> $GITHUB_STEP_SUMMARY
