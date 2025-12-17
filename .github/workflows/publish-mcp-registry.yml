@@ -182,18 +182,27 @@ jobs:
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Commit and push
+      - name: Create Pull Request
         if: steps.check.outputs.changed == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add mcp-server/server.json mcp-server/manifest.json
-          git commit -m "chore(mcp): update server.json and manifest.json to v${{ needs.build-mcpb.outputs.version }}"
-          git push
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.AUTO_MERGE_TOKEN }}
+          commit-message: "chore(mcp): update server.json to v${{ needs.build-mcpb.outputs.version }}"
+          branch: chore/mcp-server-json-${{ needs.build-mcpb.outputs.version }}
+          title: "chore(mcp): update server.json to v${{ needs.build-mcpb.outputs.version }}"
+          body: |
+            Automated update of server.json for MCP Registry publication.
+
+            **Version**: ${{ needs.build-mcpb.outputs.version }}
+            **SHA256**: `${{ needs.build-mcpb.outputs.sha256 }}`
+
+            This PR updates the server.json with the correct MCPB download URL and hash.
+          labels: automated,mcp
+          delete-branch: true
 
   publish-registry:
     name: Publish to MCP Registry
-    needs: [build-mcpb, update-server-json]
+    needs: [build-mcpb]
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
     permissions:
@@ -232,7 +241,7 @@ jobs:
 
   summary:
     name: Summary
-    needs: [build-mcpb, update-server-json, publish-registry]
+    needs: [build-mcpb, upload-release-assets, update-server-json, publish-registry]
     runs-on: ubuntu-latest
     if: always()
 
