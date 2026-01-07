@@ -10,10 +10,11 @@
  * - Consolidated API specification tool (search/get/endpoints/definitions)
  * - Consolidated subscription tier tool
  * - Consolidated addon service tool
+ * - Resource metadata tool for deterministic AI configuration generation
  * - Provider summary tool
  *
  * Token Optimization:
- * - 14 tools consolidated to 6 tools (~77% token reduction)
+ * - 14 tools consolidated to 7 tools (~75% token reduction)
  * - Optimized descriptions using shared parameter descriptions
  * - Discovery meta-tool enables lazy schema loading
  *
@@ -44,6 +45,7 @@ import { handleDocs, DOCS_TOOL_DEFINITION } from './tools/docs.js';
 import { handleApi, API_TOOL_DEFINITION } from './tools/api.js';
 import { handleSubscription, SUBSCRIPTION_TOOL_DEFINITION } from './tools/subscription.js';
 import { handleAddon, ADDON_TOOL_DEFINITION } from './tools/addon.js';
+import { handleMetadata, METADATA_TOOL_DEFINITION } from './tools/metadata.js';
 
 // Consolidated schemas
 import {
@@ -52,12 +54,14 @@ import {
   ApiSchema,
   SubscriptionSchema,
   AddonSchema,
+  MetadataSchema,
   ResponseFormatSchema,
   type DiscoverInput,
   type DocsInput,
   type ApiInput,
   type SubscriptionInput,
   type AddonInput,
+  type MetadataInput,
 } from './schemas/common.js';
 
 // Legacy schemas for get_summary tool
@@ -221,7 +225,32 @@ server.registerTool(
 );
 
 // =============================================================================
-// TOOL 6: SUMMARY TOOL (KEEP AS-IS)
+// TOOL 6: METADATA TOOL (NEW)
+// =============================================================================
+
+server.registerTool(
+  METADATA_TOOL_DEFINITION.name,
+  {
+    title: 'F5XC Resource Metadata',
+    description: METADATA_TOOL_DEFINITION.description,
+    inputSchema: MetadataSchema,
+    annotations: {
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    },
+  },
+  async (params: MetadataInput) => {
+    const result = await handleMetadata(params);
+    return {
+      content: [{ type: 'text', text: result }],
+    };
+  },
+);
+
+// =============================================================================
+// TOOL 7: SUMMARY TOOL (KEEP AS-IS)
 // =============================================================================
 
 server.registerTool(
@@ -242,6 +271,12 @@ server.registerTool(
     const apiSummary = getApiSpecsSummary();
 
     const output = {
+      provider: {
+        name: 'robinmordasiewicz/f5xc',
+        registry_url: 'https://registry.terraform.io/providers/robinmordasiewicz/f5xc/latest',
+        github_url: 'https://github.com/robinmordasiewicz/terraform-provider-f5xc',
+        npm_package: '@robinmordasiewicz/f5xc-terraform-mcp',
+      },
       documentation: {
         total: Object.values(docsSummary).reduce((a, b) => a + b, 0),
         by_type: docsSummary,
@@ -256,6 +291,47 @@ server.registerTool(
     if (params.response_format === ResponseFormat.MARKDOWN) {
       const lines = [
         '# F5 Distributed Cloud Terraform Provider',
+        '',
+        '## Provider Information',
+        '',
+        '| Property | Value |',
+        '|----------|-------|',
+        '| **Provider Name** | `robinmordasiewicz/f5xc` |',
+        '| **Registry URL** | https://registry.terraform.io/providers/robinmordasiewicz/f5xc/latest |',
+        '| **GitHub** | https://github.com/robinmordasiewicz/terraform-provider-f5xc |',
+        '| **npm Package** | `@robinmordasiewicz/f5xc-terraform-mcp` |',
+        '',
+        '## Quick Start',
+        '',
+        '### Terraform Configuration',
+        '',
+        '```hcl',
+        'terraform {',
+        '  required_providers {',
+        '    f5xc = {',
+        '      source = "robinmordasiewicz/f5xc"',
+        '    }',
+        '  }',
+        '}',
+        '',
+        'provider "f5xc" {',
+        '  # API Token authentication (recommended)',
+        '  api_url   = "https://your-tenant.console.ves.volterra.io"',
+        '  api_token = var.f5xc_api_token',
+        '}',
+        '```',
+        '',
+        '### Environment Variables',
+        '',
+        '| Variable | Description |',
+        '|----------|-------------|',
+        '| `F5XC_API_URL` | F5 Distributed Cloud API URL |',
+        '| `F5XC_API_TOKEN` | API Token for authentication |',
+        '| `F5XC_P12_FILE` | Path to P12 certificate file |',
+        '| `F5XC_P12_PASSWORD` | Password for P12 certificate |',
+        '| `F5XC_CERT` | Path to PEM certificate file |',
+        '| `F5XC_KEY` | Path to PEM private key file |',
+        '| `F5XC_CACERT` | Path to CA certificate file |',
         '',
         '## Documentation',
         '',
@@ -289,9 +365,14 @@ server.registerTool(
       lines.push(
         '- `f5xc_terraform_addon` - Addon services (operations: list, check, workflow)',
       );
+      lines.push(
+        '- `f5xc_terraform_metadata` - Resource metadata for deterministic AI config generation (operations: oneof, validation, defaults, enums, attribute, requires_replace, summary)',
+      );
       lines.push('- `f5xc_terraform_get_summary` - This summary');
       lines.push('');
-      lines.push('> **Token Optimization**: 14 tools consolidated to 6 tools (~77% reduction)');
+      lines.push('> **Token Optimization**: 14 tools consolidated to 7 tools (~75% reduction)');
+      lines.push('');
+      lines.push('> **Note**: Use `f5xc_terraform_docs` with `operation: "get", name: "provider"` for complete provider documentation.');
 
       textContent = lines.join('\n');
     } else {

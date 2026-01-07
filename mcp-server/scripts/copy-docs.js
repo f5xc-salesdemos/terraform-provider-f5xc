@@ -71,6 +71,21 @@ for (const [key, source] of Object.entries(SOURCES)) {
 
 console.log(`\nBundled ${totalFiles} documentation files to dist/docs/`);
 
+// Copy provider index (docs/index.md) - contains provider configuration information
+const PROVIDER_INDEX_SRC = join(PROJECT_ROOT, 'docs', 'index.md');
+const PROVIDER_INDEX_DEST = join(DIST_DOCS, 'index.md');
+
+if (existsSync(PROVIDER_INDEX_SRC)) {
+  try {
+    cpSync(PROVIDER_INDEX_SRC, PROVIDER_INDEX_DEST);
+    console.log('  [OK] index.md: Copied provider documentation');
+  } catch (error) {
+    console.error(`  [ERROR] index.md: ${error.message}`);
+  }
+} else {
+  console.log('  [SKIP] index.md: Source not found');
+}
+
 // Copy subscription metadata if available
 const SUBSCRIPTION_METADATA_SRC = join(PROJECT_ROOT, 'tools', 'subscription-tiers.json');
 const SUBSCRIPTION_METADATA_DEST = join(MCP_ROOT, 'dist', 'subscription-tiers.json');
@@ -84,6 +99,22 @@ if (existsSync(SUBSCRIPTION_METADATA_SRC)) {
   }
 } else {
   console.log('  [SKIP] subscription-tiers.json: Source not found (optional)');
+}
+
+// Copy resource metadata files for deterministic AI configuration generation
+const METADATA_SRC = join(PROJECT_ROOT, 'tools', 'metadata');
+const METADATA_DEST = join(MCP_ROOT, 'dist', 'metadata');
+
+if (existsSync(METADATA_SRC)) {
+  try {
+    cpSync(METADATA_SRC, METADATA_DEST, { recursive: true });
+    const metadataCount = countFiles(METADATA_DEST);
+    console.log(`  [OK] metadata/: Copied ${metadataCount} metadata files`);
+  } catch (error) {
+    console.error(`  [ERROR] metadata/: ${error.message}`);
+  }
+} else {
+  console.log('  [SKIP] metadata/: Source not found (run generate-all-schemas.go to create)');
 }
 
 /**
