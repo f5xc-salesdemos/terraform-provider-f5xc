@@ -120,6 +120,19 @@ export interface SchemaDefinition {
   allOf?: SchemaDefinition[];
   oneOf?: SchemaDefinition[];
   anyOf?: SchemaDefinition[];
+  // F5 vendor extensions (x-ves-*)
+  'x-displayname'?: string;
+  'x-ves-example'?: string;
+  // Enrichment extensions (x-f5xc-*)
+  'x-f5xc-category'?: string;
+  'x-f5xc-requires-tier'?: string;
+  'x-f5xc-complexity'?: string;
+  'x-f5xc-example'?: string;
+  'x-f5xc-description-short'?: string;
+  'x-f5xc-description-medium'?: string;
+  'x-f5xc-use-cases'?: string[];
+  'x-f5xc-related-domains'?: string[];
+  'x-f5xc-is-preview'?: boolean;
 }
 
 export interface SearchResult {
