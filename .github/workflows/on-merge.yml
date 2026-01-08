@@ -740,6 +740,20 @@ jobs:
             mcp-server/server.json
             mcp-server/manifest.json
 
+      - name: Enable auto-merge for server.json PR
+        if: steps.check-changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.AUTO_MERGE_TOKEN }}
+        run: |
+          # Find the PR we just created
+          PR_NUMBER=$(gh pr list --state open --head "chore/mcp-server-json-${{ steps.version.outputs.version }}" --json number --jq '.[0].number')
+          if [ -n "$PR_NUMBER" ]; then
+            echo "Enabling auto-merge for PR #$PR_NUMBER"
+            gh pr merge "$PR_NUMBER" --auto --squash --delete-branch || echo "Auto-merge already enabled or not available"
+          else
+            echo "Could not find PR to enable auto-merge"
+          fi
+
       - name: Post-publish summary
         run: |
           echo ""
