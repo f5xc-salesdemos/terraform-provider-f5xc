@@ -31,8 +31,8 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/f5xc/terraform-provider-f5xc/tools/pkg/naming"
 	"github.com/f5xc/terraform-provider-f5xc/tools/pkg/namespace"
+	"github.com/f5xc/terraform-provider-f5xc/tools/pkg/naming"
 	"github.com/f5xc/terraform-provider-f5xc/tools/pkg/openapi"
 )
 
@@ -188,7 +188,7 @@ type AttributeMetadata struct {
 
 // DependencyInfo holds resource relationship information
 type DependencyInfo struct {
-	References   []string `json:"references,omitempty"`   // Resources this resource references
+	References   []string `json:"references,omitempty"`    // Resources this resource references
 	ReferencedBy []string `json:"referenced_by,omitempty"` // Resources that reference this
 }
 
@@ -199,10 +199,10 @@ var metadataCollection = &MetadataCollection{
 
 // Global maps from index.json for resource metadata enrichment
 var (
-	resourceTierMap       = make(map[string]string)                       // resourceName -> tier
-	resourceDependencyMap = make(map[string]*openapi.ResourceDependencies) // resourceName -> dependencies
-	resourceReferencedByMap = make(map[string][]string)                   // resourceName -> resources that depend on it
-	resourceCategoryMap   = make(map[string]string)                       // resourceName -> category
+	resourceTierMap         = make(map[string]string)                        // resourceName -> tier
+	resourceDependencyMap   = make(map[string]*openapi.ResourceDependencies) // resourceName -> dependencies
+	resourceReferencedByMap = make(map[string][]string)                      // resourceName -> resources that depend on it
+	resourceCategoryMap     = make(map[string]string)                        // resourceName -> category
 )
 
 var schemaCache = make(map[string]SchemaDefinition)
@@ -983,8 +983,18 @@ func extractResourceSchema(spec *OpenAPI3Spec, resourceName string) (*ResourceTe
 
 	attributes = sortedAttrs
 
-	// Transform raw API description into user-friendly Terraform description
-	description := transformResourceDescription(resourceName, createSpec.Description)
+	// Get best description with enrichment extension priority:
+	// 1. x-f5xc-description-medium (preferred - detailed but concise)
+	// 2. x-f5xc-description-short (fallback - ultra-short)
+	// 3. description (original)
+	bestDescription := createSpec.XF5XCDescriptionMed
+	if bestDescription == "" {
+		bestDescription = createSpec.XF5XCDescriptionShort
+	}
+	if bestDescription == "" {
+		bestDescription = createSpec.Description
+	}
+	description := transformResourceDescription(resourceName, bestDescription)
 
 	// Generate example usage HCL
 	exampleUsage := generateExampleUsage(resourceName, attributes)
@@ -1160,10 +1170,23 @@ func convertToTerraformAttributeWithDepth(name string, schema SchemaDefinition, 
 		JsonName:    name, // Original OpenAPI property name for JSON marshaling
 	}
 
-	// Build description
-	description := schema.Description
-	if schema.XDisplayName != "" {
-		description = schema.XDisplayName + ". " + description
+	// Build description with enrichment extension priority:
+	// 1. x-f5xc-description-medium (preferred - detailed but concise)
+	// 2. x-f5xc-description-short (fallback - ultra-short)
+	// 3. x-displayname + description (original behavior)
+	// 4. description only
+	description := schema.XF5XCDescriptionMed
+	if description == "" {
+		description = schema.XF5XCDescriptionShort
+	}
+	if description == "" {
+		if schema.XDisplayName != "" && schema.Description != "" {
+			description = schema.XDisplayName + ". " + schema.Description
+		} else if schema.XDisplayName != "" {
+			description = schema.XDisplayName
+		} else {
+			description = schema.Description
+		}
 	}
 	attr.Description = cleanDescription(description, fieldPath)
 	if attr.Description == "" {
@@ -2167,13 +2190,13 @@ type ValidationPatterns struct {
 
 // ValidationPattern describes a single validation rule
 type ValidationPattern struct {
-	Type        string   `json:"type"`                  // "regex" or "range"
-	Pattern     string   `json:"pattern,omitempty"`     // Regex pattern
-	Min         *int64   `json:"min,omitempty"`         // Minimum value for range
-	Max         *int64   `json:"max,omitempty"`         // Maximum value for range
-	Description string   `json:"description"`           // Human-readable description
-	Examples    []string `json:"examples,omitempty"`    // Valid example values
-	Invalid     []string `json:"invalid,omitempty"`     // Invalid example values
+	Type        string   `json:"type"`               // "regex" or "range"
+	Pattern     string   `json:"pattern,omitempty"`  // Regex pattern
+	Min         *int64   `json:"min,omitempty"`      // Minimum value for range
+	Max         *int64   `json:"max,omitempty"`      // Maximum value for range
+	Description string   `json:"description"`        // Human-readable description
+	Examples    []string `json:"examples,omitempty"` // Valid example values
+	Invalid     []string `json:"invalid,omitempty"`  // Invalid example values
 }
 
 // getValidationPatterns returns the validation patterns used by the provider
@@ -2259,19 +2282,19 @@ func addOneOfConstraintWithGroup(desc string, groupName string, oneOfFields []st
 func determineOneOfDefault(groupName string, fields []string) string {
 	// Common patterns for F5 XC resources - these are the safe, recommended defaults
 	defaultPatterns := map[string]string{
-		"advertise_choice":          "advertise_on_public_default_vip",
-		"loadbalancer_type":         "https_auto_cert",
-		"hash_policy_choice":        "round_robin",
-		"waf_choice":                "disable_waf",
-		"challenge_type":            "no_challenge",
-		"rate_limit_choice":         "disable_rate_limit",
-		"service_policy_choice":     "no_service_policies",
-		"tls_choice":                "no_tls",
-		"bot_defense_choice":        "disable_bot_defense",
-		"api_definition_choice":     "disable_api_definition",
-		"api_discovery_choice":      "disable_api_discovery",
-		"ip_reputation_choice":      "disable_ip_reputation",
-		"malware_protection":        "disable_malware_protection",
+		"advertise_choice":           "advertise_on_public_default_vip",
+		"loadbalancer_type":          "https_auto_cert",
+		"hash_policy_choice":         "round_robin",
+		"waf_choice":                 "disable_waf",
+		"challenge_type":             "no_challenge",
+		"rate_limit_choice":          "disable_rate_limit",
+		"service_policy_choice":      "no_service_policies",
+		"tls_choice":                 "no_tls",
+		"bot_defense_choice":         "disable_bot_defense",
+		"api_definition_choice":      "disable_api_definition",
+		"api_discovery_choice":       "disable_api_discovery",
+		"ip_reputation_choice":       "disable_ip_reputation",
+		"malware_protection":         "disable_malware_protection",
 		"client_side_defense_choice": "disable_client_side_defense",
 	}
 
@@ -3769,14 +3792,14 @@ func generateResourceFile(resource *ResourceTemplate) error {
 
 	// Create template with custom functions
 	funcMap := template.FuncMap{
-		"renderNestedAttrs":              renderNestedAttributes,
-		"renderNestedBlocks":             renderNestedBlocks,
-		"renderNestedModelTypes":         renderNestedModelTypes,
-		"renderBlockFields":              renderBlockFields,
-		"renderSpecStructFields":         renderSpecStructFields,
-		"renderSpecMarshalCode":          renderSpecMarshalCode,
-		"renderSpecMarshalCodeForCreate": renderSpecMarshalCodeForCreate,
-		"renderSpecUnmarshalCode":        renderSpecUnmarshalCode,
+		"renderNestedAttrs":               renderNestedAttributes,
+		"renderNestedBlocks":              renderNestedBlocks,
+		"renderNestedModelTypes":          renderNestedModelTypes,
+		"renderBlockFields":               renderBlockFields,
+		"renderSpecStructFields":          renderSpecStructFields,
+		"renderSpecMarshalCode":           renderSpecMarshalCode,
+		"renderSpecMarshalCodeForCreate":  renderSpecMarshalCodeForCreate,
+		"renderSpecUnmarshalCode":         renderSpecUnmarshalCode,
 		"renderCreateComputedFieldsCode":  renderCreateComputedFieldsCode,
 		"renderUpdateComputedFieldsCode":  renderUpdateComputedFieldsCode,
 		"renderFetchedComputedFieldsCode": renderFetchedComputedFieldsCode,
