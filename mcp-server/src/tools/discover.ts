@@ -88,6 +88,12 @@ function buildResponse(
 }
 
 interface DiscoverResponse {
+  critical_syntax_warning: {
+    message: string;
+    common_mistake: string;
+    correct_syntax: string;
+    recommendation: string;
+  };
   provider: {
     name: string;
     registry_url: string;
@@ -106,6 +112,12 @@ interface DiscoverResponse {
 
 function buildJsonResponse(tools: ToolInfo[], verbose: boolean): DiscoverResponse {
   return {
+    critical_syntax_warning: {
+      message: 'This provider uses empty blocks {} for mutually exclusive options, NOT boolean values',
+      common_mistake: 'no_tls = true, advertise_on_public_default_vip = true, round_robin = true',
+      correct_syntax: 'no_tls {}, advertise_on_public_default_vip {}, round_robin {}',
+      recommendation: 'Always query f5xc_terraform_metadata(operation="syntax", resource="...") BEFORE writing Terraform config',
+    },
     provider: {
       name: 'robinmordasiewicz/f5xc',
       registry_url: 'https://registry.terraform.io/providers/robinmordasiewicz/f5xc/latest',
@@ -138,6 +150,42 @@ function buildMarkdownResponse(tools: ToolInfo[], verbose: boolean): string {
     '',
     '**Provider**: `robinmordasiewicz/f5xc`',
     '**Registry**: https://registry.terraform.io/providers/robinmordasiewicz/f5xc/latest',
+    '',
+    // ==========================================================================
+    // CRITICAL SYNTAX PATTERN WARNING - MUST READ FIRST
+    // ==========================================================================
+    '---',
+    '',
+    '## ⚠️ CRITICAL: Empty Block Syntax Pattern',
+    '',
+    'This provider uses **empty blocks** `{}` for mutually exclusive options, NOT boolean values.',
+    '',
+    '### Common AI Mistake (WRONG):',
+    '```hcl',
+    '# WRONG - These are NOT boolean attributes!',
+    'no_tls = true                          # ERROR',
+    'advertise_on_public_default_vip = true # ERROR',
+    'round_robin = true                     # ERROR',
+    'disable_api_definition = true          # ERROR',
+    'no_challenge = true                    # ERROR',
+    '```',
+    '',
+    '### Correct Syntax:',
+    '```hcl',
+    '# CORRECT - Use empty block syntax for OneOf choices',
+    'no_tls {}',
+    'advertise_on_public_default_vip {}',
+    'round_robin {}',
+    'disable_api_definition {}',
+    'no_challenge {}',
+    '```',
+    '',
+    '### Before Writing ANY Resource:',
+    '1. Query `f5xc_terraform_metadata(operation="syntax", resource="<name>")` to get correct syntax',
+    '2. Query `f5xc_terraform_metadata(operation="example", resource="<name>")` to get complete examples',
+    '3. Use `f5xc_terraform_metadata(operation="validate", resource="<name>", config="...")` to check your config',
+    '',
+    '---',
     '',
     `**Available Tools**: ${tools.length}`,
     `**Token Estimate**: ${verbose ? '~2,000' : '~150'} tokens`,
