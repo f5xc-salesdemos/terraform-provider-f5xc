@@ -366,7 +366,7 @@ server.registerTool(
         '- `f5xc_terraform_addon` - Addon services (operations: list, check, workflow)',
       );
       lines.push(
-        '- `f5xc_terraform_metadata` - Resource metadata for deterministic AI config generation (operations: oneof, validation, defaults, enums, attribute, requires_replace, summary)',
+        '- `f5xc_terraform_metadata` - Resource metadata for deterministic AI config generation (operations: oneof, validation, defaults, enums, attribute, requires_replace, tier, dependencies, troubleshoot, syntax, validate, example, mistakes, summary)',
       );
       lines.push('- `f5xc_terraform_get_summary` - This summary');
       lines.push('');

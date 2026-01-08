@@ -257,7 +257,7 @@ export const AddonSchema = z.object({
  * Provides access to resource metadata for deterministic AI configuration generation
  */
 export const MetadataSchema = z.object({
-  operation: z.enum(['oneof', 'validation', 'defaults', 'enums', 'attribute', 'requires_replace', 'tier', 'dependencies', 'troubleshoot', 'summary', 'syntax'])
+  operation: z.enum(['oneof', 'validation', 'defaults', 'enums', 'attribute', 'requires_replace', 'tier', 'dependencies', 'troubleshoot', 'summary', 'syntax', 'validate', 'example', 'mistakes'])
     .describe(COMMON_PARAM_DESCRIPTIONS.operation),
   resource: z.string()
     .min(1)
@@ -270,7 +270,7 @@ export const MetadataSchema = z.object({
   pattern: z.string()
     .min(1)
     .optional()
-    .describe('Validation pattern name (e.g., "name", "domain", "port")'),
+    .describe('Validation pattern name (e.g., "name", "domain", "port") or example pattern (e.g., "basic", "with_waf", "full")'),
   tier: SubscriptionTierEnum
     .optional()
     .describe('Filter resources by subscription tier'),
@@ -282,6 +282,9 @@ export const MetadataSchema = z.object({
     .min(1)
     .optional()
     .describe('Error message pattern for troubleshoot operation'),
+  config: z.string()
+    .optional()
+    .describe('Terraform config snippet to validate (for validate operation)'),
   response_format: ResponseFormatSchema,
 }).strict();
 
