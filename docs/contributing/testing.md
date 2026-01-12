@@ -62,4 +62,4 @@ See `.github/workflows/ci.yml` for details.
 ## See Also
 
 - [Development guide](development.md)
-- [CI/CD automation](../../CLAUDE.md#part-2-cicd-automation-rules)
+- [CI/CD automation](https://github.com/robinmordasiewicz/terraform-provider-f5xc/blob/main/CLAUDE.md#part-2-cicd-automation-rules)

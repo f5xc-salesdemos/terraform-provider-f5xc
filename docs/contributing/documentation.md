@@ -63,5 +63,5 @@ go generate ./...
 
 ## See Also
 
-- [CLAUDE.md Part 5: Provider-Defined Functions](../../CLAUDE.md#part-5-provider-defined-functions)
-- [CLAUDE.md Part 6: Provider Guides](../../CLAUDE.md#part-6-provider-guides)
+- [CLAUDE.md Part 5: Provider-Defined Functions](https://github.com/robinmordasiewicz/terraform-provider-f5xc/blob/main/CLAUDE.md#part-5-provider-defined-functions)
+- [CLAUDE.md Part 6: Provider Guides](https://github.com/robinmordasiewicz/terraform-provider-f5xc/blob/main/CLAUDE.md#part-6-provider-guides)
