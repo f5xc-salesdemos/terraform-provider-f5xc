@@ -144,59 +144,6 @@ func TestGetRefName(t *testing.T) {
 	}
 }
 
-func TestParseSpecFilename(t *testing.T) {
-	tests := []struct {
-		filename     string
-		wantResource string
-		wantURL      string
-		wantErr      bool
-	}{
-		{
-			"docs-cloud-f5-com.1234.public.ves.io.schema.namespace.ves-swagger.json",
-			"namespace",
-			"namespace",
-			false,
-		},
-		{
-			"docs-cloud-f5-com.5678.public.ves.io.schema.views.http_loadbalancer.ves-swagger.json",
-			"http_loadbalancer",
-			"views-http-loadbalancer",
-			false,
-		},
-		{
-			"docs-cloud-f5-com.9999.public.ves.io.schema.aws.vpc_site.ves-swagger.json",
-			"vpc_site",
-			"aws-vpc-site",
-			false,
-		},
-		{
-			"invalid-filename.json",
-			"",
-			"",
-			true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.filename, func(t *testing.T) {
-			info, err := ParseSpecFilename(tt.filename)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("ParseSpecFilename() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if err != nil {
-				return
-			}
-			if info.ResourceName != tt.wantResource {
-				t.Errorf("ParseSpecFilename().ResourceName = %q, want %q", info.ResourceName, tt.wantResource)
-			}
-			if info.URLPath != tt.wantURL {
-				t.Errorf("ParseSpecFilename().URLPath = %q, want %q", info.URLPath, tt.wantURL)
-			}
-		})
-	}
-}
-
 func TestSpec_ResolveRef(t *testing.T) {
 	spec := &Spec{
 		Components: Components{

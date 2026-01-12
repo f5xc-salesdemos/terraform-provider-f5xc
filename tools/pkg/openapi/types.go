@@ -233,9 +233,7 @@ type DomainInfo struct {
 type SpecVersion string
 
 const (
-	// SpecVersionV1 represents the original v1 spec format (269 individual files).
-	SpecVersionV1 SpecVersion = "v1"
-	// SpecVersionV2 represents the new v2 spec format (38 domain-organized files).
+	// SpecVersionV2 represents the v2 spec format (38 domain-organized files).
 	SpecVersionV2 SpecVersion = "v2"
 	// SpecVersionUnknown represents an unrecognized spec format.
 	SpecVersionUnknown SpecVersion = "unknown"

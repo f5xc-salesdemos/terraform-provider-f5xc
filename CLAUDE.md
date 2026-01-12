@@ -729,9 +729,9 @@ API authentication uses Bearer token: `Authorization: APIToken {token}`
 
 The `tools/` directory contains generators for scaffolding resources from F5 OpenAPI specs:
 
-- `generate-resources.go` - Generates resource files from OpenAPI specs
-- `generate-client-types.go` - Generates client type definitions
-- `batch-generate.sh` - Batch generation script
+- `generate-all-schemas.go` - Main generator for provider resources, data sources, and client types from v2 domain specs
+- `transform-docs.go` - Transforms generated documentation with enhanced metadata
+- `generate-examples.go` - Generates Terraform example configurations
 
 ## Environment Variables
 

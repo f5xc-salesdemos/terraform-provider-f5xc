@@ -1631,7 +1631,6 @@ func getKeys(m map[string]bool) []string {
 // =============================================================================
 
 // loadV2Examples loads examples from OpenAPI spec files into the example cache.
-// Supports both v1 (individual spec files) and v2 (domain-organized) formats.
 func loadV2Examples(specDir string) error {
 	if _, err := os.Stat(specDir); os.IsNotExist(err) {
 		return fmt.Errorf("spec directory not found: %s", specDir)
@@ -1642,8 +1641,6 @@ func loadV2Examples(specDir string) error {
 	switch specVersion {
 	case openapi.SpecVersionV2:
 		return loadV2ExamplesFromDomains(specDir)
-	case openapi.SpecVersionV1:
-		return loadV2ExamplesFromV1Specs(specDir)
 	default:
 		return fmt.Errorf("unknown spec version in %s", specDir)
 	}
@@ -1660,23 +1657,6 @@ func loadV2ExamplesFromDomains(specDir string) error {
 		if err := loadExamplesFromSpecFile(domainFile); err != nil {
 			// Log but don't fail on individual file errors
 			fmt.Printf("Warning: Error loading examples from %s: %v\n", domainFile, err)
-		}
-	}
-
-	return nil
-}
-
-// loadV2ExamplesFromV1Specs loads examples from v1 individual spec files.
-func loadV2ExamplesFromV1Specs(specDir string) error {
-	specFiles, err := openapi.FindSpecFiles(specDir)
-	if err != nil {
-		return fmt.Errorf("finding spec files: %w", err)
-	}
-
-	for _, specFile := range specFiles {
-		if err := loadExamplesFromSpecFile(specFile); err != nil {
-			// Log but don't fail on individual file errors
-			fmt.Printf("Warning: Error loading examples from %s: %v\n", specFile, err)
 		}
 	}
 
@@ -1727,15 +1707,9 @@ func loadExamplesFromSpecFile(specFile string) error {
 	return nil
 }
 
-// extractResourceNameFromSpec extracts the resource name from a spec file.
+// extractResourceNameFromSpec extracts the resource name from a v2 domain spec file.
 func extractResourceNameFromSpec(specFile string, spec map[string]interface{}) string {
-	// Try parsing the filename
-	info, err := openapi.ParseSpecFilename(specFile)
-	if err == nil && info.ResourceName != "" {
-		return info.ResourceName
-	}
-
-	// For v2 domain files, try to get from info.title or filename
+	// Extract domain name from filename (v2 format: domains/name.json)
 	base := filepath.Base(specFile)
 	if strings.HasSuffix(base, ".json") {
 		return strings.TrimSuffix(base, ".json")

@@ -374,11 +374,7 @@ jobs:
             V2_NOTE=""
           fi
 
-          # Add v2-migration label if using v2 specs
           LABELS="automated,openapi-update"
-          if [ "$SPEC_SOURCE" = "v2" ]; then
-            LABELS="$LABELS,v2-migration"
-          fi
 
           PR_URL=$(gh pr create \
             --title "${{ env.PR_TITLE }}" \
