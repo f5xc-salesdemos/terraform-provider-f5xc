@@ -86,8 +86,6 @@ func loadV2SpecMetadata() {
 	switch specVersion {
 	case openapi.SpecVersionV2:
 		count = loadV2MetadataFromDomains(specDir)
-	case openapi.SpecVersionV1:
-		count = loadV2MetadataFromV1Specs(specDir)
 	}
 
 	if count > 0 {
@@ -110,22 +108,7 @@ func loadV2MetadataFromDomains(specDir string) int {
 	return count
 }
 
-// loadV2MetadataFromV1Specs loads metadata from v1 individual spec files.
-func loadV2MetadataFromV1Specs(specDir string) int {
-	specFiles, err := openapi.FindSpecFiles(specDir)
-	if err != nil {
-		return 0
-	}
-
-	count := 0
-	for _, specFile := range specFiles {
-		n := loadV2MetadataFromFile(specFile)
-		count += n
-	}
-	return count
-}
-
-// loadV2MetadataFromFile loads metadata from a single spec file.
+// loadV2MetadataFromFile loads metadata from a v2 domain spec file.
 func loadV2MetadataFromFile(specFile string) int {
 	data, err := os.ReadFile(specFile)
 	if err != nil {
@@ -137,60 +120,11 @@ func loadV2MetadataFromFile(specFile string) int {
 		return 0
 	}
 
-	// Try to get resource name from filename
-	info, err := openapi.ParseSpecFilename(specFile)
-	if err != nil {
-		// For v2 domain files, use the domain name
-		base := filepath.Base(specFile)
-		if strings.HasSuffix(base, ".json") {
-			domainName := strings.TrimSuffix(base, ".json")
-			return extractV2MetadataFromDomainSpec(spec, domainName)
-		}
-		return 0
-	}
-
-	// v1 spec: extract metadata for this specific resource
-	return extractV2MetadataFromSpec(spec, info.ResourceName)
-}
-
-// extractV2MetadataFromSpec extracts x-f5xc-* metadata from a v1 spec file.
-func extractV2MetadataFromSpec(spec map[string]interface{}, resourceName string) int {
-	// Check for domain-level extensions
-	meta := V2ResourceMetadata{}
-	foundMeta := false
-
-	if tier, ok := spec["x-f5xc-requires-tier"].(string); ok && tier != "" {
-		meta.RequiresTier = tier
-		foundMeta = true
-	}
-	if complexity, ok := spec["x-f5xc-complexity"].(string); ok && complexity != "" {
-		meta.Complexity = complexity
-		foundMeta = true
-	}
-	if preview, ok := spec["x-f5xc-is-preview"].(bool); ok && preview {
-		meta.IsPreview = preview
-		foundMeta = true
-	}
-	if cat, ok := spec["x-f5xc-category"].(string); ok && cat != "" {
-		meta.Category = cat
-		foundMeta = true
-	}
-
-	// Check info section for descriptions
-	if info, ok := spec["info"].(map[string]interface{}); ok {
-		if desc, ok := info["x-f5xc-description-short"].(string); ok && desc != "" {
-			meta.DescriptionShort = desc
-			foundMeta = true
-		}
-		if desc, ok := info["x-f5xc-description-medium"].(string); ok && desc != "" {
-			meta.DescriptionMed = desc
-			foundMeta = true
-		}
-	}
-
-	if foundMeta {
-		v2MetadataCache[resourceName] = meta
-		return 1
+	// Extract domain name from filename (v2 format: domains/name.json)
+	base := filepath.Base(specFile)
+	if strings.HasSuffix(base, ".json") {
+		domainName := strings.TrimSuffix(base, ".json")
+		return extractV2MetadataFromDomainSpec(spec, domainName)
 	}
 	return 0
 }
@@ -534,45 +468,14 @@ func isLongRunningResource(resourceName string) bool {
 // Category patterns and subcategory overrides are now in tools/pkg/resource/categories.go
 
 // resourceAPIPathMap maps resource names to their F5 API documentation paths
-// Built dynamically from OpenAPI spec filenames at startup
+// Note: V2 specs use domain-organized format; API path mapping uses resource metadata
 var resourceAPIPathMap = make(map[string]string)
 
-// buildResourceAPIPathMap scans the OpenAPI spec directory and builds a mapping
-// from resource names to their API documentation paths
-// Example: "http_loadbalancer" -> "views-http-loadbalancer"
+// buildResourceAPIPathMap initializes the API path map
+// V2 specs are domain-organized; API doc URLs are constructed from resource metadata
 func buildResourceAPIPathMap() {
-	specDir := "docs/specifications/api"
-	files, err := filepath.Glob(filepath.Join(specDir, "*.json"))
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Warning: Could not scan OpenAPI specs: %v\n", err)
-		return
-	}
-
-	// Pattern: docs-cloud-f5-com.XXXX.public.ves.io.schema.{path}.ves-swagger.json
-	specRegex := regexp.MustCompile(`docs-cloud-f5-com\.\d+\.public\.ves\.io\.schema\.(.+)\.ves-swagger\.json`)
-
-	for _, file := range files {
-		base := filepath.Base(file)
-		matches := specRegex.FindStringSubmatch(base)
-		if matches == nil || len(matches) < 2 {
-			continue
-		}
-
-		// Extract schema path (e.g., "views.http_loadbalancer" or "namespace")
-		schemaPath := matches[1]
-
-		// Get resource name (last component of schema path)
-		parts := strings.Split(schemaPath, ".")
-		resourceName := parts[len(parts)-1]
-
-		// Convert schema path to URL format: dots -> hyphens, underscores -> hyphens
-		urlPath := strings.ReplaceAll(schemaPath, ".", "-")
-		urlPath = strings.ReplaceAll(urlPath, "_", "-")
-
-		resourceAPIPathMap[resourceName] = urlPath
-	}
-
-	fmt.Printf("Built API path mapping for %d resources\n", len(resourceAPIPathMap))
+	// API documentation paths are now derived from V2 resource metadata
+	// The v2MetadataCache populated by loadV2SpecMetadata contains category info
 }
 
 // getResourceAPIDocURL returns the F5 API documentation URL for a resource
@@ -2108,8 +2011,15 @@ func fixBareURLs(content string) string {
 	return content
 }
 
-// normalizeBlankLines removes multiple consecutive blank lines
+// normalizeBlankLines removes multiple consecutive blank lines and trailing spaces
 func normalizeBlankLines(content string) string {
+	// First, strip trailing spaces from each line (MD009 compliance)
+	lines := strings.Split(content, "\n")
+	for i, line := range lines {
+		lines[i] = strings.TrimRight(line, " \t")
+	}
+	content = strings.Join(lines, "\n")
+
 	// Replace 3+ consecutive newlines with 2 (single blank line)
 	multiBlankRegex := regexp.MustCompile(`\n{3,}`)
 	content = multiBlankRegex.ReplaceAllString(content, "\n\n")

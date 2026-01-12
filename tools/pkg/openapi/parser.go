@@ -54,69 +54,6 @@ func GetRefName(ref string) string {
 	return parts[len(parts)-1]
 }
 
-// SpecFileInfo contains information extracted from an OpenAPI spec filename.
-type SpecFileInfo struct {
-	FilePath     string
-	ResourceName string
-	SchemaPath   string // e.g., "views.http_loadbalancer"
-	URLPath      string // e.g., "views-http-loadbalancer"
-}
-
-// ParseSpecFilename extracts resource information from an OpenAPI spec filename.
-// Pattern: docs-cloud-f5-com.XXXX.public.ves.io.schema.{path}.ves-swagger.json
-func ParseSpecFilename(filename string) (*SpecFileInfo, error) {
-	specRegex := regexp.MustCompile(`docs-cloud-f5-com\.\d+\.public\.ves\.io\.schema\.(.+)\.ves-swagger\.json`)
-
-	base := filepath.Base(filename)
-	matches := specRegex.FindStringSubmatch(base)
-	if matches == nil || len(matches) < 2 {
-		return nil, fmt.Errorf("filename does not match expected pattern: %s", filename)
-	}
-
-	schemaPath := matches[1]
-	parts := strings.Split(schemaPath, ".")
-	resourceName := parts[len(parts)-1]
-
-	// Convert schema path to URL format: dots -> hyphens, underscores -> hyphens
-	urlPath := strings.ReplaceAll(schemaPath, ".", "-")
-	urlPath = strings.ReplaceAll(urlPath, "_", "-")
-
-	return &SpecFileInfo{
-		FilePath:     filename,
-		ResourceName: resourceName,
-		SchemaPath:   schemaPath,
-		URLPath:      urlPath,
-	}, nil
-}
-
-// FindSpecFiles finds all OpenAPI spec files in a directory.
-func FindSpecFiles(dir string) ([]string, error) {
-	pattern := filepath.Join(dir, "*.json")
-	return filepath.Glob(pattern)
-}
-
-// BuildResourceAPIPathMap scans the OpenAPI spec directory and builds a mapping
-// from resource names to their API documentation paths.
-// Example: "http_loadbalancer" -> "views-http-loadbalancer"
-func BuildResourceAPIPathMap(specDir string) (map[string]string, error) {
-	files, err := FindSpecFiles(specDir)
-	if err != nil {
-		return nil, fmt.Errorf("scanning spec directory: %w", err)
-	}
-
-	pathMap := make(map[string]string)
-	for _, file := range files {
-		info, err := ParseSpecFilename(file)
-		if err != nil {
-			// Skip files that don't match the pattern
-			continue
-		}
-		pathMap[info.ResourceName] = info.URLPath
-	}
-
-	return pathMap, nil
-}
-
 // GetAPIDocURL returns the F5 API documentation URL for a resource.
 func GetAPIDocURL(resourceName string, pathMap map[string]string) string {
 	if urlPath, ok := pathMap[resourceName]; ok {
@@ -129,9 +66,8 @@ func GetAPIDocURL(resourceName string, pathMap map[string]string) string {
 // V2 Spec Parser Functions - For parsing enriched API specifications
 // =============================================================================
 
-// GetSpecVersion detects whether a spec directory contains v1 or v2 format.
+// GetSpecVersion detects whether a spec directory contains v2 format.
 // v2 has index.json and domains/ subdirectory.
-// v1 has individual docs-cloud-f5-com.*.ves-swagger.json files.
 func GetSpecVersion(specDir string) SpecVersion {
 	// Check for v2 indicators
 	indexPath := filepath.Join(specDir, "index.json")
@@ -142,13 +78,6 @@ func GetSpecVersion(specDir string) SpecVersion {
 
 	if indexExists && domainsExists {
 		return SpecVersionV2
-	}
-
-	// Check for v1 pattern
-	v1Pattern := filepath.Join(specDir, "docs-cloud-f5-com.*.ves-swagger.json")
-	v1Files, _ := filepath.Glob(v1Pattern)
-	if len(v1Files) > 0 {
-		return SpecVersionV1
 	}
 
 	return SpecVersionUnknown

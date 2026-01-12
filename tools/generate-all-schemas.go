@@ -238,7 +238,7 @@ func main() {
 	}
 	fmt.Println()
 
-	// Detect spec version (v1 or v2)
+	// Detect spec version (expects v2 format)
 	specVersion := openapi.GetSpecVersion(specDir)
 	fmt.Printf("🔍 Detected spec version: %s\n\n", specVersion)
 
@@ -248,13 +248,9 @@ func main() {
 	switch specVersion {
 	case openapi.SpecVersionV2:
 		results, successCount, failCount = processV2Specs(specDir)
-	case openapi.SpecVersionV1:
-		results, successCount, failCount = processV1Specs(specDir)
 	default:
 		fmt.Printf("❌ Unknown spec format in directory: %s\n", specDir)
-		fmt.Println("💡 Expected either:")
-		fmt.Println("   - v1: docs-cloud-f5-com.*.ves-swagger.json files")
-		fmt.Println("   - v2: index.json + domains/*.json structure")
+		fmt.Println("💡 Expected v2 spec format: index.json + domains/*.json structure")
 		os.Exit(1)
 	}
 
@@ -294,42 +290,6 @@ func main() {
 	}
 
 	fmt.Println("\n🎉 Batch generation complete!")
-}
-
-// processV1Specs processes v1 format specs (individual docs-cloud-f5-com.*.ves-swagger.json files)
-func processV1Specs(specDir string) ([]GenerationResult, int, int) {
-	// Find all spec files
-	pattern := filepath.Join(specDir, "docs-cloud-f5-com.*.ves-swagger.json")
-	specFiles, err := filepath.Glob(pattern)
-	if err != nil {
-		fmt.Printf("❌ Error finding spec files: %v\n", err)
-		os.Exit(1)
-	}
-
-	if len(specFiles) == 0 {
-		fmt.Printf("❌ No spec files found matching pattern: %s\n", pattern)
-		fmt.Println("💡 Tip: Download specs from docs.cloud.f5.com or set F5XC_SPEC_DIR")
-		os.Exit(1)
-	}
-
-	fmt.Printf("📄 Found %d OpenAPI specification files (v1 format)\n\n", len(specFiles))
-
-	// Process each spec file
-	results := []GenerationResult{}
-	successCount := 0
-	failCount := 0
-
-	for _, specFile := range specFiles {
-		result := processSpecFile(specFile)
-		results = append(results, result)
-		if result.Success {
-			successCount++
-		} else if result.Error != "" {
-			failCount++
-		}
-	}
-
-	return results, successCount, failCount
 }
 
 // processV2Specs processes v2 format specs (domain-organized files from f5xc-api-enriched)
@@ -498,28 +458,28 @@ func extractResourceSchemaByName(spec *OpenAPI3Spec, resourceName string) (*Sche
 		fmt.Sprintf("%sReplaceSpecType", resourceName),
 	}
 
-	// V1 schema naming patterns
-	v1Patterns := []string{
+	// Legacy schema naming patterns (ves.io.schema format still used in some v2 specs)
+	legacyPatterns := []string{
 		fmt.Sprintf("ves.io.schema.%s.Object", resourceName),
 		fmt.Sprintf("%sType", toTitleCase(resourceName)),
 		resourceName,
 	}
 
-	// Try v2 patterns first (for v2 domain specs)
+	// Try v2 patterns first (CreateSpecType naming)
 	for _, pattern := range v2Patterns {
 		if schema, ok := spec.Components.Schemas[pattern]; ok {
 			return &schema, pattern
 		}
 	}
 
-	// Then try v1 patterns (for v1 individual specs)
-	for _, pattern := range v1Patterns {
+	// Then try legacy patterns (ves.io.schema naming still present in some specs)
+	for _, pattern := range legacyPatterns {
 		if schema, ok := spec.Components.Schemas[pattern]; ok {
 			return &schema, pattern
 		}
 	}
 
-	// Try case-insensitive match for v1 .Object suffix
+	// Try case-insensitive match for legacy .Object suffix
 	lowerName := strings.ToLower(resourceName)
 	for name, schema := range spec.Components.Schemas {
 		if strings.Contains(strings.ToLower(name), lowerName) && strings.HasSuffix(name, ".Object") {
@@ -627,107 +587,6 @@ func generateResourceFromSchema(resourceName string, schemaName string, schema *
 		AttrCount:    attrCount,
 		BlockCount:   blockCount,
 	}
-}
-
-func processSpecFile(specFile string) GenerationResult {
-	// Extract resource name from filename
-	resourceName := extractResourceName(specFile)
-	if resourceName == "" {
-		return GenerationResult{ResourceName: filepath.Base(specFile), Success: false}
-	}
-
-	// Skip internal/utility schemas
-	skipPatterns := []string{
-		"object", "status", "spec", "metadata", "types", "common",
-		"refs", "crudapi", "public", "private", "api", "empty",
-	}
-	for _, skip := range skipPatterns {
-		if resourceName == skip {
-			return GenerationResult{ResourceName: resourceName, Success: false}
-		}
-	}
-
-	if verbose {
-		fmt.Printf("Processing: %s\n", resourceName)
-	}
-
-	// Parse spec
-	spec, err := parseOpenAPISpec(specFile)
-	if err != nil {
-		return GenerationResult{ResourceName: resourceName, Success: false, Error: err.Error()}
-	}
-
-	// Extract resource schema
-	resource, err := extractResourceSchema(spec, resourceName)
-	if err != nil {
-		if verbose {
-			fmt.Printf("  ⏭️  Skipping %s: %v\n", resourceName, err)
-		}
-		return GenerationResult{ResourceName: resourceName, Success: false}
-	}
-
-	// Count attributes and blocks
-	attrCount := 0
-	blockCount := 0
-	for _, attr := range resource.Attributes {
-		if attr.IsBlock {
-			blockCount++
-		} else {
-			attrCount++
-		}
-	}
-
-	if !dryRun {
-		// Generate resource file
-		if err := generateResourceFile(resource); err != nil {
-			return GenerationResult{ResourceName: resourceName, Success: false, Error: err.Error()}
-		}
-
-		// Generate client types
-		if err := generateClientTypes(resource); err != nil {
-			return GenerationResult{ResourceName: resourceName, Success: false, Error: err.Error()}
-		}
-
-		// Generate data source
-		if err := generateDataSource(resource); err != nil {
-			return GenerationResult{ResourceName: resourceName, Success: false, Error: err.Error()}
-		}
-	}
-
-	fmt.Printf("✅ %s: %d attrs, %d blocks\n", resourceName, attrCount, blockCount)
-	return GenerationResult{
-		ResourceName: resourceName,
-		Success:      true,
-		AttrCount:    attrCount,
-		BlockCount:   blockCount,
-	}
-}
-
-func extractResourceName(specFile string) string {
-	base := filepath.Base(specFile)
-
-	// Try views pattern: schema.views.RESOURCE.ves-swagger
-	re := regexp.MustCompile(`\.schema\.views\.([^.]+)\.ves-swagger`)
-	matches := re.FindStringSubmatch(base)
-	if len(matches) >= 2 {
-		return matches[1]
-	}
-
-	// Try subtype pattern: schema.SUBTYPE.RESOURCE.ves-swagger
-	re = regexp.MustCompile(`\.schema\.[^.]+\.([^.]+)\.ves-swagger`)
-	matches = re.FindStringSubmatch(base)
-	if len(matches) >= 2 {
-		return matches[1]
-	}
-
-	// Try direct pattern: schema.RESOURCE.ves-swagger
-	re = regexp.MustCompile(`\.schema\.([^.]+)\.ves-swagger`)
-	matches = re.FindStringSubmatch(base)
-	if len(matches) >= 2 {
-		return matches[1]
-	}
-
-	return ""
 }
 
 func parseOpenAPISpec(specFile string) (*OpenAPI3Spec, error) {
