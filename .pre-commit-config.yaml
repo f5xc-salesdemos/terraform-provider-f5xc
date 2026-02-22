@@ -1,258 +1,62 @@
-# Pre-commit hooks configuration for Terraform Provider
-# IMPORTANT: These hooks are configured for VALIDATION ONLY (no auto-fixing)
-# Generated files (markdown, docs) must be fixed by updating the generators
+---
+# =============================================================================
+# GOVERNANCE CHECKS (fail-fast)
 #
-# Install: pre-commit install
-# Run all: pre-commit run --all-files
-# Update:  pre-commit autoupdate
-
-default_stages: [pre-commit]
-fail_fast: false
-
+# These run FIRST. Direct commits to main are forbidden — all changes must
+# go through a pull request linked to a GitHub issue. If this hook fails:
+#
+#   1. Create a GitHub issue describing the change
+#   2. Create a feature branch:  git checkout -b feat/<issue>-description
+#   3. Commit to the feature branch, then open a PR with "Closes #<issue>"
+#
+# See CONTRIBUTING.md for the full workflow.
+# =============================================================================
 repos:
-  # =============================================================================
-  # General file checks - validate file formats and common issues
-  # =============================================================================
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-      # Whitespace and line ending validation (check-only for markdown)
-      - id: trailing-whitespace
-        args: [--markdown-linebreak-ext=md]
-        exclude: ^(docs/|\.terraform/)
+      - id: no-commit-to-branch
+        name: "GOVERNANCE: never commit directly to main"
+        args: ["--branch", "main"]
 
-      - id: end-of-file-fixer
-        exclude: ^(docs/|\.terraform/)
-
-      - id: mixed-line-ending
-        args: [--fix=no]  # Check only, don't fix
-
-      # File format validation
-      - id: check-yaml
-        args: [--unsafe]  # Allow custom tags
-        exclude: ^\.terraform/
-
-      - id: check-json
-
-      - id: check-toml
-
-  # =============================================================================
-  # JSON/YAML Schema Validation - validate against official schemas
-  # Catches structural errors BEFORE they reach CI/CD
-  # =============================================================================
-  - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.36.0
+  # ===========================================================================
+  # Repository-specific hooks (escape hatch)
+  #
+  # Runs scripts/pre-commit-local.sh if present and executable. Repos use
+  # this for language-specific checks (ruff, eslint, tsc, etc.) that do not
+  # belong in the universal config.
+  # ===========================================================================
+  - repo: local
     hooks:
-      # GitHub Workflows (built-in hook validates against SchemaStore)
-      - id: check-github-workflows
-        args: ["--verbose"]
+      - id: local-hooks
+        name: Repository-specific hooks
+        entry: bash -c 'if [ -x scripts/pre-commit-local.sh ]; then scripts/pre-commit-local.sh; fi'
+        language: system
+        always_run: true
+        pass_filenames: false
 
-      # Docker Compose (built-in hook validates against SchemaStore)
-      - id: check-compose-spec
-        files: docker-compose\.yml$
-
-      # GoReleaser config
-      - id: check-jsonschema
-        name: Validate GoReleaser config
-        files: ^\.goreleaser\.yml$
-        types: [yaml]
-        args: ["--schemafile", "https://goreleaser.com/static/schema.json"]
-
-      # GolangCI-lint config
-      - id: check-jsonschema
-        name: Validate GolangCI-lint config
-        files: ^\.golangci\.yml$
-        types: [yaml]
-        args: ["--schemafile", "https://golangci-lint.run/jsonschema/golangci.jsonschema.json"]
-
-      # Pre-commit config (self-validation)
-      - id: check-jsonschema
-        name: Validate pre-commit config
-        files: ^\.pre-commit-config\.yaml$
-        types: [yaml]
-        args: ["--schemafile", "https://www.schemastore.org/pre-commit-config.json"]
-
-      # TypeScript config
-      - id: check-jsonschema
-        name: Validate TypeScript config
-        files: tsconfig\.json$
-        types: [json]
-        args: ["--schemafile", "https://www.schemastore.org/tsconfig.json"]
-
-      # MCP Server manifest (validates against embedded $schema)
-      - id: check-metaschema
-        name: Validate MCP server.json against its $schema
-        files: ^mcp-server/server\.json$
-
-  # =============================================================================
-  # General file checks - security and safety (continued)
-  # =============================================================================
+  # ===========================================================================
+  # File size guard (no super-linter equivalent)
+  # ===========================================================================
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-      # Security and safety checks
       - id: check-added-large-files
-        args: [--maxkb=1000]
+        args: ["--maxkb=1024"]
 
-      - id: check-merge-conflict
-
-      - id: detect-private-key
-        exclude: ^internal/.*_test\.go$  # Exclude test files with test keys
-
-      - id: check-executables-have-shebangs
-
-      - id: check-shebang-scripts-are-executable
-
-      - id: check-symlinks
-
-      - id: destroyed-symlinks
-
-  # =============================================================================
-  # Go language checks - golangci-lint v2.x (validation only, no --fix)
-  # Runs on SAME paths as CI to ensure consistency: ./internal/... .
-  # =============================================================================
-  - repo: https://github.com/golangci/golangci-lint
-    rev: v2.7.2
-    hooks:
-      - id: golangci-lint
-        args: [--timeout=5m, ./internal/..., .]
-        pass_filenames: false
-
-  # =============================================================================
-  # Terraform example files validation
-  # =============================================================================
-  - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.104.0
-    hooks:
-      # Format check only (no auto-fix)
-      - id: terraform_fmt
-        args:
-          - --args=-check
-          - --args=-diff
-        files: ^examples/
-
-      # Note: terraform_validate is not included because it requires the provider
-      # to be published to a registry. Validation is performed in CI instead.
-
-  # =============================================================================
-  # Shell script validation
-  # =============================================================================
-  - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.11.0.1
-    hooks:
-      - id: shellcheck
-        args: [--severity=warning]
-
-  # =============================================================================
-  # Markdown linting - validation only (generated files fixed via generators)
-  # NOTE: Generated docs/ files are checked by lint-generated-preview hook instead
-  # =============================================================================
-  - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.20.0
-    hooks:
-      - id: markdownlint-cli2
-        args: []  # Check only, no --fix flag
-        # Lint source markdown files only; generated docs/ handled by lint-generated-preview
-        files: ^(templates/guides/.*\.md|README\.md|CLAUDE\.md|CHANGELOG\.md|CONTRIBUTING\.md)$
-
-  # =============================================================================
-  # Secrets detection - prevent accidental credential commits
-  # =============================================================================
-  - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.5.0
-    hooks:
-      - id: detect-secrets
-        args: [--baseline, .secrets.baseline]
-        exclude: |
-          (?x)^(
-            go\.sum|
-            \.terraform/|
-            \.terraform\.lock\.hcl
-          )$
-
-  # =============================================================================
-  # Preview lint for generated code
-  # When generators change, preview what they'll produce and lint it early
-  # This catches linting errors before they reach CI/CD without committing
-  # generated files (which would violate the constitution)
-  # =============================================================================
+  # ===========================================================================
+  # Super-Linter (lints files changed vs main)
+  # Requires Docker installed locally (~2GB image pull on first run).
+  # ===========================================================================
   - repo: local
     hooks:
-      - id: lint-generated-preview
-        name: Preview lint generated code
-        entry: scripts/lint-generated-preview.sh
+      - id: super-linter
+        name: Super-Linter (local Docker)
+        entry: bash -c 'docker run --rm -v "$(pwd):/tmp/lint" -w /tmp/lint -e RUN_LOCAL=true -e VALIDATE_ALL_CODEBASE=false -e DEFAULT_BRANCH=main -e LINTER_RULES_PATH="." -e VALIDATE_JSON_PRETTIER=false -e VALIDATE_MARKDOWN_PRETTIER=false -e VALIDATE_YAML_PRETTIER=false -e VALIDATE_JAVASCRIPT_PRETTIER=false -e VALIDATE_TYPESCRIPT_PRETTIER=false -e VALIDATE_JAVASCRIPT_ES=false -e VALIDATE_TYPESCRIPT_ES=false -e VALIDATE_TSX=false -e VALIDATE_PRE_COMMIT=false -e SHELLCHECK_OPTS="-e SC2016" ghcr.io/super-linter/super-linter:v8'
         language: system
-        always_run: true
-        pass_filenames: false
-        stages: [pre-commit]
-        # Run after standard linting but before constitution check
-
-  # =============================================================================
-  # CLAUDE.md Constitution Enforcement
-  # =============================================================================
-  - repo: local
-    hooks:
-      # Rule 1: Never Commit Generated Files
-      - id: check-no-generated-files
-        name: Block generated files (CLAUDE.md Rule 1)
-        entry: scripts/check-no-generated-files.sh
-        language: system
-        always_run: true
-        pass_filenames: false
-        stages: [pre-commit]
-
-  # =============================================================================
-  # Go module tidiness check
-  # =============================================================================
-  - repo: local
-    hooks:
-      - id: go-mod-tidy-check
-        name: go mod tidy check
-        entry: bash -c 'go mod tidy && git diff --exit-code go.mod go.sum'
-        language: system
-        files: (go\.mod|go\.sum)$
         pass_filenames: false
 
-      - id: go-build-check
-        name: go build check
-        entry: go build -v .
-        language: system
-        files: \.go$
-        pass_filenames: false
-
-      - id: go-vet-check
-        name: go vet check
-        entry: go vet ./...
-        language: system
-        files: \.go$
-        pass_filenames: false
-
-      - id: go-test-check
-        name: go test check
-        entry: go test -v -race ./internal/...
-        language: system
-        files: \.go$
-        pass_filenames: false
-
-  # =============================================================================
-  # Subscription Tier Metadata Update
-  # =============================================================================
-  # Fetches latest subscription tier metadata from F5 XC Catalog API on every commit.
-  # Requires VPN access and F5XC credentials (F5XC_API_URL + F5XC_API_TOKEN or P12).
-  # If data changes, the file is automatically added to the commit.
-  # Skips gracefully if credentials are not configured - does not block commits.
-  - repo: local
-    hooks:
-      - id: update-subscription-metadata
-        name: Update subscription tier metadata
-        entry: scripts/update-subscription-metadata.sh
-        language: system
-        always_run: true
-        pass_filenames: false
-        stages: [pre-commit]
-
-# =============================================================================
-# CI Configuration
-# =============================================================================
-# For CI pipelines, run: pre-commit run --all-files
-# This ensures all files are checked, not just staged changes
+ci:
+  autofix_prs: true
+  autoupdate_schedule: weekly
+  skip: [local-hooks, super-linter]

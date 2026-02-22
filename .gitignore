@@ -1,75 +1,106 @@
-# Binaries
-terraform-provider-f5xc
-generate-all-schemas
-generate-examples
-generate-datasource-examples
-*.exe
-*.dll
-*.so
-*.dylib
-
-# Test binary
-*.test
-
-# Output
-*.out
-
-# Go workspace
-go.work
+# OS
+.DS_Store
+Thumbs.db
 
 # IDE
 .idea/
 .vscode/
 *.swp
 *.swo
+*~
 
-# OS
-.DS_Store
-Thumbs.db
+# Node
+node_modules/
+dist/
+*.tgz
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+
+# Astro
+.astro/
+site/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.dylib
+*.test
+*.out
+vendor/
 
 # Terraform
 .terraform/
+.terraform.lock.hcl
 *.tfstate
 *.tfstate.*
-.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Python virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Test coverage
+.coverage
+htmlcov/
+coverage/
 
 # Build artifacts
-dist/
-bin/
+reports/
 
-# LLM enrichment cache (deprecated feature)
-tools/enriched-descriptions-cache.json
+# Projects
+projects/
 
-# Playwright MCP artifacts
+# Tool-specific
 .playwright-mcp/
-
-# Claude Code working files
-claudedocs/
 .serena/
+.auto-claude/
+claudedocs/
+cache/
+src/generated/
+out/
 
-# Local temporary files
-tmp/
+# Documentation build artifacts
+docs/_data/
 
-# Self-hosted GitHub Actions runner
-.github-runner/
-.github-runner-docker/.env
-
-# Certificates and secrets (never commit real credentials)
-# The .gitkeep placeholders in certs/ directories are allowed
-*.pem
-*.key
-!.gitkeep
-*.p12
-*.pfx
-*.crt
-*.cer
-*.csr
-terraform.tfvars
-*-secret.txt
-*-credentials.json
-
-# MCP Registry authentication tokens (created by mcp-publisher CLI)
-.mcpregistry_*
-
-# MkDocs build output
-site/
+# API spec pipeline
+specs/
+docs/specifications/api/
+docs/api-reference/
+.version
+.etag
+.github_release

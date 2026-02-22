@@ -1,1062 +1,611 @@
-# CLAUDE.md
+# Claude Code Project Instructions
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Repository Workflow
 
-## Claude Constitution: GitHub Workflow & Automation Rules
+This repository enforces a strict governance workflow.
+**DO NOT STOP after creating a PR** — the task is
+not complete until the PR is merged, all post-merge
+workflows succeed, and local branches are cleaned.
 
-### Core Principle: Issue-First Development
+### Making Changes (Steps 1-6)
 
-**ALL work MUST begin with a GitHub Issue. No exceptions.**
+1. **Create a GitHub issue** before making any
+   changes
+2. **Sync local main** — pull the latest changes
+   before branching to avoid conflicts with recent
+   work:
 
-This repository follows a strict Issue → Branch → PR workflow. Every code change must be traceable to a documented issue that describes what problem is being solved and why.
+   ```
+   git checkout main
+   git pull origin main
+   ```
 
----
+3. **Create a feature branch** from `main` — never
+   commit to `main` directly
+4. **Commit changes** with conventional format
+   (`feat:`, `fix:`, `docs:`) and push to remote
+5. **Open a PR** that links to the issue using
+   `Closes #N` — fill out the PR template completely
+6. **Fix any CI failures** — monitor checks with
+   `gh pr checks <NUMBER>`, fix locally, push to
+   trigger re-runs
 
-## Part 1: GitHub Workflow Rules
+### Merging (Step 7)
 
-### Rule 0: Always Create an Issue First (MANDATORY)
+7. **Merge after CI passes** — once all status checks
+   are green, merge the PR yourself. Do not wait for
+   manual approval (none is required).
 
-**Before writing ANY code or creating ANY branch, create a GitHub Issue.**
+   Poll PR checks using single-shot queries (never
+   `--watch`) per the **Polling Protocol**:
+
+   ```
+   gh pr checks <NUMBER> --json bucket \
+     --jq 'map(.bucket) | unique | if . == ["pass"] then "pass"
+     elif any(. == "fail") then "fail" else "pending" end'
+   ```
+
+   Once all checks pass:
+
+   ```
+   gh pr merge <NUMBER> --squash --delete-branch
+   ```
+
+   If the merge fails, check why:
+
+   ```
+   gh pr view <NUMBER> --json mergeable,mergeStateStatus
+   ```
+
+### Post-Merge Monitoring (Steps 8-9)
+
+8. **Monitor post-merge workflows** — merging to
+   `main` triggers additional workflows (docs
+   builds, governance sync, etc.). Discover and
+   poll them using single-shot checks (never
+   `--watch`):
+
+   ```
+   git checkout main && git pull origin main
+   MERGE_SHA=$(git rev-parse HEAD)
+   sleep 15
+   gh run list --branch main --commit $MERGE_SHA
+   ```
+
+   Then poll each run using the **Polling Protocol**
+   from the rate limit section:
+
+   ```
+   gh run view <RUN-ID> --json status,conclusion \
+     --jq '"\(.status) \(.conclusion)"'
+   ```
+
+   Sleep for the interval matching the current
+   consumption zone (30s GREEN, 60s YELLOW).
+   Maximum 20 iterations — then report to user.
+
+9. **Iterate on failures** — if any workflow fails:
+   - View logs: `gh run view <RUN-ID> --log-failed`
+   - Analyze the root cause
+   - Fix the code locally
+   - Create a new issue, branch, and PR with the fix
+   - Return to Step 6 and repeat until all workflows
+     pass
+
+### Cleanup (Steps 10-11)
+
+10. **Clean up branches** — only after all workflows
+    succeed. Delete your feature branch and any other
+    stale local branches already merged to `main`:
+
+    ```
+    git branch -d <branch-name>
+    git branch --merged main | grep -v '^\*\|main' | xargs -r git branch -d
+    ```
+
+11. **Verify completion** — confirm clean state:
+
+    ```
+    git status
+    git branch
+    ```
+
+### Verification (Steps 12-13)
+
+12. **Verify outcomes** — confirm changes had the
+    intended effect, not just that workflows passed:
+
+    Always check:
+
+    ```
+    # Issue was closed by the PR
+    gh issue view <NUMBER> --json state --jq '.state'
+
+    # Branch protection matches expected state
+    gh api repos/{owner}/{repo}/branches/main/protection \
+      --jq '.required_status_checks.contexts'
+    ```
+
+    If `docs/**` changed:
+
+    ```
+    # Docs site is accessible
+    REPO=$(basename $(pwd))
+    curl -sf "https://f5xc-salesdemos.github.io/${REPO}/" \
+      && echo "OK" || echo "FAIL"
+    ```
+
+    If governance or config files changed, check
+    rate limits first and adapt scope:
+
+    - **GREEN** (>1,000 remaining): check all repos
+    - **YELLOW** (200–1,000): spot-check 3 repos
+      (first, middle, last from the list)
+    - **RED** (<200): skip entirely, report deferral
+      to user
+
+    ```
+    # Downstream repos were dispatched successfully
+    for repo in $(jq -r '.[]' .github/config/downstream-repos.json); do
+      echo "$repo:"
+      gh run list --repo "$repo" \
+        --workflow enforce-repo-settings.yml --limit 1
+    done
+    ```
+
+13. **Check repository health** — after your task is fully
+    done, check for outstanding items:
+
+    ```
+    # Open issues
+    gh issue list --state open
+
+    # Unmerged PRs
+    gh pr list --state open
+    ```
+
+    If any open issues or stale PRs are found,
+    report them to the user.
+
+## Task Completion Criteria
+
+A task is **not complete** until ALL of the
+following are true:
+
+- GitHub issue created and linked to PR
+- PR merged to `main`
+- All workflows triggered by the merge completed
+  successfully
+- Local feature branch deleted
+- No stale merged branches remain locally
+- Current branch is `main` with clean working tree
+- GitHub issue is in `closed` state
+- Outcome verification passed (settings applied, docs
+  accessible if changed, downstream dispatched if changed)
+- Repository health checked (open issues and unmerged PRs
+  reported)
+
+If any post-merge workflow fails due to your
+changes, fix and resubmit. Do not clean up branches
+until all workflows are green.
+
+## Branch Naming
+
+Use the format `<prefix>/<issue-number>-short-description`:
+
+- `feature/42-add-rate-limiting`
+- `fix/17-correct-threshold`
+- `docs/8-update-guide`
+
+## Rules
+
+- Never push directly to `main`
+- Never force push
+- Every PR must link to an issue
+- Fill out the PR template completely
+- Follow conventional commit messages (`feat:`, `fix:`, `docs:`)
+- Never consider a task complete until post-merge workflows pass
+- Always delete local feature branches after successful merge
+- Always clean up stale merged branches and workspace clutter when noticed
+
+## GitHub API Rate Limit Management
+
+The GitHub REST API allows 5,000 calls per hour.
+Unthrottled polling (`--watch` flags) can consume
+hundreds to thousands of calls per task cycle,
+triggering HTTP 403 errors that block all further
+operations until the hourly window resets.
+
+### Rate Limit Check
+
+Run this before any polling loop or when budget
+is uncertain (costs 1 API call):
+
+```
+gh api rate_limit --jq '{
+  remaining: .rate.remaining,
+  limit: .rate.limit,
+  reset_minutes: ((.rate.reset - now) / 60 | ceil)
+}'
+```
+
+### When to Check
+
+Check rate limits at exactly these 4 points:
+
+1. **Before starting any new task** (Step 1)
+2. **Before entering a polling loop** (Steps 7, 8)
+3. **Before the downstream verification loop**
+   (Step 12)
+4. **After any HTTP 403 or 429 response**
+
+### Consumption Zones
+
+| Zone | Remaining | Poll Interval | Behavior |
+| ---- | --------- | ------------- | -------- |
+| GREEN | >1,000 | 30s | Normal operation |
+| YELLOW | 200–1,000 | 60s | Spot-check 3 downstream repos (first, middle, last); skip redundant verification |
+| RED | <200 | No polling | Stop and report to user; wait for reset if <15 min away |
+
+### Banned Commands
+
+Never use these — they poll every 3-10 seconds
+and consume API calls rapidly:
+
+- `gh pr checks <NUMBER> --watch`
+- `gh run watch <RUN-ID>`
+- `gh run watch <RUN-ID> --exit-status`
+
+### Polling Protocol
+
+Replace all `--watch` patterns with single-shot
+checks in a sleep loop:
+
+**PR checks** (pass/fail/pending in one call):
+
+```
+gh pr checks <NUMBER> --json bucket \
+  --jq 'map(.bucket) | unique | if . == ["pass"] then "pass"
+  elif any(. == "fail") then "fail" else "pending" end'
+```
+
+**Workflow run status** (one call per run):
+
+```
+gh run view <RUN-ID> --json status,conclusion \
+  --jq '"\(.status) \(.conclusion)"'
+```
+
+**Loop rules**:
+
+- Sleep for the interval defined by the current
+  consumption zone (30s GREEN, 60s YELLOW)
+- Maximum 20 iterations per polling loop — if
+  still pending, report status to user and ask
+  whether to continue
+- Poll all triggered workflows in one iteration
+  before sleeping (batch, not sequential)
+- Re-check rate limit every 5 iterations
+
+### Budget Estimates
+
+Approximate API calls per operation:
+
+| Operation | Calls |
+| --------- | ----- |
+| Rate limit check | 1 |
+| PR checks (single-shot) | 1 |
+| Workflow run status | 1 |
+| PR merge | 1 |
+| Run list (discover workflows) | 1 |
+| Run view (logs) | 1 |
+| Issue view | 1 |
+| Branch protection check | 1 |
+| Downstream repo check (per repo) | 1 |
+| Full polling loop (20 iter, 3 runs) | ~65 |
+| Full task cycle (standard) | ~100 |
+| Full task cycle (governance, 18 repos) | ~150 |
+
+### 403 Recovery Protocol
+
+When an HTTP 403 or 429 response is encountered:
+
+1. Run the rate limit check to extract reset time
+2. Calculate minutes until reset
+3. Report to user: remaining calls, reset time,
+   and what operation was blocked
+4. If reset is <15 minutes away, recommend waiting
+5. If reset is >15 minutes away, stop all `gh`
+   operations and ask user how to proceed
+
+## Managed Files
+
+The following files are centrally managed by the
+[docs-control](https://github.com/f5xc-salesdemos/docs-control)
+repository and automatically synced to this repository.
+**Do not modify these files here** — local changes
+will be overwritten on the next enforcement run.
+
+To change any of these files, open a PR in
+`f5xc-salesdemos/docs-control` instead.
+
+- `.github/workflows/github-pages-deploy.yml`
+- `.github/workflows/enforce-repo-settings.yml`
+- `.github/workflows/require-linked-issue.yml`
+- `.github/workflows/dependabot-auto-merge.yml`
+- `.github/workflows/super-linter.yml`
+- `.github/PULL_REQUEST_TEMPLATE.md`
+- `.github/ISSUE_TEMPLATE/bug_report.md`
+- `.github/ISSUE_TEMPLATE/feature_request.md`
+- `.github/ISSUE_TEMPLATE/documentation.md`
+- `.github/ISSUE_TEMPLATE/config.yml`
+- `CONTRIBUTING.md`
+- `CLAUDE.md`
+- `.editorconfig`
+- `.gitignore`
+- `LICENSE`
+- `.pre-commit-config.yaml`
+- `.yamllint.yaml`
+- `.markdownlint.json`
+- `biome.json`
+- `.jscpd.json`
+- `.textlintrc`
+- `.editorconfig-checker.json`
+- `.checkov.yaml`
+- `zizmor.yaml`
+- `.shellcheckrc`
+
+## Planning Before Execution
+
+**Default to plan mode.** Before making any code or
+configuration changes, enter plan mode to present your
+approach for user review. Do not start writing code,
+creating branches, or modifying files until the user
+approves the plan.
+
+Plan mode is **required** when:
+
+- The task involves creating or modifying multiple files
+- The scope, approach, or requirements are ambiguous
+- The change affects CI workflows, governance, or shared
+  infrastructure
+- You need to make architectural or design decisions
+- The task could reasonably be done in more than one way
+
+Plan mode may be **skipped** when:
+
+- The user gives an explicit, complete instruction with
+  no ambiguity (e.g., "change X to Y in file Z")
+- The task is a single-line fix (typo, obvious syntax
+  error)
+- The operation is read-only (searching, explaining
+  code, reviewing logs)
+- The user explicitly says to skip planning (e.g.,
+  "just do it", "no need to plan")
+
+When in doubt, plan first. A 30-second planning pause
+is always cheaper than undoing unwanted changes.
+
+## CI Monitoring
+
+When monitoring CI workflows, focus only on
+workflows triggered by your current changes.
+Use the merge commit SHA (`$MERGE_SHA`) to scope
+`gh run list` and `gh run view` commands.
+
+If a workflow triggered by your commit fails:
+
+1. **Investigate the failure** — view logs with
+   `gh run view <RUN-ID> --log-failed`
+2. **Fix the root cause** — create a new issue,
+   branch, and PR with the fix
+3. **Report to the user** what failed and what
+   you did to fix it
+
+Do not investigate or report on workflow failures
+from other commits. Historical failures are out
+of scope for the current task.
+
+Rate limit awareness applies to all `gh` commands
+during CI monitoring. Before entering any polling
+loop, check remaining API budget per the
+**GitHub API Rate Limit Management** section. Use
+single-shot status checks with sleep intervals —
+never `--watch` flags.
+
+## Workspace Hygiene
+
+Apply the same proactive approach as CI monitoring
+to local workspace cleanliness. Do not ignore
+problems just because they predate your current
+task.
+
+When you notice stale local branches, leftover
+files, or other workspace issues:
+
+1. **Fix it immediately** — delete merged branches,
+   remove temp files, clean up artifacts
+2. **Report what you cleaned** — tell the user what
+   housekeeping you performed
+3. **Do not skip cleanup because "it's not my
+   task"** — a clean workspace is everyone's
+   responsibility
+
+Stale branch cleanup command:
+
+```
+git branch --merged main | grep -v '^\*\|main' | xargs -r git branch -d
+```
+
+## Documentation Pipeline
+
+All repositories publish docs to GitHub Pages using a
+shared pipeline:
+
+| Repository | Role | Owns |
+| ---- | ---- | ---- |
+| `docs-theme` | npm package — Starlight plugin, Astro config, CSS, fonts, logos, layout components | `astro.config.mjs`, `config.ts`, `content.config.ts`, all Starlight plugins and Astro integrations |
+| `docs-builder` | Docker image — build orchestration, npm deps, Puppeteer PDF generation, interactive components | `Dockerfile`, `entrypoint.sh`, `package.json` (npm dependency set only) |
+| `docs-control` | Source-of-truth — reusable CI workflows, governance templates, repository settings enforcement | CI workflows, `CLAUDE.md`, PR/issue templates, repository settings |
+| `docs-icons` | npm packages — Iconify JSON icon sets, Astro icon components | Icon packaging, npm publishing, dispatch to docs-builder on release |
+
+Content repositories only need a `docs/` directory — the
+build container and workflow handle everything else.
+CI builds trigger when files in `docs/` change on
+`main`.
+
+### Where to make changes
+
+- **Site appearance, navigation, or Astro config** —
+  change `docs-theme` (owns
+  `astro.config.mjs`, `content.config.ts`,
+  CSS, fonts, logos, and layout components)
+- **Build process, Docker image, or npm deps** —
+  change `docs-builder` (owns the
+  Dockerfile, entrypoint, and dependency set)
+- **Interactive components** (placeholder forms,
+  API viewers, Mermaid rendering) —
+  change `docs-builder`
+- **Icon packages** (Iconify JSON sets, Astro icon
+  components) — change `docs-icons` (publishes npm
+  packages consumed by `docs-builder`)
+- **CI workflow or governance files** —
+  change `docs-control` (syncs managed files
+  and repository settings to downstream repositories)
+- **Page content and images** —
+  change the `docs/` directory in the content
+  repository itself
+- **Never** add `astro.config.mjs`,
+  `package.json`, or build config to a content
+  repository — the pipeline provides these
+- **Never** create `astro.config.mjs`,
+  `uno.config.ts`, or Astro integration config
+  in `docs-builder` — these are owned exclusively
+  by `docs-theme`
+
+### Configuration ownership rules
+
+The build image (`docs-builder`) copies configuration
+files from the theme package at image build time.
+This is the mechanism that enforces
+single-source-of-truth:
+
+- `astro.config.mjs` — copied from `docs-theme`
+  into the image. **Never** create or override this
+  file in `docs-builder` or any content repository.
+- `content.config.ts` — copied from `docs-theme`
+  into the image. Same rule applies.
+- Astro integrations and Starlight plugins — defined
+  in `docs-theme/config.ts`. To add a new
+  integration, add it to docs-theme, not
+  docs-builder.
+- npm packages (icon packs, runtime libraries) —
+  added to `docs-builder/package.json`. These are
+  build-time dependencies that integrations in
+  docs-theme consume.
+- `uno.config.ts`, `tsconfig.json`, and other
+  tooling configs — owned by `docs-theme` if they
+  affect the Astro build. `docs-builder` must not
+  create competing configs.
+
+**Pattern for adding new capabilities** (e.g., icon
+packs):
+
+1. Add the npm data packages to
+   `docs-builder/package.json`
+2. Add the Astro integration/plugin to
+   `docs-theme/config.ts`
+3. The Dockerfile copies the updated config from
+   docs-theme at build time — no manual config in
+   docs-builder needed
+
+**Icon package pipeline**: `docs-icons` owns all icon
+packaging — Iconify JSON sets and Astro components. On
+npm publish, `docs-icons` dispatches to `docs-builder`
+to rebuild the Docker image with updated icon packages.
+Content repositories never install icon packages directly.
+
+### Release dispatch chain
+
+When an infrastructure package (`docs-theme` or
+`docs-icons`) merges to `main`, the following
+automated chain runs end-to-end — no manual
+triggering should be needed:
+
+1. **Semantic Release** publishes a new npm version
+   and creates a GitHub release
+2. **Dispatch to `docs-builder`** — the release
+   event triggers `dispatch-downstream.yml`, which
+   sends a `rebuild-image` repository dispatch
+3. **Docker image rebuild** — `docs-builder`
+   rebuilds the container with the updated package
+4. **Dispatch to content repositories** — `docs-builder`
+   reads `docs-sites.json` from `docs-control` and
+   dispatches `github-pages-deploy.yml` to every
+   content repository
+5. **GitHub Pages rebuild** — each content repository
+   rebuilds its site using the new image
+
+If a theme or icon change does not appear on live
+sites, check each step in this chain for failures —
+do not manually trigger `github-pages-deploy.yml`
+as a workaround.
+
+## Content Authoring
+
+### Structure
+
+- Place `.md` or `.mdx` files in the `docs/`
+  directory
+- `docs/index.mdx` is required — include YAML
+  frontmatter with at least a `title:` field
+- Static assets (images, diagrams) go in
+  subdirectories like `docs/images/` — folders
+  with no `.md`/`.mdx` files are auto-mounted
+  as public assets
+- Reference assets with root-relative paths:
+  `![alt](/images/diagram.png)`
+
+### MDX Rules
+
+- Bare `<` is treated as a JSX tag — use `&lt;`
+  or wrap in backtick inline code
+- `{` and `}` are JSX expressions — use `\{`
+  and `\}` or wrap in backtick inline code
+- Never use curly braces in `.mdx` filenames
+
+### Local Preview
+
+Run the live dev server (restart to pick up
+changes):
 
 ```bash
-# ✅ CORRECT workflow
-gh issue create --title "feat: Add user authentication" --body "Description of the feature..."
-# Note the issue number (e.g., #42)
-gh issue develop 42 --checkout  # Creates branch linked to issue
-# ... make changes ...
-git commit -m "feat(auth): implement login flow
-
-Closes #42"
+docker run --rm -it \
+  -v "$(pwd)/docs:/content/docs" \
+  -p 4321:4321 \
+  -e MODE=dev \
+  ghcr.io/f5xc-salesdemos/docs-builder:latest
 ```
+
+Open `http://localhost:4321`. File changes on the
+host require restarting the container.
+
+For a full production build:
 
 ```bash
-# ❌ INCORRECT workflow (what I was doing wrong)
-git checkout -b feature/some-feature  # NO! No issue created first
-# ... make changes ...
-git commit -m "add feature"  # NO! No issue reference
-gh pr create  # NO! PR not linked to any issue
+docker run --rm \
+  -v "$(pwd)/docs:/content/docs:ro" \
+  -v "$(pwd)/output:/output" \
+  -e GITHUB_REPOSITORY="<owner>/<repo>" \
+  ghcr.io/f5xc-salesdemos/docs-builder:latest
 ```
 
-**Issue Types and Templates:**
+Serve with `npx serve output/ -l 8080` and open
+`http://localhost:8080/<repo>/`.
 
-- `bug` - Something isn't working correctly
-- `feature` - New functionality request
-- `docs` - Documentation improvements
-- `refactor` - Code restructuring without behavior change
-- `chore` - Maintenance tasks, dependency updates
+Full content authoring guide:
+<https://f5xc-salesdemos.github.io/docs-builder/content-authors/>
 
-### Rule 1: Branch Naming Convention
+## Reference
 
-**Branch names MUST include the issue number and follow this pattern:**
-
-```text
-<type>/<issue-number>-<short-description>
-```
-
-| Type        | Purpose                 | Example                            |
-| ----------- | ----------------------- | ---------------------------------- |
-| `feature/`  | New functionality       | `feature/42-add-user-auth`         |
-| `bugfix/`   | Bug corrections         | `bugfix/57-fix-login-crash`        |
-| `docs/`     | Documentation changes   | `docs/63-update-readme`            |
-| `refactor/` | Code restructuring      | `refactor/71-cleanup-api-client`   |
-| `hotfix/`   | Urgent production fixes | `hotfix/89-security-patch`         |
-
-**Creating branches from issues:**
-
-```bash
-# Preferred: Use GitHub CLI to create linked branch
-gh issue develop 42 --checkout
-
-# Alternative: Manual creation with proper naming
-git checkout -b feature/42-add-user-auth
-```
-
-### Rule 2: Conventional Commits (MANDATORY)
-
-**All commit messages MUST follow the Conventional Commits specification.**
-
-Format:
-
-```text
-<type>(<optional scope>): <description>
-
-[optional body]
-
-[optional footer(s)]
-```
-
-**Commit Types:**
-
-| Type       | Description                | Version Bump |
-| ---------- | -------------------------- | ------------ |
-| `feat`     | New feature                | Minor        |
-| `fix`      | Bug fix                    | Patch        |
-| `docs`     | Documentation only         | None         |
-| `style`    | Formatting, no code change | None         |
-| `refactor` | Code restructuring         | None         |
-| `perf`     | Performance improvement    | Patch        |
-| `test`     | Adding/fixing tests        | None         |
-| `chore`    | Maintenance tasks          | None         |
-| `ci`       | CI/CD changes              | None         |
-
-**Examples:**
-
-```bash
-# Feature with scope
-git commit -m "feat(auth): add OAuth2 login support
-
-Implements Google and GitHub OAuth providers.
-
-Closes #42"
-
-# Bug fix
-git commit -m "fix(api): resolve null pointer in user lookup
-
-The user service was not checking for nil responses
-from the database layer.
-
-Fixes #57"
-
-# Breaking change (note the !)
-git commit -m "feat(api)!: change authentication endpoint
-
-BREAKING CHANGE: The /auth endpoint now requires
-a JSON body instead of form data.
-
-Closes #63"
-```
-
-### Rule 3: Pull Request Requirements
-
-**Every PR MUST:**
-
-1. **Reference an issue** using closing keywords in the description
-2. **Have a descriptive title** following Conventional Commits format
-3. **Include a summary** of changes and testing performed
-
-**Closing Keywords** (use in PR description):
-
-- `Closes #42` - Closes the issue when PR merges
-- `Fixes #42` - Same as Closes
-- `Resolves #42` - Same as Closes
-
-**PR Description Template:**
-
-```markdown
-## Summary
-Brief description of changes
-
-## Related Issue
-Closes #42
-
-## Changes Made
-- Change 1
-- Change 2
-
-## Testing
-- [ ] Unit tests pass
-- [ ] Manual testing completed
-
-## Screenshots (if applicable)
-```
-
-**Creating PRs:**
-
-```bash
-# Create PR linked to issue
-gh pr create --title "feat(auth): add OAuth2 login support" --body "$(cat <<'EOF'
-## Summary
-Implements OAuth2 authentication with Google and GitHub providers.
-
-## Related Issue
-Closes #42
-
-## Changes Made
-- Added OAuth2 provider configuration
-- Implemented callback handlers
-- Added user session management
-
-## Testing
-- [x] Unit tests pass
-- [x] Manual testing with Google OAuth
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
-EOF
-)"
-```
-
-### Rule 4: Issue-Branch-PR Traceability
-
-**Maintain complete traceability:**
-
-```text
-Issue #42: "Add user authentication"
-    ↓
-Branch: feature/42-add-user-auth
-    ↓
-Commits: feat(auth): implement login flow (Closes #42)
-    ↓
-PR #43: "feat(auth): add OAuth2 login support" (Closes #42)
-    ↓
-Merge → Issue #42 auto-closes
-```
-
-**Verification checklist before PR:**
-
-- [ ] Issue exists and describes the work
-- [ ] Branch name includes issue number
-- [ ] All commits reference the issue
-- [ ] PR description uses closing keyword
-
----
-
-## Part 2: CI/CD Automation Rules
-
-### Core Principle: Automation First
-
-**BEFORE making any changes, analyze `.github/workflows/` to understand existing automation patterns.**
-
-This repository uses CI/CD automation extensively. Respect the automation - do not bypass it.
-
-### Rule 1: Never Commit Generated Files
-
-**Generated/derived files are managed by CI/CD workflows, not manual commits.**
-
-| Directory/File                       | Generated By                         | Workflow       |
-| ------------------------------------ | ------------------------------------ | -------------- |
-| `docs/resources/*.md`                | `tfplugindocs` + `transform-docs.go` | `on-merge.yml` |
-| `docs/data-sources/*.md`             | `tfplugindocs` + `transform-docs.go` | `on-merge.yml` |
-| `docs/functions/*.md`                | `tfplugindocs`                       | `on-merge.yml` |
-| `examples/resources/*/*.tf`          | `generate-examples.go`               | `on-merge.yml` |
-| `examples/data-sources/*/*.tf`       | `generate-examples.go`               | `on-merge.yml` |
-| `internal/provider/*_resource.go`    | `generate-all-schemas.go`            | `on-merge.yml` |
-| `internal/provider/*_data_source.go` | `generate-all-schemas.go`            | `on-merge.yml` |
-
-**Correct behavior**: Commit only source/tool changes. Let workflows generate artifacts.
-
-#### Fixing Bugs in Generated Resource Code
-
-**IMPORTANT**: If you find a bug in a generated `*_resource.go` or `*_data_source.go` file, you must fix the generator, NOT the generated file.
-
-```bash
-# ❌ WRONG: Manually edit the generated file
-vim internal/provider/app_firewall_resource.go  # NO! This is generated
-git add internal/provider/app_firewall_resource.go
-git commit -m "fix: patch app_firewall resource"  # WILL BE BLOCKED
-
-# ✅ CORRECT: Fix the generator and let CI/CD regenerate
-vim tools/generate-all-schemas.go  # Fix the bug in the generator
-git add tools/generate-all-schemas.go
-git commit -m "fix(generator): correct ImportState parsing for namespace/name format"
-git push  # on-merge.yml will regenerate ALL resources with the fix
-```
-
-**Why this matters:**
-
-1. **Idempotency**: Manual fixes get overwritten when specs are updated
-2. **Consistency**: All 144+ resources benefit from generator fixes
-3. **Maintainability**: Single source of truth for resource implementation patterns
-4. **CI/CD Trust**: The automation ensures consistent, tested code generation
-
-**NO EXCEPTIONS**: The CI check will block PRs containing manually-modified generated files, even if tests are included. Always fix the generator.
-
-**Important**:
-
-- Resource/data source example files (`examples/resources/`, `examples/data-sources/`) are generated from `tools/generate-examples.go`
-- Function example files (`examples/functions/`) are **manually maintained** (they are the source for doc generation)
-- Function documentation (`docs/functions/`) is auto-generated from function metadata and examples
-
-### Rule 2: Understand the Workflow Architecture
-
-This repository uses a **DRY (Don't Repeat Yourself) orchestrator pattern** for CI/CD:
-
-```text
-┌─────────────────────────────────────────────────────────────────────┐
-│                    REUSABLE WORKFLOWS (Building Blocks)             │
-├─────────────────────────────────────────────────────────────────────┤
-│ _build-test.yml      - Go build, test, and lint                     │
-│ _generate-docs.yml   - Documentation regeneration                   │
-│ _generate-provider.yml - Provider code regeneration                 │
-│ _tag-release.yml     - Version tagging and release                  │
-└─────────────────────────────────────────────────────────────────────┘
-                                   ↓
-┌─────────────────────────────────────────────────────────────────────┐
-│                    ENTRY POINT WORKFLOWS (Triggers)                 │
-├─────────────────────────────────────────────────────────────────────┤
-│ on-merge.yml    - MAIN ORCHESTRATOR for all main-branch automation  │
-│ ci.yml          - PR validation (build, test, lint, constitution)   │
-│ sync-openapi.yml - Scheduled OpenAPI spec sync                      │
-└─────────────────────────────────────────────────────────────────────┘
-```
-
-**Workflows in this repository:**
-
-| Workflow           | Trigger                  | Action                                                    | Creates PR?      |
-| ------------------ | ------------------------ | --------------------------------------------------------- | ---------------- |
-| `on-merge.yml`     | Push to `main`           | Orchestrates: build/test, regenerate, tag, release        | Consolidated PR  |
-| `ci.yml`           | PRs and feature branches | Runs build, test, lint, constitution check                | Status checks    |
-| `sync-openapi.yml` | Scheduled (twice daily)  | Downloads latest OpenAPI specs from F5                    | Yes              |
-
-**The on-merge.yml Orchestrator Flow:**
-
-```text
-Push to main (human commit)
-         │
-         ▼
-┌─────────────────┐
-│ Detect Changes  │ ← What changed? (specs/code/tools)
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Build & Test    │ ← Validate merged code
-└────────┬────────┘
-         │
-    ┌────┴────┐
-    ▼         ▼
-┌───────┐ ┌───────┐
-│Regen  │ │Regen  │ ← Regenerate if needed
-│Provider│ │Docs   │
-└───┬───┘ └───┬───┘
-    └────┬────┘
-         ▼
-┌─────────────────┐
-│ Create PR       │ ← Single consolidated PR
-│ (if changes)    │   for all regeneration
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Tag & Release   │ ← ONE version bump
-└─────────────────┘
-```
-
-**Key Design Principles:**
-
-- **Single tag per change**: No more double-tagging from cascade effects
-- **Bot commit detection**: Automated commits don't trigger further automation
-- **Atomic regeneration**: All regeneration in one PR, not multiple
-- **Explicit flow**: Clear orchestration in one file, not scattered triggers
-
-### Rule 3: One Concern Per Commit
-
-When modifying generator tools (e.g., `tools/transform-docs.go`):
-
-✅ **Correct**:
-
-```bash
-git add tools/transform-docs.go
-git commit -m "feat: add Metadata/Spec grouping to doc transformer"
-git push
-# on-merge.yml orchestrator handles regeneration automatically
-```
-
-❌ **Incorrect**:
-
-```bash
-go run tools/transform-docs.go  # DON'T manually run generators
-git add tools/transform-docs.go docs/  # DON'T commit generated files
-git commit -m "feat: add grouping + regenerate all docs"
-```
-
-### Rule 4: Check .gitignore for Generated Patterns
-
-Before committing, verify files aren't in `.gitignore`. If a file pattern is in `.gitignore`, it's generated - don't commit it manually.
-
-### Rule 5: Respect Auto-Generated PRs
-
-When you see PRs from `github-actions` bot with labels `automated`, `documentation`:
-
-- These are legitimate CI-generated changes
-- Review them for correctness
-- Merge or close based on content quality
-- Do NOT duplicate their work manually
-
-### Rule 6: Pre-Flight Checklist
-
-Before creating any PR, verify:
-
-**GitHub Workflow:**
-
-- [ ] GitHub Issue exists for this work
-- [ ] Branch name includes issue number (e.g., `feature/42-description`)
-- [ ] All commits reference the issue number
-- [ ] PR description includes closing keyword (`Closes #42`)
-
-**Automation Compliance:**
-
-- [ ] Analyzed relevant workflows in `.github/workflows/`
-- [ ] Checked `.gitignore` for generated file patterns
-- [ ] Committing ONLY source code, not generated artifacts
-- [ ] Not bypassing automation that handles this task
-- [ ] PR contains single concern (not mixed source + generated)
-
-### Rule 7: Automation Security and Token Management
-
-**All automated workflows use the `AUTO_MERGE_TOKEN` for PR creation to enable workflow triggers.**
-
-**Why this matters:**
-
-- PRs created with `GITHUB_TOKEN` **do not trigger workflows** (GitHub security feature)
-- Our automation requires status checks to run on bot-created PRs
-- The `AUTO_MERGE_TOKEN` is a Personal Access Token (PAT) that enables this
-
-**Security practices:**
-
-- See `.github/AUTOMATION_SECURITY.md` for complete token management procedures
-- Token rotation required every 90 days
-- Token scopes: `repo`, `workflow` (minimum required)
-- Token access: This repository only (fine-grained PAT)
-
-**Affected workflows:**
-
-- `on-merge.yml`: Creates consolidated PRs with regenerated provider code and documentation
-- `sync-openapi.yml`: Creates PRs with updated OpenAPI specs
-
-**If automation fails:**
-
-1. Check if `AUTO_MERGE_TOKEN` has expired
-2. Follow token rotation procedure in `.github/AUTOMATION_SECURITY.md`
-3. Verify workflow logs for authentication errors
-
----
-
-## Part 3: Constitution Enforcement
-
-### Automated Enforcement Mechanisms
-
-The repository includes multiple layers of enforcement to prevent violations of the constitution rules.
-
-#### Layer 1: Pre-Commit Hooks (Local)
-
-**Location**: `.pre-commit-config.yaml` + `scripts/check-no-generated-files.sh`
-
-**What it does**: Blocks commits containing generated files before they reach the repository
-
-**Setup** (one-time):
-
-```bash
-# Install pre-commit
-pip install pre-commit
-
-# Install hooks
-pre-commit install
-
-# Test (optional)
-pre-commit run --all-files
-```
-
-**How it works**:
-
-```bash
-# Attempt to commit generated file
-git add docs/resources/namespace.md
-git commit -m "docs: update namespace"
-
-# ❌ Blocked by pre-commit hook:
-# ERROR: Attempting to commit generated files
-# - docs/resources/namespace.md
-#
-# CLAUDE.md Rule 1: Never Commit Generated Files
-```
-
-**Patterns checked**:
-
-- `docs/resources/*.md` - Provider resource documentation
-- `docs/data-sources/*.md` - Provider data source documentation
-- `internal/provider/*_resource.go` - Generated resource implementations
-- `internal/provider/*_data_source.go` - Generated data source implementations
-- `examples/resources/*/*.tf` - Generated example Terraform files
-- `examples/data-sources/*/*.tf` - Generated example Terraform files
-
-#### Layer 1b: Preview Lint for Generated Code (Local)
-
-**Location**: `.pre-commit-config.yaml` + `scripts/lint-generated-preview.sh`
-
-**What it does**: When generator tools or OpenAPI specs are modified, this hook:
-
-1. Temporarily runs the generator to produce output
-2. Lints the generated artifacts with golangci-lint
-3. Restores the original generated files (does NOT commit them)
-4. Reports linting errors before they reach CI/CD
-
-**Why this exists**: Catches linting errors early in the development cycle without violating the constitution. Generated files are never committed by this hook - it only previews what CI/CD will produce.
-
-**How it works**:
-
-```bash
-# Modify a generator tool
-vim tools/generate-all-schemas.go
-
-# Stage the generator change
-git add tools/generate-all-schemas.go
-git commit -m "fix(generator): improve schema handling"
-
-# ✅ lint-generated-preview runs:
-# 1. Saves current state of generated files
-# 2. Runs the generator
-# 3. Lints the generated output
-# 4. Restores original generated files
-# 5. Reports pass/fail
-
-# If linting fails:
-# ❌ PREVIEW LINT FAILED
-# Linting errors in generated code:
-# [list of errors]
-# Fix the generator before committing!
-```
-
-**Triggers**:
-
-- Changes to `tools/generate-all-schemas.go`
-- Changes to OpenAPI specs in `docs/specifications/api/`
-
-**Requirements**:
-
-- OpenAPI specs must exist in `docs/specifications/api/`
-- `golangci-lint` must be installed
-- If requirements aren't met, the hook skips gracefully
-
-#### Layer 2: CI/CD Checks (Remote)
-
-**Location**: `.github/workflows/ci.yml` → `check-constitution` job
-
-**What it does**: Fails PRs that contain generated files, preventing merge to main
-
-**How it works**:
-
-```yaml
-# Runs automatically on every PR
-- Compares PR branch against base branch
-- Identifies changed files
-- Checks against generated file patterns
-- Fails CI if violations detected
-```
-
-**Result**:
-
-- ❌ PR status check fails with clear error message
-- 🚫 PR cannot be merged until violations are removed
-- 📝 Instructions provided for proper fix
-
-#### Layer 3: Branch Protection (GitHub Settings)
-
-**Recommended settings** (requires repo admin):
-
-```yaml
-Branch: main
-  ✅ Require status checks to pass before merging
-  ✅ Require "Constitution Check" to pass
-  ✅ Require "Build and Test" to pass
-  ✅ Include administrators (no exceptions!)
-```
-
-### Enforcement Examples
-
-#### ✅ Correct Workflow (Passes All Checks)
-
-```bash
-# 1. Modify generator tool
-vim tools/transform-docs.go
-
-# 2. Pre-commit runs automatically
-git add tools/transform-docs.go
-git commit -m "feat: improve doc formatting"
-# ✅ Pre-commit: No generated files detected
-
-# 3. Push and create PR
-git push
-gh pr create
-
-# 4. CI checks run (ci.yml)
-# ✅ Constitution Check: No generated files in PR
-# ✅ Build and Test: All tests pass
-
-# 5. Merge PR
-# 6. on-merge.yml orchestrator triggers automatically:
-#    - Detects tool changes
-#    - Regenerates docs
-#    - Creates consolidated PR
-#    - Tags and releases (ONCE)
-# 7. Review and merge auto-PR
-```
-
-#### ❌ Incorrect Workflow (Blocked by Enforcement)
-
-```bash
-# 1. Manually run generator and commit results
-go run tools/transform-docs.go
-git add tools/transform-docs.go docs/
-git commit -m "feat: add grouping"
-
-# ❌ Pre-commit blocks:
-# ERROR: Attempting to commit generated files
-# - docs/resources/namespace.md
-# - docs/resources/http_loadbalancer.md
-# ... (142 more files)
-
-# Fix: Unstage generated files
-git restore --staged docs/
-
-# Commit only source code
-git commit -m "feat: add grouping"
-# ✅ Pre-commit: No generated files detected
-```
-
-### Bypassing Enforcement (Emergency Only)
-
-**NEVER bypass enforcement in normal development!**
-
-In genuine emergencies only (e.g., fixing broken CI):
-
-```bash
-# Skip pre-commit hooks (requires conscious decision)
-git commit --no-verify -m "emergency: fix broken workflow"
-
-# Note: CI checks will still fail if generated files present!
-```
-
-**Important**: Even with `--no-verify`, the PR will fail CI checks and cannot be merged. This provides defense-in-depth.
-
-### Testing Enforcement
-
-To verify enforcement is working:
-
-```bash
-# Test pre-commit hook
-echo "test" >> docs/resources/test.md
-git add docs/resources/test.md
-git commit -m "test"
-# Should fail with clear error message
-
-# Clean up
-git restore --staged docs/resources/test.md
-rm docs/resources/test.md
-```
-
-### Maintenance
-
-**Updating enforcement patterns**:
-
-When adding new generated file types:
-
-1. Update `scripts/check-no-generated-files.sh` (GENERATED_PATTERNS)
-2. Update `.github/workflows/ci.yml` (check-constitution job)
-3. Update this documentation (Part 3)
-4. Test enforcement with new patterns
-
----
-
-## Part 4: Self-Correction Protocol
-
-### When I Violate These Rules
-
-If I create a branch or PR without following these rules:
-
-1. **Stop immediately** - Do not continue with incorrect workflow
-2. **Create the missing issue** - Document what work is being done
-3. **Rename or recreate branch** - Include issue number
-4. **Update PR** - Add issue reference with closing keyword
-5. **Document the violation** - Learn from the mistake
-
-### Behavior Analysis Triggers
-
-I should analyze my GitHub behavior when:
-
-- Creating a branch without `gh issue develop`
-- PR description missing `Closes #`, `Fixes #`, or `Resolves #`
-- Branch name missing issue number
-- Commit messages not following Conventional Commits
-- Manually running generators and committing output
-
-## Project Overview
-
-Community-driven Terraform provider for F5 Distributed Cloud (F5XC) built using the HashiCorp Terraform Plugin Framework. The provider implements F5's public OpenAPI specifications to manage F5XC resources via Terraform.
-
-## Build & Development Commands
-
-```bash
-# Build the provider binary
-go build -o terraform-provider-f5xc
-
-# Run all tests
-go test ./...
-
-# Run acceptance tests (requires F5XC_API_TOKEN or F5XC_P12_FILE)
-TF_ACC=1 go test ./... -v -timeout 120m
-
-# Generate documentation (requires terraform CLI)
-go generate ./...
-
-# Install locally for testing
-mkdir -p ~/.terraform.d/plugins/registry.terraform.io/robinmordasiewicz/f5xc/0.1.0/darwin_arm64
-cp terraform-provider-f5xc ~/.terraform.d/plugins/registry.terraform.io/robinmordasiewicz/f5xc/0.1.0/darwin_arm64/
-```
-
-## Architecture
-
-### Provider Directory Structure
-
-- `main.go` - Provider entry point with version injection via goreleaser
-- `internal/provider/` - All Terraform resources and data sources
-- `internal/client/` - F5XC API client (HTTP client with CRUD operations and type definitions)
-- `tools/` - Code generation utilities for scaffolding new resources from OpenAPI specs
-- `docs/` - Auto-generated provider documentation for Terraform Registry
-- `examples/` - Example Terraform configurations
-
-### Resource Implementation Pattern
-
-Each resource follows the Terraform Plugin Framework pattern:
-
-1. **Resource struct** implementing `resource.Resource`, `resource.ResourceWithConfigure`, `resource.ResourceWithImportState`
-2. **Model struct** with `tfsdk` tags for state management
-3. **CRUD methods**: `Create`, `Read`, `Update`, `Delete`
-4. **Registration** in `provider.go` via `Resources()` function
-
-Example reference: `internal/provider/namespace_resource.go`
-
-### Client Architecture
-
-`internal/client/client.go` contains:
-
-- HTTP client wrapper for F5XC API (`Client` struct)
-- Type definitions for all F5XC resources (e.g., `Namespace`, `HTTPLoadBalancer`)
-- CRUD methods for each resource type following pattern: `Create{Resource}`, `Get{Resource}`, `Update{Resource}`, `Delete{Resource}`
-
-API authentication uses Bearer token: `Authorization: APIToken {token}`
-
-### Code Generation
-
-The `tools/` directory contains generators for scaffolding resources from F5 OpenAPI specs:
-
-- `generate-all-schemas.go` - Main generator for provider resources, data sources, and client types from v2 domain specs
-- `transform-docs.go` - Transforms generated documentation with enhanced metadata
-- `generate-examples.go` - Generates Terraform example configurations
-
-## Environment Variables
-
-- `F5XC_API_TOKEN` - API token for F5 Distributed Cloud (one of token or P12 required)
-- `F5XC_API_URL` - Optional API URL (defaults to `https://console.ves.volterra.io`)
-- `F5XC_P12_FILE` - Path to P12 certificate file (alternative to token auth)
-- `F5XC_P12_PASSWORD` - Password for P12 file (required with F5XC_P12_FILE)
-- `TF_ACC=1` - Enable acceptance tests
-
-## Key Dependencies
-
-- `github.com/hashicorp/terraform-plugin-framework` - Core Terraform provider SDK
-- `github.com/hashicorp/terraform-plugin-log` - Structured logging
-
-## Release Process
-
-Releases are automated via GoReleaser on tag push (`v*`). The workflow:
-
-1. Builds cross-platform binaries
-2. Signs checksums with GPG
-3. Publishes to GitHub Releases with Terraform Registry manifest
-
----
-
-## Part 5: Provider-Defined Functions
-
-### Functions Overview
-
-This repository contains provider-defined functions that provide utility functionality not available in the F5 OpenAPI specifications. These functions are manually maintained but integrate with the automated documentation workflow.
-
-### Source Code (Manually Maintained)
-
-The following directories contain hand-written **source code** that is **NOT auto-generated**:
-
-| Directory             | Purpose                                        | Contents                                              |
-| --------------------- | ---------------------------------------------- | ----------------------------------------------------- |
-| `internal/functions/` | Provider-defined function implementations      | `blindfold.go`, `blindfold_file.go`                   |
-| `internal/blindfold/` | F5XC Secret Management encryption library      | `seal.go`, `publickey.go`, `policy.go`, `types.go`    |
-| `examples/functions/` | Example Terraform configurations for functions | `blindfold/function.tf`, `blindfold_file/function.tf` |
-
-### Generated Artifacts (Auto-Generated)
-
-The following are **automatically generated** by the CI/CD pipeline:
-
-| Directory/File        | Generated By   | Trigger                                                                  |
-| --------------------- | -------------- | ------------------------------------------------------------------------ |
-| `docs/functions/*.md` | `tfplugindocs` | Changes to `internal/functions/`, `examples/functions/`, or `templates/` |
-
-### Manually Maintained Files
-
-The following individual files are manually maintained within otherwise auto-generated directories:
-
-| File                                                                   | Purpose                                             |
-| ---------------------------------------------------------------------- | --------------------------------------------------- |
-| `internal/provider/functions_registration.go`                          | Registers provider-defined functions with Terraform |
-| `internal/provider/addon_service_data_source.go`                       | Data source for querying addon service details      |
-| `internal/provider/addon_service_activation_status_data_source.go`     | Data source for checking addon activation           |
-| `templates/functions.md.tmpl`                                          | Template for generating function documentation      |
-| `examples/data-sources/addon_service/data-source.tf`                   | Example for addon_service data source               |
-| `examples/data-sources/addon_service_activation_status/data-source.tf` | Example for activation status data source           |
-
-### Functions Automation Rules
-
-1. **Source Code**: Commit directly - function source in `internal/functions/` and `internal/blindfold/`
-2. **Examples**: Commit directly - example files in `examples/functions/*/function.tf`
-3. **Documentation**: **NEVER** commit `docs/functions/*.md` - these are auto-generated
-4. **Templates**: Commit directly - `templates/functions.md.tmpl` controls doc generation
-5. **Workflow Trigger**: Changes to function source or examples trigger doc regeneration
-
-### Provider Functions
-
-The provider includes two utility functions for F5XC Secret Management:
-
-#### The `blindfold` Function
-
-Encrypts base64-encoded plaintext using F5XC blindfold encryption.
-
-```hcl
-provider::f5xc::blindfold(plaintext, policy_name, namespace)
-```
-
-#### The `blindfold_file` Function
-
-Reads a file and encrypts its contents using F5XC blindfold encryption.
-
-```hcl
-provider::f5xc::blindfold_file(path, policy_name, namespace)
-```
-
-**Requirements:**
-
-- Terraform 1.8.0 or later
-- Valid F5XC provider configuration
-- Existing SecretPolicy in the specified namespace
-
-### Adding New Functions
-
-When adding new provider-defined functions:
-
-1. **Create Function Source**: Add implementation in `internal/functions/`
-2. **Add Support Libraries**: If needed, add to `internal/blindfold/` or create new package
-3. **Register Function**: Update `internal/provider/functions_registration.go`
-4. **Create Examples**: Add `examples/functions/<function_name>/function.tf`
-5. **Add Unit Tests**: Include tests in the function package
-6. **Update Generator**: Add directories to preservation lists in `tools/generate-all-schemas.go`
-7. **Update This Section**: Document in this CLAUDE.md
-
-The CI/CD workflow will automatically:
-
-- Run tests on your function code
-- Generate `docs/functions/<function_name>.md` from function metadata
-- Create a PR with the generated documentation
-
-### Generator Integration
-
-The `generate-all-schemas.go` tool contains explicit lists of manually-maintained **source** code:
-
-```go
-var manuallyMaintainedFiles = map[string]bool{
-    "functions_registration.go": true,
-}
-
-var manuallyMaintainedDirs = []string{
-    "internal/functions",
-    "internal/blindfold",
-}
-```
-
-These source files are preserved during regeneration. Documentation in `docs/functions/` is **NOT** in this list because it is auto-generated by `tfplugindocs`.
-
----
-
-## Part 6: Provider Guides
-
-### Guides Overview
-
-Provider guides are step-by-step tutorials that help users accomplish specific tasks with the F5XC Terraform provider. Unlike resource documentation (auto-generated from schemas), guides are **manually written** prose with accompanying example Terraform configurations.
-
-### Guides Directory Structure
-
-Guides follow the same template-to-docs pattern as other provider documentation:
-
-| Directory                       | Purpose                                  | Commit? |
-| ------------------------------- | ---------------------------------------- | ------- |
-| `templates/guides/*.md`         | Guide source files (manually maintained) | YES     |
-| `docs/guides/*.md`              | Auto-generated by `tfplugindocs`         | NEVER   |
-| `examples/guides/<guide-name>/` | Complete Terraform modules for guides    | YES     |
-
-```text
-templates/
-└── guides/
-    └── http-loadbalancer.md      # Guide SOURCE (commit this)
-
-docs/
-└── guides/
-    └── http-loadbalancer.md      # AUTO-GENERATED (never commit)
-
-examples/
-└── guides/
-    └── http-loadbalancer/
-        ├── main.tf               # Resources
-        ├── variables.tf          # Variable declarations
-        ├── outputs.tf            # Output values
-        ├── terraform.tfvars.example  # Example values
-        └── README.md             # Quick-start instructions
-```
-
-### How Guides Work
-
-1. **Source files** live in `templates/guides/` and are committed to git
-2. **CI/CD runs** `tfplugindocs generate` on merge to main
-3. **tfplugindocs copies** `templates/guides/*` → `docs/guides/*`
-4. **Terraform Registry** displays guides in the provider documentation sidebar
-
-### Guide Frontmatter
-
-All guides in `templates/guides/` must have YAML frontmatter:
-
-```yaml
----
-page_title: "Guide: HTTP Load Balancer with Security Features"
-subcategory: "Guides"
-description: |-
-  Step-by-step guide to deploy a production-ready HTTP Load Balancer
-  with WAF, bot defense, and rate limiting.
----
-```
-
-- `page_title`: Appears in the Registry navigation
-- `subcategory`: Must be `"Guides"` for grouping in sidebar
-- `description`: Brief description for search and previews
-
-### Guide Example Structure
-
-Each guide should have an accompanying example in `examples/guides/<guide-name>/`:
-
-| File                       | Purpose                                            |
-| -------------------------- | -------------------------------------------------- |
-| `main.tf`                  | All Terraform resources                            |
-| `variables.tf`             | Variable declarations with types and descriptions  |
-| `outputs.tf`               | Output values for user reference                   |
-| `terraform.tfvars.example` | Example values (user copies to `terraform.tfvars`) |
-| `README.md`                | Quick-start instructions                           |
-
-**Example pattern for optional resources:**
-
-```hcl
-resource "f5xc_namespace" "this" {
-  count = var.create_namespace ? 1 : 0
-  name  = var.namespace_name
-}
-
-locals {
-  namespace = var.create_namespace ? f5xc_namespace.this[0].name : var.namespace_name
-}
-```
-
-### Guides Automation Rules
-
-1. **Guide Templates**: Commit to `templates/guides/` - manually maintained
-2. **Guide Docs**: **NEVER** commit to `docs/guides/` - auto-generated by tfplugindocs
-3. **Guide Examples**: Commit to `examples/guides/` - manually maintained
-4. **Workflow Trigger**: Changes to `templates/guides/` or `examples/guides/` trigger doc regeneration
-
-### Adding New Guides
-
-When adding a new guide:
-
-1. **Create the template**: Add `templates/guides/<guide-name>.md` with proper frontmatter
-2. **Create the example directory**: `examples/guides/<guide-name>/`
-3. **Create example files**:
-   - `main.tf` - Working Terraform configuration
-   - `variables.tf` - All variables with validation
-   - `outputs.tf` - Useful outputs
-   - `terraform.tfvars.example` - Example values
-   - `README.md` - Quick-start instructions
-4. **Test locally**: Run `terraform init && terraform validate` in the example directory
-5. **Commit both**: Template in `templates/guides/` AND examples in `examples/guides/`
-
-The CI/CD workflow will automatically:
-
-- Run `tfplugindocs generate` to create `docs/guides/`
-- Create a PR with the generated documentation
-
-### Existing Guides
-
-| Guide               | Description                                                    |
-| ------------------- | -------------------------------------------------------------- |
-| `http-loadbalancer` | Deploy HTTP Load Balancer with WAF, bot defense, rate limiting |
-
-### Guide vs Resource Documentation
-
-| Aspect            | Guides                                 | Resource Docs                         |
-| ----------------- | -------------------------------------- | ------------------------------------- |
-| Location (source) | `templates/guides/*.md`                | `templates/resources.md.tmpl`         |
-| Location (output) | `docs/guides/*.md`                     | `docs/resources/*.md`                 |
-| Content type      | Prose, tutorials, step-by-step         | API reference, schema                 |
-| Author            | Manually written                       | Auto-generated from schema            |
-| Examples          | Complete modules in `examples/guides/` | Single files in `examples/resources/` |
-
----
-
-## Part 7: F5XC API v2 Migration (v3.0.0)
-
-### Migration Overview
-
-Starting with provider version **v3.0.0**, this provider uses F5XC API v2 specifications from the centralized enriched API repository instead of the original v1 specifications.
-
-### Spec Format Changes
-
-| Aspect            | v1 (Legacy)                                | v2 (Current)                                              |
-| ----------------- | ------------------------------------------ | --------------------------------------------------------- |
-| **Source**        | `docs.cloud.f5.com/.../open-api.zip`       | `github.com/robinmordasiewicz/f5xc-api-enriched/releases` |
-| **Files**         | 269 individual `*.ves-swagger.json`        | 38 domain files + `index.json`                            |
-| **Pattern**       | `docs-cloud-f5-com.*.ves-swagger.json`     | `domains/*.json`                                          |
-| **Categories**    | Pattern-based (43 overrides, 40+ patterns) | `x-f5xc-category` extension                               |
-| **Schema naming** | `ves.io.schema.{resource}.Object`          | `{resource}CreateSpecType`                                |
-
-### V2 Domain Categories
-
-Resources are now organized into 7 domain categories:
-
-| Category           | Domains | Example Resources                              |
-| ------------------ | ------- | ---------------------------------------------- |
-| **Security**       | 12      | waf, ddos, blindfold, certificates             |
-| **Networking**     | 5       | dns, cdn, network, rate_limiting               |
-| **Infrastructure** | 6       | sites, service_mesh, cloud_infrastructure      |
-| **Platform**       | 9       | tenant_and_identity, authentication, billing   |
-| **Operations**     | 5       | observability, statistics, support             |
-| **AI**             | 1       | ai_services (preview)                          |
-
-### Extension Usage
-
-The provider now processes both extension families:
-
-| Extension Family | Source      | Purpose                                               |
-| ---------------- | ----------- | ----------------------------------------------------- |
-| `x-f5xc-*`       | Enrichment  | category, requires-tier, complexity, descriptions     |
-| `x-ves-*`        | Original F5 | oneof-field, proto-message, validation-rules          |
-
-Both are complementary - `x-f5xc-*` provides enriched metadata while `x-ves-*` provides original F5 technical annotations.
-
-### Generator Changes
-
-The schema generator (`tools/generate-all-schemas.go`) now:
-
-1. **Auto-detects spec version** based on directory structure
-2. **Processes v2 domain files** containing multiple resources each
-3. **Deduplicates resources** that appear in multiple domain specs
-4. **Extracts schemas** using v2 patterns (`{resource}CreateSpecType`)
-
-### Sync Workflow
-
-The `sync-openapi.yml` workflow now:
-
-- Downloads from GitHub releases (enriched API repository)
-- Validates v2 structure (`index.json` + `domains/` directory)
-- Pins to specific release versions for reproducibility
-
-### Impact on Users
-
-**No breaking changes for Terraform configurations.** The v3.0.0 major version bump indicates:
-
-1. **Upstream spec source change** - fundamentally different API specification source
-2. **Internal architecture change** - domain-based organization
-3. **Enhanced metadata** - new `x-f5xc-*` extensions enable richer documentation
-
-Users can continue using their existing Terraform configurations without modification.
+Read `CONTRIBUTING.md` for full governance details.
