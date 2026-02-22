@@ -158,3 +158,52 @@ jobs:
       gpg-private-key-passphrase: ${{ secrets.gpg-passphrase }}
     with:
       setup-go-version-file: 'go.mod'
+
+  upload-mcp-data:
+    name: Upload MCP Data Artifact
+    needs: [tag, release]
+    if: needs.tag.outputs.created == 'true' && inputs.create-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.tag.outputs.new_tag }}
+
+      - name: Create MCP data tarball
+        run: |
+          VERSION="${{ needs.tag.outputs.new_tag }}"
+          VERSION="${VERSION#v}"
+
+          echo "Creating MCP data tarball for v${VERSION}..."
+
+          # Create tarball with documentation, OpenAPI specs, and metadata
+          tar czf "mcp-data-${VERSION}.tar.gz" \
+            --transform 's,^,mcp-data/,' \
+            docs/resources/ \
+            docs/data-sources/ \
+            docs/functions/ \
+            docs/guides/ \
+            docs/index.md \
+            docs/specifications/api/ \
+            tools/metadata/ \
+            tools/subscription-tiers.json
+
+          echo "Tarball contents:"
+          tar tzf "mcp-data-${VERSION}.tar.gz" | head -20
+          echo "..."
+          echo "Total files: $(tar tzf "mcp-data-${VERSION}.tar.gz" | wc -l)"
+          echo "Size: $(ls -lh "mcp-data-${VERSION}.tar.gz" | awk '{print $5}')"
+
+      - name: Upload to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ needs.tag.outputs.new_tag }}"
+          VERSION="${VERSION#v}"
+
+          gh release upload "${{ needs.tag.outputs.new_tag }}" \
+            "mcp-data-${VERSION}.tar.gz" \
+            --clobber
+
+          echo "Uploaded mcp-data-${VERSION}.tar.gz to release ${{ needs.tag.outputs.new_tag }}"
