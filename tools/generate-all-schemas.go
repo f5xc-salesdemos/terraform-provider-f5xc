@@ -33,9 +33,9 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/f5xc/terraform-provider-f5xc/tools/pkg/namespace"
-	"github.com/f5xc/terraform-provider-f5xc/tools/pkg/naming"
-	"github.com/f5xc/terraform-provider-f5xc/tools/pkg/openapi"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/tools/pkg/namespace"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/tools/pkg/naming"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/tools/pkg/openapi"
 )
 
 // Configuration
@@ -4738,7 +4738,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/f5xc/terraform-provider-f5xc/internal/client"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/internal/client"
 )
 
 // Ensure F5XCProvider satisfies various provider interfaces.
@@ -4998,9 +4998,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/f5xc/terraform-provider-f5xc/internal/client"
-	inttimeouts "github.com/f5xc/terraform-provider-f5xc/internal/timeouts"
-	"github.com/f5xc/terraform-provider-f5xc/internal/validators"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/internal/client"
+	inttimeouts "github.com/f5xc-salesdemos/terraform-provider-f5xc/internal/timeouts"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/internal/validators"
 )
 
 // Ensure provider defined types fully satisfy framework interfaces.
@@ -5559,7 +5559,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
-	"github.com/f5xc/terraform-provider-f5xc/internal/client"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/internal/client"
 )
 
 var (

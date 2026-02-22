@@ -13,7 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/function"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 
-	"github.com/f5xc/terraform-provider-f5xc/internal/functions"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/internal/functions"
 )
 
 // Ensure F5XCProvider satisfies the provider.ProviderWithFunctions interface.

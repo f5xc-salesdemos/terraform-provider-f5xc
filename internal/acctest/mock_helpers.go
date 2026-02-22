@@ -14,8 +14,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-go/tfprotov6"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 
-	"github.com/f5xc/terraform-provider-f5xc/internal/mocks"
-	"github.com/f5xc/terraform-provider-f5xc/internal/provider"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/internal/mocks"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/internal/provider"
 )
 
 var (

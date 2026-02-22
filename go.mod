@@ -1,4 +1,4 @@
-module github.com/f5xc/terraform-provider-f5xc
+module github.com/f5xc-salesdemos/terraform-provider-f5xc
 
 go 1.24.0
 

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/f5xc/terraform-provider-f5xc/internal/client"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/internal/client"
 )
 
 func TestSizeAnalysis(t *testing.T) {

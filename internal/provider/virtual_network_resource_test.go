@@ -13,7 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/tfjsonpath"
 
-	"github.com/f5xc/terraform-provider-f5xc/internal/acctest"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/internal/acctest"
 )
 
 // testAccVirtualNetworkImportStateIdFunc returns a function that generates the import ID
