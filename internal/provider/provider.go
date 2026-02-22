@@ -15,7 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
-	"github.com/f5xc/terraform-provider-f5xc/internal/client"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/internal/client"
 )
 
 // Ensure F5XCProvider satisfies various provider interfaces.

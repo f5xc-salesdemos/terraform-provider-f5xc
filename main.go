@@ -19,7 +19,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 
-	"github.com/f5xc/terraform-provider-f5xc/internal/provider"
+	"github.com/f5xc-salesdemos/terraform-provider-f5xc/internal/provider"
 )
 
 // Run "go generate" to format example terraform files and generate the docs for the registry/website
