@@ -114,12 +114,12 @@ func GetTestCategorySummary(summary *TestSummary) string {
 	sb.WriteString(divider + "\n")
 	sb.WriteString("                       TEST SUMMARY REPORT\n")
 	sb.WriteString(divider + "\n")
-	sb.WriteString(fmt.Sprintf("Timestamp: %s\n", summary.Timestamp.Format(time.RFC3339)))
+	fmt.Fprintf(&sb, "Timestamp: %s\n", summary.Timestamp.Format(time.RFC3339))
 	sb.WriteString(subDivider + "\n")
 
 	// Overall totals
-	sb.WriteString(fmt.Sprintf("TOTAL: %d tests | %d passed | %d failed | %d skipped\n",
-		summary.TotalTests, summary.TotalPassed, summary.TotalFailed, summary.TotalSkipped))
+	fmt.Fprintf(&sb, "TOTAL: %d tests | %d passed | %d failed | %d skipped\n",
+		summary.TotalTests, summary.TotalPassed, summary.TotalFailed, summary.TotalSkipped)
 	sb.WriteString(subDivider + "\n")
 
 	// By category
@@ -129,8 +129,8 @@ func GetTestCategorySummary(summary *TestSummary) string {
 			if cs.Failed > 0 {
 				status = "FAIL"
 			}
-			sb.WriteString(fmt.Sprintf("[%s] %-10s: %3d tests | %3d passed | %3d failed | %3d skipped\n",
-				status, cat, cs.Total, cs.Passed, cs.Failed, cs.Skipped))
+			fmt.Fprintf(&sb, "[%s] %-10s: %3d tests | %3d passed | %3d failed | %3d skipped\n",
+				status, cat, cs.Total, cs.Passed, cs.Failed, cs.Skipped)
 		}
 	}
 
