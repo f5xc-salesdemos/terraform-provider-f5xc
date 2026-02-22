@@ -51,19 +51,19 @@ type F5XCError struct {
 // Error implements the error interface
 func (e *F5XCError) Error() string {
 	var sb strings.Builder
-	sb.WriteString(fmt.Sprintf("[%s] %s", e.Code, e.Message))
+	fmt.Fprintf(&sb, "[%s] %s", e.Code, e.Message)
 
 	if e.Resource != "" {
-		sb.WriteString(fmt.Sprintf(" (resource: %s)", e.Resource))
+		fmt.Fprintf(&sb, " (resource: %s)", e.Resource)
 	}
 	if e.Operation != "" {
-		sb.WriteString(fmt.Sprintf(" (operation: %s)", e.Operation))
+		fmt.Fprintf(&sb, " (operation: %s)", e.Operation)
 	}
 	if e.StatusCode != 0 {
-		sb.WriteString(fmt.Sprintf(" (status: %d)", e.StatusCode))
+		fmt.Fprintf(&sb, " (status: %d)", e.StatusCode)
 	}
 	if e.Wrapped != nil {
-		sb.WriteString(fmt.Sprintf(": %v", e.Wrapped))
+		fmt.Fprintf(&sb, ": %v", e.Wrapped)
 	}
 
 	return sb.String()
