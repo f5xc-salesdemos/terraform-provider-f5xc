@@ -1,57 +1,29 @@
-# Terraform Provider for F5 Distributed Cloud
+# Terraform Provider
 
-Community Terraform provider for [F5 Distributed Cloud](https://www.f5.com/cloud).
+[![GitHub Pages Deploy](https://github.com/f5xc-salesdemos/terraform-provider-f5xc/actions/workflows/github-pages-deploy.yml/badge.svg)](https://github.com/f5xc-salesdemos/terraform-provider-f5xc/actions/workflows/github-pages-deploy.yml)
+[![Repository Settings](https://github.com/f5xc-salesdemos/terraform-provider-f5xc/actions/workflows/enforce-repo-settings.yml/badge.svg)](https://github.com/f5xc-salesdemos/terraform-provider-f5xc/actions/workflows/enforce-repo-settings.yml)
+[![License](https://img.shields.io/github/license/f5xc-salesdemos/terraform-provider-f5xc)](LICENSE)
 
-## ⚠️ Version 3.0.0 Clean Break Release
-
-**IMPORTANT**: This is a pre-release clean break version that requires recreating all Terraform-managed resources.
-
-- **No in-place upgrade**: You cannot upgrade from earlier versions without destroying and recreating resources
-- **API v2 based**: Uses F5 Distributed Cloud API v2 specifications (98 resources available)
-- **No backwards compatibility**: All state upgrade infrastructure has been removed
-- **Import supported**: You can still import existing F5XC resources using `terraform import`
-
-This is a pre-release project. See [CHANGELOG.md](CHANGELOG.md) for complete details on breaking changes and migration requirements.
-
-## Installation
-
-```terraform
-terraform {
-  required_providers {
-    f5xc = {
-      source  = "robinmordasiewicz/f5xc"
-    }
-  }
-}
-
-provider "f5xc" {}
-```
-
-## Authentication
-
-Set your API token as an environment variable:
-
-```bash
-export F5XC_API_TOKEN="your-api-token"
-```
+Terraform provider for F5 Distributed Cloud
 
 ## Documentation
 
-- [Provider Documentation](https://registry.terraform.io/providers/robinmordasiewicz/f5xc/latest/docs)
-- [F5 Distributed Cloud API](https://docs.cloud.f5.com/)
+Full documentation is available at **[https://f5xc-salesdemos.github.io/terraform-provider-f5xc/](https://f5xc-salesdemos.github.io/terraform-provider-f5xc/)**.
+
+## Getting Started
+
+```bash
+git clone https://github.com/f5xc-salesdemos/terraform-provider-f5xc.git
+```
+
+See the [documentation](https://f5xc-salesdemos.github.io/terraform-provider-f5xc/) for detailed setup
+and usage guides.
 
 ## Contributing
 
-This provider uses automated workflows for documentation generation and releases:
-
-- **Documentation**: Auto-generated from OpenAPI specs on merge to main
-- **Releases**: Triggered automatically using [semantic versioning](https://semver.org/) based on conventional commits
-- **Testing**: All PRs require passing tests and lint checks
-
-All substantive changes (code, documentation, configuration) automatically trigger a new release with appropriate version bumping.
-
-For detailed contribution guidelines, see [CLAUDE.md](CLAUDE.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for workflow rules,
+branch naming, and CI requirements.
 
 ## License
 
-[Mozilla Public License 2.0](LICENSE)
+See [LICENSE](LICENSE).
