@@ -11,14 +11,17 @@ TOOLS_DIR=tools
 PROVIDER_DIR=internal/provider
 CLIENT_DIR=internal/client
 DOCS_DIR=docs
-SPEC_DIR?=/tmp
+SPEC_DIR?=docs/specifications/api
+
+# API spec source
+ENRICHED_REPO?=robinmordasiewicz/f5xc-api-enriched
 
 # Go commands
 GO=go
 GOFMT=gofmt
 GOLINT=golangci-lint
 
-.PHONY: all build test lint fmt clean clean-generated regenerate generate docs install help sweep sweep-dry-run testacc testacc-mock testacc-real testacc-all test-report test-comprehensive test-comprehensive-mock test-comprehensive-real test-pr-subset
+.PHONY: all build test lint fmt clean clean-generated regenerate generate docs install help download-specs sweep sweep-dry-run testacc testacc-mock testacc-real testacc-all test-report test-comprehensive test-comprehensive-mock test-comprehensive-real test-pr-subset
 
 # Default target
 all: generate build lint test docs
@@ -34,6 +37,7 @@ help:
 	@echo "  make lint         - Run linters"
 	@echo "  make fmt          - Format Go code"
 	@echo "  make generate     - Generate resources from OpenAPI specs"
+	@echo "  make download-specs - Download latest F5 XC API specs (requires gh CLI)"
 	@echo "  make docs         - Generate Terraform documentation"
 	@echo "  make clean        - Remove build artifacts"
 	@echo "  make install      - Install provider locally"
@@ -75,7 +79,7 @@ help:
 	@echo "Environment Variables:"
 	@echo "  TF_ACC=1           - Enable real acceptance tests"
 	@echo "  F5XC_MOCK_MODE=1   - Enable mock server tests"
-	@echo "  SPEC_DIR           - Directory containing OpenAPI specs (default: /tmp)"
+	@echo "  SPEC_DIR           - Directory containing OpenAPI specs (default: docs/specifications/api)"
 	@echo "  F5XC_SPEC_DIR      - Alternative env var for spec directory"
 	@echo ""
 	@echo "For real acceptance tests, set one of:"
@@ -102,6 +106,18 @@ lint:
 fmt:
 	@echo "Formatting code..."
 	$(GOFMT) -s -w .
+
+# Download latest F5 XC API specs from enriched repo
+download-specs:
+	@echo "Downloading latest F5 XC API specs..."
+	@mkdir -p $(SPEC_DIR)
+	@LATEST=$$(gh release list --repo $(ENRICHED_REPO) --limit 1 --json tagName --jq '.[0].tagName'); \
+	echo "Version: $$LATEST"; \
+	curl -sL "https://github.com/$(ENRICHED_REPO)/releases/download/$$LATEST/f5xc-api-specs-$$LATEST.zip" -o /tmp/specs.zip; \
+	rm -rf $(SPEC_DIR)/*; \
+	unzip -o /tmp/specs.zip -d $(SPEC_DIR); \
+	rm /tmp/specs.zip; \
+	echo "Specs downloaded to $(SPEC_DIR)"
 
 # Generate resources from OpenAPI specs
 generate: generate-schemas
