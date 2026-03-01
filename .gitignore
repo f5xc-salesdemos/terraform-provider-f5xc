@@ -46,6 +46,9 @@ wheels/
 .installed.cfg
 *.egg
 
+# Docker
+.docker-data/
+
 # Go
 *.exe
 *.exe~
@@ -86,6 +89,7 @@ reports/
 projects/
 
 # Tool-specific
+.claude/
 .playwright-mcp/
 .serena/
 .auto-claude/
