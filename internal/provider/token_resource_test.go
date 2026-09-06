@@ -43,6 +43,7 @@ func TestMockTokenResource_basic(t *testing.T) {
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "name", "test-token"),
 					resource.TestCheckResourceAttr(resourceName, "namespace", "system"),
+					resource.TestCheckResourceAttr(resourceName, "type", "0"),
 					// Test that the uid output is generated (but we can't test tf's internal masking here easily,
 					// so we just make sure we get *a* value and the resource applies cleanly)
 					resource.TestMatchResourceAttr(resourceName, "uid", regexp.MustCompile(`(^[0-9a-fA-F-]+$|^mock-uid-[0-9]+$)`)),
@@ -105,11 +106,47 @@ func TestMockTokenResource_siteBoundJWT(t *testing.T) {
 				),
 			},
 			{
+				Config: `
+				resource "xcsh_token" "test" {
+					name      = "test-token-jwt"
+					namespace = "system"
+					type      = 1
+					site_name = "example-securemesh-site"
+				}
+
+				output "jwt_credential" {
+					value     = xcsh_token.test.uid
+					sensitive = true
+				}
+				`,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
+				},
+			},
+			{
 				ResourceName:            resourceName,
 				ImportState:             true,
 				ImportStateId:           "system/test-token-jwt",
 				ImportStateVerify:       true,
 				ImportStateVerifyIgnore: []string{"timeouts"},
+			},
+			{
+				Config: `
+				resource "xcsh_token" "test" {
+					name      = "test-token-jwt"
+					namespace = "system"
+					type      = 1
+					site_name = "example-securemesh-site"
+				}
+
+				output "jwt_credential" {
+					value     = xcsh_token.test.uid
+					sensitive = true
+				}
+				`,
+				ConfigPlanChecks: resource.ConfigPlanChecks{
+					PreApply: []plancheck.PlanCheck{plancheck.ExpectEmptyPlan()},
+				},
 			},
 		},
 	})
