@@ -15,34 +15,59 @@ const (
 	tokenTypeJWT    int64 = 1
 )
 
-func tokenKindFromSpec(spec map[string]interface{}) (int64, bool) {
+func tokenKindFromSpec(spec map[string]interface{}) (int64, bool, error) {
 	value, ok := spec["type"]
 	if !ok {
-		return 0, false
+		return 0, false, nil
 	}
+	kind, err := normalizeTokenType(value)
+	if err != nil {
+		return 0, true, err
+	}
+	return kind, true, nil
+}
 
+// normalizeTokenType converts the two wire representations returned by XC into
+// the provider's stable integer contract. Errors intentionally omit the rejected
+// value so diagnostics cannot echo unexpected server data or credential material.
+func normalizeTokenType(value interface{}) (int64, error) {
+	var kind int64
 	switch typed := value.(type) {
+	case string:
+		switch typed {
+		case "NORMAL":
+			return tokenTypeNormal, nil
+		case "JWT":
+			return tokenTypeJWT, nil
+		default:
+			return 0, errors.New("token response contains an unsupported token type")
+		}
 	case float64:
-		if typed == float64(tokenTypeNormal) {
-			return tokenTypeNormal, true
+		switch typed {
+		case 0:
+			return tokenTypeNormal, nil
+		case 1:
+			return tokenTypeJWT, nil
+		default:
+			return 0, errors.New("token response contains an unsupported token type")
 		}
-		if typed == float64(tokenTypeJWT) {
-			return tokenTypeJWT, true
-		}
-		return -1, true
 	case int64:
-		return typed, true
+		kind = typed
 	case int:
-		return int64(typed), true
+		kind = int64(typed)
 	case json.Number:
 		parsed, err := typed.Int64()
 		if err != nil {
-			return -1, true
+			return 0, errors.New("token response contains an unsupported token type")
 		}
-		return parsed, true
+		kind = parsed
 	default:
-		return -1, true
+		return 0, errors.New("token response contains an unsupported token type")
 	}
+	if kind != tokenTypeNormal && kind != tokenTypeJWT {
+		return 0, errors.New("token response contains an unsupported token type")
+	}
+	return kind, nil
 }
 
 func tokenCredential(resource *client.Token, fallbackKind int64) (credential string, content string, err error) {
@@ -51,7 +76,11 @@ func tokenCredential(resource *client.Token, fallbackKind int64) (credential str
 	}
 
 	kind := fallbackKind
-	if observed, ok := tokenKindFromSpec(resource.Spec); ok {
+	observed, ok, normalizeErr := tokenKindFromSpec(resource.Spec)
+	if normalizeErr != nil {
+		return "", "", normalizeErr
+	}
+	if ok {
 		kind = observed
 	}
 	if kind != tokenTypeNormal && kind != tokenTypeJWT {
@@ -77,10 +106,22 @@ func populateTokenCredentialState(data *TokenResourceModel, resource *client.Tok
 	if !data.Type.IsNull() && !data.Type.IsUnknown() {
 		fallbackKind = data.Type.ValueInt64()
 	}
+	kind := fallbackKind
+	observed, ok, normalizeErr := tokenKindFromSpec(resource.Spec)
+	if normalizeErr != nil {
+		return normalizeErr
+	}
+	if ok {
+		kind = observed
+	}
+	if kind != tokenTypeNormal && kind != tokenTypeJWT {
+		return errors.New("token response contains an unsupported token type")
+	}
 	credential, content, err := tokenCredential(resource, fallbackKind)
 	if err != nil {
 		return err
 	}
+	data.Type = types.Int64Value(kind)
 	data.Uid = types.StringValue(credential)
 	if content == "" {
 		data.Content = types.StringNull()

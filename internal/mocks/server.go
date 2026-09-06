@@ -583,13 +583,6 @@ func (s *Server) ensureResourceVersionLocked(path string, resource interface{}) 
 func (s *Server) applyResourceDefaults(spec map[string]interface{}, resourceType string) {
 	// First, apply manually-maintained defaults for specific resource types
 	switch resourceType {
-	case "tokens":
-		// JWT token content is server-issued and never accepted from practitioner
-		// configuration. Mirror that contract so provider tests exercise the
-		// site-bound credential path without using a real credential.
-		if tokenType, ok := spec["type"].(float64); ok && tokenType == 1 {
-			spec["content"] = "mock-jwt-credential"
-		}
 	case "data_groups":
 		// The live API materializes an omitted records map inside a selected
 		// data-group oneof arm. This exercises provider null-vs-empty handling.
@@ -627,6 +620,30 @@ func (s *Server) applyResourceDefaults(spec map[string]interface{}, resourceType
 	// Then, apply API-discovered defaults from generated code
 	// This ensures mock responses match real F5 XC API behavior
 	ApplyDiscoveredDefaults(spec, resourceType)
+
+	if resourceType == "tokens" {
+		// Requests use the published integer enum, while live XC responses use
+		// symbolic enum names. Store and return the live response representation
+		// so normal provider tests cannot conceal a wire-format mismatch.
+		switch tokenType := spec["type"].(type) {
+		case float64:
+			switch tokenType {
+			case 0:
+				spec["type"] = "NORMAL"
+			case 1:
+				spec["type"] = "JWT"
+				spec["content"] = "mock-jwt-credential"
+			}
+		case int64:
+			switch tokenType {
+			case 0:
+				spec["type"] = "NORMAL"
+			case 1:
+				spec["type"] = "JWT"
+				spec["content"] = "mock-jwt-credential"
+			}
+		}
+	}
 }
 
 // validateResourceName validates the resource name based on resource type
