@@ -87,6 +87,35 @@
         "version": "6.1.0"
       }
     },
+    "1e0c7185b6d88a44b2a63fdf077d2ca43ce08e8c1c6569695d85dfe2350de1c0": {
+      "delivery": {
+        "release_tag": "v6.1.1",
+        "target_commit": "2b27355ac9bf4683d3a321f7d6388676f756c2f5",
+        "version": "6.1.1"
+      },
+      "publication": {
+        "assets": {
+          "mcp-data-7.4.0.tar.gz": "sha256:ed979cb91386f2b69c3a7724822fbdd324ddb57a2562ce59755d99d547a484fd",
+          "terraform-provider-xcsh_7.4.0_SHA256SUMS": "sha256:e94775d174cc3965248251b261e6d1ab64d36442109762f41ab7a7d6fcb8966c",
+          "terraform-provider-xcsh_7.4.0_SHA256SUMS.sig": "sha256:eb0f4e831c3ee636abb2f01597a1134213ca72d2afe8e8df7db3bd7716e50e76",
+          "terraform-provider-xcsh_7.4.0_darwin_amd64.zip": "sha256:b4b55f4f423d3dd7350bc237205a61cac41742228375ec60654a5823ffcd3f8c",
+          "terraform-provider-xcsh_7.4.0_darwin_arm64.zip": "sha256:9b1bcb861aabe7463bb97d233cb2944eaeee13483f1dbdbce4aa2fa1bc757a02",
+          "terraform-provider-xcsh_7.4.0_freebsd_386.zip": "sha256:589418bd37b5492b904ce3952563600c3a0141b5577d4d047c1438a18bc626e4",
+          "terraform-provider-xcsh_7.4.0_freebsd_amd64.zip": "sha256:f4c830a4e676955ef399ed2cc0693840e34d6e3d209bf7b6aebec9be817730e5",
+          "terraform-provider-xcsh_7.4.0_linux_386.zip": "sha256:a3f50760909ef96095d23e607202862ac38d1771da14e6763484a9308f66a20e",
+          "terraform-provider-xcsh_7.4.0_linux_amd64.zip": "sha256:95a372bf9e9a2b5d7392a13cf21a9666467520cf0e7cb9bcb80a6da9a88580a9",
+          "terraform-provider-xcsh_7.4.0_linux_arm.zip": "sha256:1f6381eb74a2204bcf79b6d0cb32e99ded3f048b0a7da9e27b9e4b3618da311b",
+          "terraform-provider-xcsh_7.4.0_linux_arm64.zip": "sha256:8af8a57becbef293153c3ca7e45bb36ba6a06b2cf8022b936ad37625da669a3a",
+          "terraform-provider-xcsh_7.4.0_manifest.json": "sha256:95513584b227b9c7923e641aae986935821077b1eb4116845b5312ac412bbc72",
+          "terraform-provider-xcsh_7.4.0_windows_386.zip": "sha256:3e0a4671e34409542cb9ffebdd774280c2be42e7c76d88d2dea50aa87126167a",
+          "terraform-provider-xcsh_7.4.0_windows_amd64.zip": "sha256:5bcd8c9064f8884ae09e580d5a3b75945825da34b62688e38abf4f1be819e658"
+        },
+        "commit": "41b15a1531dc7b68f0ec1964b05a77e3599ac311",
+        "spec_release_sha256": "be0529ce8cb16a497980d105f6aa2f3c8aa656c95137abaec92b4d25b8a68a33",
+        "tag": "v7.4.0",
+        "version": "7.4.0"
+      }
+    },
     "1e98289de5e91b43862131e23b208b50e80b83378fabd772b609c61fad86ee23": {
       "delivery": {
         "release_tag": "v5.0.0",
